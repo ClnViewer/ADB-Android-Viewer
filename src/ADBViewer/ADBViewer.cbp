@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Android ADB Viewer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../bin/Debug/ADBViewer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../obj/Debug/ADBViewer/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-Wno-unknown-pragmas" />
+					<Add option="-IC:/__BuildSource/__LIB__/SDL2/include" />
+					<Add option="-D_BUILD_FRAME_NO_TITLE" />
+				</Compiler>
+				<Linker>
+					<Add option="-lADBViewer" />
+					<Add option="-lADBDriver" />
+					<Add option="-L../bin/Debug" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
+				</ExtraCommands>
+			</Target>
+			<Target title="Release">
+				<Option output="../bin/Release/ADBViewer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../obj/Release/ADBViewer/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-Wno-unknown-pragmas" />
+					<Add option="-IC:/__BuildSource/__LIB__/SDL2/include" />
+					<Add option="-D_BUILD_FRAME_NO_TITLE" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lADBViewer" />
+					<Add option="-lADBDriver" />
+					<Add option="-L../bin/Release" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="upx -9 ../bin/Release/ADBViewer.exe" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++17" />
+			<Add option="-Wall" />
+			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
+		</Compiler>
+		<Linker>
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
+			<Add option="-lmingw32" />
+			<Add option="-lSDL2main" />
+			<Add option="-lSDL2" />
+			<Add library="user32" />
+			<Add library="gdi32" />
+			<Add library="winmm" />
+			<Add library="imm32" />
+			<Add library="version" />
+			<Add library="dxguid" />
+			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
+		</Linker>
+		<Unit filename="../ADBDriver/src/ADBDriver.h" />
+		<Unit filename="src/ADBViewer.cpp" />
+		<Unit filename="src/ADBViewer.h" />
+		<Unit filename="src/ADBViewer.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
+		<Unit filename="src/ADBViewerDLL/src/ResManager.h" />
+		<Unit filename="src/App/App.cpp" />
+		<Unit filename="src/App/App.h" />
+		<Unit filename="src/App/AppMenu.WINAPI.cpp" />
+		<Unit filename="src/App/AppMenu.cpp" />
+		<Unit filename="src/App/AppMenu.h" />
+		<Unit filename="src/loader.h" />
+		<Unit filename="src/version.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger>
+				<search_path add="..\bin\Debug\" />
+			</debugger>
+			<AutoVersioning>
+				<Scheme minor_max="10" build_max="0" rev_max="0" rev_rand_max="10" build_times_to_increment_minor="100" />
+				<Settings autoincrement="1" date_declarations="1" use_define="1" update_manifest="0" do_auto_increment="1" ask_to_increment="0" language="C" svn="1" svn_directory="../.svn" header_path="src/version.h" />
+				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
+				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="AVIEW" />
+			</AutoVersioning>
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

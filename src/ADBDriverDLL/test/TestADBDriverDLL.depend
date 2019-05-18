@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1558211386 source:c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\test\main.cpp
+	"../../ADBViewer/src/loader.h"
+	"../src/ADBDriver.h"
+
+1558206252 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\loader.h
+	<iostream>
+	<atomic>
+	<memory>
+	<algorithm>
+	<string>
+	<vector>
+	<map>
+	<queue>
+	<thread>
+	<functional>
+	<sstream>
+	<future>
+	<winsock2.h>
+	<windows.h>
+	<commctrl.h>
+	<time.h>
+	<io.h>
+	"version.h"
+
+1557865835 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\version.h
+
+1558211203 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\adbdriver.h
+	"DriverExcept.h"
+	"DriverAsync.h"
+	"DriverNet.h"
+
+1558133844 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverasync.h
+
+1558032153 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\drivernet.h
+
+1558207250 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverexcept.h
+

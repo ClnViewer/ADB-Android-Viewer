@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<BrowseTracker_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="src\App\AppMenu.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="5045" topLine="155" />
+	</File>
+	<File name="src\App\AppMenu.h" open="0" top="0" tabpos="0">
+		<Cursor position="444" topLine="0" />
+	</File>
+	<File name="src\ADBViewer.h" open="0" top="0" tabpos="0">
+		<Cursor position="198" topLine="0" />
+	</File>
+	<File name="src\App\App.h" open="0" top="0" tabpos="0">
+		<Cursor position="360" topLine="0" />
+	</File>
+	<File name="src\App\App.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="691" topLine="0" />
+	</File>
+</BrowseTracker_layout_file>

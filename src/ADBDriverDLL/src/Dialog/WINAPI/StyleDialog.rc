@@ -1,0 +1,45 @@
+
+#include "../../DriverInternal.h"
+#include <windows.h>
+#include <commctrl.h>
+
+LANGUAGE 0x19, 0x01
+STRINGTABLE
+{
+    IDS_LSTV1 "Устройство"
+    IDS_LSTV2 "Описание"
+    IDS_ERR1  "ошибка старта сессии с устройством, повторяю запрос"
+    IDS_ERR2  "неизвестная ошибка общения с устройством, повторяю запрос"
+    IDS_ERR3  "Не найден исполняемый файл adb.exe в текущем каталоге приложения.  Необходимо выбрать путь к исполняемому файлу Android Debug Bridge (adb.exe), Скачать: [https://developer.android.com/studio], [https://adb.clockworkmod.com/]"
+    IDS_ERRA  "Ошибка обработки ADB драйвером"
+}
+
+//
+// Dialog resources
+//
+LANGUAGE 0x19, 0x01
+IDD_ADBLISTDLG DIALOGEX 0, 0, 296, 123
+STYLE DS_SYSMODAL | DS_SETFONT | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_BORDER
+EXSTYLE WS_EX_TOPMOST
+FONT 10, "Segoe UI", 0, 0, 0x0
+{
+    CONTROL         "", DLG_LISTV, "SysListView32", WS_TABSTOP | WS_BORDER | LVS_ALIGNLEFT | LVS_REPORT, 7, 5, 282, 98, WS_EX_LEFT
+    CONTROL         "Отмена", IDCANCEL, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 187, 106, 50, 14
+    CONTROL         "Выбрать", IDOK, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 239, 106, 50, 14
+    LTEXT           "", DLG_LISTI, 8, 109, 176, 9
+}
+
+LANGUAGE 0x19, 0x01
+IDD_ADBMGRDLG DIALOGEX 0, 0, 296, 100
+STYLE DS_SYSMODAL | DS_SETFONT | DS_SETFOREGROUND | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_BORDER
+EXSTYLE WS_EX_TOPMOST
+FONT 10, "Segoe UI", 0, 0, 0x0
+{
+    CONTROL         "Закончить", IDCANCEL, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 237, 80, 53, 14
+    CONTROL         "Стоп ADB сервер", ID_ADBSTOP, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 161, 80, 74, 14
+    CONTROL         "Старт ADB сервер", ID_ADBSTART, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 85, 80, 74, 14
+    CONTROL         "Выбрать путь к ADB", ID_ADBPATH, "Button", BS_OWNERDRAW | BS_FLAT | WS_TABSTOP, 7, 80, 76, 14
+    LTEXT           "", DLG_ADBINFO, 8, 7, 290, 60, SS_NOPREFIX
+    LTEXT           "", DLG_ADBPATH, 8, 66, 272, 14
+    LTEXT           "+", DLG_ADBSTAT, 280, 66, 8, 14
+}

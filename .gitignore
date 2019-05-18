@@ -1,3 +1,7 @@
+
+# utils/*
+
+.svn
 # Prerequisites
 *.d
 
@@ -30,3 +34,5 @@
 *.exe
 *.out
 *.app
+
+*.sh
