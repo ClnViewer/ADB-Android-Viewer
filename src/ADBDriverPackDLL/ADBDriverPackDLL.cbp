@@ -47,6 +47,9 @@
 				</ExtraCommands>
 			</Target>
 		</Build>
+		<Unit filename="src/ADBDriverPackDLL.rc">
+			<Option compilerVar="WINDRES" />
+		</Unit>
 		<Unit filename="src/ADBDriverPackDLL.cpp" />
 		<Unit filename="src/PackManager.cpp" />
 		<Unit filename="src/PackManager.h" />
