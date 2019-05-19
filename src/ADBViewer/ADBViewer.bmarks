@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="src\App\AppMenu.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2245" topLine="74" />
+	<File name="src\App\AppMenu.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="1583" topLine="41" />
+		<BrowseMarks positions="1533,6454,13024,13450,14255,14424,14531" />
 	</File>
-	<File name="src\App\App.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="691" topLine="0" />
+	<File name="src\App\App.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="7702" topLine="268" />
+	</File>
+	<File name="src\App\AppMenu.h" open="0" top="0" tabpos="1">
+		<Cursor position="836" topLine="17" />
 	</File>
 	<File name="src\App\App.h" open="0" top="0" tabpos="0">
-		<Cursor position="360" topLine="0" />
+		<Cursor position="36" topLine="0" />
 	</File>
-	<File name="src\App\AppMenu.h" open="0" top="0" tabpos="0">
-		<Cursor position="625" topLine="12" />
-	</File>
-	<File name="src\ADBViewer.h" open="0" top="0" tabpos="0">
-		<Cursor position="198" topLine="0" />
+	<File name="src\ADBViewer.h" open="0" top="0" tabpos="3">
+		<Cursor position="142" topLine="0" />
 	</File>
 </BrowseTracker_layout_file>

@@ -2,10 +2,10 @@
 #include "../ADBViewer.h"
 
 AppMenu::AppMenu()
-    : m_menu_texture(nullptr), m_menu_rect({}),
+    : m_menu_texture(nullptr), m_info_texture(nullptr), m_menu_rect({}),
       m_isrun(true), m_isstop(true), m_ispos(false), m_isfullscreen(false),
       m_scale(2U), m_compress(9U),
-      m_cursor{nullptr}
+      m_cursor{nullptr}, m_font(nullptr)
 {
     m_menu_rect.h = __H_default;
     m_menu_rect.w = 32;
@@ -15,13 +15,22 @@ AppMenu::AppMenu()
 
 AppMenu::~AppMenu()
 {
-    SDL_DestroyTexture(m_menu_texture);
+    if (m_menu_texture)
+        SDL_DestroyTexture(m_menu_texture);
+    if (m_info_texture)
+        SDL_DestroyTexture(m_info_texture);
     if (m_cursor[0])
         SDL_FreeCursor(m_cursor[0]);
     if (m_cursor[1])
         SDL_FreeCursor(m_cursor[1]);
+    if (m_font)
+        TTF_CloseFont(m_font);
+
     m_cursor[0] = nullptr;
     m_cursor[1] = nullptr;
+
+    if (TTF_WasInit())
+        TTF_Quit();
 }
 
 bool AppMenu::init(App *app)
@@ -30,6 +39,7 @@ bool AppMenu::init(App *app)
         return false;
 
     m_app = app;
+    TTF_Init();
 
     SDL_Surface *l_image_surface = ResManager::imageload(
                     ResManager::IndexImageResource::RES_IMG_MENU
@@ -47,6 +57,11 @@ bool AppMenu::init(App *app)
         (!(m_cursor[1] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND)))
        )
         return false;
+
+    SDL_RWops *rwops;
+    if ((rwops = ResManager::fontload()))
+        if (!(m_font = TTF_OpenFontRW(rwops, 1, 16)))
+            return false;
 
     return true;
 }
@@ -125,23 +140,19 @@ void AppMenu::mousemove()
         case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
         case ResManager::IndexStringResource::RES_STR_APK:
         {
-#           if !defined (_BUILD_FRAME_NO_TITLE)
-            titleset(
+            infoset(
                 MgrType::MGR_MENU,
                 ResManager::stringload(id)
             );
-#           endif
             setcursor(1U);
             break;
         }
         default:
         {
-#           if !defined (_BUILD_FRAME_NO_TITLE)
-            titleset(
+            infoset(
                 MgrType::MGR_MENU,
                 ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN)
             );
-#           endif
             setcursor(0U);
             break;
         }
@@ -184,41 +195,35 @@ void AppMenu::mousebutton()
 
                         m_isstop = false;
                         m_app->run();
-#                       if !defined (_BUILD_FRAME_NO_TITLE)
-                        titleset(
+                        infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBCONNECT
                                 )
                         );
-#                       endif
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_STOP:
                     {
                         if (m_isstop)
                         {
-#                           if !defined (_BUILD_FRAME_NO_TITLE)
-                            titleset(
+                            infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED
                                     )
                             );
-#                           endif
                             break;
                         }
                         m_isstop = true;
                         m_app->jointh();
                         m_app->screen();
-#                       if !defined (_BUILD_FRAME_NO_TITLE)
-                        titleset(
+                        infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBDISCONNECT
                                 )
                         );
-#                       endif
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_ADBSET:
@@ -237,11 +242,9 @@ void AppMenu::mousebutton()
                     }
                     case ResManager::IndexStringResource::RES_STR_POSINFO:
                     {
-#                       if !defined (_BUILD_FRAME_NO_TITLE)
                         m_ispos = !(m_ispos);
                         if (!m_ispos)
-                            titleset(MgrType::MGR_MENU, "");
-#                       endif
+                            infoset(MgrType::MGR_MENU, "");
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_CAPTURE:
@@ -339,21 +342,22 @@ bool AppMenu::screenshot()
     std::stringstream ss;
     ss << ResManager::stringload(ResManager::IndexStringResource::RES_STR_FILESAVE);
     ss << fname.c_str();
-#   if !defined (_BUILD_FRAME_NO_TITLE)
-    titleset(MgrType::MGR_MENU, ss.str());
-#   endif
+    infoset(MgrType::MGR_MENU, ss.str());
     return true;
 }
 
-#if !defined (_BUILD_FRAME_NO_TITLE)
-void AppMenu::titleset(MgrType mgrt, std::string const & s)
+void AppMenu::infoset(MgrType mgrt, std::string const & s)
 {
     std::stringstream ss;
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+#   else
     ss << ResManager::stringload(
             ResManager::IndexStringResource::RES_STR_APPTITLENAME
         );
     ss << "v." << AVIEW_FULLVERSION_STRING;
     ss << " r." << AVIEW_SVN_REVISION;
+#   endif
 
     switch(mgrt)
     {
@@ -379,22 +383,105 @@ void AppMenu::titleset(MgrType mgrt, std::string const & s)
                         (m_app->m_main_rect.h * m_scale) :
                          m_app->m_main_rect.h
                         );
-                    ss << " - " << "( " << w << "x" << h << " )";
+#                   if !defined (_BUILD_FRAME_NO_TITLE)
+                    ss << " - ";
+#                   endif
+                    ss << "( " << w << "x" << h << " )";
                     ss << " - " << "( X: " << x << " Y: " << y << " )";
                 }
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                else
+                {
+                    drawclear();
+                    return;
+                }
+#               endif
             }
             else
+            {
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                drawclear();
+#               endif
                 return;
+            }
             break;
         }
         case MgrType::MGR_MENU:
         {
-            if (s.length())
+#           if defined (_BUILD_FRAME_NO_TITLE)
+            if (s.empty())
+            {
+                drawclear();
+                return;
+            }
+            ss << s.c_str();
+#           else
+            if (!s.empty())
                 ss << " - " << s.c_str();
+#           endif
             break;
         }
+        default:
+            {
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                drawclear();
+#               endif
+                return;
+            }
     }
-    SDL_SetWindowTitle(m_app->m_window, ss.str().c_str());
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+    drawtext(ss.str());
+#   else
+    drawtitle(ss.str());
+#   endif
+
 }
-#endif
+
+void AppMenu::drawtitle(std::string const & s)
+{
+    SDL_SetWindowTitle(m_app->m_window, s.c_str());
+}
+
+void AppMenu::drawtext(std::string const & s)
+{
+    if (!m_font)
+        return;
+
+    SDL_Texture *tmp_texture = nullptr;
+    std::swap(m_info_texture, tmp_texture);
+
+    if (tmp_texture)
+        SDL_DestroyTexture(tmp_texture);
+
+    SDL_Surface *surface = nullptr;
+
+    do
+    {
+        if (!(surface = TTF_RenderUTF8_Shaded(m_font, s.c_str(), AppMenu::txt_color[0], AppMenu::txt_color[1])))
+            break;
+
+        m_info_rect.w = surface->w;
+        m_info_rect.h = surface->h;
+        m_info_rect.x = m_menu_rect.w + 1;
+        m_info_rect.y = 0;
+
+        if ((tmp_texture = SDL_CreateTextureFromSurface(m_app->m_window_renderer, surface)))
+            std::swap(m_info_texture, tmp_texture);
+    }
+    while (0);
+
+    if (surface)
+        SDL_FreeSurface(surface);
+}
+
+void AppMenu::drawclear()
+{
+    if (!m_info_texture)
+        return;
+
+    SDL_Texture *tmp_texture = nullptr;
+    std::swap(m_info_texture, tmp_texture);
+    SDL_DestroyTexture(tmp_texture);
+}
 

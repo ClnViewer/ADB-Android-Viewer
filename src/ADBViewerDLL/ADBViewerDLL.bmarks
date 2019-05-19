@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Debug" />
-	<File name="src\ResManager.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="1691" topLine="49" />
-	</File>
-	<File name="src\ResManager.h" open="0" top="0" tabpos="0">
-		<Cursor position="689" topLine="20" />
+	<ActiveTarget name="Release" />
+	<File name="src\Resources\ResHelp.h" open="0" top="0" tabpos="0">
+		<Cursor position="1021" topLine="0" />
 	</File>
 	<File name="src\ADBViewerDLL.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="60" topLine="0" />
 	</File>
-	<File name="src\Resources\ResHelp.h" open="0" top="0" tabpos="0">
-		<Cursor position="1021" topLine="0" />
+	<File name="src\ResManager.cpp" open="0" top="0" tabpos="5">
+		<Cursor position="216" topLine="2" />
+	</File>
+	<File name="src\ResManager.h" open="0" top="0" tabpos="0">
+		<Cursor position="1080" topLine="33" />
 	</File>
 </BrowseTracker_layout_file>

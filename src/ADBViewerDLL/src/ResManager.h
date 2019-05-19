@@ -50,6 +50,7 @@ namespace Resources
             ResManager();
             ~ResManager();
 
+            static SDL_RWops   * fontload();
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
             static const char  * stringload(ResManager::IndexStringResource);

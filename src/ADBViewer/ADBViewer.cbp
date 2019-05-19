@@ -60,6 +60,7 @@
 			<Add option="-lmingw32" />
 			<Add option="-lSDL2main" />
 			<Add option="-lSDL2" />
+			<Add option="-lSDL2_ttf.dll" />
 			<Add library="user32" />
 			<Add library="gdi32" />
 			<Add library="winmm" />
@@ -68,13 +69,13 @@
 			<Add library="dxguid" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 		</Linker>
-		<Unit filename="../ADBDriver/src/ADBDriver.h" />
+		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />
+		<Unit filename="../ADBViewerDLL/src/ResManager.h" />
 		<Unit filename="src/ADBViewer.cpp" />
 		<Unit filename="src/ADBViewer.h" />
 		<Unit filename="src/ADBViewer.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="src/ADBViewerDLL/src/ResManager.h" />
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/AppMenu.WINAPI.cpp" />

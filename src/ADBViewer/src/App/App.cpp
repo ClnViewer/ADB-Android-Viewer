@@ -277,9 +277,7 @@ void App::loop()
                         if (m_appmenu.mouse())
                             break;
 
-#                       if !defined (_BUILD_FRAME_NO_TITLE)
-                        m_appmenu.titleset(MgrType::MGR_MAIN, "");
-#                       endif
+                        m_appmenu.infoset(MgrType::MGR_MAIN, "");
                         break;
                     }
 
@@ -418,5 +416,8 @@ void App::draw()
     SDL_RenderClear(m_window_renderer);
     SDL_RenderCopy(m_window_renderer, m_texture, nullptr, &m_main_rect);
     SDL_RenderCopy(m_window_renderer, m_appmenu.m_menu_texture, nullptr, &m_appmenu.m_menu_rect);
+    if (m_appmenu.m_info_texture)
+        SDL_RenderCopy(m_window_renderer, m_appmenu.m_info_texture, NULL, &m_appmenu.m_info_rect);
+
     SDL_RenderPresent(m_window_renderer);
 }

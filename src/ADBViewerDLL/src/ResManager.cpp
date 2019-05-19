@@ -10,6 +10,7 @@ namespace Resources
 #include "Resources/ResLogo.h"
 #include "Resources/ResMenu.h"
 #include "Resources/ResScreen.h"
+#include "Resources/Res16704font.h"
 
 ResManager::ResManager() {}
 ResManager::~ResManager() {}
@@ -80,5 +81,9 @@ SDL_Surface * ResManager::loadbmp(char const *path)
     return image_surface;
 }
 
+SDL_RWops   * ResManager::fontload()
+{
+    return SDL_RWFromMem(&data_font[0], __NELE(data_font));
+}
 
 }
