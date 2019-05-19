@@ -22,9 +22,6 @@
 					<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
 				</Compiler>
 				<Linker>
-					<Add option="-luser32" />
-					<Add option="-lSDL2.dll" />
-					<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -44,15 +41,20 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-luser32" />
-					<Add option="-lSDL2.dll" />
-					<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="upx -9 ../bin/Release/ADBViewer.dll" />
 				</ExtraCommands>
 			</Target>
 		</Build>
+		<Linker>
+			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
+			<Add option="-static-libstdc++" />
+			<Add option="-static-libgcc" />
+			<Add option="-lmingw32" />
+			<Add option="-lSDL2.dll" />
+			<Add option="-luser32" />
+		</Linker>
 		<Unit filename="src/ADBViewerDLL.cpp" />
 		<Unit filename="src/ResManager.cpp" />
 		<Unit filename="src/ResManager.h" />

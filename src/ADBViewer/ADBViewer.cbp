@@ -55,19 +55,14 @@
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
 		</Compiler>
 		<Linker>
+			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-lmingw32" />
 			<Add option="-lSDL2main" />
-			<Add option="-lSDL2" />
+			<Add option="-lSDL2.dll" />
 			<Add option="-lSDL2_ttf.dll" />
-			<Add library="user32" />
-			<Add library="gdi32" />
-			<Add library="winmm" />
-			<Add library="imm32" />
-			<Add library="version" />
-			<Add library="dxguid" />
-			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
+			<Add option="-luser32" />
 		</Linker>
 		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />
 		<Unit filename="../ADBViewerDLL/src/ResManager.h" />

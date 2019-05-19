@@ -179,14 +179,12 @@ void AppMenu::mousebutton()
                     {
                         if (!m_isstop)
                         {
-#                           if !defined (_BUILD_FRAME_NO_TITLE)
-                            titleset(
+                            infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBCONNECTED
                                     )
                             );
-#                           endif
                             break;
                         }
 
