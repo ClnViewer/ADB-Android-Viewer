@@ -5,7 +5,7 @@ AppMenu::AppMenu()
     : m_menu_texture(nullptr), m_menu_rect({}),
       m_isrun(true), m_isstop(true), m_ispos(false), m_isfullscreen(false),
       m_scale(2U), m_compress(9U),
-      m_cursor(nullptr)
+      m_cursor{nullptr}
 {
     m_menu_rect.h = __H_default;
     m_menu_rect.w = 32;
@@ -16,9 +16,12 @@ AppMenu::AppMenu()
 AppMenu::~AppMenu()
 {
     SDL_DestroyTexture(m_menu_texture);
-    if (m_cursor)
-        SDL_FreeCursor(m_cursor);
-    m_cursor = nullptr;
+    if (m_cursor[0])
+        SDL_FreeCursor(m_cursor[0]);
+    if (m_cursor[1])
+        SDL_FreeCursor(m_cursor[1]);
+    m_cursor[0] = nullptr;
+    m_cursor[1] = nullptr;
 }
 
 bool AppMenu::init(App *app)
@@ -39,15 +42,19 @@ bool AppMenu::init(App *app)
     if (!m_menu_texture)
         return false;
 
+    if (
+        (!(m_cursor[0] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW))) ||
+        (!(m_cursor[1] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND)))
+       )
+        return false;
+
     return true;
 }
 
-void AppMenu::setcursor(SDL_SystemCursor id)
+void AppMenu::setcursor(uint32_t id)
 {
-    if (m_cursor)
-        SDL_FreeCursor(m_cursor);
-    if ((m_cursor = SDL_CreateSystemCursor(id)))
-        SDL_SetCursor(m_cursor);
+    if (m_cursor[id])
+        SDL_SetCursor(m_cursor[id]);
 }
 
 ResManager::IndexStringResource AppMenu::clickpos(int32_t d, int32_t w, int32_t h)
@@ -124,7 +131,7 @@ void AppMenu::mousemove()
                 ResManager::stringload(id)
             );
 #           endif
-            setcursor(SDL_SYSTEM_CURSOR_HAND);
+            setcursor(1U);
             break;
         }
         default:
@@ -135,7 +142,7 @@ void AppMenu::mousemove()
                 ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN)
             );
 #           endif
-            setcursor(SDL_SYSTEM_CURSOR_ARROW);
+            setcursor(0U);
             break;
         }
     }

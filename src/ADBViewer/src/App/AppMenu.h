@@ -23,7 +23,7 @@ public:
     bool init(App*);
     bool mouse();
     bool screenshot();
-    void setcursor(SDL_SystemCursor);
+    void setcursor(uint32_t);
 #   if !defined (_BUILD_FRAME_NO_TITLE)
     void titleset(MgrType, std::string const&);
 #   endif
@@ -31,7 +31,7 @@ public:
 private:
     //
     App *m_app;
-    SDL_Cursor *m_cursor;
+    SDL_Cursor *m_cursor[2];
     //
     ResManager::IndexStringResource clickpos(int32_t, int32_t, int32_t);
     void mousemove();
