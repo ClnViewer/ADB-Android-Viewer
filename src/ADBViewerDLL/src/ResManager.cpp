@@ -11,6 +11,19 @@ namespace Resources
 #include "Resources/ResMenu.h"
 #include "Resources/ResScreen.h"
 #include "Resources/Res16704font.h"
+#include "Resources/ResFreeSansfont.h"
+
+static inline SDL_Color box_color[][2] =
+{
+    {
+        { 191, 227, 103, 0 },
+        { 2, 2, 2, 150 }
+    },
+    {
+        { 5, 5, 5, 0 },
+        { 250, 250, 250, 150 }
+    }
+};
 
 ResManager::ResManager() {}
 ResManager::~ResManager() {}
@@ -81,9 +94,42 @@ SDL_Surface * ResManager::loadbmp(char const *path)
     return image_surface;
 }
 
-SDL_RWops   * ResManager::fontload()
+SDL_RWops   * ResManager::fontload(ResManager::IndexFontResource idx)
 {
-    return SDL_RWFromMem(&data_font[0], __NELE(data_font));
+    switch (idx)
+    {
+        case ResManager::IndexFontResource::RES_FONT_16704:
+            {
+                return SDL_RWFromMem(&data_font16704[0], __NELE(data_font16704));
+            }
+        case ResManager::IndexFontResource::RES_FONT_FREESANS:
+            {
+                return SDL_RWFromMem(&data_fontFreeSans[0], __NELE(data_fontFreeSans));
+            }
+        default:
+            {
+                return nullptr;
+            }
+    }
+}
+
+SDL_Color * ResManager::colorload(ResManager::IndexColorResource idx)
+{
+    switch (idx)
+    {
+        case ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK:
+            {
+                return box_color[0];
+            }
+        case ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE:
+            {
+                return box_color[1];
+            }
+        default:
+            {
+                return nullptr;
+            }
+    }
 }
 
 }

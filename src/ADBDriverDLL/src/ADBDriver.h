@@ -86,7 +86,8 @@ public:
     void Click(ADBDriver::Tap_s*);
     void Click(ADBDriver::Swipe_s*);
     void ClickDbl(ADBDriver::Tap_s*);
-    void SendTextASCII(std::wstring&);
+    void SendTextASCII(std::wstring const &);
+    void SendTextASCII(std::string const &);
     void SendSpecialKey(ADBDriver::KeysType, int32_t);
 
     bool InstallApk(std::string const&);

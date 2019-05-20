@@ -83,7 +83,7 @@ void ADBDriver::ClickDbl(ADBDriver::Tap_s *p)
         );
 }
 
-void ADBDriver::SendTextASCII(std::wstring & s)
+void ADBDriver::SendTextASCII(std::wstring const & s)
 {
     std::wstring ws(s);
     std::wstringstream wss;
@@ -97,6 +97,26 @@ void ADBDriver::SendTextASCII(std::wstring & s)
 
     m_cmdasync.add<std::string>(
         cnv.to_bytes(ws.c_str()),
+        DriverConst::ls_cmd_shell,
+        BIND_ASYNC(std::string)
+        );
+    SendSpecialKey(
+        ADBDriver::KeysType::KEYS_ANDROID,
+        GameDev::l_enumScanCodeAndroid::AKEYCODE_ENTER
+        );
+}
+
+void ADBDriver::SendTextASCII(std::string const & s)
+{
+    std::string str(s);
+    std::stringstream ss;
+
+    string_replace<std::string>(str, " ", "%s");
+    string_replace<std::string>(str, "\"", "'");
+    ss << "input text \"" << str.c_str() << "\"";
+
+    m_cmdasync.add<std::string>(
+        ss.str().c_str(),
         DriverConst::ls_cmd_shell,
         BIND_ASYNC(std::string)
         );

@@ -15,6 +15,16 @@ namespace Resources
                 uint8_t *data;
             } ImageResource_s;
 
+            enum IndexColorResource
+            {
+                RES_COLOR_GREEN_BLACK,
+                RES_COLOR_BLACK_WHITE
+            };
+            enum IndexFontResource
+            {
+                RES_FONT_16704,
+                RES_FONT_FREESANS
+            };
             enum IndexImageResource
             {
                 RES_IMG_LOGO,
@@ -44,13 +54,15 @@ namespace Resources
                 RES_STR_CAPFILENAME,
                 RES_STR_ERR_APP,
                 RES_STR_ERR_ADRV,
-                RES_STR_ERR_UNKNOWN
+                RES_STR_ERR_UNKNOWN,
+                RES_STR_ENTER_TEXT
             };
 
             ResManager();
             ~ResManager();
 
-            static SDL_RWops   * fontload();
+            static SDL_RWops   * fontload(ResManager::IndexFontResource);
+            static SDL_Color   * colorload(ResManager::IndexColorResource);
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
             static const char  * stringload(ResManager::IndexStringResource);

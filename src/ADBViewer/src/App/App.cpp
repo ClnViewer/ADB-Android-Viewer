@@ -21,79 +21,59 @@ static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt,
 App::App()
     : m_adb_rect({}), m_adbinit(false)
 {
-    m_main_rect.w = __W_default;
-    m_main_rect.h = __H_default;
-    m_main_rect.x = m_appmenu.m_menu_rect.w;
-    m_main_rect.y = 0;
+    m_base.gui.rect.w = __W_default;
+    m_base.gui.rect.h = __H_default;
+    m_base.gui.rect.x = m_appmenu.gui.rect.w;
+    m_base.gui.rect.y = 0;
     m_adb_rect.t  = 100U;
-#   if defined (_BUILD_FRAME_NO_TITLE)
-    uint32_t wflag = SDL_WINDOW_BORDERLESS;
-#   else
-    uint32_t wflag = 0U;
-#   endif
+    m_pinput = { 50, (__H_default - 40) };
 
-    m_window = SDL_CreateWindow(
-                ResManager::stringload(
-                    ResManager::IndexStringResource::RES_STR_APPFULLNAME
-                ),
-                SDL_WINDOWPOS_CENTERED,
-                SDL_WINDOWPOS_CENTERED,
-                __W_default + m_appmenu.m_menu_rect.w, __H_default,
-                wflag
-            );
-    if (!m_window)
+    switch (initm(__W_default + m_appmenu.gui.rect.w, __H_default))
     {
-        SDL_ShowSimpleMessageBox(
-            0,
-            ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
-            ),
-            SDL_GetError(),
-            nullptr
-        );
-        return;
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+            {
+                SDL_ShowSimpleMessageBox(
+                    0,
+                    ResManager::stringload(
+                        ResManager::IndexStringResource::RES_STR_ERR_APP
+                    ),
+                    SDL_GetError(),
+                    nullptr
+                );
+                return;
+            }
+        default:
+            {
+                break;
+            }
     }
 
-    m_window_renderer = SDL_CreateRenderer(
-                m_window,
-                -1,
-                SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
-            );
-
-    if (!m_window_renderer)
-    {
-        SDL_ShowSimpleMessageBox(
-            0,
-            ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
-            ),
-            SDL_GetError(),
-            m_window
-        );
-        return;
-    }
-
-    if (!m_appmenu.init(this))
-    {
-        SDL_ShowSimpleMessageBox(
-            0,
-            ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
-            ),
-            SDL_GetError(),
-            m_window
-        );
-        return;
-    }
-
-    m_texture = SDL_CreateTexture(
-                m_window_renderer,
+    /// initiate GUI instance
+    m_base.gui.texture = SDL_CreateTexture(
+                m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
                 __W_default, __H_default
             );
 
-    if (!m_texture)
+    if (
+        (!m_base.gui.texture) ||
+        (!m_base.initgui(this)) || /// this main screen
+        (!m_info.init(
+                this,
+                ResManager::IndexFontResource::RES_FONT_16704,
+                ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK
+            )) ||                /// info-help left rectangle
+        (!m_input.init(
+                this,
+                ResManager::IndexFontResource::RES_FONT_FREESANS,
+                ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE
+            )) ||                /// keyboard input rectangle
+        (!m_appmenu.init(this))  /// this menu screen
+    )
     {
         SDL_ShowSimpleMessageBox(
             0,
@@ -116,7 +96,7 @@ App::App()
     SDL_SetWindowIcon(m_window, l_image_surface);
     SDL_FreeSurface(l_image_surface);
 
-    if (SDL_SetWindowHitTest(m_window, f_hitTest, &m_appmenu.m_menu_rect) < 0)
+    if (SDL_SetWindowHitTest(m_window, f_hitTest, &m_appmenu.gui.rect) < 0)
     {
         SDL_ShowSimpleMessageBox(
             0,
@@ -129,17 +109,15 @@ App::App()
         return;
     }
 
-    screen();
+    logo();
 }
 
 App::~App()
 {
-    SDL_DestroyTexture(m_texture);
-    SDL_DestroyRenderer(m_window_renderer);
-    SDL_DestroyWindow(m_window);
-    SDL_Quit();
     if (m_thu.joinable())
         m_thu.join();
+
+    //m_base.~guiBase();
 }
 
 void App::jointh()
@@ -148,7 +126,7 @@ void App::jointh()
         m_thu.join();
 }
 
-void App::screen()
+void App::logo()
 {
     SDL_Surface *l_image_surface = ResManager::imageload(
                     ResManager::IndexImageResource::RES_IMG_SCREEN
@@ -156,13 +134,13 @@ void App::screen()
     if (!l_image_surface)
         return;
 
-    SDL_UpdateTexture(m_texture, nullptr, l_image_surface->pixels, l_image_surface->pitch);
+    SDL_UpdateTexture(m_base.gui.texture, nullptr, l_image_surface->pixels, l_image_surface->pitch);
     SDL_FreeSurface(l_image_surface);
 }
 
 void App::run()
 {
-    rect_default(&m_adb_rect, &m_main_rect);
+    rect_default(&m_adb_rect, &m_base.gui.rect);
 
     if (!m_adbinit)
     {
@@ -171,7 +149,7 @@ void App::run()
             SDL_ShowSimpleMessageBox(
                     0,
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_APP
+                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
                     ),
                     ResManager::stringload(
                         ResManager::IndexStringResource::RES_STR_ADBINSTALLBIN
@@ -202,20 +180,25 @@ void App::run()
                 SDL_ShowSimpleMessageBox(
                     0,
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_APP
+                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
                     ),
-                    ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ADBINSTALLBIN
-                    ),
+                    _ex.what(),
                     m_window
                 );
-
-                SDL_ShowSimpleMessageBox(0, "ADB driver error:", _ex.what(), m_window);
                 return;
             }
             catch(...)
             {
-                SDL_ShowSimpleMessageBox(0, "ADB driver error:", "unknown error", m_window);
+                SDL_ShowSimpleMessageBox(
+                    0,
+                    ResManager::stringload(
+                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
+                    ),
+                    ResManager::stringload(
+                        ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN
+                    ),
+                    m_window
+                );
                 return;
             }
         }
@@ -227,11 +210,16 @@ void App::run()
 void App::loop()
 {
     m_appmenu.m_isrun = true;
-    while(m_appmenu.m_isrun.load())
+    while (m_appmenu.m_isrun.load())
     {
-        while(SDL_PollEvent(&m_window_event) > 0)
+        while (SDL_PollEvent(&m_event) > 0)
         {
-            switch(m_window_event.type)
+            if ((!m_appmenu.m_isstop) && (m_input.status()))
+            {
+                if (m_input.event(&m_event, &m_pinput))
+                    break;
+            }
+            switch(m_event.type)
             {
                 case SDL_QUIT:
                     {
@@ -244,15 +232,15 @@ void App::loop()
                         if (m_appmenu.mouse())
                             break;
 
-                        switch (m_window_event.button.button)
+                        switch (m_event.button.button)
                         {
                             case SDL_BUTTON_LEFT:
                                 {
                                     ADBDriver::Tap_s t =
                                     {
-                                        ((m_window_event.motion.x - m_appmenu.m_menu_rect.w) *
+                                        ((m_event.motion.x - m_appmenu.gui.rect.w) *
                                             static_cast<int32_t>(m_appmenu.m_scale.load())),
-                                        (m_window_event.motion.y *
+                                        (m_event.motion.y *
                                             static_cast<int32_t>(m_appmenu.m_scale.load()))
                                     };
                                     m_adb.Click(&t);
@@ -277,13 +265,13 @@ void App::loop()
                         if (m_appmenu.mouse())
                             break;
 
-                        m_appmenu.infoset(MgrType::MGR_MAIN, "");
+                        m_appmenu.infoset(MgrType::MGR_MAIN, "", -1);
                         break;
                     }
 
                 case SDL_KEYDOWN:
                     {
-                        switch (m_window_event.key.keysym.sym)
+                        switch (m_event.key.keysym.sym)
                         {
                             ///
                             /// Swipe from key
@@ -294,9 +282,32 @@ void App::loop()
                                         m_appmenu.m_isrun = false;
                                     break;
                                 }
+                            case SDLK_RETURN:
+                            case SDLK_RETURN2:
+                                {
+                                    if (m_appmenu.m_isstop)
+                                        break;
+
+                                    if (!m_input.status())
+                                    {
+                                        m_input.begin(
+                                            ResManager::stringload(
+                                                ResManager::IndexStringResource::RES_STR_ENTER_TEXT
+                                            ),
+                                            &m_pinput
+                                        );
+                                    }
+                                    else
+                                    {
+                                        if (m_input.isresult())
+                                            m_adb.SendTextASCII(m_input.getresult());
+                                            /// No UTF8 !! Cyrillic and other national language
+                                    }
+                                    break;
+                                }
                             case SDLK_LEFT:
                                 {
-                                    m_adb_rect.x1 = std::min((m_adb_rect.x1 + 30), m_main_rect.w);
+                                    m_adb_rect.x1 = std::min((m_adb_rect.x1 + 30), m_base.gui.rect.w);
                                     m_adb.Click(&m_adb_rect);
                                     m_adb_rect.x0 = m_adb_rect.x1;
                                     break;
@@ -310,7 +321,7 @@ void App::loop()
                                 }
                             case SDLK_UP:
                                 {
-                                    m_adb_rect.y1 = std::min((m_adb_rect.y1 + 30), m_main_rect.h);
+                                    m_adb_rect.y1 = std::min((m_adb_rect.y1 + 30), m_base.gui.rect.h);
                                     m_adb.Click(&m_adb_rect);
                                     m_adb_rect.y0 = m_adb_rect.y1;
                                     break;
@@ -324,8 +335,8 @@ void App::loop()
                                 }
                             case SDLK_HOME:
                                 {
-                                    m_adb_rect.x1 = static_cast<uint32_t>(m_main_rect.w / 2);
-                                    m_adb_rect.y1 = static_cast<uint32_t>(m_main_rect.h / 2);
+                                    m_adb_rect.x1 = static_cast<uint32_t>(m_base.gui.rect.w / 2);
+                                    m_adb_rect.y1 = static_cast<uint32_t>(m_base.gui.rect.h / 2);
                                     m_adb.Click(&m_adb_rect);
                                     m_adb_rect.x0 = m_adb_rect.x1;
                                     m_adb_rect.y0 = m_adb_rect.y1;
@@ -340,7 +351,7 @@ void App::loop()
                                 }
                             case SDLK_PAGEUP:
                                 {
-                                    m_adb_rect.y1 = static_cast<uint32_t>(m_main_rect.h);
+                                    m_adb_rect.y1 = static_cast<uint32_t>(m_base.gui.rect.h);
                                     m_adb.Click(&m_adb_rect);
                                     m_adb_rect.y0 = m_adb_rect.y1;
                                     break;
@@ -349,7 +360,7 @@ void App::loop()
                                 {
                                     m_adb.SendSpecialKey(
                                         GameDev::ADBDriver::KeysType::KEYS_SDL,
-                                        m_window_event.key.keysym.scancode
+                                        m_event.key.keysym.scancode
                                         );
                                     break;
                                 }
@@ -367,18 +378,19 @@ bool App::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
     if (!v.size())
         return m_appmenu.m_isrun.load();
 
+    m_base.gui.active = true;
     void *pix = nullptr;
     int32_t pitch = 0,
             iw = static_cast<int32_t>(w),
             ih = static_cast<int32_t>(h);
 
     if (
-        (m_main_rect.w != iw) ||
-        (m_main_rect.h != ih)
+        (m_base.gui.rect.w != iw) ||
+        (m_base.gui.rect.h != ih)
        )
     {
         SDL_Texture *t_texture = SDL_CreateTexture(
-                m_window_renderer,
+                m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
                 iw, ih
@@ -386,38 +398,27 @@ bool App::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
         if (!t_texture)
             return false;
 
-        std::swap(m_texture, t_texture);
+        std::swap(m_base.gui.texture, t_texture);
         SDL_DestroyTexture(t_texture);
 
-        m_main_rect.w = iw;
-        m_main_rect.h = ih;
-        m_main_rect.x = m_appmenu.m_menu_rect.w;
-        m_main_rect.y = 0;
+        m_base.gui.rect.w = iw;
+        m_base.gui.rect.h = ih;
+        m_base.gui.rect.x = m_appmenu.gui.rect.w;
+        m_base.gui.rect.y = 0;
 
         SDL_SetWindowSize(
             m_window,
-            (iw + m_appmenu.m_menu_rect.w),
+            (iw + m_appmenu.gui.rect.w),
             ih
             );
     }
 
-    SDL_LockTexture(m_texture, nullptr, &pix, &pitch);
+    SDL_LockTexture(m_base.gui.texture, nullptr, &pix, &pitch);
     if ((!pix) || (!pitch))
         return false;
 
     ::memcpy(pix, &v[0], v.size());
 
-    SDL_UnlockTexture(m_texture);
+    SDL_UnlockTexture(m_base.gui.texture);
     return ((m_appmenu.m_isstop.load()) ? false : ((m_appmenu.m_isrun.load()) ? true : false));
-}
-
-void App::draw()
-{
-    SDL_RenderClear(m_window_renderer);
-    SDL_RenderCopy(m_window_renderer, m_texture, nullptr, &m_main_rect);
-    SDL_RenderCopy(m_window_renderer, m_appmenu.m_menu_texture, nullptr, &m_appmenu.m_menu_rect);
-    if (m_appmenu.m_info_texture)
-        SDL_RenderCopy(m_window_renderer, m_appmenu.m_info_texture, NULL, &m_appmenu.m_info_rect);
-
-    SDL_RenderPresent(m_window_renderer);
 }

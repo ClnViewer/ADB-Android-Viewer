@@ -55,7 +55,6 @@
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
 		</Compiler>
 		<Linker>
-			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-lmingw32" />
@@ -63,6 +62,7 @@
 			<Add option="-lSDL2.dll" />
 			<Add option="-lSDL2_ttf.dll" />
 			<Add option="-luser32" />
+			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 		</Linker>
 		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />
 		<Unit filename="../ADBViewerDLL/src/ResManager.h" />
@@ -76,6 +76,10 @@
 		<Unit filename="src/App/AppMenu.WINAPI.cpp" />
 		<Unit filename="src/App/AppMenu.cpp" />
 		<Unit filename="src/App/AppMenu.h" />
+		<Unit filename="src/App/gui/guiBase.h" />
+		<Unit filename="src/App/gui/guiBoxTextInput.h" />
+		<Unit filename="src/App/gui/guiMain.h" />
+		<Unit filename="src/App/gui/guiStaticText.h" />
 		<Unit filename="src/loader.h" />
 		<Unit filename="src/version.h" />
 		<Extensions>

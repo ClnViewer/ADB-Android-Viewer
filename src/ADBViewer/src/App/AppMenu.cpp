@@ -2,35 +2,25 @@
 #include "../ADBViewer.h"
 
 AppMenu::AppMenu()
-    : m_menu_texture(nullptr), m_info_texture(nullptr), m_menu_rect({}),
-      m_isrun(true), m_isstop(true), m_ispos(false), m_isfullscreen(false),
+    : m_isrun(true), m_isstop(true), m_ispos(false), m_isfullscreen(false),
       m_scale(2U), m_compress(9U),
-      m_cursor{nullptr}, m_font(nullptr)
+      m_cursor{nullptr}
 {
-    m_menu_rect.h = __H_default;
-    m_menu_rect.w = 32;
-    m_menu_rect.x = 0;
-    m_menu_rect.y = 0;
+    gui.rect.h = __H_default;
+    gui.rect.w = 32;
+    gui.rect.x = 0;
+    gui.rect.y = 0;
 }
 
 AppMenu::~AppMenu()
 {
-    if (m_menu_texture)
-        SDL_DestroyTexture(m_menu_texture);
-    if (m_info_texture)
-        SDL_DestroyTexture(m_info_texture);
     if (m_cursor[0])
         SDL_FreeCursor(m_cursor[0]);
     if (m_cursor[1])
         SDL_FreeCursor(m_cursor[1]);
-    if (m_font)
-        TTF_CloseFont(m_font);
 
     m_cursor[0] = nullptr;
     m_cursor[1] = nullptr;
-
-    if (TTF_WasInit())
-        TTF_Quit();
 }
 
 bool AppMenu::init(App *app)
@@ -39,7 +29,6 @@ bool AppMenu::init(App *app)
         return false;
 
     m_app = app;
-    TTF_Init();
 
     SDL_Surface *l_image_surface = ResManager::imageload(
                     ResManager::IndexImageResource::RES_IMG_MENU
@@ -47,9 +36,9 @@ bool AppMenu::init(App *app)
     if (!l_image_surface)
         return false;
 
-    m_menu_texture = SDL_CreateTextureFromSurface(m_app->m_window_renderer, l_image_surface);
+    gui.texture = SDL_CreateTextureFromSurface(m_app->m_renderer, l_image_surface);
     SDL_FreeSurface(l_image_surface);
-    if (!m_menu_texture)
+    if (!gui.texture)
         return false;
 
     if (
@@ -58,12 +47,7 @@ bool AppMenu::init(App *app)
        )
         return false;
 
-    SDL_RWops *rwops;
-    if ((rwops = ResManager::fontload()))
-        if (!(m_font = TTF_OpenFontRW(rwops, 1, 16)))
-            return false;
-
-    return true;
+    return initgui(reinterpret_cast<guiMain*>(app));
 }
 
 void AppMenu::setcursor(uint32_t id)
@@ -100,11 +84,11 @@ bool AppMenu::mouse()
 {
     if (
         (!m_app) ||
-        (m_app->m_window_event.motion.x > m_menu_rect.w)
+        (m_app->m_event.motion.x > gui.rect.w)
        )
         return false;
 
-    switch(m_app->m_window_event.type)
+    switch(m_app->m_event.type)
     {
         case SDL_MOUSEBUTTONDOWN:
             {
@@ -126,9 +110,9 @@ void AppMenu::mousemove()
 {
     ResManager::IndexStringResource id;
     switch((id = clickpos(
-                    m_menu_rect.w,
-                    m_app->m_window_event.motion.x,
-                    m_app->m_window_event.motion.y)))
+                    gui.rect.w,
+                    m_app->m_event.motion.x,
+                    m_app->m_event.motion.y)))
     {
         case ResManager::IndexStringResource::RES_STR_QUIT:
         case ResManager::IndexStringResource::RES_STR_START:
@@ -142,7 +126,8 @@ void AppMenu::mousemove()
         {
             infoset(
                 MgrType::MGR_MENU,
-                ResManager::stringload(id)
+                ResManager::stringload(id),
+                (__LINE__ + id)
             );
             setcursor(1U);
             break;
@@ -151,7 +136,8 @@ void AppMenu::mousemove()
         {
             infoset(
                 MgrType::MGR_MENU,
-                ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN)
+                ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN),
+                __LINE__
             );
             setcursor(0U);
             break;
@@ -161,14 +147,14 @@ void AppMenu::mousemove()
 
 void AppMenu::mousebutton()
 {
-    switch (m_app->m_window_event.button.button)
+    switch (m_app->m_event.button.button)
     {
         case SDL_BUTTON_LEFT:
             {
                 switch(clickpos(
-                        m_menu_rect.w,
-                        m_app->m_window_event.motion.x,
-                        m_app->m_window_event.motion.y))
+                        gui.rect.w,
+                        m_app->m_event.motion.x,
+                        m_app->m_event.motion.y))
                 {
                     case ResManager::IndexStringResource::RES_STR_QUIT:
                     {
@@ -183,7 +169,8 @@ void AppMenu::mousebutton()
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBCONNECTED
-                                    )
+                                    ),
+                                -1
                             );
                             break;
                         }
@@ -197,7 +184,8 @@ void AppMenu::mousebutton()
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBCONNECT
-                                )
+                                ),
+                            -1
                         );
                         break;
                     }
@@ -209,18 +197,20 @@ void AppMenu::mousebutton()
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED
-                                    )
+                                    ),
+                                -1
                             );
                             break;
                         }
                         m_isstop = true;
                         m_app->jointh();
-                        m_app->screen();
+                        m_app->logo();
                         infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBDISCONNECT
-                                )
+                                ),
+                            -1
                         );
                         break;
                     }
@@ -242,7 +232,7 @@ void AppMenu::mousebutton()
                     {
                         m_ispos = !(m_ispos);
                         if (!m_ispos)
-                            infoset(MgrType::MGR_MENU, "");
+                            infoset(MgrType::MGR_MENU, "", -1);
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_CAPTURE:
@@ -260,7 +250,7 @@ void AppMenu::mousebutton()
                         {
                             SDL_SetWindowSize(
                                     m_app->m_window,
-                                    __W_default + m_menu_rect.w,
+                                    __W_default + gui.rect.w,
                                     __H_default
                                 );
                             SDL_SetWindowPosition(
@@ -289,7 +279,6 @@ void AppMenu::mousebutton()
             }
         case SDL_BUTTON_RIGHT:
             {
-                SDL_ShowSimpleMessageBox(0, "Mouse", "MENU Right button was pressed!", nullptr);
                 break;
             }
         default:
@@ -314,8 +303,8 @@ bool AppMenu::screenshot()
 
     SDL_Surface *l_ss_surface = SDL_CreateRGBSurface(
                 0,
-                m_app->m_main_rect.w,
-                m_app->m_main_rect.h,
+                m_app->m_base.gui.rect.w,
+                m_app->m_base.gui.rect.h,
                 32,
                 0x00ff0000,
                 0x0000ff00,
@@ -327,8 +316,8 @@ bool AppMenu::screenshot()
         return false;
 
     SDL_RenderReadPixels(
-            m_app->m_window_renderer,
-            &m_app->m_main_rect,
+            m_app->m_renderer,
+            &m_app->m_base.gui.rect,
             SDL_GetWindowPixelFormat(m_app->m_window),
             l_ss_surface->pixels,
             l_ss_surface->pitch
@@ -340,11 +329,11 @@ bool AppMenu::screenshot()
     std::stringstream ss;
     ss << ResManager::stringload(ResManager::IndexStringResource::RES_STR_FILESAVE);
     ss << fname.c_str();
-    infoset(MgrType::MGR_MENU, ss.str());
+    infoset(MgrType::MGR_MENU, ss.str(), -1);
     return true;
 }
 
-void AppMenu::infoset(MgrType mgrt, std::string const & s)
+void AppMenu::infoset(MgrType mgrt, std::string const & s, int32_t id)
 {
     std::stringstream ss;
 #   if defined (_BUILD_FRAME_NO_TITLE)
@@ -361,25 +350,25 @@ void AppMenu::infoset(MgrType mgrt, std::string const & s)
     {
         case MgrType::MGR_MAIN:
         {
-            if (m_app->m_window_event.motion.x > m_menu_rect.w)
+            if (m_app->m_event.motion.x > gui.rect.w)
             {
                 if ((!m_isstop) && (m_ispos))
                 {
                     uint32_t x = ((m_scale) ?
-                        ((m_app->m_window_event.motion.x - m_menu_rect.w) * m_scale) :
-                         (m_app->m_window_event.motion.x - m_menu_rect.w)
+                        ((m_app->m_event.motion.x - gui.rect.w) * m_scale) :
+                         (m_app->m_event.motion.x - gui.rect.w)
                         );
                     uint32_t y = ((m_scale) ?
-                        (m_app->m_window_event.motion.y * m_scale) :
-                         m_app->m_window_event.motion.y
+                        (m_app->m_event.motion.y * m_scale) :
+                         m_app->m_event.motion.y
                         );
                     uint32_t w = ((m_scale) ?
-                        (m_app->m_main_rect.w * m_scale) :
-                         m_app->m_main_rect.w
+                        (m_app->m_base.gui.rect.w * m_scale) :
+                         m_app->m_base.gui.rect.w
                         );
                     uint32_t h = ((m_scale) ?
-                        (m_app->m_main_rect.h * m_scale) :
-                         m_app->m_main_rect.h
+                        (m_app->m_base.gui.rect.h * m_scale) :
+                         m_app->m_base.gui.rect.h
                         );
 #                   if !defined (_BUILD_FRAME_NO_TITLE)
                     ss << " - ";
@@ -390,7 +379,7 @@ void AppMenu::infoset(MgrType mgrt, std::string const & s)
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else
                 {
-                    drawclear();
+                    m_app->m_info.clear();
                     return;
                 }
 #               endif
@@ -398,7 +387,7 @@ void AppMenu::infoset(MgrType mgrt, std::string const & s)
             else
             {
 #               if defined (_BUILD_FRAME_NO_TITLE)
-                drawclear();
+                m_app->m_info.clear();
 #               endif
                 return;
             }
@@ -409,7 +398,7 @@ void AppMenu::infoset(MgrType mgrt, std::string const & s)
 #           if defined (_BUILD_FRAME_NO_TITLE)
             if (s.empty())
             {
-                drawclear();
+                m_app->m_info.clear();
                 return;
             }
             ss << s.c_str();
@@ -422,64 +411,22 @@ void AppMenu::infoset(MgrType mgrt, std::string const & s)
         default:
             {
 #               if defined (_BUILD_FRAME_NO_TITLE)
-                drawclear();
+                m_app->m_info.clear();
 #               endif
                 return;
             }
     }
 #   if defined (_BUILD_FRAME_NO_TITLE)
     ss << "  ";
-    drawtext(ss.str());
+    SDL_Point offset = { (gui.rect.w + 1), 0 };
+    m_app->m_info.draw(ss.str(), &offset, id);
 #   else
-    drawtitle(ss.str());
+    settitle(ss.str());
 #   endif
 
 }
 
-void AppMenu::drawtitle(std::string const & s)
+void AppMenu::settitle(std::string const & s)
 {
     SDL_SetWindowTitle(m_app->m_window, s.c_str());
 }
-
-void AppMenu::drawtext(std::string const & s)
-{
-    if (!m_font)
-        return;
-
-    SDL_Texture *tmp_texture = nullptr;
-    std::swap(m_info_texture, tmp_texture);
-
-    if (tmp_texture)
-        SDL_DestroyTexture(tmp_texture);
-
-    SDL_Surface *surface = nullptr;
-
-    do
-    {
-        if (!(surface = TTF_RenderUTF8_Shaded(m_font, s.c_str(), AppMenu::txt_color[0], AppMenu::txt_color[1])))
-            break;
-
-        m_info_rect.w = surface->w;
-        m_info_rect.h = surface->h;
-        m_info_rect.x = m_menu_rect.w + 1;
-        m_info_rect.y = 0;
-
-        if ((tmp_texture = SDL_CreateTextureFromSurface(m_app->m_window_renderer, surface)))
-            std::swap(m_info_texture, tmp_texture);
-    }
-    while (0);
-
-    if (surface)
-        SDL_FreeSurface(surface);
-}
-
-void AppMenu::drawclear()
-{
-    if (!m_info_texture)
-        return;
-
-    SDL_Texture *tmp_texture = nullptr;
-    std::swap(m_info_texture, tmp_texture);
-    SDL_DestroyTexture(tmp_texture);
-}
-
