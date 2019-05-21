@@ -47,7 +47,7 @@ bool AppMenu::init(App *app)
        )
         return false;
 
-    return initgui(reinterpret_cast<guiMain*>(app));
+    return initgui(app);
 }
 
 void AppMenu::setcursor(uint32_t id)

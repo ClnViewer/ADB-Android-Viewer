@@ -67,6 +67,28 @@ public:
         {
             switch (ev->key.keysym.sym)
             {
+                case SDLK_v:
+                    {
+                        if ((SDL_GetModState() & KMOD_CTRL) && (SDL_HasClipboardText()))
+                        {
+                            char *tmp;
+
+                            if (!(tmp = SDL_GetClipboardText()))
+                                break;
+                            std::stringstream ss;
+                            m_str.assign(tmp);
+                            SDL_free(tmp);
+                            ss << " " << m_str.c_str() << " ";
+                            draw(ss.str(), offset);
+                        }
+                        break;
+                    }
+                case SDLK_c:
+                    {
+                        if (SDL_GetModState() & KMOD_CTRL)
+                            SDL_SetClipboardText(m_str.data());
+                        break;
+                    }
                 case SDLK_ESCAPE:
                     {
                         end();

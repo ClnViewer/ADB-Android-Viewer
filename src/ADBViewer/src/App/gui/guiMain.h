@@ -51,11 +51,10 @@ public:
             return 2;
         return 0;
     }
-    int32_t addpool(guiRenderer_s *gr) noexcept
+    void addpool(guiRenderer_s *gr) noexcept
     {
-        int32_t ret = m_guipool.size();
+        gr->id = m_guipool.size();
         m_guipool.push_back(gr);
-        return ret;
     }
     void removepool(int32_t id) noexcept
     {

@@ -14,7 +14,7 @@ public:
             return gui.active.load();
 
         m_guimain = gm;
-        gui.id = m_guimain->addpool(&gui);
+        m_guimain->addpool(&gui);
         gui.active = true;
         return gui.active.load();
     }
