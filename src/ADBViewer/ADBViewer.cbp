@@ -73,11 +73,15 @@
 		</Unit>
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
-		<Unit filename="src/App/AppMenu.WINAPI.cpp" />
-		<Unit filename="src/App/AppMenu.cpp" />
-		<Unit filename="src/App/AppMenu.h" />
+		<Unit filename="src/App/AppConfig.h" />
+		<Unit filename="src/App/AppMenuBar.WINAPI.cpp" />
+		<Unit filename="src/App/AppMenuBar.cpp" />
+		<Unit filename="src/App/AppMenuBar.h" />
+		<Unit filename="src/App/gui/gui.h" />
+		<Unit filename="src/App/gui/guiBase.cpp" />
 		<Unit filename="src/App/gui/guiBase.h" />
 		<Unit filename="src/App/gui/guiBoxTextInput.h" />
+		<Unit filename="src/App/gui/guiMain.cpp" />
 		<Unit filename="src/App/gui/guiMain.h" />
 		<Unit filename="src/App/gui/guiStaticText.h" />
 		<Unit filename="src/loader.h" />

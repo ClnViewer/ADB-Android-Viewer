@@ -1,6 +1,16 @@
 #pragma once
 
-#include <SDL2/SDL.h>
+class guiMain;
+class guiBase;
+
+typedef struct
+{
+    const void       *instance;
+    SDL_Texture      *texture;
+    SDL_Rect          rect;
+    int32_t           id;
+    std::atomic<bool> active;
+} guiRenderer_s;
 
 class guiBase
 {
@@ -8,35 +18,12 @@ public:
     //
     guiRenderer_s gui;
 
-    bool initgui(guiMain *gm) noexcept
-    {
-        if ((m_guimain) || (!gm))
-            return gui.active.load();
+    bool initgui(guiMain*) noexcept;
+    virtual bool event(SDL_Event*, SDL_Point*, const void*);
+    guiMain * getgui() const;
 
-        m_guimain = gm;
-        m_guimain->addpool(&gui);
-        gui.active = true;
-        return gui.active.load();
-    }
-    guiMain * getgui() const
-    {
-        return m_guimain;
-    }
-    guiBase()
-     :  gui{}, m_guimain(nullptr)
-    {
-        gui.active = false;
-        gui.texture = nullptr;
-    }
-    ~guiBase()
-    {
-        if (m_guimain)
-            m_guimain->removepool(gui.id);
-
-        if (gui.texture)
-            SDL_DestroyTexture(gui.texture);
-        gui.texture = nullptr;
-    }
+    guiBase();
+    ~guiBase();
 
 private:
     //

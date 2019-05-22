@@ -16,13 +16,18 @@ enum MgrType
     MGR_MENU
 };
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+
 #  include "../../ADBViewerDLL/src/ResManager.h"
 using Resources::ResManager;
 
 #  include "../../ADBDriverDLL/src/ADBDriver.h"
 using GameDev::ADBDriver;
 
-#  include "App/AppMenu.h"
+#  include "App/AppConfig.h"
+#  include "App/gui/gui.h"
+#  include "App/AppMenuBar.h"
 #  include "App/App.h"
 
 #endif

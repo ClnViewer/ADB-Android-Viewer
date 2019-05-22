@@ -1,0 +1,431 @@
+
+#include "../ADBViewer.h"
+
+AppMenuBar::AppMenuBar()
+    : m_cursor{nullptr}
+{
+    gui.rect.h = __H_default;
+    gui.rect.w = 32;
+    gui.rect.x = 0;
+    gui.rect.y = 0;
+}
+
+AppMenuBar::~AppMenuBar()
+{
+    if (m_cursor[0])
+        SDL_FreeCursor(m_cursor[0]);
+    if (m_cursor[1])
+        SDL_FreeCursor(m_cursor[1]);
+
+    m_cursor[0] = nullptr;
+    m_cursor[1] = nullptr;
+}
+
+bool AppMenuBar::init(App *app)
+{
+    if (!app)
+        return false;
+
+    m_app = app;
+
+    SDL_Surface *l_image_surface = ResManager::imageload(
+                    ResManager::IndexImageResource::RES_IMG_MENU
+                );
+    if (!l_image_surface)
+        return false;
+
+    gui.texture = SDL_CreateTextureFromSurface(m_app->m_renderer, l_image_surface);
+    SDL_FreeSurface(l_image_surface);
+    if (!gui.texture)
+        return false;
+
+    if (
+        (!(m_cursor[0] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW))) ||
+        (!(m_cursor[1] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND)))
+       )
+        return false;
+
+    return initgui(app);
+}
+
+void AppMenuBar::setcursor(uint32_t id)
+{
+    if (m_cursor[id])
+        SDL_SetCursor(m_cursor[id]);
+}
+
+ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32_t h)
+{
+    /// Cursor normalize, left/right padding
+    if ((w < 3) || ((d - w) < 3))
+        return ResManager::IndexStringResource::RES_STR_UNKNOWN;
+
+#   pragma GCC diagnostic push
+#   pragma GCC diagnostic ignored "-Wpedantic"
+    switch (h)
+    {
+        case 5   ... 35:  return ResManager::IndexStringResource::RES_STR_QUIT;
+        case 40  ... 70:  return ResManager::IndexStringResource::RES_STR_START;
+        case 78  ... 108: return ResManager::IndexStringResource::RES_STR_STOP;
+        case 115 ... 145: return ResManager::IndexStringResource::RES_STR_ADBSET;
+        case 153 ... 180: return ResManager::IndexStringResource::RES_STR_SCALE;
+        case 187 ... 213: return ResManager::IndexStringResource::RES_STR_POSINFO;
+        case 222 ... 251: return ResManager::IndexStringResource::RES_STR_CAPTURE;
+        case 258 ... 288: return ResManager::IndexStringResource::RES_STR_FULLSCREEN;
+        case 294 ... 323: return ResManager::IndexStringResource::RES_STR_APK;
+        default:          return ResManager::IndexStringResource::RES_STR_UNKNOWN;
+    }
+#   pragma GCC diagnostic pop
+}
+
+bool AppMenuBar::event(SDL_Event *ev, SDL_Point *offset, const void *instance)
+{
+    AppMenuBar *amb = (AppMenuBar*)instance;
+
+    if (ev->motion.x > amb->gui.rect.w)
+        return false;
+
+    switch(ev->type)
+    {
+        case SDL_MOUSEBUTTONDOWN:
+            {
+                return amb->mousebutton(ev, amb);
+            }
+        case SDL_MOUSEMOTION:
+            {
+                return amb->mousemove(ev, amb);
+            }
+        default:
+            break;
+    }
+    return false;
+}
+
+bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
+{
+    ResManager::IndexStringResource id;
+    switch((id = amb->clickpos(
+                    amb->gui.rect.w,
+                    ev->motion.x,
+                    ev->motion.y)))
+    {
+        case ResManager::IndexStringResource::RES_STR_QUIT:
+        case ResManager::IndexStringResource::RES_STR_START:
+        case ResManager::IndexStringResource::RES_STR_STOP:
+        case ResManager::IndexStringResource::RES_STR_ADBSET:
+        case ResManager::IndexStringResource::RES_STR_SCALE:
+        case ResManager::IndexStringResource::RES_STR_POSINFO:
+        case ResManager::IndexStringResource::RES_STR_CAPTURE:
+        case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
+        case ResManager::IndexStringResource::RES_STR_APK:
+        {
+            infoset(
+                MgrType::MGR_MENU,
+                ResManager::stringload(id),
+                (__LINE__ + id), ev
+            );
+            setcursor(1U);
+            return true;
+        }
+        default:
+        {
+            infoset(
+                MgrType::MGR_MENU,
+                ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN),
+                __LINE__, ev
+            );
+            amb->setcursor(0U);
+            break;
+        }
+    }
+    return false;
+}
+
+bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb)
+{
+    switch (ev->button.button)
+    {
+        case SDL_BUTTON_LEFT:
+            {
+                switch(amb->clickpos(
+                        amb->gui.rect.w,
+                        ev->motion.x,
+                        ev->motion.y))
+                {
+                    case ResManager::IndexStringResource::RES_STR_QUIT:
+                    {
+                        AppConfig::instance().cnf_isrun = false;
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_START:
+                    {
+                        if (!AppConfig::instance().cnf_isstop)
+                        {
+                            amb->infoset(
+                                MgrType::MGR_MENU,
+                                ResManager::stringload(
+                                    ResManager::IndexStringResource::RES_STR_ADBCONNECTED
+                                    ),
+                                -1, ev
+                            );
+                            return true;
+                        }
+
+                        if (!amb->m_app->m_adb.IsDeviceID())
+                            amb->m_app->m_adb.GetDeviceListUI();
+
+                        AppConfig::instance().cnf_isstop = false;
+                        amb->m_app->run();
+                        amb->infoset(
+                            MgrType::MGR_MENU,
+                            ResManager::stringload(
+                                ResManager::IndexStringResource::RES_STR_ADBCONNECT
+                                ),
+                            -1, ev
+                        );
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_STOP:
+                    {
+                        if (AppConfig::instance().cnf_isstop)
+                        {
+                            amb->infoset(
+                                MgrType::MGR_MENU,
+                                ResManager::stringload(
+                                    ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED
+                                    ),
+                                -1, ev
+                            );
+                            return true;
+                        }
+                        AppConfig::instance().cnf_isstop = true;
+                        amb->m_app->jointh();
+                        amb->m_app->logo();
+                        amb->infoset(
+                            MgrType::MGR_MENU,
+                            ResManager::stringload(
+                                ResManager::IndexStringResource::RES_STR_ADBDISCONNECT
+                                ),
+                            -1, ev
+                        );
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_ADBSET:
+                    {
+                        amb->m_app->m_adb.GetDeviceSetupUI();
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_SCALE:
+                    {
+                        AppConfig::instance().cnf_isstop = true;
+                        amb->m_app->jointh();
+                        AppConfig::instance().cnf_scale = ((AppConfig::instance().cnf_scale.load() == 2U) ? 1U : 2U);
+                        AppConfig::instance().cnf_isstop = false;
+                        amb->m_app->run();
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_POSINFO:
+                    {
+                        AppConfig::instance().cnf_ispos = !(AppConfig::instance().cnf_ispos);
+                        if (!AppConfig::instance().cnf_ispos)
+                            amb->infoset(MgrType::MGR_MENU, "", -1, ev);
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_CAPTURE:
+                    {
+                        amb->screenshot(ev);
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
+                    {
+                        SDL_SetWindowFullscreen(
+                            amb->m_app->m_window,
+                            ((AppConfig::instance().cnf_isfullscreen) ? 0U : SDL_WINDOW_FULLSCREEN)
+                        );
+                        if (AppConfig::instance().cnf_isfullscreen)
+                        {
+                            SDL_SetWindowSize(
+                                    amb->m_app->m_window,
+                                    __W_default + amb->gui.rect.w,
+                                    __H_default
+                                );
+                            SDL_SetWindowPosition(
+                                    amb->m_app->m_window,
+                                    SDL_WINDOWPOS_CENTERED,
+                                    SDL_WINDOWPOS_CENTERED
+                                );
+                        }
+                        AppConfig::instance().cnf_isfullscreen = !(AppConfig::instance().cnf_isfullscreen);
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_APK:
+                    {
+                        std::string fname;
+                        if (amb->openfile(fname))
+                            amb->m_app->m_adb.InstallApk(fname);
+
+                        return true;
+                    }
+                    default:
+                    {
+                        break;
+                    }
+                }
+                break;
+            }
+        case SDL_BUTTON_RIGHT:
+            {
+                break;
+            }
+        default:
+            {
+                break;
+            }
+    }
+    return false;
+}
+
+bool AppMenuBar::screenshot(SDL_Event *ev)
+{
+    if (!m_app)
+        return false;
+
+    std::string fname(
+            ResManager::stringload(
+                ResManager::IndexStringResource::RES_STR_CAPFILENAME
+            )
+        );
+    if (!savefile(fname))
+        return false;
+
+    SDL_Surface *l_ss_surface = SDL_CreateRGBSurface(
+                0,
+                m_app->gui.rect.w,
+                m_app->gui.rect.h,
+                32,
+                0x00ff0000,
+                0x0000ff00,
+                0x000000ff,
+                0xff000000
+            );
+
+    if (!l_ss_surface)
+        return false;
+
+    SDL_RenderReadPixels(
+            m_app->m_renderer,
+            &m_app->gui.rect,
+            SDL_GetWindowPixelFormat(m_app->m_window),
+            l_ss_surface->pixels,
+            l_ss_surface->pitch
+        );
+
+    SDL_SaveBMP(l_ss_surface, fname.c_str());
+    SDL_FreeSurface(l_ss_surface);
+
+    std::stringstream ss;
+    ss << ResManager::stringload(ResManager::IndexStringResource::RES_STR_FILESAVE);
+    ss << fname.c_str();
+    infoset(MgrType::MGR_MENU, ss.str(), -1, ev);
+    return true;
+}
+
+void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Event *ev)
+{
+    std::stringstream ss;
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+#   else
+    ss << ResManager::stringload(
+            ResManager::IndexStringResource::RES_STR_APPTITLENAME
+        );
+    ss << "v." << AVIEW_FULLVERSION_STRING;
+    ss << " r." << AVIEW_SVN_REVISION;
+#   endif
+
+    switch(mgrt)
+    {
+        case MgrType::MGR_MAIN:
+        {
+            if (ev->motion.x > gui.rect.w)
+            {
+                if ((!AppConfig::instance().cnf_isstop) && (AppConfig::instance().cnf_ispos))
+                {
+                    uint32_t x = ((AppConfig::instance().cnf_scale) ?
+                        ((ev->motion.x - gui.rect.w) * AppConfig::instance().cnf_scale) :
+                         (ev->motion.x - gui.rect.w)
+                        );
+                    uint32_t y = ((AppConfig::instance().cnf_scale) ?
+                        (ev->motion.y * AppConfig::instance().cnf_scale) :
+                         ev->motion.y
+                        );
+                    uint32_t w = ((AppConfig::instance().cnf_scale) ?
+                        (m_app->gui.rect.w * AppConfig::instance().cnf_scale) :
+                         m_app->gui.rect.w
+                        );
+                    uint32_t h = ((AppConfig::instance().cnf_scale) ?
+                        (m_app->gui.rect.h * AppConfig::instance().cnf_scale) :
+                         m_app->gui.rect.h
+                        );
+#                   if !defined (_BUILD_FRAME_NO_TITLE)
+                    ss << " - ";
+#                   endif
+                    ss << "( " << w << "x" << h << " )";
+                    ss << " - " << "( X: " << x << " Y: " << y << " )";
+                }
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                else
+                {
+                    m_app->m_info.clear();
+                    return;
+                }
+#               endif
+            }
+            else
+            {
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                m_app->m_info.clear();
+#               endif
+                return;
+            }
+            break;
+        }
+        case MgrType::MGR_MENU:
+        {
+#           if defined (_BUILD_FRAME_NO_TITLE)
+            if (s.empty())
+            {
+                m_app->m_info.clear();
+                return;
+            }
+            ss << s.c_str();
+#           else
+            if (!s.empty())
+                ss << " - " << s.c_str();
+#           endif
+            break;
+        }
+        default:
+            {
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                m_app->m_info.clear();
+#               endif
+                return;
+            }
+    }
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+    SDL_Point offset = { (gui.rect.w + 1), 0 };
+    m_app->m_info.draw(ss.str(), &offset, id);
+#   else
+    settitle(ss.str());
+#   endif
+
+}
+
+void AppMenuBar::settitle(std::string const & s)
+{
+    SDL_SetWindowTitle(m_app->m_window, s.c_str());
+}
+
+

@@ -1,9 +1,6 @@
 #pragma once
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-
-class guiBoxTextInput
+class guiBoxTextInput : public guiStaticText
 {
 private:
 
@@ -12,20 +9,12 @@ private:
         if (s.empty())
             return;
 
-        m_guitext.draw(s, offset, -1);
-        SDL_SetTextInputRect(&m_guitext.gui.rect);
+        guiStaticText::draw(s, offset, -1);
+        SDL_SetTextInputRect(&gui.rect);
     }
 
 public:
-    //
-    bool init(
-            guiMain *gm,
-            ResManager::IndexFontResource ifx,
-            ResManager::IndexColorResource icx
-        ) noexcept
-    {
-        return m_guitext.init(gm, ifx, icx);
-    }
+
     void begin(std::string const & s, SDL_Point *offset)
     {
         if (m_active.load())
@@ -42,25 +31,29 @@ public:
             return;
 
         SDL_StopTextInput();
-        m_guitext.clear();
+        guiStaticText::clear();
     }
-    bool status() const
+    bool isactive() const
     {
         return m_active.load();
     }
     bool isresult()
     {
+        end();
         m_active = false;
         return (!m_str.empty());
     }
     std::string getresult()
     {
+        end();
         m_active = false;
         return m_str;
     }
-    bool event(SDL_Event *ev, SDL_Point *offset)
+    bool event(SDL_Event *ev, SDL_Point *offset, const void *instance) override
     {
-        if (!m_active.load())
+        guiBoxTextInput *bti = (guiBoxTextInput*)instance;
+
+        if ((AppConfig::instance().cnf_isstop) || (!bti->m_active.load()))
             return false;
 
         if (ev->type == SDL_KEYDOWN)
@@ -76,7 +69,7 @@ public:
                             if (!(tmp = SDL_GetClipboardText()))
                                 break;
                             std::stringstream ss;
-                            m_str.assign(tmp);
+                            bti->m_str.assign(tmp);
                             SDL_free(tmp);
                             ss << " " << m_str.c_str() << " ";
                             draw(ss.str(), offset);
@@ -86,28 +79,27 @@ public:
                 case SDLK_c:
                     {
                         if (SDL_GetModState() & KMOD_CTRL)
-                            SDL_SetClipboardText(m_str.data());
+                            SDL_SetClipboardText(bti->m_str.data());
                         break;
                     }
                 case SDLK_ESCAPE:
                     {
                         end();
-                        m_str.erase();
-                        m_active = false;
-                        return false;
+                        bti->m_str.erase();
+                        bti->m_active = false;
+                        return true;
                     }
                 case SDLK_RETURN:
                 case SDLK_RETURN2:
                     {
-                        end();
-                        return false;
+                        break;
                     }
                 case SDLK_BACKSPACE:
                     {
                         std::stringstream ss;
-                        if (!m_str.empty())
-                            m_str.pop_back();
-                        ss << " " << m_str.c_str() << " ";
+                        if (!bti->m_str.empty())
+                            bti->m_str.pop_back();
+                        ss << " " << bti->m_str.c_str() << " ";
                         draw(ss.str(), offset);
                         break;
                     }
@@ -136,8 +128,8 @@ public:
         else if (ev->type == SDL_TEXTINPUT)
         {
             std::stringstream ss;
-            m_str.append(ev->text.text);
-            ss << " " << m_str.c_str() << " ";
+            bti->m_str.append(ev->text.text);
+            ss << " " << bti->m_str.c_str() << " ";
             draw(ss.str(), offset);
         }
         else if (ev->type == SDL_MOUSEBUTTONDOWN)
@@ -154,7 +146,6 @@ public:
 private:
     //
     int32_t           m_pos;
-    guiStaticText     m_guitext;
     std::atomic<bool> m_active;
     std::string       m_str;
     //
