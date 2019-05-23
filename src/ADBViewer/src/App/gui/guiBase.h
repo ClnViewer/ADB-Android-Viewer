@@ -18,12 +18,15 @@ public:
     //
     guiRenderer_s gui;
 
-    bool initgui(guiMain*) noexcept;
-    virtual bool event(SDL_Event*, SDL_Point*, const void*);
     guiMain * getgui() const;
+    virtual bool event(SDL_Event*, SDL_Point*, const void*);
 
     guiBase();
     ~guiBase();
+
+protected:
+    //
+    bool initgui(guiMain*) noexcept;
 
 private:
     //

@@ -32,6 +32,11 @@ int32_t guiMain::initm(int32_t w, int32_t h)
                 SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC
             )))
             return 2;
+
+        m_uevent = SDL_RegisterEvents(1);
+        if (m_uevent == ((uint32_t)-1))
+            return 3;
+
         return 0;
     }
 
@@ -43,7 +48,18 @@ void guiMain::addpool(guiRenderer_s *gr) noexcept
 
 void guiMain::removepool(int32_t id) noexcept
     {
-        m_guipool[id] = nullptr;
+        auto grr = find_if(
+                    m_guipool.begin(),
+                    m_guipool.end(),
+                    [=](guiRenderer_s *gr)
+                    {
+                        if (!gr)
+                            return false;
+                        return gr->id == id;
+                    }
+            );
+        if (grr != m_guipool.end())
+            m_guipool.erase(grr);
     }
 
 void guiMain::draw()
@@ -63,14 +79,16 @@ void guiMain::events(SDL_Event *ev, SDL_Point *pt)
         for (auto &gr : m_guipool)
             if ((gr) && (gr->active) && (gr->instance))
             {
-                guiBase *gb = (guiBase*)gr->instance;
+                guiBase *gb = static_cast<guiBase*>(
+                                const_cast<void*>(gr->instance)
+                                );
                 if ((gb) && (gb->event(ev, pt, gr->instance)))
                     break;
             }
     }
 
 guiMain::guiMain()
-     : m_renderer(nullptr), m_window(nullptr), m_event{} {}
+     : m_renderer(nullptr), m_window(nullptr), m_event{}, m_uevent(0U) {}
 
 guiMain::~guiMain()
     {

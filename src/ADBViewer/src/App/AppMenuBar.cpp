@@ -54,8 +54,17 @@ void AppMenuBar::setcursor(uint32_t id)
         SDL_SetCursor(m_cursor[id]);
 }
 
-ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32_t h)
+ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32_t h, int32_t ucode)
 {
+    switch(ucode)
+    {
+        case ID_CMD_POP_MENU1: return ResManager::IndexStringResource::RES_STR_STOP;
+        case ID_CMD_POP_MENU3: return ResManager::IndexStringResource::RES_STR_CAPTURE_D;
+        case ID_CMD_POP_MENU4: return ResManager::IndexStringResource::RES_STR_CAPTURE_F;
+        default:
+            break;
+    }
+
     /// Cursor normalize, left/right padding
     if ((w < 3) || ((d - w) < 3))
         return ResManager::IndexStringResource::RES_STR_UNKNOWN;
@@ -70,7 +79,7 @@ ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32
         case 115 ... 145: return ResManager::IndexStringResource::RES_STR_ADBSET;
         case 153 ... 180: return ResManager::IndexStringResource::RES_STR_SCALE;
         case 187 ... 213: return ResManager::IndexStringResource::RES_STR_POSINFO;
-        case 222 ... 251: return ResManager::IndexStringResource::RES_STR_CAPTURE;
+        case 222 ... 251: return ResManager::IndexStringResource::RES_STR_CAPTURE_D;
         case 258 ... 288: return ResManager::IndexStringResource::RES_STR_FULLSCREEN;
         case 294 ... 323: return ResManager::IndexStringResource::RES_STR_APK;
         default:          return ResManager::IndexStringResource::RES_STR_UNKNOWN;
@@ -82,6 +91,9 @@ bool AppMenuBar::event(SDL_Event *ev, SDL_Point *offset, const void *instance)
 {
     AppMenuBar *amb = (AppMenuBar*)instance;
 
+    if (ev->type == amb->m_app->m_uevent)
+        return amb->mousebutton(ev, amb, ev->user.code);
+
     if (ev->motion.x > amb->gui.rect.w)
         return false;
 
@@ -89,7 +101,7 @@ bool AppMenuBar::event(SDL_Event *ev, SDL_Point *offset, const void *instance)
     {
         case SDL_MOUSEBUTTONDOWN:
             {
-                return amb->mousebutton(ev, amb);
+                return amb->mousebutton(ev, amb, -1);
             }
         case SDL_MOUSEMOTION:
             {
@@ -107,7 +119,8 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
     switch((id = amb->clickpos(
                     amb->gui.rect.w,
                     ev->motion.x,
-                    ev->motion.y)))
+                    ev->motion.y,
+                    -1)))
     {
         case ResManager::IndexStringResource::RES_STR_QUIT:
         case ResManager::IndexStringResource::RES_STR_START:
@@ -115,7 +128,8 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
         case ResManager::IndexStringResource::RES_STR_ADBSET:
         case ResManager::IndexStringResource::RES_STR_SCALE:
         case ResManager::IndexStringResource::RES_STR_POSINFO:
-        case ResManager::IndexStringResource::RES_STR_CAPTURE:
+        case ResManager::IndexStringResource::RES_STR_CAPTURE_D:
+        case ResManager::IndexStringResource::RES_STR_CAPTURE_F:
         case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
         case ResManager::IndexStringResource::RES_STR_APK:
         {
@@ -141,16 +155,15 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
     return false;
 }
 
-bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb)
+bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
 {
-    switch (ev->button.button)
+    if ((ucode > 0) || (ev->button.button == SDL_BUTTON_LEFT))
     {
-        case SDL_BUTTON_LEFT:
-            {
                 switch(amb->clickpos(
                         amb->gui.rect.w,
                         ev->motion.x,
-                        ev->motion.y))
+                        ev->motion.y,
+                        ucode))
                 {
                     case ResManager::IndexStringResource::RES_STR_QUIT:
                     {
@@ -231,9 +244,14 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb)
                             amb->infoset(MgrType::MGR_MENU, "", -1, ev);
                         return true;
                     }
-                    case ResManager::IndexStringResource::RES_STR_CAPTURE:
+                    case ResManager::IndexStringResource::RES_STR_CAPTURE_D:
                     {
-                        amb->screenshot(ev);
+                        amb->screenshot(ev, false);
+                        return true;
+                    }
+                    case ResManager::IndexStringResource::RES_STR_CAPTURE_F:
+                    {
+                        amb->screenshot(ev, true);
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
@@ -271,21 +289,11 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb)
                         break;
                     }
                 }
-                break;
-            }
-        case SDL_BUTTON_RIGHT:
-            {
-                break;
-            }
-        default:
-            {
-                break;
-            }
     }
     return false;
 }
 
-bool AppMenuBar::screenshot(SDL_Event *ev)
+bool AppMenuBar::screenshot(SDL_Event *ev, bool isdialog)
 {
     if (!m_app)
         return false;
@@ -295,8 +303,22 @@ bool AppMenuBar::screenshot(SDL_Event *ev)
                 ResManager::IndexStringResource::RES_STR_CAPFILENAME
             )
         );
-    if (!savefile(fname))
-        return false;
+
+#   if !defined(OS_WIN)
+    isdialog = false;
+#   endif
+
+    if (isdialog)
+    {
+        if (!savefile(fname))
+            return false;
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << fname << std::to_string(time(NULL)) << ".bmp";
+        fname.assign(ss.str().c_str());
+    }
 
     SDL_Surface *l_ss_surface = SDL_CreateRGBSurface(
                 0,

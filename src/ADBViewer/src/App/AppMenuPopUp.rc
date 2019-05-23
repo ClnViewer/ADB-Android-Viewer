@@ -1,0 +1,13 @@
+
+#include "AppMenuPopUp.WINAPI.h"
+
+
+LANGUAGE 0x19, 0x01
+STRINGTABLE
+{
+    IDS_MENUMSG0 "Скриншот"
+    IDS_MENUMSG1 "Отключить устройство"
+    IDS_MENUMSG2 "Выход"
+    IDS_MENUMSG3 "Сохранить"
+    IDS_MENUMSG4 "Сохранить как .."
+}

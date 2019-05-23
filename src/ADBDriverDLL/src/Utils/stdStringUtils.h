@@ -37,7 +37,6 @@ namespace stdext
     return hmd;
     }
 
-
     /// compare
     template<class T>
     inline bool string_end(T const & val, T const & ending)
@@ -70,7 +69,7 @@ namespace stdext
 	}
 
     /// class
-	class wstring_fmt {
+	class DLL_EXPORT wstring_fmt {
 	private:
 		std::wstringstream _ws;
 	public:
@@ -101,14 +100,14 @@ namespace stdext
 	};
 
 	template<class T>
-	class string_sprintf
+	class DLL_EXPORT string_sprintf
 	{
-	    size_t _slen;
-	    T _sout;
+	    size_t m_slen;
+	    T m_sout;
     public:
-        string_sprintf() : _slen(0U), _sout{} {}
-        ~string_sprintf() { _sout.clear(); }
-        T get() { return _sout; }
+        string_sprintf() : m_slen(0U), m_sout{} {}
+        ~string_sprintf() { m_sout.clear(); }
+        T get() { return m_sout; }
         T go(const T, ...);
 	};
 	template<>
@@ -118,16 +117,16 @@ namespace stdext
 
     /// class, using this utilities
 	template<class T>
-	class string_from_res
+	class DLL_EXPORT string_from_res
 	{
-	    size_t _slen;
-	    HINSTANCE _hinst;
-	    T _sout;
+	    size_t m_slen;
+	    HINSTANCE m_hinst;
+	    T m_sout;
     public:
-        string_from_res() : _slen(0U), _hinst(NULL), _sout{} {}
-        ~string_from_res() { _sout.clear(); }
-        void init(HINSTANCE hinst) { _hinst = ((!hinst) ? hmodule_get() : hinst); }
-        T get() { return _sout; }
+        string_from_res() : m_slen(0U), m_hinst(NULL), m_sout{} {}
+        ~string_from_res()  { m_sout.clear(); }
+        void init(HINSTANCE hinst)  { m_hinst = ((!hinst) ? hmodule_get() : hinst); }
+        T get() { return m_sout; }
         T go(HINSTANCE hinst, uint32_t id);
 	};
 	template<>

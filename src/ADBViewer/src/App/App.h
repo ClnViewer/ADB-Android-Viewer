@@ -13,6 +13,7 @@ public:
     ADBDriver::Swipe_s m_adb_rect;
     //
     AppMenuBar    m_appmenubar;
+    AppMenuPopUp  m_appmenupop;
     SDL_Point     m_pinput;
 
     App();

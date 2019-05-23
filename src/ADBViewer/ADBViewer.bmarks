@@ -1,77 +1,87 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="src\App\gui\guiMain.h" open="1" top="0" tabpos="1">
-		<Cursor position="345" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\gui\guiBase.cpp" open="1" top="1" tabpos="4">
-		<Cursor position="308" topLine="12" />
-		<BrowseMarks positions="649" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\ADBViewer.h" open="0" top="0" tabpos="3">
-		<Cursor position="451" topLine="2" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\App.cpp" open="1" top="0" tabpos="7">
-		<Cursor position="5826" topLine="192" />
-		<BrowseMarks positions="5742" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\gui\guiMain.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="1118" topLine="25" />
-		<BrowseMarks positions="964,1241" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\App.h" open="0" top="0" tabpos="0">
-		<Cursor position="154" topLine="2" />
-		<BrowseMarks positions="14" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\AppMenuBar.WINAPI.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="76" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="0">
-		<Cursor position="632" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\gui\guiBase.h" open="1" top="0" tabpos="3">
-		<Cursor position="366" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2393" topLine="66" />
-		<BrowseMarks positions="2503,4307,10120" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\gui\guiStaticText.h" open="1" top="0" tabpos="6">
-		<Cursor position="12" topLine="55" />
-		<BrowseMarks positions="540,574,2087" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="91" topLine="0" />
-	</File>
-	<File name="src\App\AppMenuBar.h" open="1" top="0" tabpos="5">
-		<Cursor position="336" topLine="4" />
+	<File name="src\App\AppMenuBar.h" open="0" top="0" tabpos="5">
+		<Cursor position="691" topLine="4" />
 		<BrowseMarks positions="40" />
 		<Book_Marks positions="" />
 	</File>
-	<File name="src\loader.h" open="0" top="0" tabpos="0">
-		<Cursor position="378" topLine="0" />
+	<File name="src\App\gui\guiBase.h" open="1" top="1" tabpos="3">
+		<Cursor position="424" topLine="3" />
 		<BrowseMarks positions="" />
 		<Book_Marks positions="" />
 	</File>
 	<File name="src\App\gui\guiBoxTextInput.h" open="0" top="0" tabpos="3">
 		<Cursor position="2505" topLine="38" />
 		<BrowseMarks positions="278" />
+	</File>
+	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="91" topLine="0" />
+	</File>
+	<File name="src\App\gui\guiMain.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="2237" topLine="69" />
+		<BrowseMarks positions="884,1070,1710" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppMenuPopUp.WINAPI.h" open="0" top="0" tabpos="0">
+		<Cursor position="1702" topLine="2" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="0">
+		<Cursor position="632" topLine="0" />
+	</File>
+	<File name="src\App\gui\guiBase.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="235" topLine="0" />
+		<BrowseMarks positions="649" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\gui\guiMain.h" open="1" top="0" tabpos="1">
+		<Cursor position="27" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\App.h" open="1" top="0" tabpos="7">
+		<Cursor position="41" topLine="0" />
+		<BrowseMarks positions="14" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppMenuPopUp.h" open="1" top="0" tabpos="6">
+		<Cursor position="186" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\gui\guiStaticText.h" open="0" top="0" tabpos="6">
+		<Cursor position="12" topLine="55" />
+		<BrowseMarks positions="540,574,2087" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="421" topLine="0" />
+		<BrowseMarks positions="1923" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\ADBViewer.h" open="0" top="0" tabpos="3">
+		<Cursor position="191" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\loader.h" open="0" top="0" tabpos="0">
+		<Cursor position="378" topLine="4" />
+	</File>
+	<File name="src\App\App.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="3313" topLine="86" />
+		<BrowseMarks positions="5902" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppMenuBar.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="953" topLine="7" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1084" topLine="5" />
+		<BrowseMarks positions="2952,4785,4854,10729" />
 		<Book_Marks positions="" />
 	</File>
 </BrowseTracker_layout_file>

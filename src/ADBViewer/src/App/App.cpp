@@ -62,17 +62,18 @@ App::App()
     if (
         (!gui.texture)   ||           /// this main texture
         (!initgui(this)) ||           /// this main GUI screen
-        (!m_appmenubar.init(this)) || /// this menu screen
+        (!m_appmenubar.init(this)) || /// this menu BAR screen
+        (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_info.init(
                 this,
                 ResManager::IndexFontResource::RES_FONT_16704,
                 ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK
-            )) ||                /// info-help left rectangle
+            )) ||                     /// info-help left rectangle
         (!m_input.init(
                 this,
                 ResManager::IndexFontResource::RES_FONT_FREESANS,
                 ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE
-            ))                   /// keyboard input rectangle
+            ))                        /// keyboard input rectangle
     )
     {
         SDL_ShowSimpleMessageBox(
@@ -108,6 +109,10 @@ App::App()
         );
         return;
     }
+
+#   if defined(OS_WIN_EVENT)
+    SDL_EventState(SDL_SYSWMEVENT, SDL_ENABLE);
+#   endif
 
     logo();
 }
@@ -226,6 +231,7 @@ bool App::event(SDL_Event *ev, SDL_Point *pt, const void *instance)
     switch(ev->type)
     {
         case SDL_QUIT:
+        case SDL_WINDOWEVENT_CLOSE:
         {
             AppConfig::instance().cnf_isrun = false;
             return true;
@@ -255,7 +261,8 @@ bool App::event(SDL_Event *ev, SDL_Point *pt, const void *instance)
                 }
                 case SDL_BUTTON_RIGHT:
                 {
-                    break;
+                    app->m_appmenupop.show();
+                    return true;
                 }
                 default:
                 {
