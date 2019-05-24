@@ -77,10 +77,12 @@ void AppMenuPopUp::show()
         MENU_ITEM_ADD(ID_CMD_POP_MENU1, IDS_MENUMSG1,  rmap, l_hMenuPop);
         ::AppendMenuW(l_hMenuPop,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU2, IDS_MENUMSG2,  rmap, l_hMenuPop);
+        ::AppendMenuW(l_hMenuPop,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU3, IDS_MENUMSG3,  rmap, l_hMenuPop);
 
-        MENU_ITEM_ADD(ID_CMD_POP_MENU3, IDS_MENUMSG3,  rmap, l_hCapMenu);
-        ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU4, IDS_MENUMSG4,  rmap, l_hCapMenu);
+        ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU5, IDS_MENUMSG5,  rmap, l_hCapMenu);
 
         /// light: RGB(191,227,103)
         if (!(l_hbrush = CreateSolidBrush(RGB(151,192,36))))
@@ -118,17 +120,22 @@ void AppMenuPopUp::show()
                 }
             case ID_CMD_POP_MENU2:
                 {
-                    cmdEvent.type = SDL_QUIT;
+                    cmdEvent.user.code = ID_CMD_POP_MENU2;
                     break;
                 }
             case ID_CMD_POP_MENU3:
                 {
-                    cmdEvent.user.code = ID_CMD_POP_MENU3;
+                    cmdEvent.type = SDL_QUIT;
                     break;
                 }
             case ID_CMD_POP_MENU4:
                 {
                     cmdEvent.user.code = ID_CMD_POP_MENU4;
+                    break;
+                }
+            case ID_CMD_POP_MENU5:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU5;
                     break;
                 }
             default:

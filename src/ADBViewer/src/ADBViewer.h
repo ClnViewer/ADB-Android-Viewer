@@ -15,6 +15,7 @@
 #define ID_CMD_POP_MENU2 20182
 #define ID_CMD_POP_MENU3 20183
 #define ID_CMD_POP_MENU4 20184
+#define ID_CMD_POP_MENU5 20185
 
 enum MgrType
 {

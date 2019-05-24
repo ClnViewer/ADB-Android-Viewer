@@ -6,8 +6,9 @@ LANGUAGE 0x19, 0x01
 STRINGTABLE
 {
     IDS_MENUMSG0 "Скриншот"
-    IDS_MENUMSG1 "Отключить устройство"
-    IDS_MENUMSG2 "Выход"
-    IDS_MENUMSG3 "Сохранить"
-    IDS_MENUMSG4 "Сохранить как .."
+    IDS_MENUMSG1 "Установить APK"
+    IDS_MENUMSG2 "Отключить устройство"
+    IDS_MENUMSG3 "Выход"
+    IDS_MENUMSG4 "Сохранить"
+    IDS_MENUMSG5 "Сохранить как .."
 }

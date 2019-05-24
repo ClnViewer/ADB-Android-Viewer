@@ -56,11 +56,13 @@ void AppMenuBar::setcursor(uint32_t id)
 
 ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32_t h, int32_t ucode)
 {
+    /// Custom user event (POPUPMENU)
     switch(ucode)
     {
-        case ID_CMD_POP_MENU1: return ResManager::IndexStringResource::RES_STR_STOP;
-        case ID_CMD_POP_MENU3: return ResManager::IndexStringResource::RES_STR_CAPTURE_D;
-        case ID_CMD_POP_MENU4: return ResManager::IndexStringResource::RES_STR_CAPTURE_F;
+        case ID_CMD_POP_MENU1: return ResManager::IndexStringResource::RES_STR_APK;
+        case ID_CMD_POP_MENU2: return ResManager::IndexStringResource::RES_STR_STOP;
+        case ID_CMD_POP_MENU4: return ResManager::IndexStringResource::RES_STR_CAPTURE_D;
+        case ID_CMD_POP_MENU5: return ResManager::IndexStringResource::RES_STR_CAPTURE_F;
         default:
             break;
     }
