@@ -33,7 +33,9 @@ using Resources::ResManager;
 using GameDev::ADBDriver;
 
 #  include "App/AppConfig.h"
+#  include "App/plugin/AppPluginManager.h"
 #  include "App/gui/gui.h"
+#  include "App/AppVideo.h"
 #  include "App/AppMenuBar.h"
 #  include "App/AppMenuPopUp.h"
 #  include "App/App.h"

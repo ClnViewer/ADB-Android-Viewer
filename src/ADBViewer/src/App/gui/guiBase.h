@@ -19,7 +19,7 @@ public:
     guiRenderer_s gui;
 
     guiMain * getgui() const;
-    virtual bool event(SDL_Event*, SDL_Point*, const void*);
+    virtual bool event(SDL_Event*, const void*);
 
     guiBase();
     ~guiBase();

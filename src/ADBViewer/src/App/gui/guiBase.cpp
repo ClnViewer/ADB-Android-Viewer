@@ -14,7 +14,7 @@ bool guiBase::initgui(guiMain *gm) noexcept
         return gui.active.load();
     }
 
-bool guiBase::event(SDL_Event*, SDL_Point*, const void*)
+bool guiBase::event(SDL_Event*, const void*)
     {
         return false;
     }

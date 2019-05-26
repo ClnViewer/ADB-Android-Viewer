@@ -5,6 +5,7 @@
 		<Project filename="ADBDriverDLL/ADBDriverDLL.cbp" />
 		<Project filename="ADBViewerDLL/ADBViewerDLL.cbp" />
 		<Project filename="ADBViewer/ADBViewer.cbp" />
+		<Project filename="ADBViewer/src/App/plugin/plugin-template/plugin-template.cbp" />
 		<Project filename="ADBDriverDLL/test/TestADBDriverDLL.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

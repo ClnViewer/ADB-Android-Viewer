@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<BrowseTracker_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="plugin-lua.h" open="1" top="0" tabpos="1">
+		<Cursor position="905" topLine="35" />
+		<BrowseMarks positions="938" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="plugin-stub.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="449" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="plugin-lua.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="283" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="..\AppIPlugin.h" open="0" top="0" tabpos="4">
+		<Cursor position="72" topLine="0" />
+	</File>
+</BrowseTracker_layout_file>

@@ -62,6 +62,7 @@
 			<Add option="-lSDL2.dll" />
 			<Add option="-lSDL2_ttf.dll" />
 			<Add option="-luser32" />
+			<Add option="-lgdi32" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 		</Linker>
 		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />
@@ -83,6 +84,8 @@
 		<Unit filename="src/App/AppMenuPopUp.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="src/App/AppVideo.cpp" />
+		<Unit filename="src/App/AppVideo.h" />
 		<Unit filename="src/App/gui/gui.h" />
 		<Unit filename="src/App/gui/guiBase.cpp" />
 		<Unit filename="src/App/gui/guiBase.h" />
@@ -90,6 +93,13 @@
 		<Unit filename="src/App/gui/guiMain.cpp" />
 		<Unit filename="src/App/gui/guiMain.h" />
 		<Unit filename="src/App/gui/guiStaticText.h" />
+		<Unit filename="src/App/plugin/AppIPlugin.h" />
+		<Unit filename="src/App/plugin/AppIPluginCallBack.h" />
+		<Unit filename="src/App/plugin/AppPluginManager.cpp" />
+		<Unit filename="src/App/plugin/AppPluginManager.h" />
+		<Unit filename="src/App/plugin/IPluginLoader.LINUX.h" />
+		<Unit filename="src/App/plugin/IPluginLoader.WINAPI.h" />
+		<Unit filename="src/App/plugin/IPluginLoader.h" />
 		<Unit filename="src/loader.h" />
 		<Unit filename="src/version.h" />
 		<Extensions>

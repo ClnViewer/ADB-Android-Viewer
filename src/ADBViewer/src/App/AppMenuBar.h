@@ -15,7 +15,7 @@ public:
     bool screenshot(SDL_Event*, bool);
     void setcursor(uint32_t);
     void infoset(MgrType, std::string const&, int32_t, SDL_Event *ev);
-    bool event(SDL_Event*, SDL_Point*, const void*) override;
+    bool event(SDL_Event*, const void*) override;
 
 private:
     //

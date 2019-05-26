@@ -6,28 +6,19 @@ class App : public guiMain, public guiBase
 {
 public:
     //
-    guiStaticText m_info;
-    guiBoxTextInput m_input;
+    guiStaticText m_appinfo;
+    guiBoxTextInput m_appinput;
     //
-    ADBDriver m_adb;
-    ADBDriver::Swipe_s m_adb_rect;
-    //
+    AppVideo      m_appvideo;
     AppMenuBar    m_appmenubar;
     AppMenuPopUp  m_appmenupop;
-    SDL_Point     m_pinput;
 
     App();
     ~App();
 
-    void run();
     void loop();
-    void logo();
-    void jointh();
-    bool update(std::vector<uint8_t>&, uint32_t, uint32_t) noexcept;
-    bool event(SDL_Event*, SDL_Point*, const void*) override;
+    bool event(SDL_Event*, const void*) override;
 
 private:
     //
-    std::thread   m_thu;
-    std::atomic<bool> m_adbinit;
 };

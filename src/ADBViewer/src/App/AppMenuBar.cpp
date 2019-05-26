@@ -89,9 +89,11 @@ ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32
 #   pragma GCC diagnostic pop
 }
 
-bool AppMenuBar::event(SDL_Event *ev, SDL_Point *offset, const void *instance)
+bool AppMenuBar::event(SDL_Event *ev, const void *instance)
 {
-    AppMenuBar *amb = (AppMenuBar*)instance;
+    AppMenuBar *amb = static_cast<AppMenuBar*>(
+                const_cast<void*>(instance)
+            );
 
     if (ev->type == amb->m_app->m_uevent)
         return amb->mousebutton(ev, amb, ev->user.code);
@@ -186,11 +188,10 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             return true;
                         }
 
-                        if (!amb->m_app->m_adb.IsDeviceID())
-                            amb->m_app->m_adb.GetDeviceListUI();
+                        if (!AppConfig::instance().cnf_adb.IsDeviceID())
+                            AppConfig::instance().cnf_adb.GetDeviceListUI();
 
-                        AppConfig::instance().cnf_isstop = false;
-                        amb->m_app->run();
+                        amb->m_app->m_appvideo.run();
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
@@ -213,9 +214,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             );
                             return true;
                         }
-                        AppConfig::instance().cnf_isstop = true;
-                        amb->m_app->jointh();
-                        amb->m_app->logo();
+                        amb->m_app->m_appvideo.stop();
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
@@ -227,16 +226,14 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     }
                     case ResManager::IndexStringResource::RES_STR_ADBSET:
                     {
-                        amb->m_app->m_adb.GetDeviceSetupUI();
+                        AppConfig::instance().cnf_adb.GetDeviceSetupUI();
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_SCALE:
                     {
-                        AppConfig::instance().cnf_isstop = true;
-                        amb->m_app->jointh();
+                        amb->m_app->m_appvideo.stop();
                         AppConfig::instance().cnf_scale = ((AppConfig::instance().cnf_scale.load() == 2U) ? 1U : 2U);
-                        AppConfig::instance().cnf_isstop = false;
-                        amb->m_app->run();
+                        amb->m_app->m_appvideo.run();
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_POSINFO:
@@ -282,7 +279,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     {
                         std::string fname;
                         if (amb->openfile(fname))
-                            amb->m_app->m_adb.InstallApk(fname);
+                            AppConfig::instance().cnf_adb.InstallApk(fname);
 
                         return true;
                     }
@@ -400,7 +397,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else
                 {
-                    m_app->m_info.clear();
+                    m_app->m_appinfo.clear();
                     return;
                 }
 #               endif
@@ -408,7 +405,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
             else
             {
 #               if defined (_BUILD_FRAME_NO_TITLE)
-                m_app->m_info.clear();
+                m_app->m_appinfo.clear();
 #               endif
                 return;
             }
@@ -419,7 +416,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #           if defined (_BUILD_FRAME_NO_TITLE)
             if (s.empty())
             {
-                m_app->m_info.clear();
+                m_app->m_appinfo.clear();
                 return;
             }
             ss << s.c_str();
@@ -432,7 +429,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
         default:
             {
 #               if defined (_BUILD_FRAME_NO_TITLE)
-                m_app->m_info.clear();
+                m_app->m_appinfo.clear();
 #               endif
                 return;
             }
@@ -440,7 +437,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #   if defined (_BUILD_FRAME_NO_TITLE)
     ss << "  ";
     SDL_Point offset = { (gui.rect.w + 1), 0 };
-    m_app->m_info.draw(ss.str(), &offset, id);
+    m_app->m_appinfo.draw(ss.str(), &offset, id);
 #   else
     settitle(ss.str());
 #   endif

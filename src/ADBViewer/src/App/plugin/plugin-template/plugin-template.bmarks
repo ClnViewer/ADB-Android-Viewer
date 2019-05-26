@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<BrowseTracker_layout_file>
+	<ActiveTarget name="Debug" />
+	<File name="plugin-template.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="89" topLine="3" />
+	</File>
+	<File name="..\AppIPlugin.h" open="0" top="0" tabpos="4">
+		<Cursor position="72" topLine="0" />
+	</File>
+	<File name="plugin-template.h" open="0" top="0" tabpos="1">
+		<Cursor position="375" topLine="19" />
+		<BrowseMarks positions="295,865" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="plugin-stub.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="252" topLine="0" />
+	</File>
+</BrowseTracker_layout_file>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Release" />
+	<ActiveTarget name="Debug" />
 	<File name="main.cpp" open="0" top="0" tabpos="1">
 		<Cursor position="670" topLine="1" />
 	</File>

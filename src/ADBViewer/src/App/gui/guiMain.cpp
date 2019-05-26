@@ -74,7 +74,7 @@ void guiMain::draw()
         SDL_RenderPresent(m_renderer);
     }
 
-void guiMain::events(SDL_Event *ev, SDL_Point *pt)
+void guiMain::events(SDL_Event *ev)
     {
         for (auto &gr : m_guipool)
             if ((gr) && (gr->active) && (gr->instance))
@@ -82,7 +82,7 @@ void guiMain::events(SDL_Event *ev, SDL_Point *pt)
                 guiBase *gb = static_cast<guiBase*>(
                                 const_cast<void*>(gr->instance)
                                 );
-                if ((gb) && (gb->event(ev, pt, gr->instance)))
+                if ((gb) && (gb->event(ev, gr->instance)))
                     break;
             }
     }

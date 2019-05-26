@@ -17,7 +17,7 @@ protected:
     //
     int32_t initm(int32_t, int32_t);
     void draw();
-    void events(SDL_Event*, SDL_Point*);
+    void events(SDL_Event*);
 
     guiMain();
     ~guiMain();
