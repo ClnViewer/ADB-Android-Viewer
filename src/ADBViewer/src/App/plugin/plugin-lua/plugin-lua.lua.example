@@ -1,0 +1,21 @@
+
+-- rename this script to same dll plugin name
+-- examle: plugin-lua.dll -> plugin-lua.lua
+
+function main (stateOld, widthNumber, heightNumber)
+	AdbClick(612, 318)
+--	AdbSwipe(612, 318, 812, 318, 150)
+--	AdbKey(62)
+--	AdbText("i'm ready")
+	local v = AdbScreen()
+        local f = io.open("__dump__lua__", "w")
+	for i = 1,#v do
+        	f:write(v[i])
+	end
+--	for k,v in ipairs(AdbScreen()) do
+--        	f:write(v)
+--	end
+	f:close()
+	return stateOld + 1
+end
+-- AdbDriver command

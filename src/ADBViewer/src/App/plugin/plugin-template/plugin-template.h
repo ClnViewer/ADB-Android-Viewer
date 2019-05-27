@@ -55,7 +55,7 @@ namespace Plugins
         bool m_test_swap_click;
 
 	public:
-		PluginTemplate(const void*);
+		PluginTemplate(const char*, const void*);
 		~PluginTemplate() = default;
 		void go(std::vector<uint8_t> const &, uint32_t, uint32_t)  override;
 	};
@@ -65,7 +65,7 @@ extern "C"
 {
 #endif
 
-void * DLL_EXPORT CreatePlugin(const void*);
+void * DLL_EXPORT CreatePlugin(const char*, const void*);
 void   DLL_EXPORT DestroyPlugin(void);
 
 #ifdef __cplusplus

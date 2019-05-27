@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Debug" />
-	<File name="plugin-lua.h" open="1" top="0" tabpos="1">
-		<Cursor position="905" topLine="35" />
-		<BrowseMarks positions="938" />
-		<Book_Marks positions="" />
-	</File>
+	<ActiveTarget name="Release" />
 	<File name="plugin-stub.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="449" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="plugin-lua.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="283" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+		<Cursor position="466" topLine="0" />
 	</File>
 	<File name="..\AppIPlugin.h" open="0" top="0" tabpos="4">
 		<Cursor position="72" topLine="0" />
+	</File>
+	<File name="plugin-lua-stack.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="558" topLine="5" />
+	</File>
+	<File name="plugin-lua.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="2828" topLine="0" />
+		<BrowseMarks positions="521,990,2221,2773" />
+		<Book_Marks positions="514" />
+	</File>
+	<File name="plugin-lua.h" open="0" top="0" tabpos="1">
+		<Cursor position="905" topLine="0" />
+		<BrowseMarks positions="969" />
 	</File>
 </BrowseTracker_layout_file>

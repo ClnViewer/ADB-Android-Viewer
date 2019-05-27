@@ -53,13 +53,15 @@ namespace Plugins
 	class PluginLua : public AppIPlugin
 	{
     private:
-        lua_State *m_lua;
+        lua_State  *m_lua;
+        std::string m_script;
+        double      m_luastate;
 
         bool loadLuaScript(std::string const & fname);
 
 	public:
-		PluginLua(const void*);
-		~PluginLua();
+		PluginLua(const char *, const void*);
+		~PluginLua() noexcept;
 		void go(std::vector<uint8_t> const &, uint32_t, uint32_t)  override;
 	};
 }
@@ -68,7 +70,7 @@ extern "C"
 {
 #endif
 
-void * DLL_EXPORT CreatePlugin(const void*);
+void * DLL_EXPORT CreatePlugin(const char*, const void*);
 void   DLL_EXPORT DestroyPlugin(void);
 
 #ifdef __cplusplus

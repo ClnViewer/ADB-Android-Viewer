@@ -10,10 +10,10 @@ __attribute__((destructor)) static void plugin_free_destructor(void)
     l_PluginInstance = nullptr;
 }
 
-extern "C" void * DLL_EXPORT CreatePlugin(const void *vcb)
+extern "C" void * DLL_EXPORT CreatePlugin(const char *s, const void *vcb)
 {
     assert(l_PluginInstance == nullptr);
-    l_PluginInstance = new Plugins::PluginLua(vcb);
+    l_PluginInstance = new Plugins::PluginLua(s, vcb);
     return (void*)l_PluginInstance;
 }
 

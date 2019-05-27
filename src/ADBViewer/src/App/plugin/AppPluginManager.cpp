@@ -12,7 +12,7 @@ using namespace std::placeholders;
 namespace Plugins
 {
 
-typedef Plugins::AppIPlugin * (*f_Fn_construct)(const void*);
+typedef Plugins::AppIPlugin * (*f_Fn_construct)(const char*, const void*);
 typedef void (*f_Fn_destruct)(void);
 
 static inline const char *l_nameCreatePlugin = "CreatePlugin";
@@ -28,10 +28,11 @@ AppPluginManager::~AppPluginManager()
     {
         m_isrun = false;
 
-        freeplugins();
-
         if (m_thr.joinable())
             m_thr.join();
+
+        m_isrun = true;
+        freeplugins();
     }
 
 AppPluginManager& AppPluginManager::instance()
@@ -139,6 +140,7 @@ void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
         {
             std::stringstream ss;
             ss << sp.c_str() << "\\" << sn.c_str();
+            plg.path = sn.substr(0, sn.length() - 4);
 
             if (!(plg.handle = m_loadfunc->PluginOpen(ss.str().c_str())))
                 break;
@@ -148,10 +150,9 @@ void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
             if (!func)
                 break;
 
-            if (!(plg.iplug = func(AppConfig::instance().GetAdbCb())))
+            if (!(plg.iplug = func(plg.path.c_str(), AppConfig::instance().GetAdbCb())))
                 break;
 
-            plg.path = sn;
             m_plugins.push_back(plg);
             return;
         }
