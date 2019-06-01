@@ -25,6 +25,7 @@ public:
 
         return initgui(gm);
     }
+
     void draw(std::string const & s, SDL_Point *offset, int32_t id)
     {
         if ((!getgui()) || (!m_font) || (!m_color))
@@ -33,6 +34,10 @@ public:
         if ((id > 0) && (m_id == id))
             return;
 
+        while (m_iswrite.load())
+            std::this_thread::yield();
+
+        m_iswrite = true;
         m_id = id;
         gui.active = false;
         SDL_Texture *tmp_texture = nullptr;
@@ -68,7 +73,10 @@ public:
 
         if (surface)
             SDL_FreeSurface(surface);
+
+        m_iswrite = false;
     }
+
     void clear()
     {
         if (!gui.texture)
@@ -81,7 +89,7 @@ public:
     }
 
     guiStaticText()
-     : m_id(-1), m_font(nullptr), m_color(nullptr) {}
+     : m_id(-1), m_font(nullptr), m_color(nullptr), m_iswrite(false) {}
     ~guiStaticText()
     {
         if (m_font)
@@ -93,5 +101,6 @@ private:
     int32_t     m_id;
     TTF_Font   *m_font;
     SDL_Color  *m_color;
+    std::atomic<bool> m_iswrite;
     //
 };

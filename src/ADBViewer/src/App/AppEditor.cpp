@@ -34,6 +34,11 @@ bool AppEditor::init(App *app)
             return false;
 
         m_app = app;
+
+        gui.rect.h = 32;
+        gui.rect.w = 32;
+        gui.rect.x = 0;
+        gui.rect.y = (m_app->m_appvideo.gui.rect.h - 32);
         gui.texture = nullptr;
 
         return initgui(app);
@@ -57,6 +62,7 @@ void AppEditor::stop()
 
         write_script(fname);
         gui_icon_off();
+        m_app->m_appinfo.clear();
     }
 
 void AppEditor::run()
@@ -72,6 +78,7 @@ void AppEditor::run()
 
         m_target = false;
         m_active = true;
+        m_app->m_appinfo.clear();
     }
 
 void AppEditor::cancel()
@@ -85,6 +92,7 @@ void AppEditor::cancel()
         m_target = false;
         m_pixels.clear();
         m_ptarget.clear();
+        m_app->m_appinfo.clear();
     }
 
 void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
@@ -126,6 +134,17 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
                         if ((pixel.pos < 0) || ((size_t)pixel.pos >= v.size()))
                             continue;
 
+                        if (m_target)
+                        {
+                            if (!foundpos(m_ptarget, pixel))
+                                continue;
+                        }
+                        else
+                        {
+                            if (!foundpos(m_pixels, pixel))
+                                continue;
+                        }
+
                         AppEditor::_RGB *rgb = (AppEditor::_RGB*)&v[pixel.pos];
                         pixel.rgb.r = rgb->r;
                         pixel.rgb.g = rgb->g;
@@ -135,6 +154,20 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
                             m_ptarget.push_back(pixel);
                         else
                             m_pixels.push_back(pixel);
+
+                        /*
+                        /// Nvidia crush!
+                        if (yy == (z / 2))
+                        {
+                            std::stringstream ss;
+                            ss << " I: "  << std::to_string(pixel.pos);
+                            ss << " ( R:" << std::to_string(pixel.rgb.r);
+                            ss << ", G:"  << std::to_string(pixel.rgb.g);
+                            ss << ", B:"  << std::to_string(pixel.rgb.b) << " ) ";
+                            SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
+                            m_app->m_appinfo.draw(ss.str(), &offset, -1);
+                        }
+                        */
                     }
             }
             while (0);
@@ -191,6 +224,24 @@ int32_t AppEditor::getpos(int32_t x, int32_t y, uint32_t w, uint32_t h)
         if (pos > checkpos(w, h, pad))
             return -1;
         return pos;
+    }
+
+bool AppEditor::foundpos(std::vector<AppEditor::_PIXELS> & v, AppEditor::_PIXELS & p)
+    {
+        auto a = find_if(
+                    v.begin(),
+                    v.end(),
+                    [=](AppEditor::_PIXELS pix)
+                    {
+                        return pix.pos == p.pos;
+                    }
+            );
+        if (a != v.end())
+        {
+            v.erase(a);
+            return false;
+        }
+        return true;
     }
 
 bool AppEditor::event(SDL_Event *ev, const void *instance)
@@ -252,15 +303,15 @@ bool AppEditor::event(SDL_Event *ev, const void *instance)
                 case SDL_BUTTON_LEFT:
                 {
                     if (
-                        (ev->motion.x < ape->m_app->m_appmenubar.gui.rect.w) &&
-                        (ev->motion.y > (ape->m_app->m_appvideo.gui.rect.h - 32))
+                        (ev->motion.x < ape->gui.rect.w) &&
+                        (ev->motion.y > ape->gui.rect.y)
                        )
                     {
                         ape->stop();
                         return true;
                     }
 
-                    if (ev->motion.x <= ape->m_app->m_appmenubar.gui.rect.w)
+                    if (ev->motion.x <= ape->gui.rect.w)
                         break;
 
                     if (ape->isupdate())
@@ -307,16 +358,24 @@ void AppEditor::write_script(std::string const & fname)
                         ss << (m_ptarget[pos].x * sc) << "," ;
                         ss << (m_ptarget[pos].y * sc) << ")\n";
                     }
+                    ss << "\n\tLuaObject:stateSleep(10)\n";
                     break;
                 }
             case AppEditorScriptType::SCR_CLICK_ONLY:
                 {
+                    int32_t cnt = 0;
                     for (auto &rgbs : m_pixels)
                     {
-                        ss << "\ttLuaObject:adbClick(";
+                        if (!cnt)
+                            ss << "\t";
+                        else
+                            ss << "\telse";
+
+                        ss << "if stateOld == " << cnt << "then LuaObject:adbClick(";
                         ss << (rgbs.x * sc) << "," ;
-                        ss << (rgbs.y * sc) << ")\n";
+                        ss << (rgbs.y * sc) << ") end\n";
                     }
+                    ss << "\n\tLuaObject:stateSleep(1)\n";
                     break;
                 }
             case AppEditorScriptType::SCR_NONE:
@@ -325,7 +384,6 @@ void AppEditor::write_script(std::string const & fname)
                 }
         }
         ss << "\tLuaObject:stateSet(stateOld + 1)\n";
-        ss << "\tLuaObject:stateSleep(10)\n";
         ss << "end\n\n";
 
         if (m_ptarget.size())
@@ -346,16 +404,11 @@ void AppEditor::gui_icon_on()
 
         do
         {
-            gui.rect.h = 32;
-            gui.rect.w = 32;
-            gui.rect.x = 0;
-            gui.rect.y = (m_app->m_appvideo.gui.rect.h - 32);
-
             gui.texture = SDL_CreateTexture(
                 m_app->m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
-                32, 32
+                gui.rect.w, gui.rect.h
             );
 
             if (!gui.texture)

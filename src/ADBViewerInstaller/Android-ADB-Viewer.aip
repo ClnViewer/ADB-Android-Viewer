@@ -13,10 +13,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/ClnViewer/ADB-Android-Viewer/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="PS"/>
-    <ROW Property="ProductCode" Value="1033:{AD871BAD-CD62-427F-8342-DA1AC8816292} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{E62BA09F-A4F4-4415-9881-7FCC008A76C6} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ADBViewer"/>
-    <ROW Property="ProductVersion" Value="0.0.19.106" Type="32" TargetFile="ADBViewer.exe"/>
+    <ROW Property="ProductVersion" Value="0.0.21.93" Type="32" TargetFile="ADBViewer.exe"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{2249214A-A9CD-4EF8-8AD5-073A2A54954F}"/>

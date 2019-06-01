@@ -402,15 +402,6 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #                   endif
                     ss << "( " << w << "x" << h << " )";
                     ss << " - " << "( X: " << x << " Y: " << y << " )";
-
-                    /*
-                    if (m_app->m_appeditor.isactive())
-                    {
-                        ss << " - (R:" << m_app->m_appeditor.m_pixel.rgb.r_;
-                        ss << " G:" << m_app->m_appeditor.m_pixel.rgb.g_;
-                        ss << " B:" << m_app->m_appeditor.m_pixel.rgb.b_ << ") ";
-                    }
-                    */
                 }
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else

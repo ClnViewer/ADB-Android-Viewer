@@ -53,6 +53,7 @@ private:
     int32_t getpad(uint32_t);
     int32_t getpos(int32_t, int32_t, uint32_t, uint32_t);
     int32_t checkpos(uint32_t, uint32_t, int32_t);
+    bool    foundpos(std::vector<AppEditor::_PIXELS>&, AppEditor::_PIXELS&);
     void    gui_icon_on();
     void    gui_icon_off();
     void    write_script(std::string const&);
