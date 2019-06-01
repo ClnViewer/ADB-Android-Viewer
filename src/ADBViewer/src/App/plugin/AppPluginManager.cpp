@@ -77,16 +77,21 @@ void AppPluginManager::init()
 
 void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
     {
-        if ((m_isrun.load()) || (!m_plugins.size()))
+        if (m_isrun.load())
             return;
 
         if (m_thr.joinable())
             m_thr.join();
 
+        if (!m_plugins.size())
+            return;
+
         bool isready = false;
         for (auto &plg : m_plugins)
         {
-            if (!plg.iplug)
+            if ((!plg.state) && (plg.handle))
+                disableplugin(plg);
+            if ((!plg.state) || (!plg.iplug))
                 continue;
             if ((isready = plg.iplug->ready()))
                 break;
@@ -105,7 +110,7 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
                 {
                     if (!m_isrun.load())
                         break;
-                    if (!plg.iplug)
+                    if ((!plg.state) || (!plg.iplug))
                         continue;
                     if (plg.iplug->ready())
                         plg.iplug->go(vt, w, h);
@@ -123,10 +128,25 @@ bool AppPluginManager::isplugin(std::string const & s)
                     m_plugins.end(),
                     [=](Plugin_s pl)
                     {
-                        return (pl.path.compare(s) == 0);
+                        return (pl.name.compare(0, pl.name.length(), s) == 0);
                     }
             );
         return (plg != m_plugins.end());
+    }
+
+AppPluginManager::Plugin_s * AppPluginManager::findplugin(std::string const & s)
+    {
+        auto plg = find_if(
+                    m_plugins.begin(),
+                    m_plugins.end(),
+                    [=](AppPluginManager::Plugin_s pl)
+                    {
+                        return (pl.name.compare(s) == 0);
+                    }
+            );
+        if (plg == m_plugins.end())
+            return nullptr;
+        return &plg[0];
     }
 
 void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
@@ -135,14 +155,36 @@ void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
             return;
 
         AppPluginManager::Plugin_s plg{};
+        plg.state = false;
 
+#       if defined(OS_WIN)
+        int32_t off = 4;
+#       elif defined(__APPLE__)
+        int32_t off = 6;
+#       else
+        int32_t off = 3;
+#       endif
+
+        std::stringstream ss;
+        ss << sp.c_str() << "\\" << sn.c_str();
+        plg.path = ss.str();
+        plg.name = sn.substr(0, sn.length() - off);
+
+        if (enableplugin(plg))
+            m_plugins.push_back(plg);
+    }
+
+bool AppPluginManager::enableplugin(AppPluginManager::Plugin_s & plg)
+    {
         do
         {
-            std::stringstream ss;
-            ss << sp.c_str() << "\\" << sn.c_str();
-            plg.path = sn.substr(0, sn.length() - 4);
+            if (plg.handle)
+                disableplugin(plg);
 
-            if (!(plg.handle = m_loadfunc->PluginOpen(ss.str().c_str())))
+            if ((plg.path.empty()) || (plg.name.empty()))
+                break;
+
+            if (!(plg.handle = m_loadfunc->PluginOpen(plg.path.c_str())))
                 break;
 
             f_Fn_construct func = (f_Fn_construct)
@@ -150,13 +192,21 @@ void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
             if (!func)
                 break;
 
-            if (!(plg.iplug = func(plg.path.c_str(), AppConfig::instance().GetAdbCb())))
+            if (!(plg.iplug = func(plg.name.c_str(), AppConfig::instance().GetAdbCb())))
                 break;
 
-            m_plugins.push_back(plg);
-            return;
+            plg.state = true;
+            return plg.state;
         }
         while (0);
+
+        disableplugin(plg);
+        return plg.state;
+    }
+
+void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg) noexcept
+    {
+        plg.state = false;
 
         if (plg.iplug)
         {
@@ -167,6 +217,33 @@ void AppPluginManager::addplugin(std::string const & sp, std::string const & sn)
         }
         if (plg.handle)
             m_loadfunc->PluginClose(plg.handle);
+
+        plg.iplug = nullptr;
+        plg.handle = nullptr;
+    }
+
+void AppPluginManager::disableplugin(std::string const & s)
+    {
+        AppPluginManager::Plugin_s *plg = findplugin(s);
+        if (!plg)
+            return;
+        if (m_isrun)
+            plg->state = false;
+        else
+            disableplugin(*plg);
+    }
+
+bool AppPluginManager::enableplugin(std::string const & s)
+    {
+        AppPluginManager::Plugin_s *plg = findplugin(s);
+        if (!plg)
+            return false;
+        return enableplugin(*plg);
+    }
+
+std::vector<AppPluginManager::Plugin_s> AppPluginManager::listplugin() const
+    {
+        return m_plugins;
     }
 
 void AppPluginManager::freeplugins() noexcept
@@ -175,21 +252,6 @@ void AppPluginManager::freeplugins() noexcept
             return;
 
         for (auto &plg : m_plugins)
-        {
-            if (plg.handle)
-            {
-                f_Fn_destruct func = (f_Fn_destruct)
-                    m_loadfunc->PluginInstance(plg.handle, l_nameDestroyPlugin);
-                if (func)
-                    func();
-
-                m_loadfunc->PluginClose(plg.handle);
-                plg.handle = nullptr;
-            }
-            plg.iplug = nullptr;
-        }
-        m_plugins.clear();
+            disableplugin(plg);
     }
-
-
 }

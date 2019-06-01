@@ -41,6 +41,7 @@ App::App()
         (!m_appvideo.init(this))   || /// this main GUI screen
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
+        (!m_appeditor.init(this))  || /// this editor GUI screen
         (!m_appinfo.init(
                 this,
                 ResManager::IndexFontResource::RES_FONT_16704,

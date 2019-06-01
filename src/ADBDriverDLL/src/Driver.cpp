@@ -46,7 +46,7 @@ uint32_t ADBDriver::GetDisplayType()   const { return m_display[2]; }
 uint32_t ADBDriver::GetDisplaySize()   const { return m_display[3]; }
 
 ADBDriver::ADBDriver(std::wstring & exepath)
-    : m_disposed(false), m_display{0L,0L,0L}
+    : m_display{0L,0L,0L}
 {
     if (::_waccess(exepath.c_str(), F_OK) < 0)
         throw DriverExcept(GetLastError(), 0, __LINE__);
@@ -58,22 +58,12 @@ ADBDriver::ADBDriver(std::wstring & exepath)
 }
 
 ADBDriver::ADBDriver()
-    : m_disposed(false), m_display{0L,0L,0L}
+    : m_display{0L,0L,0L}
 {
     m_exepath.assign(L"adb.exe");
 
     if (m_net.GetInitError())
         throw DriverExcept(GetLastError(), 0, __LINE__);
-}
-
-ADBDriver::~ADBDriver()
-{
-    if (m_disposed)
-        return;
-
-    m_disposed = true;
-    m_cmdasync.~DriverAsync();
-    m_net.~DriverNet();
 }
 
 }

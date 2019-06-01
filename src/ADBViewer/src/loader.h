@@ -42,6 +42,7 @@
 #if !defined(OS_WIN)
 #   define _access access
 #   define _mkdir mkdir
+#   define _stat stat
 #endif
 
 #define __NELE(a) (sizeof(a) / sizeof(a[0]))
@@ -70,6 +71,10 @@
 #include <time.h>
 #include <io.h>
 #include "version.h"
+
+#if defined(_DEBUG)
+#  include "exchndl.h"
+#endif
 
 static inline void __attribute__((always_inline)) __autofile(void *v)
 {

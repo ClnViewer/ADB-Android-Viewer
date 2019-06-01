@@ -5,10 +5,10 @@
 namespace GameDev
 {
 
-#if (defined(__WIN32__) || defined(__WIN64__))
+#if defined(OS_WIN)
 
 DriverNet::DriverNet()
-    : IsError(false)
+    : IsError(false), IsDesposed(false)
 {
     WSADATA wsaData;
     int ret = WSAStartup(MAKEWORD(2,2), &wsaData);
@@ -18,6 +18,9 @@ DriverNet::DriverNet()
 
 DriverNet::~DriverNet()
 {
+    if (IsDesposed)
+        return;
+    IsDesposed = true;
     WSACleanup();
 }
 
@@ -85,7 +88,7 @@ SOCKET DriverNet::Connect()
 /// TODO:
 
 DriverNet::DriverNet()
-    : IsError(true) {}
+    : IsError(false), IsDesposed(false) {}
 DriverNet::~DriverNet() {}
 
 bool    DriverNet::Check() {}

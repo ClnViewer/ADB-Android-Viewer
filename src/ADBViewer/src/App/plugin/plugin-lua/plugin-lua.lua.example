@@ -1,21 +1,35 @@
 
--- rename this script to same dll plugin name
--- examle: plugin-lua.dll -> plugin-lua.lua
+-- 1. rename _plugin-lua.dll to plugin-lua.dll
+-- 2. rename this script to same dll plugin name
+--    examle: plugin-lua.dll -> plugin-lua.lua
 
-function main (stateOld, widthNumber, heightNumber)
-	AdbClick(612, 318)
---	AdbSwipe(612, 318, 812, 318, 150)
---	AdbKey(62)
---	AdbText("i'm ready")
-	local v = AdbScreen()
-        local f = io.open("__dump__lua__", "w")
-	for i = 1,#v do
-        	f:write(v[i])
-	end
---	for k,v in ipairs(AdbScreen()) do
---        	f:write(v)
---	end
-	f:close()
-	return stateOld + 1
+local test_table = {
+        -- format: { <position from buffer> <color R>  <color G> <color B> }
+	{446031,13,13,13},
+	{447951,13,13,13},
+	{449871,14,14,14},
+	{451791,18,18,17},
+	{453711,56,56,50},
+	{446034,253,217,157},
+	{447954,253,217,157},
+	{449874,247,210,152},
+	{451794,186,157,116}
+   }
+
+function main(state)
+  -- local stateOrigin = LuaObject:stateGet()
+  local sleep = 5
+  local ret = LuaObject:checkPixelsByPos(test_table)
+  if ret then
+      state = state + 1
+      LuaObject:adbClick(10,14)
+  else
+      state = 0
+      sleep = 60
+      LuaObject:adbText("i'm ready")
+      LuaObject:adbClick(410,414)
+  end
+  LuaObject:stateSet(state)
+  LuaObject:stateSleep(sleep)
+  return state
 end
--- AdbDriver command

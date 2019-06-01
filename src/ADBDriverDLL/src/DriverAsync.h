@@ -7,9 +7,9 @@ namespace GameDev
 class DriverAsync
 {
 private:
-    std::atomic<bool> m_iswatch;
+    std::thread                   m_thwatch;
+    std::atomic<bool>             m_iswatch;
     std::queue<std::future<bool>> m_queue;
-    std::thread m_thwatch;
 
 public:
 

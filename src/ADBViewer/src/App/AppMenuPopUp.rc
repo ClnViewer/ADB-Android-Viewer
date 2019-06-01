@@ -5,10 +5,20 @@
 LANGUAGE 0x19, 0x01
 STRINGTABLE
 {
-    IDS_MENUMSG0 "Скриншот"
-    IDS_MENUMSG1 "Установить APK"
-    IDS_MENUMSG2 "Отключить устройство"
-    IDS_MENUMSG3 "Выход"
-    IDS_MENUMSG4 "Сохранить"
-    IDS_MENUMSG5 "Сохранить как .."
+    IDS_MENUMSG0  "Скриншот"
+    IDS_MENUMSG1  "Установить APK"
+    IDS_MENUMSG2  "Отключить устройство"
+    IDS_MENUMSG3  "Выход"
+    IDS_MENUMSG4  "Сохранить"
+    IDS_MENUMSG5  "Сохранить как .."
+    IDS_MENUMSG6  "Lua скрипт"
+    IDS_MENUMSG7  "Записать скрипт"
+    IDS_MENUMSG8  "Сохранить скрипт"
+    IDS_MENUMSG9  "Поставить точку назначения скрипта"
+    IDS_MENUMSG10 "Продолжить редактирование скрипта"
+    IDS_MENUMSG11 "Отмена .."
+    IDS_MENUMSG12 "Плагины"
+    IDS_MENUMSG13 "Тип скрипта"
+    IDS_MENUMSG14 "Check & Click"
+    IDS_MENUMSG15 "Click"
 }

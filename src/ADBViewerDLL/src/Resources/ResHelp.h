@@ -20,6 +20,7 @@ static inline const char *help_strings[] = {
     "ADB Android Viewer",
     "AndroidViewer ",
     "ADBVCapture-",
+    "plugin-lua",
     "Ошибка Android Viewer:",
     "Ошибка ADB драйвера:",
     "Неизвестная ошибка, пожалуйста, сообщите подробности: https://clnviewer.github.io/ADB-Android-Viewer/",

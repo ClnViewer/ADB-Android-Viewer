@@ -16,11 +16,15 @@
 					<Add option="-Wno-unknown-pragmas" />
 					<Add option="-IC:/__BuildSource/__LIB__/SDL2/include" />
 					<Add option="-D_BUILD_FRAME_NO_TITLE" />
+					<Add option="-D_DEBUG" />
 				</Compiler>
 				<Linker>
 					<Add option="-lADBViewer" />
 					<Add option="-lADBDriver" />
+					<Add option="-lexchndl" />
+					<Add option="-lmgwhelp" />
 					<Add option="-L../bin/Debug" />
+					<Add directory="C:/__BuildSource/__LIB__/DrMingw/lib" />
 				</Linker>
 				<ExtraCommands>
 					<Add after="XCOPY $(#sdl2)\bin\*.dll $(TARGET_OUTPUT_DIR) /D /Y" />
@@ -75,7 +79,8 @@
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
 		<Unit filename="src/App/AppConfig.h" />
-		<Unit filename="src/App/AppMenuBar.WINAPI.cpp" />
+		<Unit filename="src/App/AppEditor.cpp" />
+		<Unit filename="src/App/AppEditor.h" />
 		<Unit filename="src/App/AppMenuBar.cpp" />
 		<Unit filename="src/App/AppMenuBar.h" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
@@ -84,6 +89,8 @@
 		<Unit filename="src/App/AppMenuPopUp.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
+		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />
+		<Unit filename="src/App/AppSysDialog.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
 		<Unit filename="src/App/gui/gui.h" />

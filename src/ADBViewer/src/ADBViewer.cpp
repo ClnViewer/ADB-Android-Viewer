@@ -3,6 +3,12 @@
 
 int main( int argc, char * argv[])
 {
+#   if defined(_DEBUG)
+    static const char *CrashLogFileName = "ADBViewer.rpt";
+    ExcHndlInit();
+    ExcHndlSetLogFileNameA(CrashLogFileName);
+#   endif
+
     try
     {
         App app;

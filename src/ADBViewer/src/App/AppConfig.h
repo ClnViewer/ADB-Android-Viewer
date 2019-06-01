@@ -57,11 +57,6 @@ public:
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
 
-    ~AppConfig()
-    {
-        /// cnf_adb.~ADBDriver();
-    }
-
     static AppConfig& instance()
     {
         static AppConfig m_instance{};

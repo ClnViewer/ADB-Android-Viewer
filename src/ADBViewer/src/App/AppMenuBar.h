@@ -28,7 +28,4 @@ private:
     bool mousebutton(SDL_Event*, AppMenuBar*, int32_t);
 
     void settitle(std::string const&);
-
-    bool savefile(std::string&);
-    bool openfile(std::string&);
 };

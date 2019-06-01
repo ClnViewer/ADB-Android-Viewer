@@ -10,6 +10,7 @@ namespace Resources
 #include "Resources/ResLogo.h"
 #include "Resources/ResMenu.h"
 #include "Resources/ResScreen.h"
+#include "Resources/ResRecord.h"
 #include "Resources/Res16704font.h"
 #include "Resources/ResFreeSansfont.h"
 
@@ -48,6 +49,10 @@ SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
         case ResManager::IndexImageResource::RES_IMG_SCREEN:
         {
             return imagedata(&img_screen);
+        }
+        case ResManager::IndexImageResource::RES_IMG_RCORD:
+        {
+            return imagedata(&img_record);
         }
         default:
             return nullptr;

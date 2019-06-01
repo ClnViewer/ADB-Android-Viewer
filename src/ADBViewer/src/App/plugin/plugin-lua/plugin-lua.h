@@ -1,80 +1,30 @@
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __MAIN_PLUGIN_H__
+#define __MAIN_PLUGIN_H__
 
-#include <windows.h>
+#include "../plugin-base.h"
 #include <lua.hpp>
-
-#ifdef _BUILD_DLL
-    #define DLL_EXPORT __declspec(dllexport)
-#else
-    #define DLL_EXPORT __declspec(dllimport)
-#endif
+#include "LuaObject/LuaObject.h"
 
 #ifdef __cplusplus
-
-# include <atomic>
-# include <string>
-# include <vector>
-# include <functional>
-# include <cassert>
-
-namespace GameDev
-{
-    class ADBDriver
-    {
-    public:
-
-        enum KeysType
-        {
-            KEYS_ANDROID,
-            KEYS_SDL,
-            KEYS_WINAPI
-        };
-        struct Tap_s
-        {
-            int32_t x;
-            int32_t y;
-        };
-        struct Swipe_s
-        {
-            int32_t x0;
-            int32_t y0;
-            int32_t x1;
-            int32_t y1;
-            int32_t t;
-        };
-    };
-}
-
-# include "../AppIPlugin.h"
 
 namespace Plugins
 {
 	class PluginLua : public AppIPlugin
 	{
     private:
-        lua_State  *m_lua;
+        LuaObject   m_luaobj;
         std::string m_script;
-        double      m_luastate;
+        std::atomic<int32_t> m_wcount;
 
-        bool loadLuaScript(std::string const & fname);
+        void pathLuaScript();
 
 	public:
 		PluginLua(const char *, const void*);
 		~PluginLua() noexcept;
-		void go(std::vector<uint8_t> const &, uint32_t, uint32_t)  override;
+		void go(std::vector<uint8_t> const &, uint32_t, uint32_t) override;
 	};
 }
 
-extern "C"
-{
 #endif
 
-void * DLL_EXPORT CreatePlugin(const char*, const void*);
-void   DLL_EXPORT DestroyPlugin(void);
-
-#ifdef __cplusplus
-}
 #endif
-
-#endif // __MAIN_H__

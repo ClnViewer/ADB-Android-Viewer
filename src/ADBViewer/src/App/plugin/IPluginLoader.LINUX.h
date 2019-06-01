@@ -23,11 +23,11 @@ namespace Plugins
                 std::function<void(std::string const&, std::string const&)> fun) override
 		{
 		    static const char *l_pluginPath = "/plugins/";
-#                   ifdef __APPLE__
+#           ifdef __APPLE__
 		    static const char *l_pluginMask = ".dylib";
-#                   else
+#           else
 		    static const char *l_pluginMask = ".so";
-#                   endif
+#           endif
 
 		    DIR *dir;
 		    struct dirent *ent;

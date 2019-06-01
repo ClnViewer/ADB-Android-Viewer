@@ -3,8 +3,6 @@
 #include <chrono>
 #include <thread>
 
-#include "plugin-lua-stack.cpp"
-
 namespace Plugins
 {
 
@@ -14,14 +12,33 @@ namespace Plugins
   static inline const char *l_pluginPath = "/plugins/";
 # define MAX_PATH 1024
 #endif
+  static inline const char *l_pluginExt = ".lua";
 
     PluginLua::PluginLua(const char *s, const void *vcb)
-        : m_lua(nullptr), m_luastate(0.0)
     {
-        m_adbcmd = static_cast<Plugins::PluginCallBack_s const*>(vcb);
         m_priority = 5;
         m_name.assign(s);
+        m_wcount = 0U;
 
+        pathLuaScript();
+
+        if (!m_luaobj.open(m_script.c_str()))
+            m_isready = false;
+        else
+        {
+            m_isready = true;
+            m_luaobj.adbset(
+                    (Plugins::PluginCallBack_s const*)vcb
+                );
+        }
+    }
+
+    PluginLua::~PluginLua()
+    {
+    }
+
+    void PluginLua::pathLuaScript()
+    {
         m_script.resize(MAX_PATH);
 
 #       if defined(__WIN32__)
@@ -41,88 +58,62 @@ namespace Plugins
 
         m_script.append(l_pluginPath);
         m_script.append(m_name.c_str());
-        m_script.append(".lua");
-
-        if (!loadLuaScript(m_script.c_str()))
-            m_isready = false;
-        else
-            m_isready = true;
-        adbcmd = m_adbcmd;
-    }
-
-    PluginLua::~PluginLua() noexcept
-    {
-        if (m_lua)
-            lua_close(m_lua);
-        m_lua = nullptr;
+        m_script.append(l_pluginExt);
     }
 
     void PluginLua::go(std::vector<uint8_t> const & v, uint32_t w, uint32_t h)
     {
-        if (!m_lua)
+        if (!m_isready)
+            return;
+
+        if ((m_wcount % 10) == 0)
+        {
+            m_wcount = 0U;
+
+            if (!m_luaobj.load())
+                return;
+        }
+
+        if (!m_luaobj.getfun("main"))
         {
             m_isready = false;
             return;
         }
 
-        lua_getglobal(m_lua, "main");
-        if (!lua_isfunction(m_lua, -1))
+        m_luaobj.point =
         {
-            m_isready = false;
-            return;
+            static_cast<int32_t>(w),
+            static_cast<int32_t>(h)
+        };
+        m_luaobj.fbset(&v);
+
+        lua_pushinteger(m_luaobj.instance(), m_luaobj.getstate());
+        lua_pcall(m_luaobj.instance(), 1, 1, 0);
+
+        if (!lua_isnil(m_luaobj.instance(), -1))
+        {
+            int lua_state = lua_tonumber(m_luaobj.instance(), -1);
+            (void) lua_state;
+            lua_pop(m_luaobj.instance(), 1);
         }
 
-        adbbuffer = &v;
-        //...
-        std::this_thread::sleep_for(std::chrono::seconds(5));
-
-
-        lua_pushnumber(m_lua, m_luastate);
-        lua_pushinteger(m_lua, w);
-        lua_pushinteger(m_lua, h);
-        lua_pcall(m_lua, 3, 1, 0);
-
-        if (!lua_isnil(m_lua, -1))
+        if (m_luaobj.sleep)
         {
-            m_luastate = lua_tonumber(m_lua, -1);
-            lua_pop(m_lua, 1);
+            auto s_start = std::chrono::high_resolution_clock::now();
+            auto s_end = (s_start + std::chrono::seconds(m_luaobj.sleep));
+            m_luaobj.sleep = 0U;
+
+            while (std::chrono::high_resolution_clock::now() < s_end)
+            {
+                if (!m_isready)
+                    break;
+                std::this_thread::yield();
+            }
         }
-        adbbuffer = nullptr;
+
+        m_luaobj.fbset(nullptr);
+        m_luaobj.point = { 0, 0 };
     }
-
-    bool PluginLua::loadLuaScript(std::string const & fname)
-    {
-        do
-        {
-            m_lua = luaL_newstate();
-            if (!m_lua)
-                break;
-
-            luaL_openlibs(m_lua);
-
-            if (luaL_loadfile(m_lua, fname.c_str()))
-                break;
-
-            if (lua_pcall(m_lua, 0, 0, 0))
-                break;
-
-            lua_register(m_lua, "AdbClick",  &lua_Click);
-            lua_register(m_lua, "AdbSwipe",  &lua_Swipe);
-            lua_register(m_lua, "AdbKey",    &lua_Key);
-            lua_register(m_lua, "AdbText",   &lua_Text);
-            lua_register(m_lua, "AdbScreen", &lua_Screen);
-
-            return true;
-        }
-        while (0);
-
-        if (m_lua)
-            lua_close(m_lua);
-        m_lua = nullptr;
-
-        return false;
-    }
-
 }
 
 

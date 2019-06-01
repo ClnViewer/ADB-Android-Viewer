@@ -30,6 +30,9 @@
 				<Linker>
 					<Add option="-s" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="upx -9 ..\..\..\..\..\bin\Release\plugins\plugin-lua.dll" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
@@ -44,13 +47,14 @@
 			<Add option="-lmingw32" />
 			<Add option="-llua53" />
 			<Add option="-luser32" />
+			<Add option="-lm" />
 			<Add directory="C:/__BuildSource/__LIB__/LUA/lib/static" />
 		</Linker>
 		<Unit filename="../AppIPlugin.h" />
-		<Unit filename="plugin-lua-stack.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="../plugin-base.h" />
+		<Unit filename="LuaObject/LuaObject.cpp" />
+		<Unit filename="LuaObject/LuaObject.h" />
+		<Unit filename="LuaObject/LuaObjectBind.h" />
 		<Unit filename="plugin-lua.cpp" />
 		<Unit filename="plugin-lua.h" />
 		<Unit filename="plugin-stub.cpp" />

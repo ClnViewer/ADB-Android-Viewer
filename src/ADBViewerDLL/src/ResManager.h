@@ -29,7 +29,8 @@ namespace Resources
             {
                 RES_IMG_LOGO,
                 RES_IMG_MENU,
-                RES_IMG_SCREEN
+                RES_IMG_SCREEN,
+                RES_IMG_RCORD
             };
             enum IndexStringResource
             {
@@ -53,6 +54,7 @@ namespace Resources
                 RES_STR_APPFULLNAME,
                 RES_STR_APPTITLENAME,
                 RES_STR_CAPFILENAME,
+                RES_STR_LUAFILENAME,
                 RES_STR_ERR_APP,
                 RES_STR_ERR_ADRV,
                 RES_STR_ERR_UNKNOWN,

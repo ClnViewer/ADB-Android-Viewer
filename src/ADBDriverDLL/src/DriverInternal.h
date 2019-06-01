@@ -40,10 +40,6 @@
 #    include "Utils/stdStringUtils.h"
 #    include "ADBDriver.h"
 
-//#include "..\Resources\resource.h"
-//#include "..\GameDevController.h"
-//#include "..\Dialog\StyleDialog.h"
-//#include "..\Dialog\ListDialog\ListDialog.h"
 #  endif
 
 #endif

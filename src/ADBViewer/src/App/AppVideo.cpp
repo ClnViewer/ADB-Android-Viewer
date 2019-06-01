@@ -120,6 +120,9 @@ void AppVideo::run()
                         AppConfig::instance().cnf_scale.load(), AppConfig::instance().cnf_compress.load(),
                         [this](std::vector<uint8_t> & v, uint32_t w, uint32_t h)
                             {
+                                if (m_app->m_appeditor.isactive())
+                                    m_app->m_appeditor.update(w, h, v);
+
                                 bool ret = update(v, w, h);
                                 if (ret)
                                     Plugins::AppPluginManager::instance().run(v, w, h);
@@ -159,7 +162,6 @@ void AppVideo::run()
         }
     };
     m_thu = move(thu);
-    return;
 }
 
 bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
@@ -214,14 +216,14 @@ bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
 
 bool AppVideo::event(SDL_Event *ev, const void *instance)
 {
-    AppVideo *app = static_cast<AppVideo*>(
+    AppVideo *apv = static_cast<AppVideo*>(
                 const_cast<void*>(instance)
             );
 
     if (
-        (!app) ||
+        (!apv) ||
         (AppConfig::instance().cnf_isstop) ||
-        (app->m_app->m_appinput.isactive())
+        (apv->m_app->m_appinput.isactive())
         )
         return false;
 
@@ -231,7 +233,8 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
         {
             if (
                 (AppConfig::instance().cnf_isstop) ||
-                (ev->motion.x <= app->m_app->m_appmenubar.gui.rect.w)
+                (apv->m_app->m_appeditor.isactive()) ||
+                (ev->motion.x <= apv->m_app->m_appmenubar.gui.rect.w)
                )
                 break;
 
@@ -241,7 +244,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 {
                     ADBDriver::Tap_s t =
                     {
-                        ((ev->motion.x - app->m_app->m_appmenubar.gui.rect.w) *
+                        ((ev->motion.x - apv->m_app->m_appmenubar.gui.rect.w) *
                                 static_cast<int32_t>(AppConfig::instance().cnf_scale.load())),
                         (ev->motion.y *
                                 static_cast<int32_t>(AppConfig::instance().cnf_scale.load()))
@@ -265,7 +268,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
 
             if (
                 (AppConfig::instance().cnf_isstop) ||
-                (app->m_app->m_appinput.isactive())
+                (apv->m_app->m_appinput.isactive())
                )
                 break;
 
@@ -273,7 +276,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
             {
                 case SDLK_LEFT:
                 {
-                    AppConfig::instance().cnf_adb_rect.x1 = std::min((AppConfig::instance().cnf_adb_rect.x1 + 30), app->gui.rect.w);
+                    AppConfig::instance().cnf_adb_rect.x1 = std::min((AppConfig::instance().cnf_adb_rect.x1 + 30), apv->gui.rect.w);
                     AppConfig::instance().cnf_adb.Click(&AppConfig::instance().cnf_adb_rect);
                     AppConfig::instance().cnf_adb_rect.x0 = AppConfig::instance().cnf_adb_rect.x1;
                     return true;
@@ -287,7 +290,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 }
                 case SDLK_UP:
                 {
-                    AppConfig::instance().cnf_adb_rect.y1 = std::min((AppConfig::instance().cnf_adb_rect.y1 + 30), app->gui.rect.h);
+                    AppConfig::instance().cnf_adb_rect.y1 = std::min((AppConfig::instance().cnf_adb_rect.y1 + 30), apv->gui.rect.h);
                     AppConfig::instance().cnf_adb.Click(&AppConfig::instance().cnf_adb_rect);
                     AppConfig::instance().cnf_adb_rect.y0 = AppConfig::instance().cnf_adb_rect.y1;
                     return true;
@@ -301,8 +304,8 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 }
                 case SDLK_HOME:
                 {
-                    AppConfig::instance().cnf_adb_rect.x1 = static_cast<uint32_t>(app->gui.rect.w / 2);
-                    AppConfig::instance().cnf_adb_rect.y1 = static_cast<uint32_t>(app->gui.rect.h / 2);
+                    AppConfig::instance().cnf_adb_rect.x1 = static_cast<uint32_t>(apv->gui.rect.w / 2);
+                    AppConfig::instance().cnf_adb_rect.y1 = static_cast<uint32_t>(apv->gui.rect.h / 2);
                     AppConfig::instance().cnf_adb.Click(&AppConfig::instance().cnf_adb_rect);
                     AppConfig::instance().cnf_adb_rect.x0 = AppConfig::instance().cnf_adb_rect.x1;
                     AppConfig::instance().cnf_adb_rect.y0 = AppConfig::instance().cnf_adb_rect.y1;
@@ -317,7 +320,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 }
                 case SDLK_PAGEUP:
                 {
-                    AppConfig::instance().cnf_adb_rect.y1 = static_cast<uint32_t>(app->gui.rect.h);
+                    AppConfig::instance().cnf_adb_rect.y1 = static_cast<uint32_t>(apv->gui.rect.h);
                     AppConfig::instance().cnf_adb.Click(&AppConfig::instance().cnf_adb_rect);
                     AppConfig::instance().cnf_adb_rect.y0 = AppConfig::instance().cnf_adb_rect.y1;
                     return true;

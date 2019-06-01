@@ -13,12 +13,11 @@ typedef std::map<std::wstring, std::wstring> SelectedList;
 class DLL_EXPORT ADBDriver
 {
 private:
-    bool m_disposed;
-    uint32_t m_display[4];
-    std::wstring m_exepath;
-    std::wstring m_deviceid;
+    uint32_t             m_display[4];
+    std::wstring         m_exepath;
+    std::wstring         m_deviceid;
     GameDev::DriverAsync m_cmdasync;
-    GameDev::DriverNet m_net;
+    GameDev::DriverNet   m_net;
 
 public:
 
@@ -61,7 +60,6 @@ public:
 
     ADBDriver();
     ADBDriver(std::wstring&);
-    ~ADBDriver();
 
     uint32_t GetDisplayWidth() const;
     uint32_t GetDisplayHeight() const;

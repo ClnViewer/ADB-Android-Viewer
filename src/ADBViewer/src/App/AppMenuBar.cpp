@@ -1,6 +1,12 @@
 
 #include "../ADBViewer.h"
 
+static inline const LPCSTR l_openBmpFilter = "Bitmap files (*.bmp)\0*.bmp\0";
+static inline const LPCSTR l_openBmpExt = "bmp";
+static inline const LPCSTR l_openApkFilter = "APK files (*.apk)\0*.apk\0";
+static inline const LPCSTR l_openApkExt = "apk";
+static inline const LPCSTR l_openCurDir = ".\\";
+
 AppMenuBar::AppMenuBar()
     : m_cursor{nullptr}
 {
@@ -94,6 +100,9 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
     AppMenuBar *amb = static_cast<AppMenuBar*>(
                 const_cast<void*>(instance)
             );
+
+    if (amb->m_app->m_appeditor.isactive())
+        return false;
 
     if (ev->type == amb->m_app->m_uevent)
         return amb->mousebutton(ev, amb, ev->user.code);
@@ -278,7 +287,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     case ResManager::IndexStringResource::RES_STR_APK:
                     {
                         std::string fname;
-                        if (amb->openfile(fname))
+                        if (AppSysDialog::openfile(m_app->m_window, fname, l_openApkFilter, l_openApkExt, l_openCurDir))
                             AppConfig::instance().cnf_adb.InstallApk(fname);
 
                         return true;
@@ -309,7 +318,7 @@ bool AppMenuBar::screenshot(SDL_Event *ev, bool isdialog)
 
     if (isdialog)
     {
-        if (!savefile(fname))
+        if (!AppSysDialog::savefile(m_app->m_window, fname, l_openBmpFilter, l_openBmpExt, l_openCurDir))
             return false;
     }
     else
@@ -381,18 +390,27 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
                          ev->motion.y
                         );
                     uint32_t w = ((AppConfig::instance().cnf_scale) ?
-                        (m_app->gui.rect.w * AppConfig::instance().cnf_scale) :
-                         m_app->gui.rect.w
+                        (m_app->m_appvideo.gui.rect.w * AppConfig::instance().cnf_scale) :
+                         m_app->m_appvideo.gui.rect.w
                         );
                     uint32_t h = ((AppConfig::instance().cnf_scale) ?
-                        (m_app->gui.rect.h * AppConfig::instance().cnf_scale) :
-                         m_app->gui.rect.h
+                        (m_app->m_appvideo.gui.rect.h * AppConfig::instance().cnf_scale) :
+                         m_app->m_appvideo.gui.rect.h
                         );
 #                   if !defined (_BUILD_FRAME_NO_TITLE)
                     ss << " - ";
 #                   endif
                     ss << "( " << w << "x" << h << " )";
                     ss << " - " << "( X: " << x << " Y: " << y << " )";
+
+                    /*
+                    if (m_app->m_appeditor.isactive())
+                    {
+                        ss << " - (R:" << m_app->m_appeditor.m_pixel.rgb.r_;
+                        ss << " G:" << m_app->m_appeditor.m_pixel.rgb.g_;
+                        ss << " B:" << m_app->m_appeditor.m_pixel.rgb.b_ << ") ";
+                    }
+                    */
                 }
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else

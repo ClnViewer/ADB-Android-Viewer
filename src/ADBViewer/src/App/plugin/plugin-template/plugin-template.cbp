@@ -31,16 +31,20 @@
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-Wall" />
-					<Add option="-D_BUILD_DLL" />
 					<Add option="-O2" />
+					<Add option="-D_BUILD_DLL" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add library="user32" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="upx -9 ..\..\..\..\..\bin\Release\plugins\plugin-template.dll" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Unit filename="../AppIPlugin.h" />
+		<Unit filename="../plugin-base.h" />
 		<Unit filename="plugin-stub.cpp" />
 		<Unit filename="plugin-template.cpp" />
 		<Unit filename="plugin-template.h" />

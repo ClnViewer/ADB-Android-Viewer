@@ -2,7 +2,7 @@
 #pragma once
 
 
-#if (!defined(__WIN32__) && !defined(__WIN64__))
+#if !defined(OS_WIN)
    typedef SOCKET int32_t;
 #  define INVALID_SOCKET -1
 #endif
@@ -10,10 +10,11 @@
 namespace GameDev
 {
 
-class DriverNet
+class DLL_EXPORT DriverNet
 {
 private:
     std::atomic<bool> IsError;
+    bool              IsDesposed;
 
 public:
 

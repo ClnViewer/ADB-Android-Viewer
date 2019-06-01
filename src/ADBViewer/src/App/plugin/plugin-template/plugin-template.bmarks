@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="..\AppIPlugin.h" open="0" top="0" tabpos="4">
-		<Cursor position="72" topLine="0" />
-	</File>
-	<File name="plugin-stub.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="437" topLine="0" />
-	</File>
-	<File name="plugin-template.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="467" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="plugin-template.h" open="0" top="0" tabpos="1">
-		<Cursor position="851" topLine="25" />
-		<BrowseMarks positions="295,865" />
-	</File>
 </BrowseTracker_layout_file>
