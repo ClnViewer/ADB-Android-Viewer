@@ -49,7 +49,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="upx -9 ../bin/Release/ADBViewer.exe" />
-					<Add after='cmd.exe /C &quot;C:\Program Files\Caphyon\Advanced Installer 15.9\bin\x86\AdvancedInstaller.com&quot; /rebuild ..\ADBViewerInstaller\Android-ADB-Viewer.aip' />
+					<Add after='cmd.exe /C &quot;C:\Program Files\Caphyon\Advanced Installer 16.0\bin\x86\AdvancedInstaller.com&quot; /rebuild ..\ADBViewerInstaller\Android-ADB-Viewer.aip' />
 				</ExtraCommands>
 			</Target>
 		</Build>
