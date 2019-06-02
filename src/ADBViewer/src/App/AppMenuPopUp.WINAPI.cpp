@@ -3,6 +3,13 @@
 #include  "SDL2/SDL_syswm.h"
 #include  "../../../ADBDriverDLL/src/Utils/stdStringUtils.h"
 
+typedef struct
+{
+    uint32_t cid;
+    int32_t  sid, key;
+
+} ACmdKey;
+
 AppMenuPopUp::AppMenuPopUp()
     : m_app(nullptr)
 {
@@ -17,8 +24,14 @@ AppMenuPopUp::AppMenuPopUp()
 
 AppMenuPopUp::~AppMenuPopUp() {}
 
-//#if defined(OS_WIN)
-#include  "AppMenuPopUp.WINAPI.h"
+#if defined(OS_WIN)
+#include "AppMenuPopUp.WINAPI.h"
+
+static ACmdKey l_acmdkey[] =
+{
+#  define __MENU_ACMD(A,B,C) { .cid = A, .sid = B, .key = C },
+#  include "AppMenuPopUpAcmd.WINAPI.h"
+};
 
 static const wchar_t * f_GetStringFromMap(int32_t id, std::map<int32_t, std::wstring> & rmap)
 {
@@ -51,6 +64,7 @@ void AppMenuPopUp::show()
     HBRUSH l_hbrush   = NULL;
     HMENU  l_hPopMenu = NULL,
            l_hCapMenu = NULL,
+           l_hCmdMenu = NULL,
            l_hScrMenu = NULL,
            l_hScrTypeMenu = NULL,
            l_hPlugMenu = NULL;
@@ -59,6 +73,7 @@ void AppMenuPopUp::show()
         if (
             (!(l_hPopMenu = ::CreatePopupMenu())) ||
             (!(l_hCapMenu = ::CreateMenu())) ||
+            (!(l_hCmdMenu = ::CreateMenu())) ||
             (!(l_hScrMenu = ::CreateMenu())) ||
             (!(l_hPlugMenu = ::CreateMenu()))||
             (!(l_hScrTypeMenu = ::CreateMenu()))
@@ -73,6 +88,9 @@ void AppMenuPopUp::show()
         RESOURCE_MAP(IDS_MENUMSG0, IDS_MENUEND, rmap);
 
         MENU_ADD(l_hCapMenu, IDS_MENUMSG0,  rmap, l_hPopMenu);
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+
+        MENU_ADD(l_hCmdMenu, IDS_MENUMSG16,  rmap, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
         MENU_ADD(l_hScrMenu, IDS_MENUMSG6,  rmap, l_hPopMenu);
@@ -126,8 +144,7 @@ void AppMenuPopUp::show()
         ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU5, IDS_MENUMSG5,  rmap, l_hCapMenu);
 
-        /// Plugin menu list
-
+        /// Plugins menu list
         std::vector<Plugins::AppPluginManager::Plugin_s> plist =
                     Plugins::AppPluginManager::instance().listplugin();
 
@@ -137,6 +154,13 @@ void AppMenuPopUp::show()
             ::AppendMenuW(l_hPlugMenu, MF_STRING, (i + 50000U), ws.c_str());
             if (plist[i].state)
                 ::SetMenuItemInfo(l_hPlugMenu, (i + 50000U), FALSE, &mit);
+        }
+
+        /// Android direct command menu list
+        for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
+        {
+            auto wtxt = f_GetStringFromMap(l_acmdkey[i].sid, rmap);
+            ::AppendMenuW(l_hCmdMenu, MF_STRING, l_acmdkey[i].cid, wtxt);
         }
 
         /// light: RGB(191,227,103)
@@ -228,6 +252,20 @@ void AppMenuPopUp::show()
                     cmdEvent.user.code = 0;
                     break;
                 }
+            case ID_CMD_POP_MENU30 ... ID_CMD_POP_MENU39:
+                {
+                    for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
+                        if (idx == l_acmdkey[i].cid)
+                        {
+                            AppConfig::instance().cnf_adb.SendSpecialKey(
+                                    GameDev::ADBDriver::KeysType::KEYS_ANDROID,
+                                    l_acmdkey[i].key
+                                );
+                            break;
+                        }
+                    cmdEvent.user.code = 0;
+                    break;
+                }
             case 50000 ... 50999:
                 {
                     uint32_t i = (idx - 50000U);
@@ -256,6 +294,8 @@ void AppMenuPopUp::show()
         ::DestroyMenu(l_hScrTypeMenu);
     if (l_hScrMenu)
         ::DestroyMenu(l_hScrMenu);
+    if (l_hCmdMenu)
+        ::DestroyMenu(l_hCmdMenu);
     if (l_hCapMenu)
         ::DestroyMenu(l_hCapMenu);
     if (l_hPopMenu)
@@ -264,7 +304,6 @@ void AppMenuPopUp::show()
         ::DeleteObject(l_hbrush);
 }
 
-#if defined(OS_WIN)
 #else
 
 bool AppMenuPopUp::init(App *app) { return false; }

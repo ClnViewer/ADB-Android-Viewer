@@ -78,6 +78,7 @@
 		</Unit>
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
+		<Unit filename="src/App/AppConfig.cpp" />
 		<Unit filename="src/App/AppConfig.h" />
 		<Unit filename="src/App/AppEditor.cpp" />
 		<Unit filename="src/App/AppEditor.h" />

@@ -163,7 +163,7 @@ __LUA_FUNC_BODY(adbClick)
         {
             lua_pop(m_lua, 1);
 
-            if (!m_adbcmd)
+            if (!m_adbcmd.load())
                 break;
 
             if (
@@ -177,7 +177,7 @@ __LUA_FUNC_BODY(adbClick)
                 static_cast<int32_t>(lua_tointeger(m_lua, -1))
                 };
 
-            m_adbcmd->click(&t);
+            m_adbcmd.load()->click(&t);
         }
         while (0);
 
@@ -191,7 +191,7 @@ __LUA_FUNC_BODY(adbSwipe)
         {
             lua_pop(m_lua, 1);
 
-            if (!m_adbcmd)
+            if (!m_adbcmd.load())
                 break;
 
             if (
@@ -211,7 +211,7 @@ __LUA_FUNC_BODY(adbSwipe)
                 static_cast<int32_t>(lua_tointeger(m_lua, -1))
                 };
 
-            m_adbcmd->swipe(&s);
+            m_adbcmd.load()->swipe(&s);
         }
         while (0);
 
@@ -225,13 +225,13 @@ __LUA_FUNC_BODY(adbKey)
         {
             lua_pop(m_lua, 1);
 
-            if (!m_adbcmd)
+            if (!m_adbcmd.load())
                 break;
 
             if (!lua_isnumber(m_lua, -1))
                 break;
 
-            m_adbcmd->key(
+            m_adbcmd.load()->key(
                 GameDev::ADBDriver::KeysType::KEYS_ANDROID,
                 static_cast<int32_t>(lua_tointeger(m_lua, -1))
             );
@@ -248,7 +248,7 @@ __LUA_FUNC_BODY(adbText)
         {
             lua_pop(m_lua, 1);
 
-            if (!m_adbcmd)
+            if (!m_adbcmd.load())
                 break;
 
             if (!lua_isstring (m_lua, -1))
@@ -259,7 +259,7 @@ __LUA_FUNC_BODY(adbText)
             if (txt.empty())
                 break;
 
-            m_adbcmd->text(txt);
+            m_adbcmd.load()->text(txt);
         }
         while (0);
 

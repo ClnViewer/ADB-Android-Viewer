@@ -22,6 +22,7 @@ private:
     //
     std::thread             m_thr;
     std::atomic<bool>       m_isrun;
+    std::mutex              m_lock;
     std::vector<AppPluginManager::Plugin_s> m_plugins;
     std::shared_ptr<Plugins::IPluginLoader> m_loadfunc;
 

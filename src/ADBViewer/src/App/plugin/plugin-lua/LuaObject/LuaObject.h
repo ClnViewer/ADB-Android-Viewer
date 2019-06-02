@@ -9,7 +9,7 @@ class LuaObject
         double      m_laststate;
         std::string m_path;
 
-        Plugins::PluginCallBack_s const *m_adbcmd;
+        std::atomic<const Plugins::PluginCallBack_s*> m_adbcmd;
         std::vector<uint8_t> const *m_vfb;
 
         bool init();

@@ -10,30 +10,37 @@ local function isreload()
   local ret
   io.write("-- begin isreload ( 000 )\n")
   
-  ret = LuaObject:checkPixelsByPos(tbl.restartscreen2)
+  ret = LuaObject:checkPixelsByPos(tbl.restartscreen1)
   if ret then
     LuaObject:adbClick(460,426)
     io.write("-- begin restartscreen2 ( 001 )\n")
     return 8
   end
 
+  ret = LuaObject:checkPixelsByPos(tbl.restartscreen2)
+  if ret then
+    LuaObject:adbClick(460,426)
+    io.write("-- begin restartscreen2 ( 002 )\n")
+    return 8
+  end
+
   ret = LuaObject:checkPixelsByPos(tbl.restartscreen3)
   if ret then
     LuaObject:adbClick(460,422)
-    io.write("-- begin restartscreen3 ( 002 )\n")
+    io.write("-- begin restartscreen3 ( 003 )\n")
     return 8
   end
 
   ret = LuaObject:checkPixelsByPos(tbl.loadlogo)
   if ret then
-    io.write("-- begin loadlogo ( 003 )\n")
+    io.write("-- begin loadlogo ( 004 )\n")
     return 5
   end
 
   ret = LuaObject:checkPixelsByPos(tbl.defscreen)
   if ret then
     LuaObject:adbClick(640,594)
-    io.write("-- begin defscreen ( 004 )\n")
+    io.write("-- begin defscreen ( 005 )\n")
     return 5
   end
 
@@ -80,6 +87,7 @@ local function step(state)
     tolog(state, ret)
     if ret then
       state = 4
+      sleep = 7
       LuaObject:adbClick(344,764)
     end
     
@@ -122,12 +130,21 @@ local function step(state)
     end
     
   elseif state == 7 then
-    -- end, close chat menu (for test only)
-    ret = LuaObject:checkPixelsByPos(tbl.menuopen)
+    -- keyboard enter (close)
+    ret = LuaObject:checkPixelsByPos(tbl.menuglobalchatkbd)
     tolog(state, ret)
     if ret then
-      state = 0
-      LuaObject:adbClick(410,414)
+      state = 3
+      sleep = 10
+      LuaObject:adbKey(111)
+    else
+      -- end, close chat menu (for test only)
+      ret = LuaObject:checkPixelsByPos(tbl.menuopen)
+      tolog(state, ret)
+      if ret then
+        state = 0
+        LuaObject:adbClick(410,414)
+      end
     end
   end
   
@@ -152,7 +169,8 @@ end
 
 function main(state)
   
-  local f = io.open("..\\bin\\__dump__coc_lua__", "a")
+  -- local f = io.open("..\\bin\\__dump__coc_lua__", "a")
+  local f = io.open("plugins\\__dump__coc_lua__", "a")
   io.output(f)
   io.write("-- begin main ( "..string.format("%s", state).." )\n")
   

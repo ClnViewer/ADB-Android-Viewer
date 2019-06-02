@@ -86,18 +86,25 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
         if (!m_plugins.size())
             return;
 
-        bool isready = false;
-        for (auto &plg : m_plugins)
+        /// lock
         {
-            if ((!plg.state) && (plg.handle))
-                disableplugin(plg);
-            if ((!plg.state) || (!plg.iplug))
-                continue;
-            if ((isready = plg.iplug->ready()))
-                break;
+            bool isready = false;
+
+            for (auto &plg : m_plugins)
+            {
+                if ((!plg.state) && (plg.handle))
+                    disableplugin(plg);
+                if ((!plg.state) || (!plg.iplug))
+                    continue;
+                {
+                    std::lock_guard<std::mutex> l_lock(m_lock);
+                    if ((isready = plg.iplug->ready()))
+                        break;
+                }
+            }
+            if (!isready)
+                return;
         }
-        if (!isready)
-            return;
 
         m_isrun = true;
 
@@ -112,8 +119,11 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
                         break;
                     if ((!plg.state) || (!plg.iplug))
                         continue;
-                    if (plg.iplug->ready())
-                        plg.iplug->go(vt, w, h);
+                    {
+                        std::lock_guard<std::mutex> l_lock(m_lock);
+                        if (plg.iplug->ready())
+                            plg.iplug->go(vt, w, h);
+                    }
                 }
                 m_isrun = false;
             }
@@ -123,6 +133,8 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
 
 bool AppPluginManager::isplugin(std::string const & s)
     {
+        std::lock_guard<std::mutex> l_lock(m_lock);
+
         auto plg = find_if(
                     m_plugins.begin(),
                     m_plugins.end(),
@@ -178,6 +190,8 @@ bool AppPluginManager::enableplugin(AppPluginManager::Plugin_s & plg)
     {
         do
         {
+            std::lock_guard<std::mutex> l_lock(m_lock);
+
             if (plg.handle)
                 disableplugin(plg);
 
@@ -206,6 +220,7 @@ bool AppPluginManager::enableplugin(AppPluginManager::Plugin_s & plg)
 
 void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg) noexcept
     {
+        std::lock_guard<std::mutex> l_lock(m_lock);
         plg.state = false;
 
         if (plg.iplug)
@@ -224,7 +239,11 @@ void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg) noexcept
 
 void AppPluginManager::disableplugin(std::string const & s)
     {
-        AppPluginManager::Plugin_s *plg = findplugin(s);
+        AppPluginManager::Plugin_s *plg;
+        {
+            std::lock_guard<std::mutex> l_lock(m_lock);
+            plg = findplugin(s);
+        }
         if (!plg)
             return;
         if (m_isrun)
@@ -235,7 +254,11 @@ void AppPluginManager::disableplugin(std::string const & s)
 
 bool AppPluginManager::enableplugin(std::string const & s)
     {
-        AppPluginManager::Plugin_s *plg = findplugin(s);
+        AppPluginManager::Plugin_s *plg;
+        {
+            std::lock_guard<std::mutex> l_lock(m_lock);
+            plg = findplugin(s);
+        }
         if (!plg)
             return false;
         return enableplugin(*plg);
@@ -251,6 +274,7 @@ void AppPluginManager::freeplugins() noexcept
         if (!m_plugins.size())
             return;
 
+        std::lock_guard<std::mutex> l_lock(m_lock);
         for (auto &plg : m_plugins)
             disableplugin(plg);
     }
