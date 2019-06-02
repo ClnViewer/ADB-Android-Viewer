@@ -2,7 +2,7 @@
 #define VERSION_H
 
 	//Date Version Types
-	#define AVIEW_DATE "01"
+	#define AVIEW_DATE "02"
 	#define AVIEW_MONTH "06"
 	#define AVIEW_YEAR "2019"
 	#define AVIEW_UBUNTU_VERSION_STYLE  "19.06"
@@ -14,21 +14,21 @@
 	//Standard Version Type
 	#define AVIEW_MAJOR  0
 	#define AVIEW_MINOR  0
-	#define AVIEW_BUILD  21
-	#define AVIEW_REVISION  93
+	#define AVIEW_BUILD  3
+	#define AVIEW_REVISION  18
 	
 	//Miscellaneous Version Types
-	#define AVIEW_BUILDS_COUNT  30
-	#define AVIEW_RC_FILEVERSION 0,0,21,93
-	#define AVIEW_RC_FILEVERSION_STRING "0, 0, 21, 93\0"
-	#define AVIEW_FULLVERSION_STRING  "0.0.21.93"
+	#define AVIEW_BUILDS_COUNT  2
+	#define AVIEW_RC_FILEVERSION 0,0,3,18
+	#define AVIEW_RC_FILEVERSION_STRING "0, 0, 3, 18\0"
+	#define AVIEW_FULLVERSION_STRING  "0.0.3.18"
 	
 	//SVN Version
-	#define AVIEW_SVN_REVISION "35"
-	#define AVIEW_SVN_DATE "2019-06-01T02:33:13.236133Z"
+	#define AVIEW_SVN_REVISION "37"
+	#define AVIEW_SVN_DATE "2019-06-01T09:22:58.384424Z"
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	#define AVIEW_BUILD_HISTORY  21
+	#define AVIEW_BUILD_HISTORY  3
 	
 
 #endif //VERSION_H

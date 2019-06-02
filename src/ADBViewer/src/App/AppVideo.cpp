@@ -132,29 +132,31 @@ void AppVideo::run()
             }
             catch(std::exception & _ex)
             {
-                SDL_ShowSimpleMessageBox(
-                    0,
-                    ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
-                    ),
+                SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
+                m_app->m_appinfo.draw(
                     _ex.what(),
-                    m_app->m_window
-                );
+                    &offset,
+                    -1
+                    );
+                gui.active = false;
+                defscreen();
+                gui.active = true;
                 AppConfig::instance().cnf_isstop = true;
                 return;
             }
             catch(...)
             {
-                SDL_ShowSimpleMessageBox(
-                    0,
-                    ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
-                    ),
+                SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
+                m_app->m_appinfo.draw(
                     ResManager::stringload(
                         ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN
                     ),
-                    m_app->m_window
-                );
+                    &offset,
+                    -1
+                    );
+                gui.active = false;
+                defscreen();
+                gui.active = true;
                 AppConfig::instance().cnf_isstop = true;
                 return;
             }

@@ -55,6 +55,7 @@
 		<Unit filename="LuaObject/LuaObject.cpp" />
 		<Unit filename="LuaObject/LuaObject.h" />
 		<Unit filename="LuaObject/LuaObjectBind.h" />
+		<Unit filename="plugin-lua-utils.h" />
 		<Unit filename="plugin-lua.cpp" />
 		<Unit filename="plugin-lua.h" />
 		<Unit filename="plugin-stub.cpp" />

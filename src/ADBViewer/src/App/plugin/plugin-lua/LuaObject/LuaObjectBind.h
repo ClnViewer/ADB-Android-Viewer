@@ -25,6 +25,8 @@
 #define __RGB_CHECK(A,B) \
     ((A != B) && ((std::max(A,B) - 1) != std::min(A,B)))
 
+#include "../plugin-lua-utils.h"
+
 struct _RGB {
     uint8_t r, g, b;
 };
@@ -42,10 +44,12 @@ __LUA_FUNC_STATIC(adbClick)
 __LUA_FUNC_STATIC(adbSwipe)
 __LUA_FUNC_STATIC(adbKey)
 __LUA_FUNC_STATIC(adbText)
-__LUA_FUNC_STATIC(adbScreen)
 __LUA_FUNC_STATIC(stateSet)
 __LUA_FUNC_STATIC(stateGet)
 __LUA_FUNC_STATIC(stateSleep)
+__LUA_FUNC_STATIC(screenGetCord)
+__LUA_FUNC_STATIC(screenGetFb)
+__LUA_FUNC_STATIC(screenGet)
 
 static LuaFunReg_s l_func[] =
 {
@@ -55,10 +59,12 @@ static LuaFunReg_s l_func[] =
     __LUA_FUNC_TABLE(adbSwipe),
     __LUA_FUNC_TABLE(adbKey),
     __LUA_FUNC_TABLE(adbText),
-    __LUA_FUNC_TABLE(adbScreen),
     __LUA_FUNC_TABLE(stateSet),
     __LUA_FUNC_TABLE(stateGet),
-    __LUA_FUNC_TABLE(stateSleep)
+    __LUA_FUNC_TABLE(stateSleep),
+    __LUA_FUNC_TABLE(screenGetCord),
+    __LUA_FUNC_TABLE(screenGetFb),
+    __LUA_FUNC_TABLE(screenGet)
 };
 
 
@@ -105,6 +111,8 @@ __LUA_FUNC_BODY(checkPixelsByPos)
         return 1;
     }
 
+
+
 __LUA_FUNC_BODY(checkPixelsByCord)
     {
         bool ret = false;
@@ -113,22 +121,35 @@ __LUA_FUNC_BODY(checkPixelsByCord)
         {
             lua_pop(m_lua, 1);
 
-            if (!m_vfb)
+            if ((!m_vfb) || (!m_vfb->size()))
                 break;
 
             auto tbl = getT<int32_t, 5>();
             if (!tbl.size())
                 break;
 
-            /*
-            for (auto & a : tbl)
-            {
-                std::cout << "{" << a[0] <<"," << a[1] <<"," << a[2] <<"," << a[3] <<"},";
-            }
-            std::cout << std::endl;
-            */
-
             ret = true;
+
+            for (auto & arr : tbl)
+            {
+                int32_t x = static_cast<int32_t>(std::get<0>(arr)),
+                        y = static_cast<int32_t>(std::get<1>(arr)),
+                        p = utils_getpos(x, y, point.x, point.y);
+
+                if ((uint32_t)p >= m_vfb->size())
+                    continue;
+
+                _RGB const *rgb = (_RGB*)&(*m_vfb)[p];
+                if (
+                    __RGB_CHECK(static_cast<uint8_t>(std::get<2>(arr)), rgb->r) ||
+                    __RGB_CHECK(static_cast<uint8_t>(std::get<3>(arr)), rgb->g) ||
+                    __RGB_CHECK(static_cast<uint8_t>(std::get<4>(arr)), rgb->b)
+                   )
+                {
+                    ret = false;
+                    break;
+                }
+            }
         }
         while (0);
 
@@ -246,26 +267,6 @@ __LUA_FUNC_BODY(adbText)
         return 0;
     }
 
-__LUA_FUNC_BODY(adbScreen)
-    {
-        do
-        {
-            lua_pop(m_lua, 1);
-
-            if (!m_vfb)
-                break;
-
-            lua_pushinteger(m_lua, point.x);
-            lua_pushinteger(m_lua, point.y);
-            setT(*m_vfb);
-            return 3;
-        }
-        while (0);
-
-        lua_pushnil(m_lua);
-        return 0;
-    }
-
 __LUA_FUNC_BODY(stateSet)
     {
         do
@@ -308,4 +309,49 @@ __LUA_FUNC_BODY(stateSleep)
         return 0;
     }
 
+__LUA_FUNC_BODY(screenGetCord)
+    {
+        lua_pop(m_lua, 1);
+        lua_pushinteger(m_lua, point.x);
+        lua_pushinteger(m_lua, point.y);
+        return 2;
+    }
+
+__LUA_FUNC_BODY(screenGetFb)
+    {
+        do
+        {
+            lua_pop(m_lua, 1);
+
+            if (!m_vfb)
+                break;
+
+            setT(*m_vfb);
+            return 1;
+        }
+        while (0);
+
+        lua_pushnil(m_lua);
+        return 0;
+    }
+
+__LUA_FUNC_BODY(screenGet)
+    {
+        do
+        {
+            lua_pop(m_lua, 1);
+
+            if (!m_vfb)
+                break;
+
+            lua_pushinteger(m_lua, point.x);
+            lua_pushinteger(m_lua, point.y);
+            setT(*m_vfb);
+            return 3;
+        }
+        while (0);
+
+        lua_pushnil(m_lua);
+        return 0;
+    }
 

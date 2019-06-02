@@ -41,8 +41,10 @@ class LuaObject
 
         /// Export to Lua script function
 
-        int32_t checkPixelsByPos();   /// return boolean
-        int32_t checkPixelsByCord();  /// return boolean
+        int32_t checkPixelsByPos();   /// return boolean,
+                                      /// format: { buffer position, color R, color G, color B }
+        int32_t checkPixelsByCord();  /// return boolean,
+                                      /// format: { vertical X, horizontal Y, color R, color G, color B }
         int32_t stateSet();
         int32_t stateGet();
         int32_t stateSleep();
@@ -51,7 +53,10 @@ class LuaObject
         int32_t adbSwipe();
         int32_t adbKey();
         int32_t adbText();
-        int32_t adbScreen();          /// return (w, h, vector FB)
+
+        int32_t screenGet();          /// return (w, h, vector FB)
+        int32_t screenGetCord();      /// return (w, h)
+        int32_t screenGetFb();        /// return (vector FB)
 
         /// Get methods
 
