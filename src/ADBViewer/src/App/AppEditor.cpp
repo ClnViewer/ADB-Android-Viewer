@@ -354,9 +354,12 @@ void AppEditor::write_script(std::string const & fname)
                     if (m_ptarget.size())
                     {
                         int32_t pos = (m_ptarget.size() / 2);
-                        ss << "\ttLuaObject:adbClick(";
+                        ss << "\tlocal ret = LuaObject:checkPixelsByPos(tbl_screen01)\n";
+                        ss << "\tif ret then\n";
+                        ss << "\t\tLuaObject:adbClick(";
                         ss << (m_ptarget[pos].x * sc) << "," ;
                         ss << (m_ptarget[pos].y * sc) << ")\n";
+                        ss << "\tend\n";
                     }
                     ss << "\n\tLuaObject:stateSleep(10)\n";
                     break;

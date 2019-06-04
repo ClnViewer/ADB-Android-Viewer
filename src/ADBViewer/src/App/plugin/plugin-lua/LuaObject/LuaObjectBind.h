@@ -93,6 +93,13 @@ __LUA_FUNC_BODY(checkPixelsByPos)
                     )
                     continue;
 
+                /*
+                uint32_t p = static_cast<uint32_t>(std::get<0>(arr));
+                uint8_t  r = static_cast<uint8_t>(std::get<1>(arr));
+                uint8_t  g = static_cast<uint8_t>(std::get<2>(arr));
+                uint8_t  b = static_cast<uint8_t>(std::get<3>(arr));
+                */
+
                 _RGB const *rgb = (_RGB*)&(*m_vfb)[arr[0]];
                 if (
                     __RGB_CHECK(static_cast<uint8_t>(std::get<1>(arr)), rgb->r) ||
