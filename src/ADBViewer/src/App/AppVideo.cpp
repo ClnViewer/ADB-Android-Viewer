@@ -132,12 +132,14 @@ void AppVideo::run()
             }
             catch(std::exception & _ex)
             {
+                /*
                 SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
                 m_app->m_appinfo.draw(
                     _ex.what(),
                     &offset,
                     -1
                     );
+                */
                 gui.active = false;
                 defscreen();
                 gui.active = true;
@@ -146,6 +148,7 @@ void AppVideo::run()
             }
             catch(...)
             {
+                /*
                 SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
                 m_app->m_appinfo.draw(
                     ResManager::stringload(
@@ -154,6 +157,7 @@ void AppVideo::run()
                     &offset,
                     -1
                     );
+                */
                 gui.active = false;
                 defscreen();
                 gui.active = true;

@@ -44,8 +44,8 @@ public:
     void run(std::vector<uint8_t>&, uint32_t, uint32_t);
     bool enableplugin(AppPluginManager::Plugin_s&);
     bool enableplugin(std::string const&);
-    void disableplugin(AppPluginManager::Plugin_s&) noexcept;
-    void disableplugin(std::string const&);
+    void disableplugin(AppPluginManager::Plugin_s&);
+    bool disableplugin(std::string const&);
     std::vector<AppPluginManager::Plugin_s> listplugin() const;
 
     static AppPluginManager& instance();

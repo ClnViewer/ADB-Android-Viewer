@@ -135,6 +135,7 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
 
 bool AppPluginManager::isplugin(std::string const & s)
     {
+        //std::lock_guard<std::mutex> l_lock(m_lock);
         auto plg = find_if(
                     m_plugins.begin(),
                     m_plugins.end(),
@@ -148,6 +149,7 @@ bool AppPluginManager::isplugin(std::string const & s)
 
 AppPluginManager::Plugin_s * AppPluginManager::findplugin(std::string const & s)
     {
+        // std::lock_guard<std::mutex> l_lock(m_lock);
         auto plg = find_if(
                     m_plugins.begin(),
                     m_plugins.end(),
@@ -163,11 +165,8 @@ AppPluginManager::Plugin_s * AppPluginManager::findplugin(std::string const & s)
 
 void AppPluginManager::addplugin(std::string const & sp, std::string const & sn, bool isenable)
     {
-        {
-            std::lock_guard<std::mutex> l_lock(m_lock);
-            if (isplugin(sn))
-                return;
-        }
+        if (isplugin(sn))
+            return;
 
         AppPluginManager::Plugin_s plg{};
         plg.state = false;
@@ -203,26 +202,28 @@ bool AppPluginManager::enableplugin(AppPluginManager::Plugin_s & plg)
     {
         do
         {
-            std::lock_guard<std::mutex> l_lock(m_lock);
-
             if (plg.handle)
                 disableplugin(plg);
 
             if ((plg.path.empty()) || (plg.name.empty()))
                 break;
 
-            if (!(plg.handle = m_loadfunc->PluginOpen(plg.path.c_str())))
-                break;
+            std::lock_guard<std::mutex> l_lock(m_lock);
+            {
+                if (!(plg.handle = m_loadfunc->PluginOpen(plg.path.c_str())))
+                    break;
 
-            f_Fn_construct func = (f_Fn_construct)
-                m_loadfunc->PluginInstance(plg.handle, l_nameCreatePlugin);
-            if (!func)
-                break;
+                f_Fn_construct func = (f_Fn_construct)
+                    m_loadfunc->PluginInstance(plg.handle, l_nameCreatePlugin);
+                if (!func)
+                    break;
 
-            if (!(plg.iplug = func(plg.name.c_str(), AppConfig::instance().GetAdbCb())))
-                break;
+                if (!(plg.iplug = func(plg.name.c_str(), AppConfig::instance().GetAdbCb())))
+                    break;
 
-            plg.state = true;
+                plg.state = true;
+            }
+
             return plg.state;
         }
         while (0);
@@ -231,7 +232,7 @@ bool AppPluginManager::enableplugin(AppPluginManager::Plugin_s & plg)
         return plg.state;
     }
 
-void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg) noexcept
+void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg)
     {
         std::lock_guard<std::mutex> l_lock(m_lock);
         plg.state = false;
@@ -250,28 +251,20 @@ void AppPluginManager::disableplugin(AppPluginManager::Plugin_s & plg) noexcept
         plg.handle = nullptr;
     }
 
-void AppPluginManager::disableplugin(std::string const & s)
+bool AppPluginManager::disableplugin(std::string const & s)
     {
-        AppPluginManager::Plugin_s *plg;
-        {
-            std::lock_guard<std::mutex> l_lock(m_lock);
-            plg = findplugin(s);
-        }
+        AppPluginManager::Plugin_s *plg = findplugin(s);
+
         if (!plg)
-            return;
-        if (m_isrun)
-            plg->state = false;
-        else
-            disableplugin(*plg);
+            return false;
+        plg->state = false;
+        return true;
     }
 
 bool AppPluginManager::enableplugin(std::string const & s)
     {
-        AppPluginManager::Plugin_s *plg;
-        {
-            std::lock_guard<std::mutex> l_lock(m_lock);
-            plg = findplugin(s);
-        }
+        AppPluginManager::Plugin_s *plg = findplugin(s);
+
         if (!plg)
             return false;
         return enableplugin(*plg);

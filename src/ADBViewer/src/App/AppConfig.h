@@ -10,6 +10,7 @@ private:
     std::vector<std::string>   cnf_f_empty;
     std::map<std::string, std::vector<std::string>> cnf_f_config;
     std::mutex                 cnf_lock;
+    std::once_flag             cnf_once;
 
     AppConfig();
     AppConfig(const AppConfig& apc) = delete;

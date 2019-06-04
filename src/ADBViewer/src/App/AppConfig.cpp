@@ -49,9 +49,19 @@ std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
     {
         do
         {
+            bool isfileconf = true;
+
             if (!cnf_f_config.size())
-                if (!GetFromFile())
-                    break;
+                std::call_once(
+                        cnf_once,
+                        [=](bool & ret)
+                        {
+                            ret = GetFromFile();
+                        },
+                        isfileconf
+                    );
+            if (!isfileconf)
+                break;
 
             auto found = cnf_f_config.find(tag);
             if (found == cnf_f_config.end())
