@@ -44,3 +44,57 @@ const void * AppConfig::GetAdbCb() const
     {
         return (const void*)&cnf_cbcmd;
     }
+
+std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
+    {
+        do
+        {
+            if (!cnf_f_config.size())
+                if (!GetFromFile())
+                    break;
+
+            auto found = cnf_f_config.find(tag);
+            if (found == cnf_f_config.end())
+                break;
+            return found->second;
+        }
+        while (0);
+
+        return cnf_f_empty;
+    }
+
+bool AppConfig::GetFromFile()
+    {
+        std::lock_guard<std::mutex> l_lock(cnf_lock);
+
+        std::ifstream l_file("ADBViewer.ini");
+        if (!l_file.is_open())
+            return false;
+
+        std::string line;
+        while(getline(l_file, line))
+        {
+            line.erase(
+                std::remove_if(line.begin(), line.end(), isspace), line.end()
+            );
+            if(line[0] == '#' || line.empty())
+                continue;
+
+            auto pos = line.find("=");
+            auto tag = line.substr(0, pos);
+            auto value = line.substr(pos + 1);
+
+            auto found = cnf_f_config.find(tag);
+            if (found != cnf_f_config.end())
+            {
+                found->second.push_back(value);
+            }
+            else
+            {
+                std::vector<std::string> l_list;
+                l_list.push_back(value);
+                cnf_f_config.insert(make_pair(tag, l_list));
+            }
+        }
+        return true;
+    }

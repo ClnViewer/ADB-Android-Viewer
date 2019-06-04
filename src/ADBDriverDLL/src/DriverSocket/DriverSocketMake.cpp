@@ -42,7 +42,7 @@ static T f__MakeTarget(std::wstring const & dev)
 }
 
 template<typename T>
-static bool f__MakeCheck(T & result)
+static bool f__MakeCheck(T & result, bool is8)
 {
     if (result.length() < 4U)
         return false;
@@ -78,9 +78,9 @@ static bool f__MakeCheck(T & result)
     else
         return false;
 
-    size_t pos = ((result.length() >= 8) ? 8U :
-                    ((result.length() >= 4) ? 4U : 0U)
-                  );
+    size_t pos = (((is8) && (result.length() >= 8)) ? 8U :
+            ((result.length() >= 4) ? 4U : 0U)
+        );
     if (pos)
         result.erase(0, pos);
 

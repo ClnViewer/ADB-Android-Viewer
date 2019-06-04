@@ -32,7 +32,7 @@ private:
 
     AppPluginManager::Plugin_s * findplugin(std::string const&);
     bool isplugin(std::string const &);
-    void addplugin(std::string const&, std::string const&);
+    void addplugin(std::string const&, std::string const&, bool);
     void freeplugins() noexcept;
 
 public:

@@ -17,7 +17,7 @@ std::string ADBDriver::GetProperties(ADBDriver::DeviceInfoType t)
     std::stringstream ss;
     ss << "getprop " << DriverConst::ls_arrayPropertis[t];
 
-    if (AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result))
+    if (AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, false))
         return result;
     return std::string{};
 }
@@ -30,7 +30,7 @@ SelectedList ADBDriver::GetDeviceList()
     try
     {
         if (
-            (!AdbRawT<std::wstring>(L"devices-l", DriverConst::lw_cmd_host, response)) ||
+            (!AdbRawT<std::wstring>(L"devices-l", DriverConst::lw_cmd_host, response, true)) ||
             (!response.length())
            )
             return devices;
@@ -71,7 +71,7 @@ bool ADBDriver::InitRemote()
     {
         std::string result;
 
-        if (!AdbRawT<std::string>(DriverConst::ls_checkFile, DriverConst::ls_cmd_shell, result))
+        if (!AdbRawT<std::string>(DriverConst::ls_checkFile, DriverConst::ls_cmd_shell, result, false))
             break;
         if (string_end<std::string>(result, DriverConst::ls_foundFile))
             return true;
@@ -91,7 +91,7 @@ bool ADBDriver::InitRemote()
 
         ss.str(std::string());
         ss << DriverConst::ls_cmod_file << DriverConst::ls_name_ascreencap;
-        if (!AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result))
+        if (!AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, false))
             break;
 
         return true;

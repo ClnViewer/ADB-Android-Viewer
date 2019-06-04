@@ -1,6 +1,6 @@
 
 template<typename T>
-bool ADBDriver::AdbRawT(T cmd, T const & addtype, T & result)
+bool ADBDriver::AdbRawT(T cmd, T const & addtype, T & result, bool is8)
 {
     bool ret = false;
     SOCKET l_client = INVALID_SOCKET;
@@ -19,7 +19,7 @@ bool ADBDriver::AdbRawT(T cmd, T const & addtype, T & result)
         if (!f__SessionReceiveString<T>(1, l_client, cmd, result))
             break;
 
-        if (!f__MakeCheck<T>(result))
+        if (!f__MakeCheck<T>(result, is8))
             break;
 
         ret = true;
@@ -29,6 +29,6 @@ bool ADBDriver::AdbRawT(T cmd, T const & addtype, T & result)
     m_net.Close(l_client);
     return ret;
 }
-template bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&);
-template bool ADBDriver::AdbRawT<std::string>(std::string, std::string  const &, std::string&);
+template bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&, bool);
+template bool ADBDriver::AdbRawT<std::string>(std::string, std::string  const &, std::string&, bool);
 

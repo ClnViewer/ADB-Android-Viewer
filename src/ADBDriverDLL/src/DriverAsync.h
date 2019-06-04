@@ -50,7 +50,7 @@ public:
     }
 
     template <typename T>
-    void add(T cmd, T const & addtype, std::function<bool(T, T const&, T&)> fun)
+    void add(T cmd, T const & addtype, std::function<bool(T, T const&, T&, bool)> fun)
     {
         m_queue.push(
             std::async(
@@ -58,7 +58,7 @@ public:
                 [=]()
                 {
                     T result{};
-                    return fun(cmd, addtype, result);
+                    return fun(cmd, addtype, result, true);
                 }
             )
         );

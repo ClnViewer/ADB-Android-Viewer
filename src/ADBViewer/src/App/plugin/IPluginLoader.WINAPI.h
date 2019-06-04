@@ -20,7 +20,7 @@ namespace Plugins
 		    return (void*) GetProcAddress((HMODULE)instance, s.c_str());
 		}
 		bool PluginFind(
-                std::function<void(std::string const&, std::string const&)> fun) override
+                std::function<void(std::string const&, std::string const&, bool)> fun) override
 		{
 		    static const char *l_pluginPath = "\\plugins";
 		    static const char *l_pluginMask = "\\plugins\\*.dll";
@@ -55,15 +55,32 @@ namespace Plugins
             if ((handle = ::FindFirstFile(fpath_s.c_str(), &data)) == INVALID_HANDLE_VALUE)
                 return false;
 
+            std::vector<std::string> & l_cnf = AppConfig::instance().GetFileConfig("plugins-enable");
+
             do
             {
+                bool plug_enable = false;
+
                 if (
                     (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) ||
                     (data.cFileName[0] == '_')
                    )
                    continue;
 
-                fun(fpath_a, data.cFileName);
+                if (l_cnf.size())
+                {
+                    auto sname = find_if(
+                            l_cnf.begin(),
+                            l_cnf.end(),
+                            [=](std::string const & s)
+                            {
+                                return (s.compare(0, s.length(), data.cFileName, 0, s.length()) == 0);
+                            }
+                        );
+                     plug_enable = (sname != l_cnf.end());
+                }
+
+                fun(fpath_a, data.cFileName, plug_enable);
                 cnt++;
             }
             while (::FindNextFile(handle, &data));

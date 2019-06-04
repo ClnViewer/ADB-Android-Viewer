@@ -29,7 +29,7 @@
 
 #  ifdef __cplusplus
 
-#    define BIND_ASYNC(A) std::bind(&GameDev::ADBDriver::AdbRawT<A>, this, _1, _2, _3)
+#    define BIND_ASYNC(A) std::bind(&GameDev::ADBDriver::AdbRawT<A>, this, _1, _2, _3, _4)
 
 #    include <codecvt>
 #    include <iomanip>

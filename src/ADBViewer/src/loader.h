@@ -61,6 +61,7 @@
 #  include <thread>
 #  include <functional>
 #  include <sstream>
+#  include <fstream>
 #  include <future>
 
 #endif

@@ -6,11 +6,16 @@ class AppConfig
 {
 private:
     //
-    Plugins::PluginCallBack_s   cnf_cbcmd;
+    Plugins::PluginCallBack_s  cnf_cbcmd;
+    std::vector<std::string>   cnf_f_empty;
+    std::map<std::string, std::vector<std::string>> cnf_f_config;
+    std::mutex                 cnf_lock;
 
     AppConfig();
     AppConfig(const AppConfig& apc) = delete;
     AppConfig& operator=(const AppConfig&) = delete;
+
+    bool GetFromFile();
 
 public:
     //
@@ -25,6 +30,8 @@ public:
 
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
+
+    std::vector<std::string> & GetFileConfig(std::string const &);
 
     static AppConfig& instance();
     const void * GetAdbCb() const;

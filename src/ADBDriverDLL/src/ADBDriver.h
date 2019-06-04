@@ -72,14 +72,13 @@ public:
     const wchar_t * GetDeviceID() const;
     const wchar_t * GetAdbBin() const;
 
-
     bool         AdbCheck();
     std::wstring AdbStart();
     std::wstring AdbStop();
     std::wstring Manager(const std::wstring&);
     bool         InitRemote();
 
-    template <typename T> bool AdbRawT(T, T const&, T&);
+    template <typename T> bool AdbRawT(T, T const&, T&, bool);
 
     void Click(ADBDriver::Tap_s*);
     void Click(ADBDriver::Swipe_s*);
@@ -102,7 +101,7 @@ public:
 
 };
 
-extern template bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&);
-extern template bool ADBDriver::AdbRawT<std::string>(std::string, std::string const &, std::string&);
+extern template bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&, bool);
+extern template bool ADBDriver::AdbRawT<std::string>(std::string, std::string const &, std::string&, bool);
 
 }
