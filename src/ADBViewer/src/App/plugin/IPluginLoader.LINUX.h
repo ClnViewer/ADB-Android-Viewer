@@ -53,15 +53,32 @@ namespace Plugins
             if (!(dir = ::opendir(fpath_d.c_str())))
                 return false;
 
+            std::vector<std::string> & l_cnf = AppConfig::instance().GetFileConfig("plugins-enable");
+
             while ((ent = ::readdir(dir)))
             {
+                bool plug_enable = false;
                 std::string file_l(ent->d_name);
                 pos = file_l.find_last_of(".");
+
                 if (pos != std::string::npos)
                     if (file_l.substr(0, pos).compare(l_pluginMask) != 0)
                         continue;
 
-                fun(fpath_d.c_str(), ent->d_name);
+                if (l_cnf.size())
+                {
+                    auto sname = find_if(
+                            l_cnf.begin(),
+                            l_cnf.end(),
+                            [=](std::string const & s)
+                            {
+                                return (s.compare(0, s.length(), ent->d_name, 0, s.length()) == 0);
+                            }
+                        );
+                     plug_enable = (sname != l_cnf.end());
+                }
+
+                fun(fpath_d.c_str(), ent->d_name, plug_enable);
                 cnt++;
             }
             ::closedir(dir);
