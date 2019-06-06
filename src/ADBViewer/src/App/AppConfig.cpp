@@ -4,7 +4,7 @@
 
 AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
-          cnf_isfullscreen(false), cnf_adbinit(false),
+          cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
           cnf_scale(2U), cnf_compress(9),
           cnf_point_input{}, cnf_adb_rect{}
     {
@@ -49,18 +49,14 @@ std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
     {
         do
         {
-            bool isfileconf = true;
-
-            if (!cnf_f_config.size())
-                std::call_once(
-                        cnf_once,
-                        [=](bool & ret)
-                        {
-                            ret = GetFromFile();
-                        },
-                        isfileconf
-                    );
-            if (!isfileconf)
+            std::call_once(
+                    cnf_once,
+                    [=]()
+                    {
+                        cnf_isfcnf = GetFromFile();
+                    }
+                );
+            if ((!cnf_isfcnf.load()) || (!cnf_f_config.size()))
                 break;
 
             auto found = cnf_f_config.find(tag);

@@ -25,6 +25,7 @@ public:
     std::atomic<bool>      cnf_ispos;
     std::atomic<bool>      cnf_isfullscreen;
     std::atomic<bool>      cnf_adbinit;
+    std::atomic<bool>      cnf_isfcnf;
     std::atomic<uint32_t>  cnf_scale;
     std::atomic<uint32_t>  cnf_compress;
     SDL_Point              cnf_point_input;
