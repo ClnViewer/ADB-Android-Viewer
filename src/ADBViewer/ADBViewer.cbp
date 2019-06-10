@@ -85,11 +85,7 @@
 		<Unit filename="src/App/AppMenuBar.cpp" />
 		<Unit filename="src/App/AppMenuBar.h" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
-		<Unit filename="src/App/AppMenuPopUp.WINAPI.h" />
 		<Unit filename="src/App/AppMenuPopUp.h" />
-		<Unit filename="src/App/AppMenuPopUp.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
 		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />
 		<Unit filename="src/App/AppSysDialog.h" />
 		<Unit filename="src/App/AppVideo.cpp" />

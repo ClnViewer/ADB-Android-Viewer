@@ -31,7 +31,9 @@ ResManager::~ResManager() {}
 
 const char * ResManager::stringload(ResManager::IndexStringResource idx)
 {
-    return help_strings[idx];
+    if ((uint32_t)idx < __NELE(help_strings))
+        return help_strings[idx];
+    return nullptr;
 }
 
 SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)

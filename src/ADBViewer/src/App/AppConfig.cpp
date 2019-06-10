@@ -2,6 +2,14 @@
 
 #include "../ADBViewer.h"
 
+static inline const char *cnf_l_file = "ADBViewer.ini";
+static inline const char *cnf_l_file_tag[] =
+{
+    "plugins-enable",
+    "adb-path",
+    "adb-device"
+};
+
 AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
@@ -32,6 +40,7 @@ AppConfig::AppConfig()
             {
                 cnf_adb.SendSpecialKey(t, k);
             };
+        OnceUpdateFromFile();
     }
 
 AppConfig& AppConfig::instance()
@@ -43,6 +52,13 @@ AppConfig& AppConfig::instance()
 const void * AppConfig::GetAdbCb() const
     {
         return (const void*)&cnf_cbcmd;
+    }
+
+const char * AppConfig::GetFileConfigId(ConfigIdType idx)
+    {
+        if ((uint32_t)idx < __NELE(cnf_l_file_tag))
+            return cnf_l_file_tag[idx];
+        return nullptr;
     }
 
 std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
@@ -69,11 +85,38 @@ std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
         return cnf_f_empty;
     }
 
+bool AppConfig::GetFromSection(const char *tag, std::wstring & wstr)
+    {
+        do
+        {
+            std::vector<std::string> & v = GetFileConfig(tag);
+            if (!v.size())
+                break;
+            std::string str = v[0];
+            if (str.empty())
+                break;
+            wstr.assign(str.begin(), str.end());
+            return true;
+        }
+        while (0);
+
+        return false;
+    }
+
+void AppConfig::OnceUpdateFromFile()
+    {
+        std::wstring wstr;
+
+        if (GetFromSection(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
+            cnf_adb.SetAdbBin(wstr);
+
+        if (GetFromSection(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
+            cnf_adb.SetDeviceID(wstr);
+    }
+
 bool AppConfig::GetFromFile()
     {
-        std::lock_guard<std::mutex> l_lock(cnf_lock);
-
-        std::ifstream l_file("ADBViewer.ini");
+        std::ifstream l_file(cnf_l_file);
         if (!l_file.is_open())
             return false;
 

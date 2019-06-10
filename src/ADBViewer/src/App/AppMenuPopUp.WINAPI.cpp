@@ -3,10 +3,21 @@
 #include  "SDL2/SDL_syswm.h"
 #include  "../../../ADBDriverDLL/src/Utils/stdStringUtils.h"
 
+#define MENU_ITEM_ADD(ID1,ID2,M) __extension__ ({                               \
+    auto wtxt = ResManager::stringpopup(ID2);                                   \
+    AppendMenuW(M, MF_STRING, ID1, wtxt);                                       \
+    })
+
+#define MENU_ADD(PM,ID2,M) __extension__ ({                                     \
+    auto wtxt = ResManager::stringpopup(ID2);                                   \
+    AppendMenuW(M, MF_STRING | MF_POPUP, (UINT_PTR)PM, wtxt);                   \
+    })
+
 typedef struct
 {
     uint32_t cid;
-    int32_t  sid, key;
+    int32_t  key;
+    ResManager::IndexStringPopUpMenu sid;
 
 } ACmdKey;
 
@@ -25,21 +36,12 @@ AppMenuPopUp::AppMenuPopUp()
 AppMenuPopUp::~AppMenuPopUp() {}
 
 #if defined(OS_WIN)
-#include "AppMenuPopUp.WINAPI.h"
 
 static ACmdKey l_acmdkey[] =
 {
-#  define __MENU_ACMD(A,B,C) { .cid = A, .sid = B, .key = C },
+#  define __MENU_ACMD(A,B,C) { .cid = A, .key = C, .sid = B },
 #  include "AppMenuPopUpAcmd.WINAPI.h"
 };
-
-static const wchar_t * f_GetStringFromMap(int32_t id, std::map<int32_t, std::wstring> & rmap)
-{
-    auto res = rmap.find(id);
-    if (res != rmap.end())
-        return res->second.c_str();
-    return nullptr;
-}
 
 bool AppMenuPopUp::init(App *app)
 {
@@ -85,40 +87,38 @@ void AppMenuPopUp::show()
         mit.fMask = MIIM_STATE;
         mit.fState = MFS_CHECKED;
 
-        RESOURCE_MAP(IDS_MENUMSG0, IDS_MENUEND, rmap);
-
-        MENU_ADD(l_hCapMenu, IDS_MENUMSG0,  rmap, l_hPopMenu);
+        MENU_ADD(l_hCapMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_0, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
-        MENU_ADD(l_hCmdMenu, IDS_MENUMSG16,  rmap, l_hPopMenu);
+        MENU_ADD(l_hCmdMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_16, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
-        MENU_ADD(l_hScrMenu, IDS_MENUMSG6,  rmap, l_hPopMenu);
+        MENU_ADD(l_hScrMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_6, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
-        MENU_ADD(l_hPlugMenu, IDS_MENUMSG12,  rmap, l_hPopMenu);
+        MENU_ADD(l_hPlugMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_12, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
         if ((m_app) && (!m_app->m_appeditor.isactive()))
-            MENU_ITEM_ADD(ID_CMD_POP_MENU6, IDS_MENUMSG7,  rmap, l_hScrMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU6, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_7, l_hScrMenu);
         else
         {
-            MENU_ITEM_ADD(ID_CMD_POP_MENU7, IDS_MENUMSG11,  rmap, l_hScrMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU7, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_11, l_hScrMenu);
             ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
-            MENU_ITEM_ADD(ID_CMD_POP_MENU6, IDS_MENUMSG8,  rmap, l_hScrMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU6, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_8, l_hScrMenu);
             ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
-            MENU_ADD(l_hScrTypeMenu, IDS_MENUMSG13,  rmap, l_hScrMenu);
+            MENU_ADD(l_hScrTypeMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_13, l_hScrMenu);
 
-            MENU_ITEM_ADD(ID_CMD_POP_MENU9,  IDS_MENUMSG14,  rmap, l_hScrTypeMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU9,  ResManager::IndexStringPopUpMenu::RES_STR_POPUP_14, l_hScrTypeMenu);
             ::AppendMenuW(l_hScrTypeMenu,  MF_SEPARATOR, 0, NULL);
-            MENU_ITEM_ADD(ID_CMD_POP_MENU10, IDS_MENUMSG15,  rmap, l_hScrTypeMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU10, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_15, l_hScrTypeMenu);
 
             switch (m_app->m_appeditor.scrtype)
             {
                 case AppEditor::AppEditorScriptType::SCR_CHECK_AND_CLICK:
                     {
                         ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
-                        MENU_ITEM_ADD(ID_CMD_POP_MENU8, IDS_MENUMSG9,  rmap, l_hScrMenu);
+                        MENU_ITEM_ADD(ID_CMD_POP_MENU8, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_9, l_hScrMenu);
 
                         ::SetMenuItemInfo(l_hScrTypeMenu, ID_CMD_POP_MENU9, FALSE, &mit);
                         break;
@@ -133,16 +133,16 @@ void AppMenuPopUp::show()
             }
         }
 
-        MENU_ITEM_ADD(ID_CMD_POP_MENU1, IDS_MENUMSG1,  rmap, l_hPopMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU1, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_1, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
-        MENU_ITEM_ADD(ID_CMD_POP_MENU2, IDS_MENUMSG2,  rmap, l_hPopMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU2, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_2, l_hPopMenu);
 
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
-        MENU_ITEM_ADD(ID_CMD_POP_MENU3, IDS_MENUMSG3,  rmap, l_hPopMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU3, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_3, l_hPopMenu);
 
-        MENU_ITEM_ADD(ID_CMD_POP_MENU4, IDS_MENUMSG4,  rmap, l_hCapMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU4, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_4, l_hCapMenu);
         ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
-        MENU_ITEM_ADD(ID_CMD_POP_MENU5, IDS_MENUMSG5,  rmap, l_hCapMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU5, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_5, l_hCapMenu);
 
         /// Plugins menu list
         std::vector<Plugins::AppPluginManager::Plugin_s> plist =
@@ -159,7 +159,7 @@ void AppMenuPopUp::show()
         /// Android direct command menu list
         for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
         {
-            auto wtxt = f_GetStringFromMap(l_acmdkey[i].sid, rmap);
+            auto wtxt = ResManager::stringpopup(l_acmdkey[i].sid);
             ::AppendMenuW(l_hCmdMenu, MF_STRING, l_acmdkey[i].cid, wtxt);
         }
 

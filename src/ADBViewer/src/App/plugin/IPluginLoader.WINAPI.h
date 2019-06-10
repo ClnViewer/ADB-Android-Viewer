@@ -55,8 +55,11 @@ namespace Plugins
             if ((handle = ::FindFirstFile(fpath_s.c_str(), &data)) == INVALID_HANDLE_VALUE)
                 return false;
 
-            std::vector<std::string> & l_cnf = AppConfig::instance().GetFileConfig("plugins-enable");
-
+            std::vector<std::string> & l_cnf = AppConfig::instance().GetFileConfig(
+                                                AppConfig::instance().GetFileConfigId(
+                                                    AppConfig::ConfigIdType::CNF_PLUGINS_ENABLE
+                                                )
+                                            );
             do
             {
                 bool plug_enable = false;

@@ -29,14 +29,14 @@ namespace Plugins
 		    static const char *l_pluginMask = ".so";
 #           endif
 
-		    DIR *dir;
-		    struct dirent *ent;
-		    uint32_t cnt = 0U;
+	    DIR *dir;
+	    struct dirent *ent;
+	    uint32_t cnt = 0U;
 
-		    std::string fpath_d;
-		    fpath_d.resize(1024);
+	    std::string fpath_d;
+	    fpath_d.resize(1024);
 
-		    if (!::getcwd(fpath_d.data(), 1024))
+	    if (!::getcwd(fpath_d.data(), 1024))
                 return false;
 
             size_t pos = fpath_d.find_last_of("/");

@@ -60,6 +60,37 @@ namespace Resources
                 RES_STR_ERR_UNKNOWN,
                 RES_STR_ENTER_TEXT
             };
+            enum IndexStringPopUpMenu
+            {
+                RES_STR_POPUP_0,
+                RES_STR_POPUP_1,
+                RES_STR_POPUP_2,
+                RES_STR_POPUP_3,
+                RES_STR_POPUP_4,
+                RES_STR_POPUP_5,
+                RES_STR_POPUP_6,
+                RES_STR_POPUP_7,
+                RES_STR_POPUP_8,
+                RES_STR_POPUP_9,
+                RES_STR_POPUP_10,
+                RES_STR_POPUP_11,
+                RES_STR_POPUP_12,
+                RES_STR_POPUP_13,
+                RES_STR_POPUP_14,
+                RES_STR_POPUP_15,
+                RES_STR_POPUP_16,
+                RES_STR_POPUP_17,
+                RES_STR_POPUP_18,
+                RES_STR_POPUP_19,
+                RES_STR_POPUP_20,
+                RES_STR_POPUP_21,
+                RES_STR_POPUP_22,
+                RES_STR_POPUP_23,
+                RES_STR_POPUP_24,
+                RES_STR_POPUP_25,
+                RES_STR_POPUP_26,
+                RES_STR_POPUP_NONE
+            };
 
             ResManager();
             ~ResManager();
@@ -69,6 +100,12 @@ namespace Resources
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
             static const char  * stringload(ResManager::IndexStringResource);
+
+#           if defined(OS_WIN)
+            static const wchar_t * stringpopup(ResManager::IndexStringPopUpMenu);
+#           else
+            static const char * stringpopup(ResManager::IndexStringPopUpMenu);
+#           endif
 
         private:
             static SDL_Surface * imagedata(const ImageResource_s *res);
