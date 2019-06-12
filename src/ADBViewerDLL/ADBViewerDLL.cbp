@@ -62,7 +62,7 @@
 		<Unit filename="src/ResManagerPopUp.cpp">
 			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp1251 $options $includes -c $file -o $object" />
 		</Unit>
-		<Unit filename="src/Resources/ResHelp.h" />
+		<Unit filename="src/ResManagerPopUp_cn.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

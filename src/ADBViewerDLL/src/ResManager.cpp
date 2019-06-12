@@ -6,7 +6,9 @@
 namespace Resources
 {
 
-#include "Resources/ResHelp.h"
+#include "Resources/ResHelp_ru.h"
+#include "Resources/ResHelp_en.h"
+#include "Resources/ResHelp_cn.h"
 #include "Resources/ResLogo.h"
 #include "Resources/ResMenu.h"
 #include "Resources/ResScreen.h"
@@ -29,11 +31,18 @@ static inline SDL_Color box_color[][2] =
 ResManager::ResManager() {}
 ResManager::~ResManager() {}
 
-const char * ResManager::stringload(ResManager::IndexStringResource idx)
+const char * ResManager::stringload(ResManager::IndexStringResource idx, ResManager::IndexLanguageResource lang)
 {
-    if ((uint32_t)idx < __NELE(help_strings))
-        return help_strings[idx];
-    return nullptr;
+    if ((uint32_t)idx >= __NELE(help_strings_ru))
+        return nullptr;
+
+    switch(lang)
+    {
+        case ResManager::IndexLanguageResource::LANG_RU: return help_strings_ru[idx];
+        case ResManager::IndexLanguageResource::LANG_EN: return help_strings_en[idx];
+        case ResManager::IndexLanguageResource::LANG_CN: return help_strings_cn[idx];
+        default: return help_strings_ru[idx];
+    }
 }
 
 SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src\ResManager.h" open="0" top="0" tabpos="0">
-		<Cursor position="3275" topLine="80" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+	<File name="src\ResManagerPopUp_cn.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="467" topLine="0" />
 	</File>
 	<File name="src\ResManager.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="739" topLine="10" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+		<Cursor position="842" topLine="27" />
+	</File>
+	<File name="src\ResManager.h" open="0" top="0" tabpos="0">
+		<Cursor position="2829" topLine="77" />
 	</File>
 	<File name="src\ResManagerPopUp.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="461" topLine="0" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+		<Cursor position="185" topLine="5" />
 	</File>
 </BrowseTracker_layout_file>

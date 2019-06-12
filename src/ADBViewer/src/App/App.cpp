@@ -24,7 +24,8 @@ App::App()
                 SDL_ShowSimpleMessageBox(
                     0,
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_APP
+                        ResManager::IndexStringResource::RES_STR_ERR_APP,
+                        AppConfig::instance().cnf_lang
                     ),
                     SDL_GetError(),
                     nullptr
@@ -57,7 +58,8 @@ App::App()
         SDL_ShowSimpleMessageBox(
             0,
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
+                ResManager::IndexStringResource::RES_STR_ERR_APP,
+                AppConfig::instance().cnf_lang
             ),
             SDL_GetError(),
             m_window
@@ -80,7 +82,8 @@ App::App()
         SDL_ShowSimpleMessageBox(
             0,
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
+                ResManager::IndexStringResource::RES_STR_ERR_APP,
+                AppConfig::instance().cnf_lang
             ),
             SDL_GetError(),
             m_window
@@ -184,7 +187,8 @@ bool App::event(SDL_Event *ev, const void *instance)
                     {
                         app->m_appinput.begin(
                             ResManager::stringload(
-                                ResManager::IndexStringResource::RES_STR_ENTER_TEXT
+                                ResManager::IndexStringResource::RES_STR_ENTER_TEXT,
+                                AppConfig::instance().cnf_lang
                             )
                         );
                     }

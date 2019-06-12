@@ -10,7 +10,8 @@ public:
     {
         CNF_PLUGINS_ENABLE = 0,
         CNF_ADB_PATH,
-        CNF_ADB_DEVICE
+        CNF_ADB_DEVICE,
+        CNF_LANGUAGE
     };
 
 private:
@@ -25,8 +26,11 @@ private:
     AppConfig& operator=(const AppConfig&) = delete;
 
     bool GetFromFile();
-    bool GetFromSection(const char*, std::wstring&);
     void OnceUpdateFromFile();
+    void OnceUpdateLang(std::wstring const &);
+
+    template<typename T>
+    bool GetFromSection(const char*, T&);
 
 public:
     //
@@ -42,6 +46,7 @@ public:
 
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
+    ResManager::IndexLanguageResource cnf_lang = ResManager::IndexLanguageResource::LANG_DEFAULT;
 
 
     std::vector<std::string> & GetFileConfig(std::string const &);

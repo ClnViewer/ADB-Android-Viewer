@@ -19,7 +19,8 @@ int main( int argc, char * argv[])
         SDL_ShowSimpleMessageBox(
             0,
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
+                ResManager::IndexStringResource::RES_STR_ERR_APP,
+                AppConfig::instance().cnf_lang
             ),
             _ex.what(),
             nullptr
@@ -30,10 +31,12 @@ int main( int argc, char * argv[])
         SDL_ShowSimpleMessageBox(
             0,
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_APP
+                ResManager::IndexStringResource::RES_STR_ERR_APP,
+                AppConfig::instance().cnf_lang
             ),
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN
+                ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN,
+                AppConfig::instance().cnf_lang
             ),
             nullptr
         );

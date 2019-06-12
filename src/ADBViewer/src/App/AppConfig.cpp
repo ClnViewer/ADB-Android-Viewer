@@ -7,7 +7,8 @@ static inline const char *cnf_l_file_tag[] =
 {
     "plugins-enable",
     "adb-path",
-    "adb-device"
+    "adb-device",
+    "language"
 };
 
 AppConfig::AppConfig()
@@ -85,17 +86,32 @@ std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
         return cnf_f_empty;
     }
 
-bool AppConfig::GetFromSection(const char *tag, std::wstring & wstr)
+template<typename T>
+bool AppConfig::GetFromSection(const char *tag, T & dstr)
     {
         do
         {
             std::vector<std::string> & v = GetFileConfig(tag);
             if (!v.size())
                 break;
-            std::string str = v[0];
-            if (str.empty())
+
+            if constexpr (std::is_same<T, std::wstring>::value)
+            {
+                std::string str = v[0];
+                if (str.empty())
+                    break;
+
+                dstr.assign(str.begin(), str.end());
+            }
+            else if constexpr (std::is_same<T, std::string>::value)
+            {
+                dstr = v[0];
+                if (dstr.empty())
+                    break;
+            }
+            else
                 break;
-            wstr.assign(str.begin(), str.end());
+
             return true;
         }
         while (0);
@@ -103,15 +119,30 @@ bool AppConfig::GetFromSection(const char *tag, std::wstring & wstr)
         return false;
     }
 
+void AppConfig::OnceUpdateLang(std::wstring const & wstr)
+    {
+        if (wstr.empty())
+            return;
+        if (wstr.compare(L"ru") == 0)
+            cnf_lang = ResManager::IndexLanguageResource::LANG_RU;
+        else if (wstr.compare(L"en") == 0)
+            cnf_lang = ResManager::IndexLanguageResource::LANG_EN;
+        else if (wstr.compare(L"cn") == 0)
+            cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
+    }
+
 void AppConfig::OnceUpdateFromFile()
     {
         std::wstring wstr;
 
-        if (GetFromSection(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
             cnf_adb.SetAdbBin(wstr);
 
-        if (GetFromSection(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
             cnf_adb.SetDeviceID(wstr);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_LANGUAGE), wstr))
+            OnceUpdateLang(wstr);
     }
 
 bool AppConfig::GetFromFile()

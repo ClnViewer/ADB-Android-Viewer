@@ -4,12 +4,12 @@
 #include  "../../../ADBDriverDLL/src/Utils/stdStringUtils.h"
 
 #define MENU_ITEM_ADD(ID1,ID2,M) __extension__ ({                               \
-    auto wtxt = ResManager::stringpopup(ID2);                                   \
+    auto wtxt = ResManager::stringpopup(ID2, AppConfig::instance().cnf_lang);   \
     AppendMenuW(M, MF_STRING, ID1, wtxt);                                       \
     })
 
 #define MENU_ADD(PM,ID2,M) __extension__ ({                                     \
-    auto wtxt = ResManager::stringpopup(ID2);                                   \
+    auto wtxt = ResManager::stringpopup(ID2, AppConfig::instance().cnf_lang);   \
     AppendMenuW(M, MF_STRING | MF_POPUP, (UINT_PTR)PM, wtxt);                   \
     })
 
@@ -69,7 +69,8 @@ void AppMenuPopUp::show()
            l_hCmdMenu = NULL,
            l_hScrMenu = NULL,
            l_hScrTypeMenu = NULL,
-           l_hPlugMenu = NULL;
+           l_hPlugMenu = NULL,
+           l_hLangMenu = NULL;
     do
     {
         if (
@@ -78,6 +79,7 @@ void AppMenuPopUp::show()
             (!(l_hCmdMenu = ::CreateMenu())) ||
             (!(l_hScrMenu = ::CreateMenu())) ||
             (!(l_hPlugMenu = ::CreateMenu()))||
+            (!(l_hLangMenu = ::CreateMenu()))||
             (!(l_hScrTypeMenu = ::CreateMenu()))
            )
            break;
@@ -138,6 +140,23 @@ void AppMenuPopUp::show()
         MENU_ITEM_ADD(ID_CMD_POP_MENU2, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_2, l_hPopMenu);
 
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ADD(l_hLangMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_27, l_hPopMenu);
+        {
+            MENU_ITEM_ADD(ID_CMD_POP_MENU11, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_28, l_hLangMenu);
+            ::AppendMenuW(l_hLangMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU12, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_29, l_hLangMenu);
+            ::AppendMenuW(l_hLangMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU13, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_30, l_hLangMenu);
+
+            if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_RU)
+                ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU11, FALSE, &mit);
+            else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_EN)
+                ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU12, FALSE, &mit);
+            else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_CN)
+                ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU13, FALSE, &mit);
+        }
+
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU3, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_3, l_hPopMenu);
 
         MENU_ITEM_ADD(ID_CMD_POP_MENU4, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_4, l_hCapMenu);
@@ -159,7 +178,7 @@ void AppMenuPopUp::show()
         /// Android direct command menu list
         for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
         {
-            auto wtxt = ResManager::stringpopup(l_acmdkey[i].sid);
+            auto wtxt = ResManager::stringpopup(l_acmdkey[i].sid, AppConfig::instance().cnf_lang);
             ::AppendMenuW(l_hCmdMenu, MF_STRING, l_acmdkey[i].cid, wtxt);
         }
 
@@ -181,6 +200,7 @@ void AppMenuPopUp::show()
         ::SetMenuInfo(l_hPopMenu,     &mim);
         ::SetMenuInfo(l_hPlugMenu,    &mip);
         ::SetMenuInfo(l_hScrTypeMenu, &mip);
+        ::SetMenuInfo(l_hLangMenu,    &mip);
         ::SDL_GetGlobalMouseState(&x, &y);
 
         SDL_Event cmdEvent{};
@@ -252,6 +272,21 @@ void AppMenuPopUp::show()
                     cmdEvent.user.code = 0;
                     break;
                 }
+            case ID_CMD_POP_MENU11:
+                {
+                    AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_RU;
+                    break;
+                }
+            case ID_CMD_POP_MENU12:
+                {
+                    AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_EN;
+                    break;
+                }
+            case ID_CMD_POP_MENU13:
+                {
+                    AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
+                    break;
+                }
             case ID_CMD_POP_MENU30 ... ID_CMD_POP_MENU39:
                 {
                     for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
@@ -288,6 +323,8 @@ void AppMenuPopUp::show()
     }
     while (0);
 
+    if (l_hLangMenu)
+        ::DestroyMenu(l_hLangMenu);
     if (l_hPlugMenu)
         ::DestroyMenu(l_hPlugMenu);
     if (l_hScrTypeMenu)

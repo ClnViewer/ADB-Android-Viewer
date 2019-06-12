@@ -148,7 +148,7 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
         {
             infoset(
                 MgrType::MGR_MENU,
-                ResManager::stringload(id),
+                ResManager::stringload(id, AppConfig::instance().cnf_lang),
                 (__LINE__ + id), ev
             );
             setcursor(1U);
@@ -158,7 +158,10 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
         {
             infoset(
                 MgrType::MGR_MENU,
-                ResManager::stringload(ResManager::IndexStringResource::RES_STR_UNKNOWN),
+                ResManager::stringload(
+                    ResManager::IndexStringResource::RES_STR_UNKNOWN,
+                    AppConfig::instance().cnf_lang
+                ),
                 __LINE__, ev
             );
             amb->setcursor(0U);
@@ -190,7 +193,8 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             amb->infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
-                                    ResManager::IndexStringResource::RES_STR_ADBCONNECTED
+                                    ResManager::IndexStringResource::RES_STR_ADBCONNECTED,
+                                    AppConfig::instance().cnf_lang
                                     ),
                                 -1, ev
                             );
@@ -204,7 +208,8 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
-                                ResManager::IndexStringResource::RES_STR_ADBCONNECT
+                                ResManager::IndexStringResource::RES_STR_ADBCONNECT,
+                                AppConfig::instance().cnf_lang
                                 ),
                             -1, ev
                         );
@@ -217,7 +222,8 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             amb->infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
-                                    ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED
+                                    ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED,
+                                    AppConfig::instance().cnf_lang
                                     ),
                                 -1, ev
                             );
@@ -227,7 +233,8 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
-                                ResManager::IndexStringResource::RES_STR_ADBDISCONNECT
+                                ResManager::IndexStringResource::RES_STR_ADBDISCONNECT,
+                                AppConfig::instance().cnf_lang
                                 ),
                             -1, ev
                         );
@@ -308,7 +315,8 @@ bool AppMenuBar::screenshot(SDL_Event *ev, bool isdialog)
 
     std::string fname(
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_CAPFILENAME
+                ResManager::IndexStringResource::RES_STR_CAPFILENAME,
+                AppConfig::instance().cnf_lang
             )
         );
 
@@ -354,7 +362,10 @@ bool AppMenuBar::screenshot(SDL_Event *ev, bool isdialog)
     SDL_FreeSurface(l_ss_surface);
 
     std::stringstream ss;
-    ss << ResManager::stringload(ResManager::IndexStringResource::RES_STR_FILESAVE);
+    ss << ResManager::stringload(
+            ResManager::IndexStringResource::RES_STR_FILESAVE,
+            AppConfig::instance().cnf_lang
+        );
     ss << fname.c_str();
     infoset(MgrType::MGR_MENU, ss.str(), -1, ev);
     return true;
@@ -367,7 +378,8 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
     ss << "  ";
 #   else
     ss << ResManager::stringload(
-            ResManager::IndexStringResource::RES_STR_APPTITLENAME
+            ResManager::IndexStringResource::RES_STR_APPTITLENAME,
+            AppConfig::instance().cnf_lang
         );
     ss << "v." << AVIEW_FULLVERSION_STRING;
     ss << " r." << AVIEW_SVN_REVISION;

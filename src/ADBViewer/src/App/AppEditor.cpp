@@ -54,7 +54,8 @@ void AppEditor::stop()
 
         std::string fname(
             ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_LUAFILENAME
+                ResManager::IndexStringResource::RES_STR_LUAFILENAME,
+                AppConfig::instance().cnf_lang
             )
         );
         if (!AppSysDialog::savefile(m_app->m_window, fname, l_openLuaFilter, l_openLuaExt, l_openCurDir))

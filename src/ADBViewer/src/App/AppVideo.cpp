@@ -96,10 +96,12 @@ void AppVideo::run()
             SDL_ShowSimpleMessageBox(
                     0,
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_ADRV
+                        ResManager::IndexStringResource::RES_STR_ERR_ADRV,
+                        AppConfig::instance().cnf_lang
                     ),
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ADBINSTALLBIN
+                        ResManager::IndexStringResource::RES_STR_ADBINSTALLBIN,
+                        AppConfig::instance().cnf_lang
                     ),
                     m_app->m_window
                 );
@@ -152,7 +154,8 @@ void AppVideo::run()
                 SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
                 m_app->m_appinfo.draw(
                     ResManager::stringload(
-                        ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN
+                        ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN,
+                        AppConfig::instance().cnf_lang
                     ),
                     &offset,
                     -1

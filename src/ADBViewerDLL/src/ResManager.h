@@ -15,6 +15,13 @@ namespace Resources
                 uint8_t *data;
             } ImageResource_s;
 
+            enum IndexLanguageResource
+            {
+                LANG_RU,
+                LANG_EN,
+                LANG_CN,
+                LANG_DEFAULT = LANG_RU
+            };
             enum IndexColorResource
             {
                 RES_COLOR_GREEN_BLACK,
@@ -89,6 +96,10 @@ namespace Resources
                 RES_STR_POPUP_24,
                 RES_STR_POPUP_25,
                 RES_STR_POPUP_26,
+                RES_STR_POPUP_27,
+                RES_STR_POPUP_28,
+                RES_STR_POPUP_29,
+                RES_STR_POPUP_30,
                 RES_STR_POPUP_NONE
             };
 
@@ -99,16 +110,21 @@ namespace Resources
             static SDL_Color   * colorload(ResManager::IndexColorResource);
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
-            static const char  * stringload(ResManager::IndexStringResource);
+            static const char  * stringload(ResManager::IndexStringResource, ResManager::IndexLanguageResource);
 
 #           if defined(OS_WIN)
-            static const wchar_t * stringpopup(ResManager::IndexStringPopUpMenu);
+            static const wchar_t * stringpopup(ResManager::IndexStringPopUpMenu, ResManager::IndexLanguageResource);
 #           else
-            static const char * stringpopup(ResManager::IndexStringPopUpMenu);
+            static const char * stringpopup(ResManager::IndexStringPopUpMenu, ResManager::IndexLanguageResource);
 #           endif
 
         private:
             static SDL_Surface * imagedata(const ImageResource_s *res);
 
+#           if defined(OS_WIN)
+            static const wchar_t * stringpopup_cn(ResManager::IndexStringPopUpMenu);
+#           else
+            static const char * stringpopup_cn(ResManager::IndexStringPopUpMenu);
+#           endif
     };
 }

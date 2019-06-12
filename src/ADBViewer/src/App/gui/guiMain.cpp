@@ -17,7 +17,8 @@ int32_t guiMain::initm(int32_t w, int32_t h)
 
         if (!(m_window = SDL_CreateWindow(
                 ResManager::stringload(
-                    ResManager::IndexStringResource::RES_STR_APPFULLNAME
+                    ResManager::IndexStringResource::RES_STR_APPFULLNAME,
+                    AppConfig::instance().cnf_lang
                 ),
                 SDL_WINDOWPOS_CENTERED,
                 SDL_WINDOWPOS_CENTERED,
