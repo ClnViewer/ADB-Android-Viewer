@@ -127,6 +127,8 @@ void AppConfig::OnceUpdateLang(std::wstring const & wstr)
             cnf_lang = ResManager::IndexLanguageResource::LANG_RU;
         else if (wstr.compare(L"en") == 0)
             cnf_lang = ResManager::IndexLanguageResource::LANG_EN;
+        else if (wstr.compare(L"dm") == 0)
+            cnf_lang = ResManager::IndexLanguageResource::LANG_DM;
         else if (wstr.compare(L"cn") == 0)
             cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
     }

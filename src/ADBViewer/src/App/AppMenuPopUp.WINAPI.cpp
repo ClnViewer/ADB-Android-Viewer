@@ -147,13 +147,17 @@ void AppMenuPopUp::show()
             MENU_ITEM_ADD(ID_CMD_POP_MENU12, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_29, l_hLangMenu);
             ::AppendMenuW(l_hLangMenu,  MF_SEPARATOR, 0, NULL);
             MENU_ITEM_ADD(ID_CMD_POP_MENU13, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_30, l_hLangMenu);
+            ::AppendMenuW(l_hLangMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU14, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_31, l_hLangMenu);
 
             if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_RU)
                 ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU11, FALSE, &mit);
             else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_EN)
                 ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU12, FALSE, &mit);
-            else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_CN)
+            else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_DM)
                 ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU13, FALSE, &mit);
+            else if (AppConfig::instance().cnf_lang == ResManager::IndexLanguageResource::LANG_CN)
+                ::SetMenuItemInfo(l_hLangMenu, ID_CMD_POP_MENU14, FALSE, &mit);
         }
 
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
@@ -283,6 +287,11 @@ void AppMenuPopUp::show()
                     break;
                 }
             case ID_CMD_POP_MENU13:
+                {
+                    AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_DM;
+                    break;
+                }
+            case ID_CMD_POP_MENU14:
                 {
                     AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
                     break;

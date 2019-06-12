@@ -30,6 +30,7 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 27 */ L"Language",
     /* 28 */ L"Russian",
     /* 29 */ L"English",
-    /* 30 */ L"Chinese",
+    /* 30 */ L"German",
+    /* 31 */ L"Chinese",
     nullptr
 };

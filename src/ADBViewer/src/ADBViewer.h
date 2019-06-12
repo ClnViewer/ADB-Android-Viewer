@@ -25,6 +25,7 @@
 #define ID_CMD_POP_MENU11 20191
 #define ID_CMD_POP_MENU12 20192
 #define ID_CMD_POP_MENU13 20193
+#define ID_CMD_POP_MENU14 20194
 
 #define ID_CMD_POP_MENU30 20300
 #define ID_CMD_POP_MENU31 20301
@@ -53,7 +54,9 @@ using Resources::ResManager;
 #  include "../../ADBDriverDLL/src/ADBDriver.h"
 using GameDev::ADBDriver;
 
+#  include "App/AppTimer.h"
 #  include "App/AppConfig.h"
+#  include "App/AppMessageQueue.h"
 #  include "App/AppSysDialog.h"
 #  include "App/plugin/AppPluginManager.h"
 #  include "App/gui/gui.h"

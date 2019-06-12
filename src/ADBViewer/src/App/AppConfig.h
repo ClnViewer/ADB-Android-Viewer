@@ -22,7 +22,7 @@ private:
     std::once_flag             cnf_once;
 
     AppConfig();
-    AppConfig(const AppConfig& apc) = delete;
+    AppConfig(const AppConfig&) = delete;
     AppConfig& operator=(const AppConfig&) = delete;
 
     bool GetFromFile();

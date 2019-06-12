@@ -2,6 +2,26 @@
 
 #include <SDL2/SDL.h>
 
+#if defined(OS_WIN)
+# define DECL_STRINGLOAD_M() \
+   const wchar_t * ResManager::stringpopup ( \
+                    ResManager::IndexStringPopUpMenu idx, ResManager::IndexLanguageResource lang \
+            )
+# define DECL_STRINGLOAD_N(A) \
+   const wchar_t * ResManager::stringpopup_ ## A ( \
+                    ResManager::IndexStringPopUpMenu idx \
+            )
+#else
+# define DECL_STRINGLOAD_M() \
+   const char * ResManager::stringpopup ( \
+                    ResManager::IndexStringPopUpMenu idx, ResManager::IndexLanguageResource lang \
+            )
+# define DECL_STRINGLOAD_N(A) \
+   const char * ResManager::stringpopup_ ## A ( \
+                    ResManager::IndexStringPopUpMenu idx \
+            )
+#endif
+
 namespace Resources
 {
     class DLL_EXPORT ResManager
@@ -19,6 +39,7 @@ namespace Resources
             {
                 LANG_RU,
                 LANG_EN,
+                LANG_DM,
                 LANG_CN,
                 LANG_DEFAULT = LANG_RU
             };
@@ -100,6 +121,7 @@ namespace Resources
                 RES_STR_POPUP_28,
                 RES_STR_POPUP_29,
                 RES_STR_POPUP_30,
+                RES_STR_POPUP_31,
                 RES_STR_POPUP_NONE
             };
 
@@ -122,8 +144,14 @@ namespace Resources
             static SDL_Surface * imagedata(const ImageResource_s *res);
 
 #           if defined(OS_WIN)
+            static const wchar_t * stringpopup_ru(ResManager::IndexStringPopUpMenu);
+            static const wchar_t * stringpopup_en(ResManager::IndexStringPopUpMenu);
+            static const wchar_t * stringpopup_dm(ResManager::IndexStringPopUpMenu);
             static const wchar_t * stringpopup_cn(ResManager::IndexStringPopUpMenu);
 #           else
+            static const char * stringpopup_ru(ResManager::IndexStringPopUpMenu);
+            static const char * stringpopup_en(ResManager::IndexStringPopUpMenu);
+            static const char * stringpopup_dm(ResManager::IndexStringPopUpMenu);
             static const char * stringpopup_cn(ResManager::IndexStringPopUpMenu);
 #           endif
     };

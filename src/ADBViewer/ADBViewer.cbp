@@ -55,6 +55,7 @@
 		</Build>
 		<Compiler>
 			<Add option="-std=c++17" />
+			<Add option="-fconcepts" />
 			<Add option="-Wall" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
 		</Compiler>
@@ -86,8 +87,11 @@
 		<Unit filename="src/App/AppMenuBar.h" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
 		<Unit filename="src/App/AppMenuPopUp.h" />
+		<Unit filename="src/App/AppMessageQueue.cpp" />
+		<Unit filename="src/App/AppMessageQueue.h" />
 		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />
 		<Unit filename="src/App/AppSysDialog.h" />
+		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
 		<Unit filename="src/App/gui/gui.h" />

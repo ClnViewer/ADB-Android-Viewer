@@ -27,9 +27,10 @@ static inline const char *popup_strings_en[] = {
     /* 24 */ "- Google assist (219)",
     /* 25 */ "- device: sleep (223)",
     /* 26 */ "- device: activation (224)",
-    /* 27 */ "Language",
-    /* 28 */ "Russian",
-    /* 29 */ "English",
-    /* 30 */ "Chinese",
+    /* 27 */ L"Language",
+    /* 28 */ L"Russian",
+    /* 29 */ L"English",
+    /* 30 */ L"German",
+    /* 31 */ L"Chinese",
     nullptr
 };

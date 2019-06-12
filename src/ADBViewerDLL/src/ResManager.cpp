@@ -8,6 +8,7 @@ namespace Resources
 
 #include "Resources/ResHelp_ru.h"
 #include "Resources/ResHelp_en.h"
+#include "Resources/ResHelp_dm.h"
 #include "Resources/ResHelp_cn.h"
 #include "Resources/ResLogo.h"
 #include "Resources/ResMenu.h"
@@ -40,6 +41,7 @@ const char * ResManager::stringload(ResManager::IndexStringResource idx, ResMana
     {
         case ResManager::IndexLanguageResource::LANG_RU: return help_strings_ru[idx];
         case ResManager::IndexLanguageResource::LANG_EN: return help_strings_en[idx];
+        case ResManager::IndexLanguageResource::LANG_DM: return help_strings_dm[idx];
         case ResManager::IndexLanguageResource::LANG_CN: return help_strings_cn[idx];
         default: return help_strings_ru[idx];
     }

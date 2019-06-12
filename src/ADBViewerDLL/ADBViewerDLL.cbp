@@ -59,10 +59,20 @@
 		</Unit>
 		<Unit filename="src/ResManager.cpp" />
 		<Unit filename="src/ResManager.h" />
-		<Unit filename="src/ResManagerPopUp.cpp">
+		<Unit filename="src/ResManagerPopUp.cpp" />
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUp1251_ru.cpp">
 			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp1251 $options $includes -c $file -o $object" />
 		</Unit>
-		<Unit filename="src/ResManagerPopUp_cn.cpp" />
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUp437_en.cpp">
+			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp437 $options $includes -c $file -o $object" />
+		</Unit>
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUp850_dm.cpp">
+			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp850 $options $includes -c $file -o $object" />
+		</Unit>
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_cn.cpp" />
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_dm.cpp" />
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_en.cpp" />
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_ru.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
