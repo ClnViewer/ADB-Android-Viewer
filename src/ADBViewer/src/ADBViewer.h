@@ -39,6 +39,8 @@
 #define ID_CMD_POP_MENU39 20309
 #define ID_CMD_POP_MENU40 20310
 
+#define ID_CMD_MSGBAR     49999
+
 enum MgrType
 {
     MGR_MAIN,
@@ -60,6 +62,7 @@ using GameDev::ADBDriver;
 #  include "App/AppSysDialog.h"
 #  include "App/plugin/AppPluginManager.h"
 #  include "App/gui/gui.h"
+#  include "App/AppMessageBar.h"
 #  include "App/AppEditor.h"
 #  include "App/AppVideo.h"
 #  include "App/AppMenuBar.h"

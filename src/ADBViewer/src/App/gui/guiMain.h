@@ -7,7 +7,6 @@ public:
     SDL_Renderer *m_renderer;
     SDL_Window   *m_window;
     SDL_Event     m_event;
-    uint32_t      m_uevent;
     //
 
     void addpool(guiRenderer_s*) noexcept;

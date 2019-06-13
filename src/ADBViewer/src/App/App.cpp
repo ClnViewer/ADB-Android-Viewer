@@ -14,6 +14,8 @@ static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt,
 
 App::App()
 {
+    AppConfig::instance().init();
+
     switch (initm(__W_default + m_appmenubar.gui.rect.w, __H_default))
     {
         case 1:
@@ -43,11 +45,7 @@ App::App()
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_appeditor.init(this))  || /// this editor GUI screen
-        (!m_appinfo.init(
-                this,
-                ResManager::IndexFontResource::RES_FONT_16704,
-                ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK
-            )) ||                     /// info-help left rectangle
+        (!m_appmsgbar.init(this))  || /// this message BAR box
         (!m_appinput.init(
                 this,
                 ResManager::IndexFontResource::RES_FONT_FREESANS,
@@ -100,6 +98,7 @@ App::App()
     (void) initgui(this);
 
     Plugins::AppPluginManager::instance().init();
+    AppMessageQueue::instance().init();
 }
 
 App::~App()

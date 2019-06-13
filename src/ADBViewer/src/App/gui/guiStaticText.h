@@ -82,10 +82,12 @@ public:
         if (!gui.texture)
             return;
 
+        m_id = -1;
         gui.active = false;
         SDL_Texture *tmp_texture = nullptr;
         std::swap(gui.texture, tmp_texture);
-        SDL_DestroyTexture(tmp_texture);
+        if (tmp_texture)
+            SDL_DestroyTexture(tmp_texture);
     }
 
     guiStaticText()

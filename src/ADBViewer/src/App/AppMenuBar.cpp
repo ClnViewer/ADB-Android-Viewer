@@ -104,7 +104,7 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
     if (amb->m_app->m_appeditor.isactive())
         return false;
 
-    if (ev->type == amb->m_app->m_uevent)
+    if (ev->type == AppConfig::instance().cnf_uevent)
         return amb->mousebutton(ev, amb, ev->user.code);
 
     if (ev->motion.x > amb->gui.rect.w)
@@ -418,16 +418,16 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else
                 {
-                    m_app->m_appinfo.clear();
+                    m_app->m_appmsgbar.clear();
                     return;
                 }
 #               endif
             }
             else
             {
-#               if defined (_BUILD_FRAME_NO_TITLE)
-                m_app->m_appinfo.clear();
-#               endif
+//#               if defined (_BUILD_FRAME_NO_TITLE)
+                //m_app->m_appmsgbar.clear();
+//#               endif
                 return;
             }
             break;
@@ -437,7 +437,7 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
 #           if defined (_BUILD_FRAME_NO_TITLE)
             if (s.empty())
             {
-                m_app->m_appinfo.clear();
+                m_app->m_appmsgbar.clear();
                 return;
             }
             ss << s.c_str();
@@ -449,16 +449,19 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
         }
         default:
             {
-#               if defined (_BUILD_FRAME_NO_TITLE)
-                m_app->m_appinfo.clear();
-#               endif
+//#               if defined (_BUILD_FRAME_NO_TITLE)
+                //m_app->m_appmsgbar.clear();
+//#               endif
                 return;
             }
     }
 #   if defined (_BUILD_FRAME_NO_TITLE)
     ss << "  ";
-    SDL_Point offset = { (gui.rect.w + 1), 0 };
-    m_app->m_appinfo.draw(ss.str(), &offset, id);
+    AddMessageQueue(
+        ss.str(),
+        3U,
+        id
+    );
 #   else
     settitle(ss.str());
 #   endif

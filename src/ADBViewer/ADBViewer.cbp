@@ -87,6 +87,8 @@
 		<Unit filename="src/App/AppMenuBar.h" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
 		<Unit filename="src/App/AppMenuPopUp.h" />
+		<Unit filename="src/App/AppMessageBar.cpp" />
+		<Unit filename="src/App/AppMessageBar.h" />
 		<Unit filename="src/App/AppMessageQueue.cpp" />
 		<Unit filename="src/App/AppMessageQueue.h" />
 		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />

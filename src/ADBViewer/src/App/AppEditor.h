@@ -31,6 +31,7 @@ public:
 
     bool isactive() const;
     bool isupdate() const;
+    bool istarget() const;
     bool init(App*);
     void run();
     void stop();

@@ -15,7 +15,7 @@ AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
           cnf_scale(2U), cnf_compress(9),
-          cnf_point_input{}, cnf_adb_rect{}
+          cnf_point_input{}, cnf_uevent(0U), cnf_adb_rect{}
     {
         using namespace std::placeholders;
 
@@ -49,6 +49,12 @@ AppConfig& AppConfig::instance()
         static AppConfig m_instance{};
         return m_instance;
     }
+
+void AppConfig::init()
+    {
+
+    }
+
 
 const void * AppConfig::GetAdbCb() const
     {

@@ -34,8 +34,8 @@ int32_t guiMain::initm(int32_t w, int32_t h)
             )))
             return 2;
 
-        m_uevent = SDL_RegisterEvents(1);
-        if (m_uevent == ((uint32_t)-1))
+        AppConfig::instance().cnf_uevent = SDL_RegisterEvents(1);
+        if (AppConfig::instance().cnf_uevent == ((uint32_t)-1))
             return 3;
 
         return 0;
@@ -89,7 +89,7 @@ void guiMain::events(SDL_Event *ev)
     }
 
 guiMain::guiMain()
-     : m_renderer(nullptr), m_window(nullptr), m_event{}, m_uevent(0U) {}
+     : m_renderer(nullptr), m_window(nullptr), m_event{} {}
 
 guiMain::~guiMain()
     {

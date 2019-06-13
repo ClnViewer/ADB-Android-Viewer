@@ -22,6 +22,11 @@ bool AppEditor::isactive() const
         return m_active.load();
     }
 
+bool AppEditor::istarget() const
+    {
+        return m_target.load();
+    }
+
 bool AppEditor::isupdate() const
     {
         return ((m_active.load()) ?
@@ -63,7 +68,7 @@ void AppEditor::stop()
 
         write_script(fname);
         gui_icon_off();
-        m_app->m_appinfo.clear();
+        m_app->m_appmsgbar.clear();
     }
 
 void AppEditor::run()
@@ -79,7 +84,7 @@ void AppEditor::run()
 
         m_target = false;
         m_active = true;
-        m_app->m_appinfo.clear();
+        m_app->m_appmsgbar.clear();
     }
 
 void AppEditor::cancel()
@@ -93,7 +98,7 @@ void AppEditor::cancel()
         m_target = false;
         m_pixels.clear();
         m_ptarget.clear();
-        m_app->m_appinfo.clear();
+        m_app->m_appmsgbar.clear();
     }
 
 void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
@@ -108,6 +113,7 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
 
             do
             {
+                bool     iswriteinfo = false;
                 int32_t x = ppixel.x,
                         y = ppixel.y,
                         p = ((m_target) ? 4 : 2),
@@ -156,19 +162,23 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
                         else
                             m_pixels.push_back(pixel);
 
-                        /*
-                        /// Nvidia crush!
-                        if (yy == (z / 2))
+                        /// Info position, x/y, color RGB
+                        if ((!iswriteinfo) && (yy == (z / 2)))
                         {
                             std::stringstream ss;
-                            ss << " I: "  << std::to_string(pixel.pos);
+                            ss << " P: "  << std::to_string(pixel.pos);
+                            ss << " X: "  << std::to_string(pixel.x);
+                            ss << " Y: "  << std::to_string(pixel.y);
                             ss << " ( R:" << std::to_string(pixel.rgb.r);
                             ss << ", G:"  << std::to_string(pixel.rgb.g);
                             ss << ", B:"  << std::to_string(pixel.rgb.b) << " ) ";
-                            SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
-                            m_app->m_appinfo.draw(ss.str(), &offset, -1);
+                            AddMessageQueue(
+                                    ss.str(),
+                                    5U,
+                                    (__LINE__ + pixel.pos)
+                                );
+                            iswriteinfo = true;
                         }
-                        */
                     }
             }
             while (0);
@@ -258,7 +268,7 @@ bool AppEditor::event(SDL_Event *ev, const void *instance)
        )
         return false;
 
-    if (ev->type == ape->m_app->m_uevent)
+    if (ev->type == AppConfig::instance().cnf_uevent)
     {
         switch(ev->user.code)
         {

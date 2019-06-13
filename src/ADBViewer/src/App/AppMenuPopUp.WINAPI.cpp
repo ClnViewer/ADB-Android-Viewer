@@ -119,8 +119,13 @@ void AppMenuPopUp::show()
             {
                 case AppEditor::AppEditorScriptType::SCR_CHECK_AND_CLICK:
                     {
+                        /// TODO: check result text
                         ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
-                        MENU_ITEM_ADD(ID_CMD_POP_MENU8, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_9, l_hScrMenu);
+
+                        if (m_app->m_appeditor.istarget())
+                            MENU_ITEM_ADD(ID_CMD_POP_MENU8, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_10, l_hScrMenu);
+                        else
+                            MENU_ITEM_ADD(ID_CMD_POP_MENU8, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_9, l_hScrMenu);
 
                         ::SetMenuItemInfo(l_hScrTypeMenu, ID_CMD_POP_MENU9, FALSE, &mit);
                         break;
@@ -208,7 +213,7 @@ void AppMenuPopUp::show()
         ::SDL_GetGlobalMouseState(&x, &y);
 
         SDL_Event cmdEvent{};
-        cmdEvent.type = m_app->m_uevent;
+        cmdEvent.type = AppConfig::instance().cnf_uevent;
 
         uint32_t idx = ::TrackPopupMenu(
                         l_hPopMenu,

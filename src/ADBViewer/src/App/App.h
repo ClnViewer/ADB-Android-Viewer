@@ -6,13 +6,13 @@ class App : public guiMain, public guiBase
 {
 public:
     //
-    guiStaticText m_appinfo;
     guiBoxTextInput m_appinput;
     //
     AppVideo      m_appvideo;
     AppEditor     m_appeditor;
     AppMenuBar    m_appmenubar;
     AppMenuPopUp  m_appmenupop;
+    AppMessageBar m_appmsgbar;
 
     App();
     ~App();

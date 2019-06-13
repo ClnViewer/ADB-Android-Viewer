@@ -43,6 +43,7 @@ public:
     std::atomic<uint32_t>  cnf_scale;
     std::atomic<uint32_t>  cnf_compress;
     SDL_Point              cnf_point_input;
+    uint32_t               cnf_uevent;
 
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
@@ -52,6 +53,7 @@ public:
     std::vector<std::string> & GetFileConfig(std::string const &);
     const char * GetFileConfigId(ConfigIdType);
 
+    void init();
     static AppConfig& instance();
     const void * GetAdbCb() const;
 };
