@@ -63,7 +63,7 @@ bool AppMessageBar::event(SDL_Event *ev, const void *instance)
             amb->m_timer.stop();
 
         if (dataq.tm)
-            amb->m_timer.start(
+            amb->m_timer.once(
                 dataq.tm,
                 [=]()
                 {

@@ -79,6 +79,7 @@ void AppVideo::stop()
     gui.active = false;
     jointh();
     defscreen();
+    m_app->m_appani.run();
     gui.active = true;
 }
 
@@ -88,6 +89,7 @@ void AppVideo::run()
         return;
 
     rect_default(&AppConfig::instance().cnf_adb_rect, &gui.rect);
+    m_app->m_appani.stop();
 
     if (!AppConfig::instance().cnf_adbinit)
     {
@@ -134,14 +136,11 @@ void AppVideo::run()
             }
             catch(std::exception & _ex)
             {
-                /*
-                SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
-                m_app->m_appinfo.draw(
+                AddMessageQueue(
                     _ex.what(),
-                    &offset,
+                    10U,
                     -1
-                    );
-                */
+                );
                 gui.active = false;
                 defscreen();
                 gui.active = true;
@@ -150,17 +149,14 @@ void AppVideo::run()
             }
             catch(...)
             {
-                /*
-                SDL_Point offset = { (m_app->m_appmenubar.gui.rect.w + 1), 0 };
-                m_app->m_appinfo.draw(
+                AddMessageQueue(
                     ResManager::stringload(
                         ResManager::IndexStringResource::RES_STR_ERR_UNKNOWN,
                         AppConfig::instance().cnf_lang
                     ),
-                    &offset,
+                    10U,
                     -1
-                    );
-                */
+                );
                 gui.active = false;
                 defscreen();
                 gui.active = true;
@@ -173,7 +169,7 @@ void AppVideo::run()
     m_thu = move(thu);
 }
 
-bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
+bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h)
 {
     if ((!m_app) || (!v.size()))
         return AppConfig::instance().cnf_isrun.load();
@@ -199,7 +195,8 @@ bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h) noexcept
             return false;
 
         std::swap(gui.texture, t_texture);
-        SDL_DestroyTexture(t_texture);
+        if (t_texture)
+            SDL_DestroyTexture(t_texture);
 
         gui.rect.w = iw;
         gui.rect.h = ih;

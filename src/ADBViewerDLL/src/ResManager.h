@@ -132,6 +132,7 @@ namespace Resources
             static SDL_Color   * colorload(ResManager::IndexColorResource);
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
+            static SDL_Surface **spriteload(SDL_Color*, uint32_t*);
             static const char  * stringload(ResManager::IndexStringResource, ResManager::IndexLanguageResource);
 
 #           if defined(OS_WIN)

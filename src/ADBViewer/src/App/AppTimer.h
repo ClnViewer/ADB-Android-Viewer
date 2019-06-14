@@ -4,6 +4,23 @@
 
 class AppTimer
 {
+private:
+    //
+    std::atomic<bool>               m_active = false;
+    std::future<void>               m_task;
+    //
+    void sleeps(uint32_t sec)
+    {
+        sec = (sec * 100);
+        do
+        {
+            if (!m_active.load()) return;
+            std::this_thread::yield();
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        }
+        while (sec--);
+    }
+
 public:
     //
     AppTimer() {}
@@ -13,7 +30,7 @@ public:
             m_task.wait();
     }
 
-    void start(uint32_t sec, auto f)
+    void once(uint32_t sec, auto f)
     {
         if (m_active.load())
             return;
@@ -26,20 +43,47 @@ public:
                     std::launch::async,
                     [=](uint32_t s)
                     {
-                        s = (s * 100);
-                        do
-                        {
-                            if (!m_active.load()) return;
-                            std::this_thread::yield();
-                            std::this_thread::sleep_for(std::chrono::milliseconds(10));
-                            if (!m_active.load()) return;
-                        }
-                        while (s--);
+                        sleeps(s);
 
                         if (!m_active.load()) return;
                         f();
                         m_active = false;
                     },
+                    sec
+            );
+    }
+
+    void loop(uint32_t cnt, uint32_t sec, auto f)
+    {
+        if (m_active.load())
+            return;
+
+        if (m_task.valid())
+            m_task.wait();
+
+        m_active = true;
+        m_task = std::async(
+                    std::launch::async,
+                    [=](uint32_t c, uint32_t s)
+                    {
+                        bool a = (c == 0U);
+                        if (a)
+                            c++;
+
+                        do
+                        {
+                            sleeps(s);
+                            if (!m_active.load()) return;
+                            f();
+                            if (!m_active.load()) return;
+                            if (a)
+                                c++;
+                        }
+                        while (c--);
+
+                        m_active = false;
+                    },
+                    cnt,
                     sec
             );
     }
@@ -60,13 +104,14 @@ public:
         }
     }
 
-    bool isactive() const
+    void wait()
     {
-        return m_active;
+        if (m_task.valid())
+            m_task.wait();
     }
 
-private:
-    //
-    std::atomic<bool>               m_active;
-    std::future<void>               m_task;
+    bool isactive() const
+    {
+        return m_active.load();
+    }
 };

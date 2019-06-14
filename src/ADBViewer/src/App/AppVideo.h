@@ -23,6 +23,6 @@ private:
     //
     void jointh();
     bool defscreen();
-    bool update(std::vector<uint8_t>&, uint32_t, uint32_t) noexcept;
+    bool update(std::vector<uint8_t>&, uint32_t, uint32_t);
     //
 };

@@ -41,7 +41,7 @@
 					<Add option="-s" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="upx -9 ../bin/Release/ADBViewer.dll" />
+					<Add after="upx -6 ../bin/Release/ADBViewer.dll" />
 				</ExtraCommands>
 			</Target>
 		</Build>

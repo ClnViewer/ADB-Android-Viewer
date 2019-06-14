@@ -96,6 +96,8 @@
 		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
+		<Unit filename="src/App/AppVideoAnimation.cpp" />
+		<Unit filename="src/App/AppVideoAnimation.h" />
 		<Unit filename="src/App/gui/gui.h" />
 		<Unit filename="src/App/gui/guiBase.cpp" />
 		<Unit filename="src/App/gui/guiBase.h" />

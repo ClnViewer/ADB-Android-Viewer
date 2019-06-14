@@ -16,6 +16,7 @@ namespace Resources
 #include "Resources/ResRecord.h"
 #include "Resources/Res16704font.h"
 #include "Resources/ResFreeSansfont.h"
+#include "Resources/clip/bender-anime-8/bender8sprite.h"
 
 static inline SDL_Color box_color[][2] =
 {
@@ -46,6 +47,55 @@ const char * ResManager::stringload(ResManager::IndexStringResource idx, ResMana
         default: return help_strings_ru[idx];
     }
 }
+
+SDL_Surface ** ResManager::spriteload(SDL_Color *transparent, uint32_t *idx)
+    {
+        do
+        {
+            if (idx)
+                *idx = 0U;
+
+            SDL_Surface **surf = new SDL_Surface*[__NELE(img_bender8sprites)]{};
+            if (!surf)
+                break;
+
+            uint32_t i = 0U;
+
+            for (; i < __NELE(img_bender8sprites); i++)
+            {
+                if (!(surf[i] = ResManager::imagedata(img_bender8sprites[i])))
+                    break;
+
+                if (transparent)
+                {
+                    surf[i]->format->Amask = 0xFF000000;
+                    surf[i]->format->Ashift = 24;
+
+                    SDL_SetColorKey(
+                        surf[i],
+                        SDL_TRUE,
+                        SDL_MapRGB(
+                            surf[i]->format,
+                            transparent->r,
+                            transparent->g,
+                            transparent->b
+                        )
+                    );
+                }
+            }
+
+            if (i != __NELE(img_bender8sprites))
+                break;
+
+            if (idx)
+                *idx = __NELE(img_bender8sprites);
+
+            return surf;
+        }
+        while (0);
+
+        return nullptr;
+    }
 
 SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
 {

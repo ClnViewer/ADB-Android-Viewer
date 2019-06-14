@@ -15,6 +15,7 @@ static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt,
 App::App()
 {
     AppConfig::instance().init();
+    AppMessageQueue::instance().init();
 
     switch (initm(__W_default + m_appmenubar.gui.rect.w, __H_default))
     {
@@ -40,8 +41,10 @@ App::App()
             }
     }
 
+    /// Instance initiation by step of renderer (Overwrite prevision screen region)
     if (
         (!m_appvideo.init(this))   || /// this main GUI screen
+        (!m_appani.init(this))     || /// this animation default GUI screen
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_appeditor.init(this))  || /// this editor GUI screen
@@ -98,7 +101,6 @@ App::App()
     (void) initgui(this);
 
     Plugins::AppPluginManager::instance().init();
-    AppMessageQueue::instance().init();
 }
 
 App::~App()
