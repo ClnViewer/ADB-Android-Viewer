@@ -13,22 +13,22 @@
 	
 	//Standard Version Type
 	#define AVIEW_MAJOR  0
-	#define AVIEW_MINOR  1
-	#define AVIEW_BUILD  104
-	#define AVIEW_REVISION  546
+	#define AVIEW_MINOR  0
+	#define AVIEW_BUILD  7
+	#define AVIEW_REVISION  38
 	
 	//Miscellaneous Version Types
-	#define AVIEW_BUILDS_COUNT  220
-	#define AVIEW_RC_FILEVERSION 0,1,104,546
-	#define AVIEW_RC_FILEVERSION_STRING "0, 1, 104, 546\0"
-	#define AVIEW_FULLVERSION_STRING  "0.1.104.546"
+	#define AVIEW_BUILDS_COUNT  18
+	#define AVIEW_RC_FILEVERSION 0,0,7,38
+	#define AVIEW_RC_FILEVERSION_STRING "0, 0, 7, 38\0"
+	#define AVIEW_FULLVERSION_STRING  "0.0.7.38"
 	
 	//SVN Version
-	#define AVIEW_SVN_REVISION "48"
-	#define AVIEW_SVN_DATE "2019-06-13T12:57:51.080001Z"
+	#define AVIEW_SVN_REVISION "49"
+	#define AVIEW_SVN_DATE "2019-06-14T20:11:08.706896Z"
 	
 	//These values are to keep track of your versioning state, don't modify them.
-	#define AVIEW_BUILD_HISTORY  4
+	#define AVIEW_BUILD_HISTORY  7
 	
 
 #endif //VERSION_H

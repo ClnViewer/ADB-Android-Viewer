@@ -77,6 +77,8 @@ bool AppVideoAnimation::init(App *app)
     while (0);
 
     bool ret = initgui(app);
+    gui.active = false;
+
     if (ret)
         run();
 
@@ -119,17 +121,25 @@ void AppVideoAnimation::run()
                     if (i == (m_textures_sz - 1U))
                         i = 0U;
 
-                    gui.active  = false;
-                    gui.texture = m_textures[i];
-                    gui.rect.x += 5;
-                    gui.rect.y = (m_key_y + l_key_y);
+                    {
+                        gui.active  = false;
+                        gui.texture = m_textures[i];
+                        gui.rect.x += 5;
+                        gui.rect.y = (m_key_y + l_key_y);
+                    }
 
                     if (gui.rect.x >= pad)
+                        break;
+
+                    if (!AppConfig::instance().cnf_isrun)
                         break;
 
                     gui.active = true;
                     std::this_thread::yield();
                     std::this_thread::sleep_for(std::chrono::milliseconds(80));
+
+                    if (!AppConfig::instance().cnf_isrun)
+                        break;
                 }
             }
             while (0);
@@ -146,11 +156,32 @@ bool AppVideoAnimation::event(SDL_Event *ev, const void *instance)
                 const_cast<void*>(instance)
             );
 
-    if ((!apva) || (!AppConfig::instance().cnf_isstop))
+    if ((!apva) || (!AppConfig::instance().cnf_isstop) || (!apva->gui.active))
         return false;
 
     switch(ev->type)
     {
+        case SDL_MOUSEBUTTONDOWN:
+        {
+            if (ev->button.button == SDL_BUTTON_LEFT)
+            {
+                if (
+                    (ev->motion.x >= gui.rect.x) &&
+                    (ev->motion.x <= (gui.rect.x + gui.rect.w)) &&
+                    (ev->motion.y >= gui.rect.y) &&
+                    (ev->motion.y <= (gui.rect.y + gui.rect.h))
+                    )
+                {
+                    AddMessageQueue(
+                        ResManager::speechrandom(),
+                        10U,
+                        (__LINE__ + ev->motion.x)
+                    );
+                    return true;
+                }
+            }
+            break;
+        }
         case SDL_KEYDOWN:
         {
             switch (ev->key.keysym.sym)

@@ -1,11 +1,11 @@
 
 #include "../../ADBViewer/src/loader.h"
 #include "ResManager.h"
-
+#include <cstdlib>
+#include <ctime>
 
 namespace Resources
 {
-
 #include "Resources/ResHelp_ru.h"
 #include "Resources/ResHelp_en.h"
 #include "Resources/ResHelp_dm.h"
@@ -17,6 +17,7 @@ namespace Resources
 #include "Resources/Res16704font.h"
 #include "Resources/ResFreeSansfont.h"
 #include "Resources/clip/bender-anime-8/bender8sprite.h"
+#include "Resources/clip/bender-anime-8/bender8speech.h"
 
 static inline SDL_Color box_color[][2] =
 {
@@ -29,6 +30,11 @@ static inline SDL_Color box_color[][2] =
         { 250, 250, 250, 150 }
     }
 };
+
+__attribute__((constructor)) static void initialize_ResourcesRand()
+{
+    std::srand(unsigned(std::time(0)));
+}
 
 ResManager::ResManager() {}
 ResManager::~ResManager() {}
@@ -47,6 +53,11 @@ const char * ResManager::stringload(ResManager::IndexStringResource idx, ResMana
         default: return help_strings_ru[idx];
     }
 }
+
+const char * ResManager::speechrandom()
+    {
+        return txt_bender8speech[(std::rand() % __NELE(txt_bender8speech))];
+    }
 
 SDL_Surface ** ResManager::spriteload(SDL_Color *transparent, uint32_t *idx)
     {
