@@ -44,7 +44,7 @@ App::App()
     /// Instance initiation by step of renderer (Overwrite prevision screen region)
     if (
         (!m_appvideo.init(this))   || /// this main GUI screen
-        (!m_appani.init(this))     || /// this animation default GUI screen
+        (!m_appabender.init(this))     || /// this animation default GUI screen
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_appeditor.init(this))  || /// this editor GUI screen

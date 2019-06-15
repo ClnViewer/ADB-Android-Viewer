@@ -5,3 +5,4 @@
 #include "guiMain.h"
 #include "guiStaticText.h"
 #include "guiBoxTextInput.h"
+#include "guiAnimation.h"

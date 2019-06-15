@@ -59,22 +59,34 @@ const char * ResManager::speechrandom()
         return txt_bender8speech[(std::rand() % __NELE(txt_bender8speech))];
     }
 
-SDL_Surface ** ResManager::spriteload(SDL_Color *transparent, uint32_t *idx)
+SDL_Surface ** ResManager::spriteload(ResManager::IndexSpriteResource idx, SDL_Color *transparent, uint32_t *psz)
     {
         do
         {
-            if (idx)
-                *idx = 0U;
+            if (psz)
+                *psz = 0U;
 
-            SDL_Surface **surf = new SDL_Surface*[__NELE(img_bender8sprites)]{};
+            uint32_t i = 0U,
+                     l_ssz = 0U;
+            const ResManager::ImageResource_s **l_res = nullptr;
+
+            switch (idx)
+            {
+                default:
+                //case ResManager::IndexSpriteResource::RES_SPRITE_BENDER
+                {
+                    l_ssz = __NELE(img_bender8sprites);
+                    l_res = img_bender8sprites;
+                }
+            }
+
+            SDL_Surface **surf = new SDL_Surface*[l_ssz]{};
             if (!surf)
                 break;
 
-            uint32_t i = 0U;
-
-            for (; i < __NELE(img_bender8sprites); i++)
+            for (; i < l_ssz; i++)
             {
-                if (!(surf[i] = ResManager::imagedata(img_bender8sprites[i])))
+                if (!(surf[i] = ResManager::imagedata(l_res[i])))
                     break;
 
                 if (transparent)
@@ -95,11 +107,11 @@ SDL_Surface ** ResManager::spriteload(SDL_Color *transparent, uint32_t *idx)
                 }
             }
 
-            if (i != __NELE(img_bender8sprites))
+            if (i != l_ssz)
                 break;
 
-            if (idx)
-                *idx = __NELE(img_bender8sprites);
+            if (psz)
+                *psz = l_ssz;
 
             return surf;
         }

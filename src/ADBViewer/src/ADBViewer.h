@@ -64,7 +64,7 @@ using GameDev::ADBDriver;
 #  include "App/gui/gui.h"
 #  include "App/AppMessageBar.h"
 #  include "App/AppEditor.h"
-#  include "App/AppVideoAnimation.h"
+#  include "App/AppAnimationBender.h"
 #  include "App/AppVideo.h"
 #  include "App/AppMenuBar.h"
 #  include "App/AppMenuPopUp.h"

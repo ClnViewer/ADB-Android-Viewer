@@ -60,6 +60,11 @@ namespace Resources
                 RES_IMG_SCREEN,
                 RES_IMG_RCORD
             };
+            enum IndexSpriteResource
+            {
+                RES_SPRITE_BENDER,
+                RES_SPRITE_DEFAULT = RES_SPRITE_BENDER
+            };
             enum IndexStringResource
             {
                 RES_STR_QUIT,
@@ -132,7 +137,7 @@ namespace Resources
             static SDL_Color   * colorload(ResManager::IndexColorResource);
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
-            static SDL_Surface **spriteload(SDL_Color*, uint32_t*);
+            static SDL_Surface **spriteload(ResManager::IndexSpriteResource, SDL_Color*, uint32_t*);
             static const char  * speechrandom();
             static const char  * stringload(ResManager::IndexStringResource, ResManager::IndexLanguageResource);
 

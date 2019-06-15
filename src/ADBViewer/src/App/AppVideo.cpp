@@ -79,7 +79,7 @@ void AppVideo::stop()
     gui.active = false;
     jointh();
     defscreen();
-    m_app->m_appani.run();
+    m_app->m_appabender.run();
     gui.active = true;
 }
 
@@ -89,7 +89,7 @@ void AppVideo::run()
         return;
 
     rect_default(&AppConfig::instance().cnf_adb_rect, &gui.rect);
-    m_app->m_appani.stop();
+    m_app->m_appabender.stop();
 
     if (!AppConfig::instance().cnf_adbinit)
     {

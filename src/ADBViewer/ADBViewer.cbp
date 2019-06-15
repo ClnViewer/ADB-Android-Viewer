@@ -79,6 +79,8 @@
 		</Unit>
 		<Unit filename="src/App/App.cpp" />
 		<Unit filename="src/App/App.h" />
+		<Unit filename="src/App/AppAnimationBender.cpp" />
+		<Unit filename="src/App/AppAnimationBender.h" />
 		<Unit filename="src/App/AppConfig.cpp" />
 		<Unit filename="src/App/AppConfig.h" />
 		<Unit filename="src/App/AppEditor.cpp" />
@@ -96,9 +98,9 @@
 		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
-		<Unit filename="src/App/AppVideoAnimation.cpp" />
-		<Unit filename="src/App/AppVideoAnimation.h" />
 		<Unit filename="src/App/gui/gui.h" />
+		<Unit filename="src/App/gui/guiAnimation.cpp" />
+		<Unit filename="src/App/gui/guiAnimation.h" />
 		<Unit filename="src/App/gui/guiBase.cpp" />
 		<Unit filename="src/App/gui/guiBase.h" />
 		<Unit filename="src/App/gui/guiBoxTextInput.h" />
