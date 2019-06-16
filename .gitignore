@@ -1,5 +1,11 @@
 
-# utils/*
+src/bin/*
+src/obj/*
+*.save
+*.bmarks
+*.layout
+*.depend
+*.jbf
 
 .svn
 # Prerequisites
@@ -34,5 +40,6 @@
 *.exe
 *.out
 *.app
-
 *.sh
+*.cmd
+/src/ADBViewerInstaller/Android-ADB-Viewer-cache/*

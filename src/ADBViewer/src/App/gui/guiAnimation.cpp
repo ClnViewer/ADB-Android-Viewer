@@ -56,16 +56,18 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
 
         for (uint32_t i = 0U; i < m_textures_sz; i++)
         {
-            if ((isvalid) && (l_sprites[i]))
-                if (!(m_textures[i] = SDL_CreateTextureFromSurface(
-                                        m_app->m_renderer,
-                                        l_sprites[i]
-                    )))
-                    isvalid = false;
-
             if (l_sprites[i])
+            {
+                if (isvalid)
+                    if (!(m_textures[i] = SDL_CreateTextureFromSurface(
+                                            m_app->m_renderer,
+                                            l_sprites[i]
+                        )))
+                        isvalid = false;
+
                 SDL_FreeSurface(l_sprites[i]);
-            l_sprites[i] = nullptr;
+                l_sprites[i] = nullptr;
+            }
         }
         delete [] l_sprites;
 
