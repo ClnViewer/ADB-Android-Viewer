@@ -12,6 +12,7 @@ public:
     ~AppMessageBar();
 
     bool init(App*);
+    bool evresize(SDL_Texture**) override;
     bool event(SDL_Event*, const void*) override;
     void clear();
 

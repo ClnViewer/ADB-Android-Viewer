@@ -28,6 +28,10 @@ static inline SDL_Color box_color[][2] =
     {
         { 5, 5, 5, 0 },
         { 250, 250, 250, 150 }
+    },
+    {
+        { 151, 192, 36, 0 },
+        { 0, 0, 0, 0 }
     }
 };
 
@@ -215,6 +219,10 @@ SDL_Color * ResManager::colorload(ResManager::IndexColorResource idx)
         case ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE:
             {
                 return box_color[1];
+            }
+        case ResManager::IndexColorResource::RES_COLOR_GREEN_BG:
+            {
+                return box_color[2];
             }
         default:
             {

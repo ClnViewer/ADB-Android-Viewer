@@ -12,6 +12,8 @@ public:
     ~AppMenuBar();
 
     bool init(App*);
+    bool tinit(SDL_Texture**) override;
+    bool evresize(SDL_Texture**) override;
     bool screenshot(SDL_Event*, bool);
     void setcursor(uint32_t);
     void infoset(MgrType, std::string const&, int32_t, SDL_Event *ev);

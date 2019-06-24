@@ -32,5 +32,15 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 29 */ L"English",
     /* 30 */ L"German",
     /* 31 */ L"Chinese",
+    /* 32 */ L"Display",
+    /* 33 */ L"Ratio",
+    /* 34 */ L"Rotate",
+    /* 35 */ L"Bender Rodriguez",
+    /* 36 */ L"Landscape",
+    /* 37 */ L"Portrait",
+    /* 38 */ L"1:1",
+    /* 39 */ L"1:2",
+    /* 40 */ L"1:3",
+    /* 41 */ L"Save configuration",
     nullptr
 };

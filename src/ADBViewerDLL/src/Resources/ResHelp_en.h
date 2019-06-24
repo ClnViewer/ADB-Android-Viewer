@@ -25,5 +25,7 @@ static inline const char *help_strings_en[] = {
 	"ADB Error Driver:",
 	"Unknown error, please provide details: https://clnviewer.github.io/ADB-Android-Viewer/",
 	"Enter text:",
+	"Bender: I will come soon ..",
+	"Bender: I turn off ..",
 	nullptr
 };

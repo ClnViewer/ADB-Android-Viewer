@@ -25,5 +25,7 @@ static inline const char *help_strings_dm[] = {
     "ADB-Fehlertreiber:",
     "Unbekannter Fehler, bitte Details angeben: https://clnviewer.github.io/ADB-Android-Viewer/",
     "Text eingeben:",
+    "Bender: Ich werde bald kommen ..",
+    "Bender: Ich schalte aus ..",
     nullptr
 };

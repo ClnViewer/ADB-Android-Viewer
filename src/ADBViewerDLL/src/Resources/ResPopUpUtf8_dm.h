@@ -32,5 +32,15 @@ static inline const char *popup_strings_dm[] = {
     /* 29 */ "Englisch",
     /* 30 */ "Deutsch",
     /* 31 */ "Chinesisch",
+    /* 32 */ "Anzeige",
+    /* 33 */ "Proportionen",
+    /* 34 */ "Orientierung",
+    /* 35 */ "Bender Rodriguez",
+    /* 36 */ "Landschaft",
+    /* 37 */ "Portrait",
+    /* 38 */ "1:1",
+    /* 39 */ "1:2",
+    /* 40 */ "1:3",
+    /* 41 */ "Konfiguration speichern",
     nullptr
 };

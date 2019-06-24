@@ -11,7 +11,12 @@ public:
         CNF_PLUGINS_ENABLE = 0,
         CNF_ADB_PATH,
         CNF_ADB_DEVICE,
-        CNF_LANGUAGE
+        CNF_LANGUAGE,
+        CNF_DISP_WIDTH,
+        CNF_DISP_HEIGHT,
+        CNF_DISP_RATIO,
+        CNF_DISP_ORIENT,
+        CNF_DISP_BENDER
     };
 
 private:
@@ -40,9 +45,12 @@ public:
     std::atomic<bool>      cnf_isfullscreen;
     std::atomic<bool>      cnf_adbinit;
     std::atomic<bool>      cnf_isfcnf;
-    std::atomic<uint32_t>  cnf_scale;
+    std::atomic<bool>      cnf_disp_bender;
+    std::atomic<uint32_t>  cnf_disp_ratio;
+    std::atomic<uint32_t>  cnf_disp_rotate;
     std::atomic<uint32_t>  cnf_compress;
-    SDL_Point              cnf_point_input;
+    SDL_Point              cnf_input_point;
+    SDL_Point              cnf_disp_point;
     uint32_t               cnf_uevent;
 
     GameDev::ADBDriver          cnf_adb;
@@ -56,4 +64,5 @@ public:
     void init();
     static AppConfig& instance();
     const void * GetAdbCb() const;
+    void SetDisplaySize(uint32_t, uint32_t);
 };

@@ -8,13 +8,7 @@ static inline const LPCSTR l_openApkExt = "apk";
 static inline const LPCSTR l_openCurDir = ".\\";
 
 AppMenuBar::AppMenuBar()
-    : m_cursor{nullptr}
-{
-    gui.rect.h = __H_default;
-    gui.rect.w = 32;
-    gui.rect.x = 0;
-    gui.rect.y = 0;
-}
+    : m_cursor{nullptr} { guiBase::gui.rect = {}; }
 
 AppMenuBar::~AppMenuBar()
 {
@@ -34,17 +28,6 @@ bool AppMenuBar::init(App *app)
 
     m_app = app;
 
-    SDL_Surface *l_image_surface = ResManager::imageload(
-                    ResManager::IndexImageResource::RES_IMG_MENU
-                );
-    if (!l_image_surface)
-        return false;
-
-    gui.texture = SDL_CreateTextureFromSurface(m_app->m_renderer, l_image_surface);
-    SDL_FreeSurface(l_image_surface);
-    if (!gui.texture)
-        return false;
-
     if (
         (!(m_cursor[0] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_ARROW))) ||
         (!(m_cursor[1] = SDL_CreateSystemCursor(SDL_SYSTEM_CURSOR_HAND)))
@@ -53,6 +36,50 @@ bool AppMenuBar::init(App *app)
 
     return initgui(app);
 }
+
+bool AppMenuBar::tinit(SDL_Texture **texture)
+    {
+        SDL_Surface *l_image_surface_img = ResManager::imageload(
+                    ResManager::IndexImageResource::RES_IMG_MENU
+                );
+        if (!l_image_surface_img)
+            return false;
+
+        guiBase::gui.rect.w = l_image_surface_img->w;
+        guiBase::gui.rect.h = l_image_surface_img->h;
+        guiBase::gui.rect.x = 0;
+        guiBase::gui.rect.y = 0;
+
+        SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
+                m_app->m_renderer,
+                l_image_surface_img
+            );
+        SDL_FreeSurface(l_image_surface_img);
+
+        if (!l_texture)
+            return false;
+
+        GuiLock(
+            std::swap(*texture, l_texture);
+        );
+
+        if (l_texture)
+            SDL_DestroyTexture(l_texture);
+
+
+        return true;
+    }
+
+bool AppMenuBar::evresize(SDL_Texture **texture)
+    {
+        if ((!texture) || (!*texture))
+            return false;
+
+        guiBase::ActiveOff();
+        if (tinit(texture))
+            guiBase::ActiveOn();
+        return guiBase::IsActive();
+    }
 
 void AppMenuBar::setcursor(uint32_t id)
 {
@@ -112,6 +139,12 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
 
     switch(ev->type)
     {
+        case SDL_RENDER_TARGETS_RESET:
+        case SDL_RENDER_DEVICE_RESET:
+            {
+                (void) amb->evresize(&amb->gui.texture);
+                return false;
+            }
         case SDL_MOUSEBUTTONDOWN:
             {
                 return amb->mousebutton(ev, amb, -1);
@@ -151,7 +184,7 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
                 ResManager::stringload(id, AppConfig::instance().cnf_lang),
                 (__LINE__ + id), ev
             );
-            setcursor(1U);
+            amb->setcursor(1U);
             return true;
         }
         default:
@@ -204,7 +237,6 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         if (!AppConfig::instance().cnf_adb.IsDeviceID())
                             AppConfig::instance().cnf_adb.GetDeviceListUI();
 
-                        amb->m_app->m_appvideo.run();
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
@@ -213,6 +245,11 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                                 ),
                             -1, ev
                         );
+                        SDL_Event cmdEvent{};
+                        cmdEvent.type = AppConfig::instance().cnf_uevent;
+                        cmdEvent.user.code = ID_CMD_POP_MENU97;
+                        SDL_PushEvent(&cmdEvent);
+                        amb->setcursor(0U);
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_STOP:
@@ -229,7 +266,6 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             );
                             return true;
                         }
-                        amb->m_app->m_appvideo.stop();
                         amb->infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
@@ -238,6 +274,11 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                                 ),
                             -1, ev
                         );
+                        SDL_Event cmdEvent{};
+                        cmdEvent.type = AppConfig::instance().cnf_uevent;
+                        cmdEvent.user.code = ID_CMD_POP_MENU98;
+                        SDL_PushEvent(&cmdEvent);
+                        amb->setcursor(0U);
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_ADBSET:
@@ -247,9 +288,12 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     }
                     case ResManager::IndexStringResource::RES_STR_SCALE:
                     {
-                        amb->m_app->m_appvideo.stop();
-                        AppConfig::instance().cnf_scale = ((AppConfig::instance().cnf_scale.load() == 2U) ? 1U : 2U);
-                        amb->m_app->m_appvideo.run();
+                        AppConfig::instance().cnf_disp_ratio = ((AppConfig::instance().cnf_disp_ratio.load() >= 2U) ? 1U : 2U);
+                        SDL_Event cmdEvent{};
+                        cmdEvent.type = AppConfig::instance().cnf_uevent;
+                        cmdEvent.user.code = ID_CMD_POP_MENU99;
+                        SDL_PushEvent(&cmdEvent);
+                        amb->setcursor(0U);
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_POSINFO:
@@ -273,14 +317,14 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     {
                         SDL_SetWindowFullscreen(
                             amb->m_app->m_window,
-                            ((AppConfig::instance().cnf_isfullscreen) ? 0U : SDL_WINDOW_FULLSCREEN)
+                            ((AppConfig::instance().cnf_isfullscreen) ? 0U : SDL_WINDOW_FULLSCREEN_DESKTOP)
                         );
                         if (AppConfig::instance().cnf_isfullscreen)
                         {
                             SDL_SetWindowSize(
                                     amb->m_app->m_window,
-                                    __W_default + amb->gui.rect.w,
-                                    __H_default
+                                    AppConfig::instance().cnf_disp_point.x,
+                                    AppConfig::instance().cnf_disp_point.y
                                 );
                             SDL_SetWindowPosition(
                                     amb->m_app->m_window,
@@ -393,20 +437,20 @@ void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Ev
             {
                 if ((!AppConfig::instance().cnf_isstop) && (AppConfig::instance().cnf_ispos))
                 {
-                    uint32_t x = ((AppConfig::instance().cnf_scale) ?
-                        ((ev->motion.x - gui.rect.w) * AppConfig::instance().cnf_scale) :
+                    uint32_t x = ((AppConfig::instance().cnf_disp_ratio) ?
+                        ((ev->motion.x - gui.rect.w) * AppConfig::instance().cnf_disp_ratio) :
                          (ev->motion.x - gui.rect.w)
                         );
-                    uint32_t y = ((AppConfig::instance().cnf_scale) ?
-                        (ev->motion.y * AppConfig::instance().cnf_scale) :
+                    uint32_t y = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (ev->motion.y * AppConfig::instance().cnf_disp_ratio) :
                          ev->motion.y
                         );
-                    uint32_t w = ((AppConfig::instance().cnf_scale) ?
-                        (m_app->m_appvideo.gui.rect.w * AppConfig::instance().cnf_scale) :
+                    uint32_t w = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (m_app->m_appvideo.gui.rect.w * AppConfig::instance().cnf_disp_ratio) :
                          m_app->m_appvideo.gui.rect.w
                         );
-                    uint32_t h = ((AppConfig::instance().cnf_scale) ?
-                        (m_app->m_appvideo.gui.rect.h * AppConfig::instance().cnf_scale) :
+                    uint32_t h = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (m_app->m_appvideo.gui.rect.h * AppConfig::instance().cnf_disp_ratio) :
                          m_app->m_appvideo.gui.rect.h
                         );
 #                   if !defined (_BUILD_FRAME_NO_TITLE)

@@ -12,7 +12,7 @@ guiAnimation::~guiAnimation()
 
 void guiAnimation::cleanup()
 {
-    guiBase::gui.active = false;
+    guiBase::ActiveOff();
 
     if (m_timer.isactive())
         m_timer.stop();
@@ -30,12 +30,26 @@ void guiAnimation::cleanup()
     m_textures = nullptr;
 }
 
+bool guiAnimation::isinit()
+    {
+        return !((!m_textures) || (!m_textures_sz));
+    }
+
+bool guiAnimation::init(App *app)
+    {
+        if (!app)
+            return false;
+        m_app = ((!m_app) ? app : m_app);
+        guiBase::gui.texture = nullptr;
+        return guiBase::initgui(app);
+    }
+
 bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteResource res)
 {
     if (!app)
         return false;
 
-    m_app = app;
+    m_app = ((!m_app) ? app : m_app);
     guiBase::gui.texture = nullptr;
 
     do
@@ -80,7 +94,7 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
     while (0);
 
     bool ret = guiBase::initgui(app);
-    guiBase::gui.active = false;
+    guiBase::ActiveOff();
 
     if (ret)
         run();
@@ -93,7 +107,7 @@ void guiAnimation::stop()
     if (m_timer.isactive())
         m_timer.stop();
 
-    guiBase::gui.active = false;
+    guiBase::ActiveOff();
 }
 
 void guiAnimation::run()
@@ -124,12 +138,12 @@ void guiAnimation::run()
                     if (i == (m_textures_sz - 1U))
                         i = 0U;
 
-                    {
-                        guiBase::gui.active  = false;
+                    guiBase::ActiveOff();
+                    GuiLock(
                         guiBase::gui.texture = m_textures[i];
                         guiBase::gui.rect.x += (5 + m_key_x);
                         guiBase::gui.rect.y = (m_key_y + l_key_y);
-                    }
+                    );
 
                     if (guiBase::gui.rect.x >= pad)
                         break;
@@ -137,7 +151,7 @@ void guiAnimation::run()
                     if (!AppConfig::instance().cnf_isrun)
                         break;
 
-                    guiBase::gui.active = true;
+                    guiBase::ActiveOn();
                     std::this_thread::yield();
                     std::this_thread::sleep_for(std::chrono::milliseconds(80));
 
@@ -147,7 +161,7 @@ void guiAnimation::run()
             }
             while (0);
 
-            guiBase::gui.active = false;
+            guiBase::ActiveOff();
             guiBase::gui.texture = nullptr;
         }
     );

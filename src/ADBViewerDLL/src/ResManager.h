@@ -46,7 +46,8 @@ namespace Resources
             enum IndexColorResource
             {
                 RES_COLOR_GREEN_BLACK,
-                RES_COLOR_BLACK_WHITE
+                RES_COLOR_BLACK_WHITE,
+                RES_COLOR_GREEN_BG
             };
             enum IndexFontResource
             {
@@ -91,7 +92,9 @@ namespace Resources
                 RES_STR_ERR_APP,
                 RES_STR_ERR_ADRV,
                 RES_STR_ERR_UNKNOWN,
-                RES_STR_ENTER_TEXT
+                RES_STR_ENTER_TEXT,
+                RES_STR_BENDER_ON,
+                RES_STR_BENDER_OFF
             };
             enum IndexStringPopUpMenu
             {
@@ -127,6 +130,16 @@ namespace Resources
                 RES_STR_POPUP_29,
                 RES_STR_POPUP_30,
                 RES_STR_POPUP_31,
+                RES_STR_POPUP_32,
+                RES_STR_POPUP_33,
+                RES_STR_POPUP_34,
+                RES_STR_POPUP_35,
+                RES_STR_POPUP_36,
+                RES_STR_POPUP_37,
+                RES_STR_POPUP_38,
+                RES_STR_POPUP_39,
+                RES_STR_POPUP_40,
+                RES_STR_POPUP_41,
                 RES_STR_POPUP_NONE
             };
 

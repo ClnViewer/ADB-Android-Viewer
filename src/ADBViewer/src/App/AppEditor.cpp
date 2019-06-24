@@ -1,5 +1,6 @@
 
 #include "../ADBViewer.h"
+#include <ctime>
 
 static inline const LPCSTR l_openLuaFilter = "Lua script files (*.lua)\0*.lua\0";
 static inline const LPCSTR l_openLuaExt = "lua";
@@ -14,7 +15,7 @@ AppEditor::AppEditor()
 
 AppEditor::~AppEditor()
     {
-        gui.active = false;
+        guiBase::ActiveOff();
     }
 
 bool AppEditor::isactive() const
@@ -40,11 +41,11 @@ bool AppEditor::init(App *app)
 
         m_app = app;
 
-        gui.rect.h = 32;
-        gui.rect.w = 32;
-        gui.rect.x = 0;
-        gui.rect.y = (m_app->m_appvideo.gui.rect.h - 32);
-        gui.texture = nullptr;
+        guiBase::gui.rect.h = 32;
+        guiBase::gui.rect.w = 32;
+        guiBase::gui.rect.x = 0;
+        guiBase::gui.rect.y = (AppConfig::instance().cnf_disp_point.y - 32);
+        guiBase::gui.texture = nullptr;
 
         return initgui(app);
     }
@@ -348,8 +349,12 @@ void AppEditor::write_script(std::string const & fname)
         if (fname.empty())
             return;
 
-        int32_t sc = static_cast<int32_t>(AppConfig::instance().cnf_scale);
+        int32_t sc = static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio);
+        std::time_t tnow = std::time(NULL);
         std::stringstream ss;
+        ss << "\n -- Android ADB Viewer " AVIEW_FULLVERSION_STRING " - " AVIEW_DATE "/" AVIEW_MONTH "/" AVIEW_YEAR;
+        ss << "\n -- Display resolution: " << m_app->m_appvideo.gui.rect.w << "x" << m_app->m_appvideo.gui.rect.h;
+        ss << "\n -- Date build script: " << std::ctime(&tnow);
         ss << "\n\nfunction main (stateOld)\n";
 
         switch (scrtype)
@@ -377,18 +382,32 @@ void AppEditor::write_script(std::string const & fname)
                 }
             case AppEditorScriptType::SCR_CLICK_ONLY:
                 {
-                    int32_t cnt = 0;
+                    int32_t cnt = 0,
+                            idx = 0;
                     for (auto &rgbs : m_pixels)
                     {
+                        if (idx == 24)
+                        {
+                            idx = 0;
+                            continue;
+                        }
+                        if (idx != 12)
+                        {
+                            idx++;
+                            continue;
+                        }
+                        idx++;
+
                         if (!cnt)
                             ss << "\t";
                         else
                             ss << "\telse";
 
-                        ss << "if stateOld == " << cnt << "then LuaObject:adbClick(";
+                        ss << "if stateOld == " << cnt++ << " then LuaObject:adbClick(";
                         ss << (rgbs.x * sc) << "," ;
-                        ss << (rgbs.y * sc) << ") end\n";
+                        ss << (rgbs.y * sc) << ")\n";
                     }
+                    ss << "\telseif stateOld == " << cnt << " then stateOld = -1 end\n";
                     ss << "\n\tLuaObject:stateSleep(1)\n";
                     break;
                 }
@@ -422,7 +441,8 @@ void AppEditor::gui_icon_on()
                 m_app->m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
-                gui.rect.w, gui.rect.h
+                guiBase::gui.rect.w,
+                guiBase::gui.rect.h
             );
 
             if (!gui.texture)

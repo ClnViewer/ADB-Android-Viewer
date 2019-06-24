@@ -24,13 +24,13 @@ typedef struct
 AppMenuPopUp::AppMenuPopUp()
     : m_app(nullptr)
 {
-    gui.rect.h = 0;
-    gui.rect.w = 0;
-    gui.rect.x = 0;
-    gui.rect.y = 0;
-    gui.texture = nullptr;
-    gui.instance = nullptr;
-    gui.active = false;
+    guiBase::gui.rect.h = 0;
+    guiBase::gui.rect.w = 0;
+    guiBase::gui.rect.x = 0;
+    guiBase::gui.rect.y = 0;
+    guiBase::gui.texture = nullptr;
+    guiBase::gui.instance = nullptr;
+    guiBase::ActiveOff();
 }
 
 AppMenuPopUp::~AppMenuPopUp() {}
@@ -54,7 +54,7 @@ bool AppMenuPopUp::init(App *app)
 
     bool ret = initgui(app);
     if (ret)
-        gui.active = false;
+        guiBase::ActiveOff();
     return ret;
 }
 
@@ -70,7 +70,10 @@ void AppMenuPopUp::show()
            l_hScrMenu = NULL,
            l_hScrTypeMenu = NULL,
            l_hPlugMenu = NULL,
-           l_hLangMenu = NULL;
+           l_hLangMenu = NULL,
+           l_hDisplayMenu = NULL,
+           l_hDisplayRatioMenu = NULL,
+           l_hDisplayRotateMenu = NULL;
     do
     {
         if (
@@ -80,7 +83,10 @@ void AppMenuPopUp::show()
             (!(l_hScrMenu = ::CreateMenu())) ||
             (!(l_hPlugMenu = ::CreateMenu()))||
             (!(l_hLangMenu = ::CreateMenu()))||
-            (!(l_hScrTypeMenu = ::CreateMenu()))
+            (!(l_hScrTypeMenu = ::CreateMenu())) ||
+            (!(l_hDisplayMenu = ::CreateMenu())) ||
+            (!(l_hDisplayRatioMenu = ::CreateMenu())) ||
+            (!(l_hDisplayRotateMenu = ::CreateMenu()))
            )
            break;
 
@@ -166,6 +172,61 @@ void AppMenuPopUp::show()
         }
 
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ADD(l_hDisplayMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_32, l_hPopMenu);
+        {
+            MENU_ADD(l_hDisplayRatioMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_33, l_hDisplayMenu);
+            ::AppendMenuW(l_hDisplayMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ADD(l_hDisplayRotateMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_34, l_hDisplayMenu);
+            ::AppendMenuW(l_hDisplayMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU15, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_35, l_hDisplayMenu);
+
+            MENU_ITEM_ADD(ID_CMD_POP_MENU16, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
+            ::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU17, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_37, l_hDisplayRotateMenu);
+
+            switch (AppConfig::instance().cnf_disp_rotate)
+            {
+                case 0:
+                    {
+                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU36, FALSE, &mit);
+                        break;
+                    }
+                case 1:
+                    {
+                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU37, FALSE, &mit);
+                        break;
+                    }
+            }
+
+            MENU_ITEM_ADD(ID_CMD_POP_MENU18, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_38, l_hDisplayRatioMenu);
+            ::AppendMenuW(l_hDisplayRatioMenu,  MF_SEPARATOR, 0, NULL);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU19, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_39, l_hDisplayRatioMenu);
+            //::AppendMenuW(l_hDisplayRatioMenu,  MF_SEPARATOR, 0, NULL);
+            //MENU_ITEM_ADD(ID_CMD_POP_MENU20, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_40, l_hDisplayRatioMenu);
+
+            switch (AppConfig::instance().cnf_disp_ratio)
+            {
+                case 1:
+                    {
+                        ::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU18, FALSE, &mit);
+                        break;
+                    }
+                case 2:
+                    {
+                        ::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU19, FALSE, &mit);
+                        break;
+                    }
+                case 3:
+                    {
+                        //::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU20, FALSE, &mit);
+                        break;
+                    }
+            }
+        }
+
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU21, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_41, l_hPopMenu);
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU3, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_3, l_hPopMenu);
 
         MENU_ITEM_ADD(ID_CMD_POP_MENU4, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_4, l_hCapMenu);
@@ -210,6 +271,9 @@ void AppMenuPopUp::show()
         ::SetMenuInfo(l_hPlugMenu,    &mip);
         ::SetMenuInfo(l_hScrTypeMenu, &mip);
         ::SetMenuInfo(l_hLangMenu,    &mip);
+        ::SetMenuInfo(l_hDisplayMenu, &mim);
+        ::SetMenuInfo(l_hDisplayRatioMenu, &mip);
+        ::SetMenuInfo(l_hDisplayRotateMenu,&mip);
         ::SDL_GetGlobalMouseState(&x, &y);
 
         SDL_Event cmdEvent{};
@@ -301,6 +365,36 @@ void AppMenuPopUp::show()
                     AppConfig::instance().cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
                     break;
                 }
+            case ID_CMD_POP_MENU15:
+                {
+                    AppConfig::instance().cnf_disp_bender = !(AppConfig::instance().cnf_disp_bender.load());
+                    cmdEvent.user.code = ID_CMD_POP_MENU15;
+                    break;
+                }
+            case ID_CMD_POP_MENU16:
+            case ID_CMD_POP_MENU17:
+                {
+                    switch (idx)
+                    {
+                        case ID_CMD_POP_MENU16: AppConfig::instance().cnf_disp_rotate = 360U; break;
+                        case ID_CMD_POP_MENU17: AppConfig::instance().cnf_disp_rotate = 90U; break;
+                    }
+                    cmdEvent.user.code = ID_CMD_POP_MENU99;
+                    break;
+                }
+            case ID_CMD_POP_MENU18:
+            case ID_CMD_POP_MENU19:
+            case ID_CMD_POP_MENU20:
+                {
+                    switch (idx)
+                    {
+                        case ID_CMD_POP_MENU18: AppConfig::instance().cnf_disp_ratio = 1U; break;
+                        case ID_CMD_POP_MENU19: AppConfig::instance().cnf_disp_ratio = 2U; break;
+                        // case ID_CMD_POP_MENU20: AppConfig::instance().cnf_disp_ratio = 3U; break;
+                    }
+                    cmdEvent.user.code = ID_CMD_POP_MENU99;
+                    break;
+                }
             case ID_CMD_POP_MENU30 ... ID_CMD_POP_MENU39:
                 {
                     for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
@@ -337,6 +431,12 @@ void AppMenuPopUp::show()
     }
     while (0);
 
+    if (l_hDisplayRotateMenu)
+        ::DestroyMenu(l_hDisplayRotateMenu);
+    if (l_hDisplayRatioMenu)
+        ::DestroyMenu(l_hDisplayRatioMenu);
+    if (l_hDisplayMenu)
+        ::DestroyMenu(l_hDisplayMenu);
     if (l_hLangMenu)
         ::DestroyMenu(l_hLangMenu);
     if (l_hPlugMenu)

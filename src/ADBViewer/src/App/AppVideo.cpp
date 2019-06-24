@@ -8,11 +8,11 @@ static void rect_default(ADBDriver::Swipe_s *adbr, SDL_Rect *sdlr)
 }
 
 AppVideo::AppVideo()
-    : m_app{nullptr} {}
+    : m_app{nullptr} { guiBase::gui.rect = {}; }
 
 AppVideo::~AppVideo()
 {
-    gui.active = false;
+    guiBase::ActiveOff();
     jointh();
 }
 
@@ -28,46 +28,132 @@ bool AppVideo::init(App *app)
         return false;
 
     m_app = app;
-
-    gui.rect.h = __H_default;
-    gui.rect.w = __W_default;
-    gui.rect.x = m_app->m_appmenubar.gui.rect.w;
-    gui.rect.y = 0;
-
-    gui.texture = SDL_CreateTexture(
-                m_app->m_renderer,
-                SDL_PIXELFORMAT_RGB24,
-                SDL_TEXTUREACCESS_STREAMING,
-                __W_default, __H_default
-            );
-
-    if (
-        (!gui.texture) ||
-        (!defscreen())
-       )
-        return false;
+    guiBase::gui.texture = nullptr;
 
     return initgui(app);
 }
 
+bool AppVideo::tinit(SDL_Texture **texture)
+    {
+        guiBase::gui.rect.w = AppConfig::instance().cnf_disp_point.x - __MENU_W_default;
+        guiBase::gui.rect.h = AppConfig::instance().cnf_disp_point.y;
+        guiBase::gui.rect.x = __MENU_W_default;
+        guiBase::gui.rect.y = 0;
+
+        SDL_Texture *l_texture = SDL_CreateTexture(
+                m_app->m_renderer,
+                SDL_PIXELFORMAT_RGB24,
+                SDL_TEXTUREACCESS_STREAMING,
+                guiBase::gui.rect.w,
+                guiBase::gui.rect.h
+            );
+
+        if (!l_texture)
+            return false;
+
+        GuiLock(
+            std::swap(*texture, l_texture);
+        );
+
+        if (l_texture)
+            SDL_DestroyTexture(l_texture);
+
+        if (!defscreen(texture))
+            return false;
+        return true;
+    }
+
+bool AppVideo::evresize(SDL_Texture **texture)
+    {
+        (void) tinit(texture);
+        return false;
+    }
+
 bool AppVideo::defscreen()
+    {
+        return defscreen(&guiBase::gui.texture);
+    }
+
+bool AppVideo::defscreen(SDL_Texture **texture)
 {
-    SDL_Surface *l_image_surface = nullptr;
+    SDL_Color   *l_bgcolor = nullptr;
+    SDL_Surface *l_image_surface_img = nullptr;
+    SDL_Surface *l_image_surface_bg = nullptr;
+    SDL_Rect rbg{};
 
     do
     {
-        if (!(l_image_surface = ResManager::imageload(
+        GuiLock(
+            if ((!texture) || (!*texture))
+                break;
+        );
+
+        if (!(l_image_surface_img = ResManager::imageload(
                     ResManager::IndexImageResource::RES_IMG_SCREEN
             )))
             break;
 
-        SDL_UpdateTexture(gui.texture, nullptr, l_image_surface->pixels, l_image_surface->pitch);
+        if (
+            (guiBase::gui.rect.w > l_image_surface_img->w) ||
+            (guiBase::gui.rect.h > l_image_surface_img->h)
+            )
+        {
+            rbg.w = guiBase::gui.rect.w;
+            rbg.h = guiBase::gui.rect.h;
+
+            if (!(l_image_surface_bg = SDL_CreateRGBSurface(
+                    0U,
+                    rbg.w,
+                    rbg.h,
+                    24,
+#                   if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                    0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff
+#                   else
+                    0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000
+#                   endif
+                )))
+                break;
+
+            if (!(l_bgcolor = ResManager::colorload(
+                            ResManager::IndexColorResource::RES_COLOR_GREEN_BG
+                )))
+                break;
+
+            SDL_FillRect(l_image_surface_bg,
+                     &rbg,
+                     SDL_MapRGB(
+                            l_image_surface_bg->format,
+                            l_bgcolor[0].r,
+                            l_bgcolor[0].g,
+                            l_bgcolor[0].b
+                        )
+                );
+
+            guiBase::ActiveOff();
+            GuiLock(
+                SDL_UpdateTexture(*texture, &rbg, l_image_surface_bg->pixels, l_image_surface_bg->pitch);
+            );
+
+            rbg.x = ((guiBase::gui.rect.w - l_image_surface_img->w) / 2);
+            rbg.y = ((guiBase::gui.rect.h - l_image_surface_img->h) / 2);
+        }
+
+        rbg.w = ((guiBase::gui.rect.w < l_image_surface_img->w) ? guiBase::gui.rect.w : l_image_surface_img->w);
+        rbg.h = ((guiBase::gui.rect.h < l_image_surface_img->h) ? guiBase::gui.rect.h : l_image_surface_img->h);
+
+        GuiLock(
+            SDL_UpdateTexture(*texture, &rbg, l_image_surface_img->pixels, l_image_surface_img->pitch);
+        );
     }
     while (0);
 
-    if (l_image_surface)
+    if (l_image_surface_img)
     {
-        SDL_FreeSurface(l_image_surface);
+        SDL_FreeSurface(l_image_surface_img);
+        if (l_image_surface_bg)
+            SDL_FreeSurface(l_image_surface_bg);
+
+        guiBase::ActiveOn();
         return true;
     }
     return false;
@@ -75,17 +161,22 @@ bool AppVideo::defscreen()
 
 void AppVideo::stop()
 {
+    if (AppConfig::instance().cnf_isstop)
+        return;
     AppConfig::instance().cnf_isstop = true;
-    gui.active = false;
+    guiBase::ActiveOff();
     jointh();
     defscreen();
     m_app->m_appabender.run();
-    gui.active = true;
+    guiBase::ActiveOn();
 }
 
 void AppVideo::run()
 {
     if (!m_app)
+        return;
+
+    if (!AppConfig::instance().cnf_isstop)
         return;
 
     rect_default(&AppConfig::instance().cnf_adb_rect, &gui.rect);
@@ -121,7 +212,7 @@ void AppVideo::run()
             try
             {
                 (void) AppConfig::instance().cnf_adb.Video(
-                        AppConfig::instance().cnf_scale.load(), AppConfig::instance().cnf_compress.load(),
+                        AppConfig::instance().cnf_disp_ratio.load(), AppConfig::instance().cnf_compress.load(),
                         [this](std::vector<uint8_t> & v, uint32_t w, uint32_t h)
                             {
                                 if (m_app->m_appeditor.isactive())
@@ -141,9 +232,9 @@ void AppVideo::run()
                     10U,
                     -1
                 );
-                gui.active = false;
+                guiBase::ActiveOff();
                 defscreen();
-                gui.active = true;
+                guiBase::ActiveOn();
                 AppConfig::instance().cnf_isstop = true;
                 return;
             }
@@ -157,9 +248,9 @@ void AppVideo::run()
                     10U,
                     -1
                 );
-                gui.active = false;
+                guiBase::ActiveOff();
                 defscreen();
-                gui.active = true;
+                guiBase::ActiveOn();
                 AppConfig::instance().cnf_isstop = true;
                 return;
             }
@@ -174,50 +265,47 @@ bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h)
     if ((!m_app) || (!v.size()))
         return AppConfig::instance().cnf_isrun.load();
 
-    gui.active = true;
-    void *pix = nullptr;
-    int32_t pitch = 0,
-            iw = static_cast<int32_t>(w),
-            ih = static_cast<int32_t>(h);
-
-    if (
-        (gui.rect.w != iw) ||
-        (gui.rect.h != ih)
-       )
+    do
     {
-        SDL_Texture *t_texture = SDL_CreateTexture(
-                m_app->m_renderer,
-                SDL_PIXELFORMAT_RGB24,
-                SDL_TEXTUREACCESS_STREAMING,
-                iw, ih
-            );
-        if (!t_texture)
+        const int32_t
+                iw = static_cast<int32_t>(w),
+                ih = static_cast<int32_t>(h);
+
+        if (!guiBase::gui.texture)
             return false;
 
-        std::swap(gui.texture, t_texture);
-        if (t_texture)
-            SDL_DestroyTexture(t_texture);
+        guiBase::ActiveOn();
 
-        gui.rect.w = iw;
-        gui.rect.h = ih;
-        gui.rect.x = m_app->m_appmenubar.gui.rect.w;
-        gui.rect.y = 0;
+        if ((guiBase::gui.rect.w != iw) || (guiBase::gui.rect.h != ih))
+        {
+            AppConfig::instance().SetDisplaySize(w, h);
 
-        SDL_SetWindowSize(
-            m_app->m_window,
-            (iw + m_app->m_appmenubar.gui.rect.w),
-            ih
+            SDL_SetWindowSize(
+                m_app->m_window,
+                AppConfig::instance().cnf_disp_point.x,
+                AppConfig::instance().cnf_disp_point.y
             );
+
+            std::this_thread::yield();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            break;
+        }
+
+        GuiLock(
+            void   *pix = nullptr;
+            int32_t pitch = 0;
+            SDL_LockTexture(guiBase::gui.texture, nullptr, &pix, &pitch);
+            if ((!pix) || (!pitch))
+                return false;
+            ::memcpy(pix, &v[0], v.size());
+            SDL_UnlockTexture(guiBase::gui.texture);
+        );
     }
+    while (0);
 
-    SDL_LockTexture(gui.texture, nullptr, &pix, &pitch);
-    if ((!pix) || (!pitch))
-        return false;
-
-    ::memcpy(pix, &v[0], v.size());
-
-    SDL_UnlockTexture(gui.texture);
-    return ((AppConfig::instance().cnf_isstop.load()) ? false : ((AppConfig::instance().cnf_isrun.load()) ? true : false));
+    return ((AppConfig::instance().cnf_isstop.load()) ?
+            false : AppConfig::instance().cnf_isrun.load()
+        );
 }
 
 bool AppVideo::event(SDL_Event *ev, const void *instance)
@@ -228,9 +316,49 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
 
     if (
         (!apv) ||
-        (AppConfig::instance().cnf_isstop) ||
         (apv->m_app->m_appinput.isactive())
         )
+        return false;
+
+    if (ev->type == AppConfig::instance().cnf_uevent)
+    {
+        switch(ev->user.code)
+        {
+            /// Restart connect to device event
+            case ID_CMD_POP_MENU99:
+                {
+                    apv->stop();
+                    std::this_thread::yield();
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    apv->run();
+                    return true;
+                }
+            /// MenuBar device connect event
+            case ID_CMD_POP_MENU97:
+                {
+                    apv->run();
+                    return true;
+                }
+            /// MenuBar device disconnect event
+            case ID_CMD_POP_MENU98:
+                {
+                    apv->stop();
+                    return true;
+                }
+        }
+    }
+
+    switch(ev->type)
+    {
+        case SDL_RENDER_TARGETS_RESET:
+        case SDL_RENDER_DEVICE_RESET:
+            {
+                (void) apv->evresize(&apv->gui.texture);
+                return false;
+            }
+    }
+
+    if (AppConfig::instance().cnf_isstop)
         return false;
 
     switch(ev->type)
@@ -251,9 +379,9 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                     ADBDriver::Tap_s t =
                     {
                         ((ev->motion.x - apv->m_app->m_appmenubar.gui.rect.w) *
-                                static_cast<int32_t>(AppConfig::instance().cnf_scale.load())),
+                                static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio.load())),
                         (ev->motion.y *
-                                static_cast<int32_t>(AppConfig::instance().cnf_scale.load()))
+                                static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio.load()))
                     };
                     AppConfig::instance().cnf_adb.Click(&t);
                     return true;

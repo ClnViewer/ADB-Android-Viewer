@@ -14,14 +14,20 @@ public:
     guiAnimation();
     ~guiAnimation();
 
+    bool init(App*);
     bool init(App*, SDL_Color*, ResManager::IndexSpriteResource);
+    bool isinit();
+
     virtual void run();
     virtual void stop();
+
+protected:
+    //
+    App              *m_app = nullptr;
 
 private:
     //
     AppTimer          m_timer;
-    App              *m_app = nullptr;
     SDL_Texture     **m_textures = nullptr;
     uint32_t          m_textures_sz = 0U;
     //

@@ -12,6 +12,8 @@ public:
     ~AppVideo();
 
     bool init(App*);
+    bool tinit(SDL_Texture**) override;
+    bool evresize(SDL_Texture**) override;
     void run();
     void stop();
     bool event(SDL_Event*, const void*) override;
@@ -23,6 +25,7 @@ private:
     //
     void jointh();
     bool defscreen();
+    bool defscreen(SDL_Texture**);
     bool update(std::vector<uint8_t>&, uint32_t, uint32_t);
     //
 };

@@ -15,7 +15,6 @@ public:
 
 private:
     //
-    App              *m_app = nullptr;
     SDL_Color         m_color = { 0xFF, 0xFF, 0xFF, 0xFF };
     //
 };

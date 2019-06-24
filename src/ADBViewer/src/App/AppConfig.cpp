@@ -8,19 +8,47 @@ static inline const char *cnf_l_file_tag[] =
     "plugins-enable",
     "adb-path",
     "adb-device",
-    "language"
+    "language",
+    "display-width",
+    "display-height",
+    "display-ratio",
+    "display-orient",
+    "display-bender"
 };
+
+template<typename T>
+static uint32_t l_strToUint(T const & str)
+{
+    try
+    {
+        return stoul(str);
+    }
+    catch (std::invalid_argument&)
+    {
+        return 0U;
+    }
+    catch (std::out_of_range&)
+    {
+        return 0U;
+    }
+    catch (...)
+    {
+        return 0U;
+    }
+}
 
 AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
-          cnf_scale(2U), cnf_compress(9),
-          cnf_point_input{}, cnf_uevent(0U), cnf_adb_rect{}
+          cnf_disp_bender(true), cnf_disp_ratio(2U), cnf_disp_rotate(2U), cnf_compress(9),
+          cnf_input_point{}, cnf_disp_point{},
+          cnf_uevent(0U), cnf_adb_rect{}
     {
         using namespace std::placeholders;
 
+        SetDisplaySize(__W_default, __H_default);
+
         cnf_adb_rect.t  = 100U;
-        cnf_point_input = { 50, (__H_default - 40) };
         cnf_cbcmd.click =
             [=](ADBDriver::Tap_s *t)
             {
@@ -42,6 +70,7 @@ AppConfig::AppConfig()
                 cnf_adb.SendSpecialKey(t, k);
             };
         OnceUpdateFromFile();
+        cnf_input_point = { 50, (cnf_disp_point.y - 40) };
     }
 
 AppConfig& AppConfig::instance()
@@ -55,7 +84,6 @@ void AppConfig::init()
 
     }
 
-
 const void * AppConfig::GetAdbCb() const
     {
         return (const void*)&cnf_cbcmd;
@@ -67,6 +95,13 @@ const char * AppConfig::GetFileConfigId(ConfigIdType idx)
             return cnf_l_file_tag[idx];
         return nullptr;
     }
+
+void AppConfig::SetDisplaySize(uint32_t w, uint32_t h)
+    {
+        cnf_disp_point.x = ((w) ? (static_cast<int32_t>(w) + __MENU_W_default) : cnf_disp_point.x);
+        cnf_disp_point.y = ((h) ? static_cast<int32_t>(h) : cnf_disp_point.y);
+    }
+
 
 std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
     {
@@ -142,6 +177,7 @@ void AppConfig::OnceUpdateLang(std::wstring const & wstr)
 void AppConfig::OnceUpdateFromFile()
     {
         std::wstring wstr;
+        uint32_t val;
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
             cnf_adb.SetAdbBin(wstr);
@@ -151,6 +187,28 @@ void AppConfig::OnceUpdateFromFile()
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_LANGUAGE), wstr))
             OnceUpdateLang(wstr);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_WIDTH), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
+                SetDisplaySize(val, 0U);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_HEIGHT), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
+                SetDisplaySize(0U, val);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_RATIO), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val < 6))
+                cnf_disp_ratio = val;
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_ORIENT), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val < 3))
+                cnf_disp_rotate = val;
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_BENDER), wstr))
+        {
+            val = l_strToUint<std::wstring>(wstr);
+            cnf_disp_bender = static_cast<bool>(val);
+        }
     }
 
 bool AppConfig::GetFromFile()

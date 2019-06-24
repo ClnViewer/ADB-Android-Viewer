@@ -8,7 +8,7 @@
 
 #define INCBIN_PREFIX bin_
 #include "extern/incbin.h"
-#define MIN_ASDK_VERSION 22U
+#define MIN_ASDK_VERSION 20U
 
 typedef struct
 {

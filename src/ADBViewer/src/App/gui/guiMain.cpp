@@ -1,7 +1,7 @@
 
 #include "../../ADBViewer.h"
 
-int32_t guiMain::initm(int32_t w, int32_t h)
+int32_t guiMain::initm(SDL_Point *p)
     {
         if(SDL_Init(SDL_INIT_VIDEO) < 0)
             return 3;
@@ -22,7 +22,7 @@ int32_t guiMain::initm(int32_t w, int32_t h)
                 ),
                 SDL_WINDOWPOS_CENTERED,
                 SDL_WINDOWPOS_CENTERED,
-                w, h,
+                p->x, p->y,
                 wflag
             )))
             return 1;
@@ -71,7 +71,14 @@ void guiMain::draw()
         SDL_RenderClear(m_renderer);
         for (auto &gr : m_guipool)
             if ((gr) && (gr->active) && (gr->texture))
+            {
+                guiBase *gb = static_cast<guiBase*>(
+                                const_cast<void*>(gr->instance)
+                                );
+                std::lock_guard<std::mutex> l_lock(gb->m_lock);
                 SDL_RenderCopy(m_renderer, gr->texture, nullptr, &gr->rect);
+            }
+
         SDL_RenderPresent(m_renderer);
     }
 

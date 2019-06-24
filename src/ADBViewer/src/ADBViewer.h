@@ -8,6 +8,7 @@
 
 #define __W_default 640
 #define __H_default 400
+#define __MENU_W_default  32
 #define __MENU_H_dragable 330
 
 #define ID_CMD_POP_MENU0 20180
@@ -27,6 +28,14 @@
 #define ID_CMD_POP_MENU13 20193
 #define ID_CMD_POP_MENU14 20194
 
+#define ID_CMD_POP_MENU15 20195
+#define ID_CMD_POP_MENU16 20196
+#define ID_CMD_POP_MENU17 20197
+#define ID_CMD_POP_MENU18 20198
+#define ID_CMD_POP_MENU19 20199
+#define ID_CMD_POP_MENU20 20200
+#define ID_CMD_POP_MENU21 20201
+
 #define ID_CMD_POP_MENU30 20300
 #define ID_CMD_POP_MENU31 20301
 #define ID_CMD_POP_MENU32 20302
@@ -38,6 +47,10 @@
 #define ID_CMD_POP_MENU38 20308
 #define ID_CMD_POP_MENU39 20309
 #define ID_CMD_POP_MENU40 20310
+
+#define ID_CMD_POP_MENU97 20401 // Connect device         - MenuBar event
+#define ID_CMD_POP_MENU98 20402 // Disconnect device      - MenuBar event
+#define ID_CMD_POP_MENU99 20403 // Restart connect device - MenuBar event
 
 #define ID_CMD_MSGBAR     49999
 

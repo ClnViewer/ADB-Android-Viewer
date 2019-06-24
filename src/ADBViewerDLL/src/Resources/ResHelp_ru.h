@@ -25,5 +25,7 @@ static inline const char *help_strings_ru[] = {
     "Ошибка ADB драйвера:",
     "Неизвестная ошибка, пожалуйста, сообщите подробности: https://clnviewer.github.io/ADB-Android-Viewer/",
     " Введите текст: ",
+    "Бендер: я скоро приду..",
+    "Бендер: я выключаюсь..",
     nullptr
 };

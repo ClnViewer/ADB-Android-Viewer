@@ -1,6 +1,8 @@
 
 src/bin/*
 src/obj/*
+src/ADBViewer/remotebin/*
+src/ADBViewerInstaller/Android-ADB-Viewer-cache/*
 *.save
 *.bmarks
 *.layout
@@ -43,3 +45,4 @@ src/obj/*
 *.sh
 *.cmd
 /src/ADBViewerInstaller/Android-ADB-Viewer-cache/*
+/src/ADBViewer/*.rpt

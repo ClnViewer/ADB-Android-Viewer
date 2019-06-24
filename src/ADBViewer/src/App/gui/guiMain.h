@@ -14,7 +14,7 @@ public:
 
 protected:
     //
-    int32_t initm(int32_t, int32_t);
+    int32_t initm(SDL_Point*);
     void draw();
     void events(SDL_Event*);
 

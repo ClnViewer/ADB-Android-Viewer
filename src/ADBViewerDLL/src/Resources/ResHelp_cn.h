@@ -25,5 +25,7 @@ static inline const char *help_strings_cn[] = {
     "ADB错误驱动程序：",
     "未知错误，请提供详细信息：https：//clnviewer.github.io/ADB-Android-Viewer/",
     "输入文字：",
+    "本德：我很快就会来......",
+    "本德：我关掉......",
     nullptr
 };

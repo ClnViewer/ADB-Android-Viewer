@@ -1,5 +1,11 @@
 #pragma once
 
+#define GuiLock(A)                                           \
+    {                                                        \
+        std::lock_guard<std::mutex> l_lock(guiBase::m_lock); \
+        A                                                    \
+    }
+
 class guiMain;
 class guiBase;
 
@@ -17,9 +23,16 @@ class guiBase
 public:
     //
     guiRenderer_s gui;
+    std::mutex    m_lock;
 
     guiMain * getgui() const;
+    virtual bool tinit(SDL_Texture**);
     virtual bool event(SDL_Event*, const void*);
+    virtual bool evresize(SDL_Texture**);
+
+    void ActiveOn();
+    void ActiveOff();
+    bool IsActive();
 
     guiBase();
     ~guiBase();

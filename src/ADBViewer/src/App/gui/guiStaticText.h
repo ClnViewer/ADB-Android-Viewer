@@ -39,9 +39,12 @@ public:
 
         m_iswrite = true;
         m_id = id;
-        gui.active = false;
+        guiBase::ActiveOff();
         SDL_Texture *tmp_texture = nullptr;
-        std::swap(gui.texture, tmp_texture);
+
+        GuiLock(
+            std::swap(guiBase::gui.texture, tmp_texture);
+        );
 
         if (tmp_texture)
             SDL_DestroyTexture(tmp_texture);
@@ -65,8 +68,10 @@ public:
 
             if ((tmp_texture = SDL_CreateTextureFromSurface(getgui()->m_renderer, surface)))
             {
-                std::swap(gui.texture, tmp_texture);
-                gui.active = true;
+                GuiLock(
+                    std::swap(guiBase::gui.texture, tmp_texture);
+                );
+                guiBase::ActiveOn();
             }
         }
         while (0);
@@ -83,9 +88,13 @@ public:
             return;
 
         m_id = -1;
-        gui.active = false;
+        guiBase::ActiveOff();
         SDL_Texture *tmp_texture = nullptr;
-        std::swap(gui.texture, tmp_texture);
+
+        GuiLock(
+            std::swap(guiBase::gui.texture, tmp_texture);
+        );
+
         if (tmp_texture)
             SDL_DestroyTexture(tmp_texture);
     }

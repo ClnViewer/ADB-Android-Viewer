@@ -17,7 +17,7 @@ App::App()
     AppConfig::instance().init();
     AppMessageQueue::instance().init();
 
-    switch (initm(__W_default + m_appmenubar.gui.rect.w, __H_default))
+    switch (initm(&AppConfig::instance().cnf_disp_point))
     {
         case 1:
         case 2:

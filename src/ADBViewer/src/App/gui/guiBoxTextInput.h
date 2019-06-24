@@ -23,7 +23,7 @@ public:
         SDL_StartTextInput();
         m_active = true;
         m_str.erase();
-        draw(s, AppConfig::instance().cnf_point_input);
+        draw(s, AppConfig::instance().cnf_input_point);
     }
     void end()
     {
@@ -74,7 +74,7 @@ public:
                             bti->m_str.assign(tmp);
                             SDL_free(tmp);
                             ss << " " << m_str.c_str() << " ";
-                            draw(ss.str(), AppConfig::instance().cnf_point_input);
+                            draw(ss.str(), AppConfig::instance().cnf_input_point);
                         }
                         break;
                     }
@@ -102,7 +102,7 @@ public:
                         if (!bti->m_str.empty())
                             bti->m_str.pop_back();
                         ss << " " << bti->m_str.c_str() << " ";
-                        draw(ss.str(), AppConfig::instance().cnf_point_input);
+                        draw(ss.str(), AppConfig::instance().cnf_input_point);
                         break;
                     }
                 case SDLK_LEFT:
@@ -132,7 +132,7 @@ public:
             std::stringstream ss;
             bti->m_str.append(ev->text.text);
             ss << " " << bti->m_str.c_str() << " ";
-            draw(ss.str(), AppConfig::instance().cnf_point_input);
+            draw(ss.str(), AppConfig::instance().cnf_input_point);
         }
         else if (ev->type == SDL_MOUSEBUTTONDOWN)
         {
