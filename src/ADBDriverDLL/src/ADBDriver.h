@@ -98,6 +98,7 @@ public:
     std::vector<uint8_t> Capture();
     std::vector<uint8_t> Capture(CapType, uint32_t, uint32_t);
     bool Video(uint32_t, uint32_t, std::function<bool(std::vector<uint8_t>&, uint32_t, uint32_t)>);
+    bool Video(uint32_t, uint32_t, uint32_t, std::function<bool(std::vector<uint8_t>&, uint32_t, uint32_t)>);
 
 };
 

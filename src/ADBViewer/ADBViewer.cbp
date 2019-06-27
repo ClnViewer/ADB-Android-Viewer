@@ -93,6 +93,9 @@
 		<Unit filename="src/App/AppMessageBar.h" />
 		<Unit filename="src/App/AppMessageQueue.cpp" />
 		<Unit filename="src/App/AppMessageQueue.h" />
+		<Unit filename="src/App/AppScreen.WINAPI.cpp" />
+		<Unit filename="src/App/AppScreen.cpp" />
+		<Unit filename="src/App/AppScreen.h" />
 		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />
 		<Unit filename="src/App/AppSysDialog.h" />
 		<Unit filename="src/App/AppTimer.h" />

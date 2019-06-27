@@ -3,6 +3,7 @@ src/bin/*
 src/obj/*
 src/ADBViewer/remotebin/*
 src/ADBViewerInstaller/Android-ADB-Viewer-cache/*
+src/license_header.template
 *.save
 *.bmarks
 *.layout

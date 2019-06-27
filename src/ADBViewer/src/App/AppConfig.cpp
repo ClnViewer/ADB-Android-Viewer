@@ -1,4 +1,33 @@
+/*
+    MIT License
 
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #include "../ADBViewer.h"
 
@@ -12,8 +41,16 @@ static inline const char *cnf_l_file_tag[] =
     "display-width",
     "display-height",
     "display-ratio",
-    "display-orient",
+    "display-rotate",
     "display-bender"
+};
+
+static inline const wchar_t *cnf_l_file_lang[] =
+{
+    L"ru",
+    L"en",
+    L"dm",
+    L"cn"
 };
 
 template<typename T>
@@ -40,7 +77,7 @@ static uint32_t l_strToUint(T const & str)
 AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
-          cnf_disp_bender(true), cnf_disp_ratio(2U), cnf_disp_rotate(2U), cnf_compress(9),
+          cnf_disp_bender(true), cnf_disp_ratio(2U), cnf_disp_rotate(360U), cnf_compress(9),
           cnf_input_point{}, cnf_disp_point{},
           cnf_uevent(0U), cnf_adb_rect{}
     {
@@ -164,14 +201,15 @@ void AppConfig::OnceUpdateLang(std::wstring const & wstr)
     {
         if (wstr.empty())
             return;
-        if (wstr.compare(L"ru") == 0)
-            cnf_lang = ResManager::IndexLanguageResource::LANG_RU;
-        else if (wstr.compare(L"en") == 0)
-            cnf_lang = ResManager::IndexLanguageResource::LANG_EN;
-        else if (wstr.compare(L"dm") == 0)
-            cnf_lang = ResManager::IndexLanguageResource::LANG_DM;
-        else if (wstr.compare(L"cn") == 0)
-            cnf_lang = ResManager::IndexLanguageResource::LANG_CN;
+
+        for (uint32_t i = 0U; i < __NELE(cnf_l_file_lang); i++)
+        {
+            if (wstr.compare(cnf_l_file_lang[i]) == 0)
+            {
+                cnf_lang = static_cast<ResManager::IndexLanguageResource>(i);
+                break;
+            }
+        }
     }
 
 void AppConfig::OnceUpdateFromFile()
@@ -200,8 +238,8 @@ void AppConfig::OnceUpdateFromFile()
             if (((val = l_strToUint<std::wstring>(wstr))) && (val < 6))
                 cnf_disp_ratio = val;
 
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_ORIENT), wstr))
-            if (((val = l_strToUint<std::wstring>(wstr))) && (val < 3))
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_ROTATE), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val <= 360))
                 cnf_disp_rotate = val;
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_BENDER), wstr))
@@ -243,4 +281,75 @@ bool AppConfig::GetFromFile()
             }
         }
         return true;
+    }
+
+void AppConfig::SaveToFile()
+    {
+        std::wstring wstr;
+        std::wofstream l_file(cnf_l_file, std::ofstream::out);
+        if (!l_file.is_open())
+            return;
+
+        for (uint32_t i = 0U; i < __NELE(cnf_l_file_tag); i++)
+        {
+            wstr = L"";
+
+            switch (i)
+            {
+                case ConfigIdType::CNF_PLUGINS_ENABLE:
+                    {
+                        std::vector<Plugins::AppPluginManager::Plugin_s> plist =
+                                Plugins::AppPluginManager::instance().listplugin();
+
+                        for (uint32_t n = 0U; n < plist.size(); n++)
+                            if (plist[n].state)
+                                if (!plist[n].name.empty())
+                                    l_file << cnf_l_file_tag[i] << "=" << plist[n].name.c_str() << L"\n";
+                        continue;
+                    }
+                case ConfigIdType::CNF_ADB_PATH:
+                    {
+                        wstr = cnf_adb.GetAdbBin();
+                        break;
+                    }
+                case ConfigIdType::CNF_ADB_DEVICE:
+                    {
+                        wstr = cnf_adb.GetDeviceID();
+                        break;
+                    }
+                case ConfigIdType::CNF_LANGUAGE:
+                    {
+                        if (cnf_lang < __NELE(cnf_l_file_lang))
+                            wstr = cnf_l_file_lang[cnf_lang];
+                        break;
+                    }
+                case ConfigIdType::CNF_DISP_WIDTH:
+                    {
+                        wstr = std::to_wstring(cnf_disp_point.x - __MENU_W_default);
+                        break;
+                    }
+                case ConfigIdType::CNF_DISP_HEIGHT:
+                    {
+                        wstr = std::to_wstring(cnf_disp_point.y);
+                        break;
+                    }
+                case ConfigIdType::CNF_DISP_RATIO:
+                    {
+                        wstr = std::to_wstring(cnf_disp_ratio);
+                        break;
+                    }
+                case ConfigIdType::CNF_DISP_ROTATE:
+                    {
+                        wstr = std::to_wstring(cnf_disp_rotate);
+                        break;
+                    }
+                case ConfigIdType::CNF_DISP_BENDER:
+                    {
+                        wstr = std::to_wstring(cnf_disp_bender);
+                        break;
+                    }
+            }
+            if (!wstr.empty())
+                l_file << cnf_l_file_tag[i] << "=" << wstr.c_str() << L"\n";
+        }
     }

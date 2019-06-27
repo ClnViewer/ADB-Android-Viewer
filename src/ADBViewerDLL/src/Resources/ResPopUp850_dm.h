@@ -42,5 +42,7 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 39 */ L"1:2",
     /* 40 */ L"1:3",
     /* 41 */ L"Konfiguration speichern",
+    /* 42 */ L"Kopieren",
+    /* 43 */ L"Mirror Image",
     nullptr
 };

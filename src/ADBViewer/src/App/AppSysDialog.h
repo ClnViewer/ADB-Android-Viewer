@@ -6,10 +6,11 @@ class AppSysDialog
 {
 public:
     //
-    static bool savefile(SDL_Window*, std::string&, const LPCSTR, const LPCSTR, const LPCSTR);
-    static bool openfile(SDL_Window*, std::string&, const LPCSTR, const LPCSTR, const LPCSTR);
-
 #   if defined(OS_WIN)
+    static HWND m_hWnd;
     static HWND gethwnd(SDL_Window*);
 #   endif
+
+    static bool savefile(SDL_Window*, std::string&, const LPCSTR, const LPCSTR, const LPCSTR);
+    static bool openfile(SDL_Window*, std::string&, const LPCSTR, const LPCSTR, const LPCSTR);
 };

@@ -1,3 +1,33 @@
+/*
+    MIT License
+
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #include "../ADBViewer.h"
 #include  "SDL2/SDL_syswm.h"
@@ -182,18 +212,20 @@ void AppMenuPopUp::show()
 
             MENU_ITEM_ADD(ID_CMD_POP_MENU16, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
             ::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
-            MENU_ITEM_ADD(ID_CMD_POP_MENU17, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_37, l_hDisplayRotateMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU17, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_43, l_hDisplayRotateMenu);
+            //::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
+            //MENU_ITEM_ADD(ID_CMD_POP_MENU23, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
 
             switch (AppConfig::instance().cnf_disp_rotate)
             {
-                case 0:
+                case 360U:
                     {
-                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU36, FALSE, &mit);
+                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU16, FALSE, &mit);
                         break;
                     }
-                case 1:
+                case 90U: //TODO: ?? Mirror this :)
                     {
-                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU37, FALSE, &mit);
+                        ::SetMenuItemInfo(l_hDisplayRotateMenu, ID_CMD_POP_MENU17, FALSE, &mit);
                         break;
                     }
             }
@@ -206,17 +238,17 @@ void AppMenuPopUp::show()
 
             switch (AppConfig::instance().cnf_disp_ratio)
             {
-                case 1:
+                case 1U:
                     {
                         ::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU18, FALSE, &mit);
                         break;
                     }
-                case 2:
+                case 2U:
                     {
                         ::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU19, FALSE, &mit);
                         break;
                     }
-                case 3:
+                case 3U:
                     {
                         //::SetMenuItemInfo(l_hDisplayRatioMenu, ID_CMD_POP_MENU20, FALSE, &mit);
                         break;
@@ -232,12 +264,14 @@ void AppMenuPopUp::show()
         MENU_ITEM_ADD(ID_CMD_POP_MENU4, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_4, l_hCapMenu);
         ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU5, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_5, l_hCapMenu);
+        ::AppendMenuW(l_hCapMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU22, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_42, l_hCapMenu);
 
         /// Plugins menu list
         std::vector<Plugins::AppPluginManager::Plugin_s> plist =
                     Plugins::AppPluginManager::instance().listplugin();
 
-        for (uint32_t i = 0; i < plist.size(); i++)
+        for (uint32_t i = 0U; i < plist.size(); i++)
         {
             std::wstring ws(plist[i].name.begin(), plist[i].name.end());
             ::AppendMenuW(l_hPlugMenu, MF_STRING, (i + 50000U), ws.c_str());
@@ -246,7 +280,7 @@ void AppMenuPopUp::show()
         }
 
         /// Android direct command menu list
-        for (uint32_t i = 0; i < __NELE(l_acmdkey); i++)
+        for (uint32_t i = 0U; i < __NELE(l_acmdkey); i++)
         {
             auto wtxt = ResManager::stringpopup(l_acmdkey[i].sid, AppConfig::instance().cnf_lang);
             ::AppendMenuW(l_hCmdMenu, MF_STRING, l_acmdkey[i].cid, wtxt);
@@ -393,6 +427,17 @@ void AppMenuPopUp::show()
                         // case ID_CMD_POP_MENU20: AppConfig::instance().cnf_disp_ratio = 3U; break;
                     }
                     cmdEvent.user.code = ID_CMD_POP_MENU99;
+                    break;
+                }
+            case ID_CMD_POP_MENU21:
+                {
+                    AppConfig::instance().SaveToFile();
+                    cmdEvent.user.code = 0;
+                    break;
+                }
+            case ID_CMD_POP_MENU22:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU22;
                     break;
                 }
             case ID_CMD_POP_MENU30 ... ID_CMD_POP_MENU39:

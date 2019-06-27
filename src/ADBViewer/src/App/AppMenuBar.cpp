@@ -1,8 +1,36 @@
+/*
+    MIT License
+
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #include "../ADBViewer.h"
 
-static inline const LPCSTR l_openBmpFilter = "Bitmap files (*.bmp)\0*.bmp\0";
-static inline const LPCSTR l_openBmpExt = "bmp";
 static inline const LPCSTR l_openApkFilter = "APK files (*.apk)\0*.apk\0";
 static inline const LPCSTR l_openApkExt = "apk";
 static inline const LPCSTR l_openCurDir = ".\\";
@@ -94,8 +122,6 @@ ResManager::IndexStringResource AppMenuBar::clickpos(int32_t d, int32_t w, int32
     {
         case ID_CMD_POP_MENU1: return ResManager::IndexStringResource::RES_STR_APK;
         case ID_CMD_POP_MENU2: return ResManager::IndexStringResource::RES_STR_STOP;
-        case ID_CMD_POP_MENU4: return ResManager::IndexStringResource::RES_STR_CAPTURE_D;
-        case ID_CMD_POP_MENU5: return ResManager::IndexStringResource::RES_STR_CAPTURE_F;
         default:
             break;
     }
@@ -174,6 +200,7 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
         case ResManager::IndexStringResource::RES_STR_ADBSET:
         case ResManager::IndexStringResource::RES_STR_SCALE:
         case ResManager::IndexStringResource::RES_STR_POSINFO:
+        case ResManager::IndexStringResource::RES_STR_CAPTURE_C:
         case ResManager::IndexStringResource::RES_STR_CAPTURE_D:
         case ResManager::IndexStringResource::RES_STR_CAPTURE_F:
         case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
@@ -208,6 +235,10 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
 {
     if ((ucode > 0) || (ev->button.button == SDL_BUTTON_LEFT))
     {
+        SDL_Event cmdEvent{};
+        cmdEvent.type = AppConfig::instance().cnf_uevent;
+        cmdEvent.user.code = 0;
+
                 switch(amb->clickpos(
                         amb->gui.rect.w,
                         ev->motion.x,
@@ -245,12 +276,9 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                                 ),
                             -1, ev
                         );
-                        SDL_Event cmdEvent{};
-                        cmdEvent.type = AppConfig::instance().cnf_uevent;
                         cmdEvent.user.code = ID_CMD_POP_MENU97;
-                        SDL_PushEvent(&cmdEvent);
                         amb->setcursor(0U);
-                        return true;
+                        break;
                     }
                     case ResManager::IndexStringResource::RES_STR_STOP:
                     {
@@ -274,12 +302,9 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                                 ),
                             -1, ev
                         );
-                        SDL_Event cmdEvent{};
-                        cmdEvent.type = AppConfig::instance().cnf_uevent;
                         cmdEvent.user.code = ID_CMD_POP_MENU98;
-                        SDL_PushEvent(&cmdEvent);
                         amb->setcursor(0U);
-                        return true;
+                        break;
                     }
                     case ResManager::IndexStringResource::RES_STR_ADBSET:
                     {
@@ -289,12 +314,9 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     case ResManager::IndexStringResource::RES_STR_SCALE:
                     {
                         AppConfig::instance().cnf_disp_ratio = ((AppConfig::instance().cnf_disp_ratio.load() >= 2U) ? 1U : 2U);
-                        SDL_Event cmdEvent{};
-                        cmdEvent.type = AppConfig::instance().cnf_uevent;
                         cmdEvent.user.code = ID_CMD_POP_MENU99;
-                        SDL_PushEvent(&cmdEvent);
                         amb->setcursor(0U);
-                        return true;
+                        break;
                     }
                     case ResManager::IndexStringResource::RES_STR_POSINFO:
                     {
@@ -303,15 +325,20 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             amb->infoset(MgrType::MGR_MENU, "", -1, ev);
                         return true;
                     }
+                    case ResManager::IndexStringResource::RES_STR_CAPTURE_C:
+                    {
+                        cmdEvent.user.code = ID_CMD_POP_MENU22;
+                        break;
+                    }
                     case ResManager::IndexStringResource::RES_STR_CAPTURE_D:
                     {
-                        amb->screenshot(ev, false);
-                        return true;
+                        cmdEvent.user.code = ID_CMD_POP_MENU4;
+                        break;
                     }
                     case ResManager::IndexStringResource::RES_STR_CAPTURE_F:
                     {
-                        amb->screenshot(ev, true);
-                        return true;
+                        cmdEvent.user.code = ID_CMD_POP_MENU5;
+                        break;
                     }
                     case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
                     {
@@ -340,7 +367,6 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         std::string fname;
                         if (AppSysDialog::openfile(m_app->m_window, fname, l_openApkFilter, l_openApkExt, l_openCurDir))
                             AppConfig::instance().cnf_adb.InstallApk(fname);
-
                         return true;
                     }
                     default:
@@ -348,71 +374,13 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         break;
                     }
                 }
+                if (cmdEvent.user.code)
+                {
+                    SDL_PushEvent(&cmdEvent);
+                    return true;
+                }
     }
     return false;
-}
-
-bool AppMenuBar::screenshot(SDL_Event *ev, bool isdialog)
-{
-    if (!m_app)
-        return false;
-
-    std::string fname(
-            ResManager::stringload(
-                ResManager::IndexStringResource::RES_STR_CAPFILENAME,
-                AppConfig::instance().cnf_lang
-            )
-        );
-
-#   if !defined(OS_WIN)
-    isdialog = false;
-#   endif
-
-    if (isdialog)
-    {
-        if (!AppSysDialog::savefile(m_app->m_window, fname, l_openBmpFilter, l_openBmpExt, l_openCurDir))
-            return false;
-    }
-    else
-    {
-        std::stringstream ss;
-        ss << fname << std::to_string(time(NULL)) << ".bmp";
-        fname.assign(ss.str().c_str());
-    }
-
-    SDL_Surface *l_ss_surface = SDL_CreateRGBSurface(
-                0,
-                m_app->gui.rect.w,
-                m_app->gui.rect.h,
-                32,
-                0x00ff0000,
-                0x0000ff00,
-                0x000000ff,
-                0xff000000
-            );
-
-    if (!l_ss_surface)
-        return false;
-
-    SDL_RenderReadPixels(
-            m_app->m_renderer,
-            &m_app->gui.rect,
-            SDL_GetWindowPixelFormat(m_app->m_window),
-            l_ss_surface->pixels,
-            l_ss_surface->pitch
-        );
-
-    SDL_SaveBMP(l_ss_surface, fname.c_str());
-    SDL_FreeSurface(l_ss_surface);
-
-    std::stringstream ss;
-    ss << ResManager::stringload(
-            ResManager::IndexStringResource::RES_STR_FILESAVE,
-            AppConfig::instance().cnf_lang
-        );
-    ss << fname.c_str();
-    infoset(MgrType::MGR_MENU, ss.str(), -1, ev);
-    return true;
 }
 
 void AppMenuBar::infoset(MgrType mgrt, std::string const & s, int32_t id, SDL_Event *ev)

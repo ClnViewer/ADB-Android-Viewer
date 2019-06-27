@@ -42,5 +42,7 @@ static inline const wchar_t *popup_strings_cn[] = {
     /* 39 */ L"1：2",
     /* 40 */ L"1：3",
     /* 41 */ L"保存配置",
+    /* 42 */ L"复制",
+    /* 43 */ L"镜像",
     nullptr
 };

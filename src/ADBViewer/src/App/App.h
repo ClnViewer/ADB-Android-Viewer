@@ -14,6 +14,7 @@ public:
     AppMenuPopUp       m_appmenupop;
     AppMessageBar      m_appmsgbar;
     AppAnimationBender m_appabender;
+    AppScreen          m_screen;
 
     App();
     ~App();

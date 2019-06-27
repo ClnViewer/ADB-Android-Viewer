@@ -15,7 +15,7 @@ public:
         CNF_DISP_WIDTH,
         CNF_DISP_HEIGHT,
         CNF_DISP_RATIO,
-        CNF_DISP_ORIENT,
+        CNF_DISP_ROTATE,
         CNF_DISP_BENDER
     };
 
@@ -65,4 +65,5 @@ public:
     static AppConfig& instance();
     const void * GetAdbCb() const;
     void SetDisplaySize(uint32_t, uint32_t);
+    void SaveToFile();
 };

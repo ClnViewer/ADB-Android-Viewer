@@ -37,7 +37,7 @@ namespace Resources
 
             enum IndexLanguageResource
             {
-                LANG_RU,
+                LANG_RU = 0,
                 LANG_EN,
                 LANG_DM,
                 LANG_CN,
@@ -74,12 +74,14 @@ namespace Resources
                 RES_STR_ADBSET,
                 RES_STR_SCALE,
                 RES_STR_POSINFO,
+                RES_STR_CAPTURE_C,
                 RES_STR_CAPTURE_D,
                 RES_STR_CAPTURE_F,
                 RES_STR_FULLSCREEN,
                 RES_STR_APK,
                 RES_STR_UNKNOWN,
                 RES_STR_FILESAVE,
+                RES_STR_CLIPBOARD,
                 RES_STR_ADBCONNECT,
                 RES_STR_ADBDISCONNECT,
                 RES_STR_ADBCONNECTED,
@@ -140,6 +142,8 @@ namespace Resources
                 RES_STR_POPUP_39,
                 RES_STR_POPUP_40,
                 RES_STR_POPUP_41,
+                RES_STR_POPUP_42,
+                RES_STR_POPUP_43,
                 RES_STR_POPUP_NONE
             };
 

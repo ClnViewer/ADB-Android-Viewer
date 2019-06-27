@@ -43,6 +43,7 @@
 #   define _access access
 #   define _mkdir mkdir
 #   define _stat stat
+    typedef const char* LPCSTR;
 #endif
 
 #define __NELE(a) (sizeof(a) / sizeof(a[0]))

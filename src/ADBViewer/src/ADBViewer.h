@@ -15,8 +15,8 @@
 #define ID_CMD_POP_MENU1 20181
 #define ID_CMD_POP_MENU2 20182
 #define ID_CMD_POP_MENU3 20183
-#define ID_CMD_POP_MENU4 20184
-#define ID_CMD_POP_MENU5 20185
+#define ID_CMD_POP_MENU4 20184 // Save Screen to default name
+#define ID_CMD_POP_MENU5 20185 // Save Screen to select user dialog name
 #define ID_CMD_POP_MENU6 20186
 #define ID_CMD_POP_MENU7 20187
 #define ID_CMD_POP_MENU8 20188
@@ -35,6 +35,8 @@
 #define ID_CMD_POP_MENU19 20199
 #define ID_CMD_POP_MENU20 20200
 #define ID_CMD_POP_MENU21 20201
+#define ID_CMD_POP_MENU22 20202 // Copy Screen to clipboard
+#define ID_CMD_POP_MENU23 20203
 
 #define ID_CMD_POP_MENU30 20300
 #define ID_CMD_POP_MENU31 20301
@@ -76,6 +78,7 @@ using GameDev::ADBDriver;
 #  include "App/plugin/AppPluginManager.h"
 #  include "App/gui/gui.h"
 #  include "App/AppMessageBar.h"
+#  include "App/AppScreen.h"
 #  include "App/AppEditor.h"
 #  include "App/AppAnimationBender.h"
 #  include "App/AppVideo.h"
