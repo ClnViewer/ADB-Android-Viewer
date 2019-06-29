@@ -31,7 +31,7 @@
 
 #include "../ADBViewer.h"
 
-static inline const LPCSTR l_openApkFilter = "APK files (*.apk)\0*.apk\0";
+static inline const LPCSTR l_openApkFilter = "APK files (*.apk)\0*.apk\0\0";
 static inline const LPCSTR l_openApkExt = "apk";
 static inline const LPCSTR l_openCurDir = ".\\";
 

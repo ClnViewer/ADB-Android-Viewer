@@ -12,6 +12,7 @@ public:
         CNF_ADB_PATH,
         CNF_ADB_DEVICE,
         CNF_LANGUAGE,
+        CNF_SAVE_TYPE,
         CNF_DISP_WIDTH,
         CNF_DISP_HEIGHT,
         CNF_DISP_RATIO,
@@ -52,6 +53,7 @@ public:
     SDL_Point              cnf_input_point;
     SDL_Point              cnf_disp_point;
     uint32_t               cnf_uevent;
+    std::string            cnf_save_fmt;
 
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
@@ -64,6 +66,7 @@ public:
     void init();
     static AppConfig& instance();
     const void * GetAdbCb() const;
+    const char * GetImageSaveFmt(uint32_t) const;
     void SetDisplaySize(uint32_t, uint32_t);
     void SaveToFile();
 };

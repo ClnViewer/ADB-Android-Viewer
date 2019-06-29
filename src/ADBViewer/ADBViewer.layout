@@ -2,34 +2,34 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\App\AppScreen.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\App.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1118" topLine="0" />
+			<Cursor1 position="381" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\gui\guiBase.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2116" topLine="73" />
+			<Cursor1 position="140" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppAnimationBender.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1835" topLine="0" />
+			<Cursor1 position="256" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppConfig.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\loader.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="933" topLine="37" />
+			<Cursor1 position="1354" topLine="33" />
 		</Cursor>
 	</File>
-	<File name="src\App\plugin\AppPluginManager.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppConfig.cpp" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="447" topLine="20" />
+			<Cursor1 position="7997" topLine="251" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppMessageBar.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\gui\guiAnimation.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="953" topLine="56" />
+			<Cursor1 position="398" topLine="1" />
 		</Cursor>
 	</File>
 	<File name="src\App\plugin\IPluginLoader.WINAPI.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -37,14 +37,19 @@
 			<Cursor1 position="42" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppSysDialog.WINAPI.cpp" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppMessageBar.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="361" topLine="0" />
+			<Cursor1 position="953" topLine="56" />
 		</Cursor>
 	</File>
-	<File name="src\loader.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\gui\guiBase.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1354" topLine="33" />
+			<Cursor1 position="211" topLine="1" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppMessageBar.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="221" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\App\gui\guiBoxTextInput.h" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -57,14 +62,14 @@
 			<Cursor1 position="413" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\gui\guiAnimation.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppEditor.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3080" topLine="127" />
+			<Cursor1 position="9946" topLine="340" />
 		</Cursor>
 	</File>
-	<File name="src\App\plugin\IPluginLoader.LINUX.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\gui\guiMain.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1402" topLine="33" />
+			<Cursor1 position="266" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppEditor.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -77,24 +82,44 @@
 			<Cursor1 position="2064" topLine="62" />
 		</Cursor>
 	</File>
+	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1559" topLine="24" />
+		</Cursor>
+	</File>
 	<File name="src\App\gui\guiStaticText.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2182" topLine="79" />
 		</Cursor>
 	</File>
+	<File name="src\App\AppScreen.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6020" topLine="278" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppScreen.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="545" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppSysDialog.WINAPI.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1534" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="..\ADBDriverDLL\src\ADBDriver.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="234" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1878" topLine="41" />
+		</Cursor>
+	</File>
 	<File name="src\App\AppMessageQueue.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="38" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppAnimationBender.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="256" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\gui\guiMain.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="266" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppSysDialog.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -107,64 +132,9 @@
 			<Cursor1 position="10548" topLine="218" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppScreen.WINAPI.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9103" topLine="321" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="5985" topLine="187" />
-		</Cursor>
-	</File>
-	<File name="src\App\gui\guiBase.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="140" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppMessageBar.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="221" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppAnimationBender.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="785" topLine="48" />
-		</Cursor>
-	</File>
-	<File name="..\ADBDriverDLL\src\ADBDriver.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="234" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppMenuBar.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="40" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\App.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="381" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppMessageQueue.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="468" topLine="12" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppScreen.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="449" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppEditor.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="9946" topLine="340" />
-		</Cursor>
-	</File>
-	<File name="src\App\App.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1211" topLine="30" />
+			<Cursor1 position="2150" topLine="52" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppTimer.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -172,9 +142,14 @@
 			<Cursor1 position="1630" topLine="53" />
 		</Cursor>
 	</File>
-	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\plugin\IPluginLoader.LINUX.h" open="0" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="234" topLine="0" />
+			<Cursor1 position="1402" topLine="33" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="9103" topLine="321" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppVideo.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -182,9 +157,39 @@
 			<Cursor1 position="388" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\gui\guiAnimation.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppMenuBar.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="398" topLine="1" />
+			<Cursor1 position="40" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2116" topLine="73" />
+		</Cursor>
+	</File>
+	<File name="src\App\App.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1919" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="src\App\plugin\AppPluginManager.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="447" topLine="20" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppAnimationBender.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="785" topLine="48" />
+		</Cursor>
+	</File>
+	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="234" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppMessageQueue.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="468" topLine="12" />
 		</Cursor>
 	</File>
 	<File name="src\ADBViewer.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -192,14 +197,9 @@
 			<Cursor1 position="167" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppScreen.WINAPI.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\gui\guiAnimation.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="198" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\App\gui\guiBase.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="211" topLine="1" />
+			<Cursor1 position="3080" topLine="127" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

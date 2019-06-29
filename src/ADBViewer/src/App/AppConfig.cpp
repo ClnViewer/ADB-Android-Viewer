@@ -38,6 +38,7 @@ static inline const char *cnf_l_file_tag[] =
     "adb-path",
     "adb-device",
     "language",
+    "save-format",
     "display-width",
     "display-height",
     "display-ratio",
@@ -51,6 +52,12 @@ static inline const wchar_t *cnf_l_file_lang[] =
     L"en",
     L"dm",
     L"cn"
+};
+
+static inline const char *cnf_l_file_savefmt[] =
+{
+    ".bmp",
+    ".png"
 };
 
 template<typename T>
@@ -84,6 +91,7 @@ AppConfig::AppConfig()
         using namespace std::placeholders;
 
         SetDisplaySize(__W_default, __H_default);
+        cnf_save_fmt = cnf_l_file_savefmt[0];
 
         cnf_adb_rect.t  = 100U;
         cnf_cbcmd.click =
@@ -119,6 +127,12 @@ AppConfig& AppConfig::instance()
 void AppConfig::init()
     {
 
+    }
+
+const char * AppConfig::GetImageSaveFmt(uint32_t idx) const
+    {
+        idx = ((idx < __NELE(cnf_l_file_savefmt)) ? idx : 0);
+        return cnf_l_file_savefmt[idx];
     }
 
 const void * AppConfig::GetAdbCb() const
@@ -247,6 +261,18 @@ void AppConfig::OnceUpdateFromFile()
             val = l_strToUint<std::wstring>(wstr);
             cnf_disp_bender = static_cast<bool>(val);
         }
+        ///
+        {
+            std::string sstr;
+            if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_SAVE_TYPE), sstr))
+                if (!sstr.empty())
+                    for (uint32_t i = 0U; i < __NELE(cnf_l_file_savefmt); i++)
+                        if (sstr.compare(0U, sstr.length(), cnf_l_file_savefmt[i]) == 0)
+                        {
+                            cnf_save_fmt = cnf_l_file_savefmt[i];
+                            break;
+                        }
+        }
     }
 
 bool AppConfig::GetFromFile()
@@ -321,6 +347,12 @@ void AppConfig::SaveToFile()
                     {
                         if (cnf_lang < __NELE(cnf_l_file_lang))
                             wstr = cnf_l_file_lang[cnf_lang];
+                        break;
+                    }
+                case ConfigIdType::CNF_SAVE_TYPE:
+                    {
+                        if (!cnf_save_fmt.empty())
+                            wstr.assign(cnf_save_fmt.begin(), cnf_save_fmt.end());
                         break;
                     }
                 case ConfigIdType::CNF_DISP_WIDTH:

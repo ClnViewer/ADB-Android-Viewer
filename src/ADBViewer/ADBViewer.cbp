@@ -117,6 +117,8 @@
 		<Unit filename="src/App/plugin/IPluginLoader.LINUX.h" />
 		<Unit filename="src/App/plugin/IPluginLoader.WINAPI.h" />
 		<Unit filename="src/App/plugin/IPluginLoader.h" />
+		<Unit filename="src/extern/lodepng.cpp" />
+		<Unit filename="src/extern/lodepng.h" />
 		<Unit filename="src/loader.h" />
 		<Unit filename="src/version.h" />
 		<Extensions>

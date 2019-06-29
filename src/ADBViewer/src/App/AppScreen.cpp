@@ -30,8 +30,9 @@
  */
 
 #include "../ADBViewer.h"
+#include "../extern/lodepng.h"
 
-static inline const LPCSTR l_openBmpFilter = "Bitmap files (*.bmp)\0*.bmp\0";
+static inline const LPCSTR l_openBmpFilter = "Bitmap files (*.bmp)\0*.bmp\0PNG files (*.png)\0*.png\0\0";
 static inline const LPCSTR l_openBmpExt = "bmp";
 static inline const LPCSTR l_openCurDir = ".\\";
 
@@ -178,15 +179,30 @@ bool AppScreen::screenshot(bool isdialog)
             else
             {
                 std::stringstream ss;
-                ss << fname << std::to_string(time(NULL)) << ".bmp";
+                ss << fname << std::to_string(time(NULL));
+                ss << AppConfig::instance().cnf_save_fmt.c_str();
                 fname.assign(ss.str().c_str());
             }
 
             if (!(l_ss_surface = getscreen()))
                 break;
 
-            if (!SDL_SaveBMP(l_ss_surface, fname.c_str()))
-                break;
+            ///
+            {
+                size_t pos;
+
+                if (
+                    ((pos = fname.find_last_of(".")) != std::wstring::npos) &&
+                    (fname.compare(pos, 4, AppConfig::instance().GetImageSaveFmt(1U)) == 0)
+                    )
+                {
+                    if (!savepng(l_ss_surface, fname))
+                        break;
+                }
+                else
+                    if (SDL_SaveBMP(l_ss_surface, fname.c_str()))
+                        break;
+            }
 
             std::stringstream ss;
             ss << ResManager::stringload(
@@ -210,6 +226,51 @@ bool AppScreen::screenshot(bool isdialog)
 
         return ret;
     }
+}
+
+bool  AppScreen::savepng(SDL_Surface *s, std::string const & fpath)
+{
+    do
+    {
+        if (!s)
+            break;
+
+        std::vector<uint8_t> l_spng;
+        l_spng.resize(s->w * s->h * 4);
+
+        for(int32_t y = 0U, offset; y < s->h; y++)
+        {
+            offset = ((4 * s->w) * y);
+
+            for(int32_t x = 0U; x < s->w; x++)
+            {
+                uint32_t pixel  = getpixel(s, x, y),
+                         pos = (offset + (x * 4));
+
+#               if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                l_spng[(pos + 0)] = (pixel  >> 24);
+                l_spng[(pos + 1)] = ((pixel >> 16) & 0xff);
+                l_spng[(pos + 2)] = ((pixel >> 8)  & 0xff);
+                l_spng[(pos + 3)] = (pixel         & 0xff);
+#               else
+                l_spng[(pos + 0)] = (pixel         & 0xff);
+                l_spng[(pos + 1)] = ((pixel >> 8)  & 0xff);
+                l_spng[(pos + 2)] = ((pixel >> 16) & 0xff);
+                l_spng[(pos + 3)] = (pixel  >> 24);
+#               endif
+            }
+        }
+
+        std::vector<uint8_t> l_vpng;
+        if (lodepng::encode(l_vpng, l_spng, s->w, s->h))
+            break;
+
+        lodepng::save_file(l_vpng, fpath.c_str());
+        return true;
+    }
+    while (0);
+
+    return false;
 }
 
 bool AppScreen::event(SDL_Event *ev, const void *instance)

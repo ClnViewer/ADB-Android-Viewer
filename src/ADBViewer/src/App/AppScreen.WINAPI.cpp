@@ -60,6 +60,7 @@ void * AppScreen::getsysscreen(SDL_Surface *s)
 
             {
                 HGDIOBJ l_hold = ::SelectObject(l_hDC, l_hBmp);
+
                 for (int32_t x = 0U; x < s->w; x++)
                     for (int32_t y = 0U; y < s->h; y++)
                     {

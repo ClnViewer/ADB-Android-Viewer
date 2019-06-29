@@ -15,13 +15,13 @@
 	#define AVIEW_MAJOR  0
 	#define AVIEW_MINOR  0
 	#define AVIEW_BUILD  2
-	#define AVIEW_REVISION  12
+	#define AVIEW_REVISION  11
 	
 	//Miscellaneous Version Types
-	#define AVIEW_BUILDS_COUNT  3
-	#define AVIEW_RC_FILEVERSION 0,0,2,12
-	#define AVIEW_RC_FILEVERSION_STRING "0, 0, 2, 12\0"
-	#define AVIEW_FULLVERSION_STRING  "0.0.2.12"
+	#define AVIEW_BUILDS_COUNT  4
+	#define AVIEW_RC_FILEVERSION 0,0,2,11
+	#define AVIEW_RC_FILEVERSION_STRING "0, 0, 2, 11\0"
+	#define AVIEW_FULLVERSION_STRING  "0.0.2.11"
 	
 	//SVN Version
 	#define AVIEW_SVN_REVISION "51"

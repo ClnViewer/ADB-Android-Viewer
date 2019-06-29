@@ -23,5 +23,6 @@ private:
     void        * getsysscreen(SDL_Surface*);
     void          freesysscreen(void*);
     bool          setclipboard(void*);
+    bool          savepng(SDL_Surface*, std::string const&);
 };
 
