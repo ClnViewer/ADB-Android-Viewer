@@ -53,6 +53,9 @@ public:
     SDL_Point              cnf_input_point;
     SDL_Point              cnf_disp_point;
     uint32_t               cnf_uevent;
+    int32_t const          cnf_keymod_ctrl[3];
+    int32_t const          cnf_keymod_alt[3];
+    int32_t const          cnf_keymod_disabled[6];
     std::string            cnf_save_fmt;
 
     GameDev::ADBDriver          cnf_adb;
@@ -69,4 +72,8 @@ public:
     const char * GetImageSaveFmt(uint32_t) const;
     void SetDisplaySize(uint32_t, uint32_t);
     void SaveToFile();
+
+    bool IsUtf8(std::string const&);
+    bool IsUtf8(std::string const&, int32_t*);
+    bool IsUtf8c(std::string const&);
 };

@@ -50,6 +50,7 @@
 			<Add option="-static-libgcc" />
 			<Add option="-lmingw32" />
 			<Add option="-lSDL2.dll" />
+			<Add option="-lSDL2_ttf.dll" />
 			<Add option="-luser32" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 		</Linker>
@@ -68,6 +69,9 @@
 		</Unit>
 		<Unit filename="src/ResManagerPopUp/ResManagerPopUp850_dm.cpp">
 			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp850 $options $includes -c $file -o $object" />
+		</Unit>
+		<Unit filename="src/ResManagerPopUp/ResManagerPopUp936_cn.cpp">
+			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c++17 -finput-charset=cp936 $options $includes -c $file -o $object" />
 		</Unit>
 		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_cn.cpp" />
 		<Unit filename="src/ResManagerPopUp/ResManagerPopUpUtf8_dm.cpp" />

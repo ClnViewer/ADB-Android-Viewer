@@ -91,9 +91,6 @@ bool AppMessageBar::event(SDL_Event *ev, const void *instance)
             )
             break;
 
-        if (amb->m_app->m_appinput.isactive())
-            break;
-
         if (!AppMessageQueue::instance().checkData())
             break;
 
@@ -111,6 +108,7 @@ bool AppMessageBar::event(SDL_Event *ev, const void *instance)
         if (dataq.tm)
             amb->m_timer.once(
                 dataq.tm,
+                0U,
                 [=]()
                 {
                     amb->clear();

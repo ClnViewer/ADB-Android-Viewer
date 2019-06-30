@@ -25,8 +25,8 @@ private:
     SDL_Cursor *m_cursor[2];
     //
     ResManager::IndexStringResource clickpos(int32_t, int32_t, int32_t, int32_t);
-    bool mousemove(SDL_Event*, AppMenuBar*);
-    bool mousebutton(SDL_Event*, AppMenuBar*, int32_t);
+    bool mousemove(SDL_Event*);
+    bool mousebutton(SDL_Event*, int32_t);
 
     void settitle(std::string const&);
 };

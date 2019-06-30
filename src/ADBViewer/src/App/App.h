@@ -6,8 +6,7 @@ class App : public guiMain, public guiBase
 {
 public:
     //
-    guiBoxTextInput m_appinput;
-    //
+    AppInputText       m_appinput;
     AppVideo           m_appvideo;
     AppEditor          m_appeditor;
     AppMenuBar         m_appmenubar;
@@ -15,6 +14,7 @@ public:
     AppMessageBar      m_appmsgbar;
     AppAnimationBender m_appabender;
     AppScreen          m_screen;
+    AppTerminal        m_terminal;
 
     App();
     ~App();

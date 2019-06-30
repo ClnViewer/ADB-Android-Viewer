@@ -2,6 +2,11 @@
 
 #include "../ADBViewer.h"
 
+static inline uint32_t l_calctime(uint32_t sec, uint32_t msec)
+{
+    return ((msec) ? (msec * 10) : (sec * 100));
+}
+
 class AppTimer
 {
 private:
@@ -11,7 +16,6 @@ private:
     //
     void sleeps(uint32_t sec)
     {
-        sec = (sec * 100);
         do
         {
             if (!m_active.load()) return;
@@ -30,7 +34,7 @@ public:
             m_task.wait();
     }
 
-    void once(uint32_t sec, auto f)
+    void once(uint32_t sec, uint32_t msec, auto f)
     {
         if (m_active.load())
             return;
@@ -38,6 +42,7 @@ public:
         if (m_task.valid())
             m_task.wait();
 
+        uint32_t t = l_calctime(sec, msec);
         m_active = true;
         m_task = std::async(
                     std::launch::async,
@@ -49,11 +54,11 @@ public:
                         f();
                         m_active = false;
                     },
-                    sec
+                    t
             );
     }
 
-    void loop(uint32_t cnt, uint32_t sec, auto f)
+    void loop(uint32_t cnt, uint32_t sec, uint32_t msec, auto f)
     {
         if (m_active.load())
             return;
@@ -61,6 +66,7 @@ public:
         if (m_task.valid())
             m_task.wait();
 
+        uint32_t t = l_calctime(sec, msec);
         m_active = true;
         m_task = std::async(
                     std::launch::async,
@@ -84,7 +90,7 @@ public:
                         m_active = false;
                     },
                     cnt,
-                    sec
+                    t
             );
     }
 

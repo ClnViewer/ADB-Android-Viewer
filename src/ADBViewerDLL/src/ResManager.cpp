@@ -45,9 +45,17 @@ namespace Resources
 #include "Resources/ResScreen.h"
 #include "Resources/ResRecord.h"
 #include "Resources/Res16704font.h"
+#include "Resources/ResConsolafont.h"
 #include "Resources/ResFreeSansfont.h"
 #include "Resources/clip/bender-anime-8/bender8sprite.h"
 #include "Resources/clip/bender-anime-8/bender8speech.h"
+
+typedef struct
+{
+    TTF_Font  *font;
+    SDL_RWops *rwops;
+
+} font_cache_s;
 
 static inline SDL_Color box_color[][2] =
 {
@@ -62,8 +70,14 @@ static inline SDL_Color box_color[][2] =
     {
         { 151, 192, 36, 0 },
         { 0, 0, 0, 0 }
+    },
+    {
+        { 104, 192, 0, 0 },
+        { 155, 204, 38, 0 }
     }
 };
+
+static font_cache_s font_cache[3]{};
 
 __attribute__((constructor)) static void initialize_ResourcesRand()
 {
@@ -219,7 +233,59 @@ SDL_Surface * ResManager::loadbmp(char const *path)
     return image_surface;
 }
 
-SDL_RWops   * ResManager::fontload(ResManager::IndexFontResource idx)
+void ResManager::fontcachefree()
+{
+    for (uint32_t i = 0U; i < __NELE(font_cache); i++)
+    {
+        Resources::ResManager::fontcachefree(
+                static_cast<Resources::ResManager::IndexFontResource>(i)
+            );
+    }
+}
+
+void ResManager::fontcachefree(ResManager::IndexFontResource idx)
+{
+    if (font_cache[idx].font)
+        TTF_CloseFont(font_cache[idx].font);
+    if (font_cache[idx].rwops)
+        SDL_RWclose(font_cache[idx].rwops);
+
+    font_cache[idx].font = nullptr;
+    font_cache[idx].rwops = nullptr;
+}
+
+TTF_Font * ResManager::fontload(ResManager::IndexFontResource idx)
+{
+    SDL_RWops *rwops = nullptr;
+    TTF_Font  *font = nullptr;
+
+    do
+    {
+        if (idx >= __NELE(font_cache))
+            break;
+
+        if (font_cache[idx].font)
+        {
+            return font_cache[idx].font;
+        }
+        if (!(rwops = ResManager::fontloadraw(idx)))
+            break;
+        if (!(font = TTF_OpenFontRW(rwops, 1, 16)))
+            break;
+
+        font_cache[idx].font = font;
+        font_cache[idx].rwops = rwops;
+        return font;
+    }
+    while (0);
+
+    if (rwops)
+        SDL_RWclose(rwops);
+
+    return nullptr;
+}
+
+SDL_RWops   * ResManager::fontloadraw(ResManager::IndexFontResource idx)
 {
     switch (idx)
     {
@@ -230,6 +296,10 @@ SDL_RWops   * ResManager::fontload(ResManager::IndexFontResource idx)
         case ResManager::IndexFontResource::RES_FONT_FREESANS:
             {
                 return SDL_RWFromMem(&data_fontFreeSans[0], __NELE(data_fontFreeSans));
+            }
+        case ResManager::IndexFontResource::RES_FONT_CONSOLAS:
+            {
+                return SDL_RWFromMem(&data_fontConsolas[0], __NELE(data_fontConsolas));
             }
         default:
             {
@@ -253,6 +323,10 @@ SDL_Color * ResManager::colorload(ResManager::IndexColorResource idx)
         case ResManager::IndexColorResource::RES_COLOR_GREEN_BG:
             {
                 return box_color[2];
+            }
+        case ResManager::IndexColorResource::RES_COLOR_GREEN_CURSOR:
+            {
+                return box_color[3];
             }
         default:
             {

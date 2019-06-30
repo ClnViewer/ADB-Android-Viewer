@@ -29,5 +29,7 @@ static inline const char *help_strings_ru[] = {
     " Введите текст: ",
     "Бендер: я скоро приду..",
     "Бендер: я выключаюсь..",
+    "! ADB не поддерживает ввод текста на национальном языке !",
+    "! ADB not support input text in national language !",
     nullptr
 };

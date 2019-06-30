@@ -42,7 +42,7 @@ bool AppScreen::init(App *app)
             return false;
 
         m_app = app;
-        return initgui(app);
+        return guiBase::initgui(app);
     }
 
 uint32_t AppScreen::getpixel(SDL_Surface *s, int32_t x, int32_t y)
@@ -89,7 +89,7 @@ SDL_Surface * AppScreen::getscreen()
                 break;
 
             SDL_RenderReadPixels(
-                m_app->m_renderer,
+                guiBase::getgui()->m_renderer,
                 &m_app->m_appvideo.guiBase::gui.rect,
                 SDL_GetWindowPixelFormat(m_app->guiMain::m_window),
                 l_ss_surface->pixels,

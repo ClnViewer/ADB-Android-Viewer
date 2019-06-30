@@ -29,5 +29,6 @@ static inline const char *help_strings_en[] = {
 	"Enter text:",
 	"Bender: I will come soon ..",
 	"Bender: I turn off ..",
+	"! ADB not support input text in national language !",
 	nullptr
 };

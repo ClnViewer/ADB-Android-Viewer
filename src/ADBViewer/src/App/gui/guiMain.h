@@ -12,6 +12,8 @@ public:
     void addpool(guiRenderer_s*) noexcept;
     void removepool(int32_t) noexcept;
 
+    void flushicon(int32_t);
+
 protected:
     //
     int32_t initm(SDL_Point*);
@@ -20,6 +22,7 @@ protected:
 
     guiMain();
     ~guiMain();
+    guiMain& operator=(guiMain const&) = delete;
 
 private:
     //

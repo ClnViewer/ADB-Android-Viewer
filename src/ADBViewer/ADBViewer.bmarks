@@ -1,144 +1,88 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="src\App\App.h" open="0" top="0" tabpos="0">
-		<Cursor position="381" topLine="0" />
+	<File name="src\App\gui\guiMain.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1682" topLine="26" />
 	</File>
-	<File name="src\App\gui\guiBase.h" open="0" top="0" tabpos="0">
-		<Cursor position="140" topLine="0" />
-	</File>
-	<File name="src\App\AppAnimationBender.h" open="0" top="0" tabpos="0">
-		<Cursor position="256" topLine="0" />
-	</File>
-	<File name="src\loader.h" open="0" top="0" tabpos="0">
-		<Cursor position="1354" topLine="33" />
-	</File>
-	<File name="src\App\AppConfig.cpp" open="0" top="0" tabpos="4">
-		<Cursor position="7997" topLine="251" />
-		<BrowseMarks positions="20,2904,3017,3110,3255,5565,6394,6734,7607,10614" />
-	</File>
-	<File name="src\App\gui\guiAnimation.h" open="0" top="0" tabpos="0">
-		<Cursor position="398" topLine="1" />
-	</File>
-	<File name="src\App\plugin\IPluginLoader.WINAPI.h" open="0" top="0" tabpos="4">
-		<Cursor position="42" topLine="0" />
-		<BrowseMarks positions="2680" />
-	</File>
-	<File name="src\App\AppMessageBar.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="953" topLine="56" />
-	</File>
-	<File name="src\App\gui\guiBase.cpp" open="0" top="0" tabpos="5">
-		<Cursor position="211" topLine="1" />
-		<BrowseMarks positions="620" />
-	</File>
-	<File name="src\App\AppMessageBar.h" open="0" top="0" tabpos="0">
-		<Cursor position="221" topLine="0" />
-		<BrowseMarks positions="334" />
-	</File>
-	<File name="src\App\gui\guiBoxTextInput.h" open="0" top="0" tabpos="6">
-		<Cursor position="468" topLine="0" />
-	</File>
-	<File name="src\App\plugin\IPluginLoader.h" open="0" top="0" tabpos="0">
-		<Cursor position="413" topLine="0" />
-	</File>
-	<File name="src\App\AppEditor.cpp" open="0" top="0" tabpos="6">
-		<Cursor position="9946" topLine="340" />
-		<BrowseMarks positions="5735,8953,10893" />
-		<Book_Marks positions="6613" />
-	</File>
-	<File name="src\App\gui\guiMain.h" open="0" top="0" tabpos="0">
-		<Cursor position="266" topLine="0" />
-	</File>
-	<File name="src\App\AppEditor.h" open="0" top="0" tabpos="2">
-		<Cursor position="940" topLine="4" />
-		<BrowseMarks positions="367" />
-	</File>
-	<File name="src\App\gui\guiMain.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2064" topLine="62" />
-	</File>
-	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="1559" topLine="24" />
-		<BrowseMarks positions="964,1844,9117,12783" />
-	</File>
-	<File name="src\App\gui\guiStaticText.h" open="0" top="0" tabpos="3">
-		<Cursor position="2182" topLine="79" />
-		<BrowseMarks positions="568" />
-	</File>
-	<File name="src\App\AppScreen.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="6020" topLine="278" />
-		<BrowseMarks positions="308,1120,5489" />
-		<Book_Marks positions="1561" />
-	</File>
-	<File name="src\App\AppScreen.h" open="0" top="0" tabpos="2">
-		<Cursor position="545" topLine="0" />
-	</File>
-	<File name="src\App\AppSysDialog.WINAPI.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="1534" topLine="33" />
-	</File>
-	<File name="..\ADBDriverDLL\src\ADBDriver.h" open="0" top="0" tabpos="0">
-		<Cursor position="234" topLine="0" />
-	</File>
-	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="5">
-		<Cursor position="1878" topLine="41" />
-	</File>
-	<File name="src\App\AppMessageQueue.h" open="0" top="0" tabpos="5">
-		<Cursor position="38" topLine="0" />
-		<BrowseMarks positions="776" />
-	</File>
-	<File name="src\App\AppSysDialog.h" open="0" top="0" tabpos="0">
-		<Cursor position="124" topLine="0" />
-	</File>
-	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="10548" topLine="218" />
-		<BrowseMarks positions="377,4288,5536,5991,12944,16557,16617" />
-		<Book_Marks positions="389" />
-	</File>
-	<File name="src\App\AppScreen.WINAPI.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="2150" topLine="52" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\AppTimer.h" open="0" top="0" tabpos="4">
-		<Cursor position="1630" topLine="53" />
-	</File>
-	<File name="src\App\plugin\IPluginLoader.LINUX.h" open="0" top="0" tabpos="4">
-		<Cursor position="1402" topLine="33" />
-	</File>
-	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="9103" topLine="321" />
-		<BrowseMarks positions="3878,4523" />
-	</File>
-	<File name="src\App\AppVideo.h" open="0" top="0" tabpos="0">
-		<Cursor position="388" topLine="0" />
-	</File>
-	<File name="src\App\AppMenuBar.h" open="0" top="0" tabpos="3">
-		<Cursor position="40" topLine="0" />
-	</File>
-	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="2116" topLine="73" />
-		<BrowseMarks positions="748,802,1348,1443,2028,2303,2710,5141,5148,6778,6785,6926" />
-		<Book_Marks positions="6729" />
-	</File>
-	<File name="src\App\App.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="1919" topLine="30" />
-		<BrowseMarks positions="5183" />
-	</File>
-	<File name="src\App\plugin\AppPluginManager.h" open="0" top="0" tabpos="2">
-		<Cursor position="447" topLine="20" />
+	<File name="src\App\gui\guiAnimation.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3891" topLine="142" />
 	</File>
 	<File name="src\App\AppAnimationBender.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="785" topLine="48" />
+		<Cursor position="2043" topLine="35" />
 	</File>
-	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="234" topLine="0" />
+	<File name="src\App\gui\guiBase.h" open="0" top="0" tabpos="0">
+		<Cursor position="872" topLine="13" />
+		<BrowseMarks positions="803" />
 	</File>
-	<File name="src\App\AppMessageQueue.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="468" topLine="12" />
+	<File name="src\App\gui\guiAnimation.h" open="0" top="0" tabpos="0">
+		<Cursor position="263" topLine="0" />
 	</File>
-	<File name="src\ADBViewer.h" open="0" top="0" tabpos="0">
-		<Cursor position="167" topLine="0" />
+	<File name="src\App\AppInputText.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="1518" topLine="17" />
 	</File>
-	<File name="src\App\gui\guiAnimation.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="3080" topLine="127" />
+	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="19377" topLine="452" />
+		<BrowseMarks positions="13464,19851" />
+	</File>
+	<File name="src\App\gui\guiStaticText.cpp" open="0" top="0" tabpos="7">
+		<Cursor position="1776" topLine="73" />
+		<BrowseMarks positions="1514" />
+	</File>
+	<File name="src\App\App.h" open="0" top="0" tabpos="0">
+		<Cursor position="75" topLine="0" />
+	</File>
+	<File name="src\App\gui\guiStaticText.h" open="0" top="0" tabpos="8">
+		<Cursor position="214" topLine="0" />
+		<BrowseMarks positions="63" />
+	</File>
+	<File name="src\App\gui\guiTextInputBox.cpp" open="0" top="0" tabpos="4">
+		<Cursor position="4176" topLine="145" />
+		<BrowseMarks positions="1927,3448,8739,9568,10413,10608,11275,12253,12730" />
+	</File>
+	<File name="src\App\gui\guiTextInputBox.h" open="0" top="0" tabpos="5">
+		<Cursor position="1131" topLine="17" />
+		<BrowseMarks positions="14,978" />
+	</File>
+	<File name="src\App\gui\guiMain.h" open="0" top="0" tabpos="0">
+		<Cursor position="249" topLine="0" />
+	</File>
+	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="0">
+		<Cursor position="2230" topLine="49" />
+	</File>
+	<File name="src\App\gui\guiMain.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4570" topLine="10" />
+	</File>
+	<File name="src\App\AppConfigUtf8.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1485" topLine="115" />
+		<BrowseMarks positions="1900,1934,2890,3201" />
+	</File>
+	<File name="src\App\AppMenuBar.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="16436" topLine="302" />
+	</File>
+	<File name="src\App\AppMessageBar.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2790" topLine="78" />
+	</File>
+	<File name="src\App\AppScreen.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1723" topLine="37" />
+	</File>
+	<File name="src\App\AppMessageBar.h" open="0" top="0" tabpos="0">
+		<Cursor position="193" topLine="0" />
+	</File>
+	<File name="src\App\AppSysDialog.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="41" />
+	</File>
+	<File name="src\App\AppTimer.h" open="0" top="0" tabpos="3">
+		<Cursor position="701" topLine="26" />
+	</File>
+	<File name="src\App\gui\guiCursor.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="5087" topLine="177" />
+		<BrowseMarks positions="2540,2833,3620,3813,4130,5490" />
+	</File>
+	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="8922" topLine="269" />
+	</File>
+	<File name="src\App\gui\guiCursor.h" open="0" top="0" tabpos="1">
+		<Cursor position="246" topLine="0" />
+		<BrowseMarks positions="75,569" />
 	</File>
 </BrowseTracker_layout_file>

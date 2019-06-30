@@ -3,6 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include "guiBase.h"
 #include "guiMain.h"
+#include "guiCursor.h"
 #include "guiStaticText.h"
-#include "guiBoxTextInput.h"
+#include "guiTextInputBox.h"
 #include "guiAnimation.h"

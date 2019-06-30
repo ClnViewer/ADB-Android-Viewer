@@ -13,6 +13,7 @@ public:
 
     guiAnimation();
     ~guiAnimation();
+    guiAnimation& operator=(guiAnimation const&) = delete;
 
     bool init(App*);
     bool init(App*, SDL_Color*, ResManager::IndexSpriteResource);

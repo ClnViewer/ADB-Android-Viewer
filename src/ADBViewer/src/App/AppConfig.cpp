@@ -85,8 +85,11 @@ AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
           cnf_disp_bender(true), cnf_disp_ratio(2U), cnf_disp_rotate(360U), cnf_compress(9),
-          cnf_input_point{}, cnf_disp_point{},
-          cnf_uevent(0U), cnf_adb_rect{}
+          cnf_input_point{}, cnf_disp_point{}, cnf_uevent(0U),
+          cnf_keymod_ctrl { KMOD_CTRL, KMOD_LCTRL, KMOD_RCTRL },
+          cnf_keymod_alt { KMOD_RALT, KMOD_LALT, KMOD_ALT },
+          cnf_keymod_disabled { KMOD_CTRL, KMOD_LCTRL, KMOD_RCTRL, KMOD_RALT, KMOD_LALT, KMOD_ALT },
+          cnf_adb_rect{}
     {
         using namespace std::placeholders;
 
@@ -115,7 +118,7 @@ AppConfig::AppConfig()
                 cnf_adb.SendSpecialKey(t, k);
             };
         OnceUpdateFromFile();
-        cnf_input_point = { 50, (cnf_disp_point.y - 40) };
+        cnf_input_point = { __MENU_W_default, (cnf_disp_point.y - 40) };
     }
 
 AppConfig& AppConfig::instance()

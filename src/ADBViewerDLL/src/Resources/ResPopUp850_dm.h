@@ -44,5 +44,9 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 41 */ L"Konfiguration speichern",
     /* 42 */ L"Kopieren",
     /* 43 */ L"Mirror Image",
+    /* 44 */ L"Texteingabefeld",
+    /* 45 */ L"Terminal",
+    /* 46 */ L"Benachrichtigen ”ffnen/erweitern",
+    /* 47 */ L"Benachrichtigen schlieáen/reduzieren",
     nullptr
 };

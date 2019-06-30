@@ -139,6 +139,9 @@ guiMain::~guiMain()
         m_window = nullptr;
 
         if (TTF_WasInit())
+        {
+            Resources::ResManager::fontcachefree();
             TTF_Quit();
+        }
         SDL_Quit();
     }

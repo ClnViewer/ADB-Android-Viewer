@@ -62,7 +62,7 @@ bool AppMenuBar::init(App *app)
        )
         return false;
 
-    return initgui(app);
+    return guiBase::initgui(app);
 }
 
 bool AppMenuBar::tinit(SDL_Texture **texture)
@@ -79,7 +79,7 @@ bool AppMenuBar::tinit(SDL_Texture **texture)
         guiBase::gui.rect.y = 0;
 
         SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
-                m_app->m_renderer,
+                guiBase::getgui()->m_renderer,
                 l_image_surface_img
             );
         SDL_FreeSurface(l_image_surface_img);
@@ -154,11 +154,11 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
                 const_cast<void*>(instance)
             );
 
+    if (ev->type == AppConfig::instance().cnf_uevent)
+        return amb->mousebutton(ev, ev->user.code);
+
     if (amb->m_app->m_appeditor.isactive())
         return false;
-
-    if (ev->type == AppConfig::instance().cnf_uevent)
-        return amb->mousebutton(ev, amb, ev->user.code);
 
     if (ev->motion.x > amb->gui.rect.w)
         return false;
@@ -173,11 +173,11 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
             }
         case SDL_MOUSEBUTTONDOWN:
             {
-                return amb->mousebutton(ev, amb, -1);
+                return amb->mousebutton(ev, -1);
             }
         case SDL_MOUSEMOTION:
             {
-                return amb->mousemove(ev, amb);
+                return amb->mousemove(ev);
             }
         default:
             break;
@@ -185,11 +185,11 @@ bool AppMenuBar::event(SDL_Event *ev, const void *instance)
     return false;
 }
 
-bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
+bool AppMenuBar::mousemove(SDL_Event *ev)
 {
     ResManager::IndexStringResource id;
-    switch((id = amb->clickpos(
-                    amb->gui.rect.w,
+    switch((id = clickpos(
+                    guiBase::gui.rect.w,
                     ev->motion.x,
                     ev->motion.y,
                     -1)))
@@ -211,7 +211,7 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
                 ResManager::stringload(id, AppConfig::instance().cnf_lang),
                 (__LINE__ + id), ev
             );
-            amb->setcursor(1U);
+            setcursor(1U);
             return true;
         }
         default:
@@ -224,14 +224,14 @@ bool AppMenuBar::mousemove(SDL_Event *ev, AppMenuBar *amb)
                 ),
                 __LINE__, ev
             );
-            amb->setcursor(0U);
+            setcursor(0U);
             break;
         }
     }
     return false;
 }
 
-bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
+bool AppMenuBar::mousebutton(SDL_Event *ev, int32_t ucode)
 {
     if ((ucode > 0) || (ev->button.button == SDL_BUTTON_LEFT))
     {
@@ -239,8 +239,8 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
         cmdEvent.type = AppConfig::instance().cnf_uevent;
         cmdEvent.user.code = 0;
 
-                switch(amb->clickpos(
-                        amb->gui.rect.w,
+                switch(clickpos(
+                        guiBase::gui.rect.w,
                         ev->motion.x,
                         ev->motion.y,
                         ucode))
@@ -254,7 +254,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     {
                         if (!AppConfig::instance().cnf_isstop)
                         {
-                            amb->infoset(
+                            infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBCONNECTED,
@@ -268,7 +268,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                         if (!AppConfig::instance().cnf_adb.IsDeviceID())
                             AppConfig::instance().cnf_adb.GetDeviceListUI();
 
-                        amb->infoset(
+                        infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBCONNECT,
@@ -277,14 +277,14 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             -1, ev
                         );
                         cmdEvent.user.code = ID_CMD_POP_MENU97;
-                        amb->setcursor(0U);
+                        setcursor(0U);
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_STOP:
                     {
                         if (AppConfig::instance().cnf_isstop)
                         {
-                            amb->infoset(
+                            infoset(
                                 MgrType::MGR_MENU,
                                 ResManager::stringload(
                                     ResManager::IndexStringResource::RES_STR_ADBDISCONNECTED,
@@ -294,7 +294,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             );
                             return true;
                         }
-                        amb->infoset(
+                        infoset(
                             MgrType::MGR_MENU,
                             ResManager::stringload(
                                 ResManager::IndexStringResource::RES_STR_ADBDISCONNECT,
@@ -303,7 +303,7 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                             -1, ev
                         );
                         cmdEvent.user.code = ID_CMD_POP_MENU98;
-                        amb->setcursor(0U);
+                        setcursor(0U);
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_ADBSET:
@@ -315,14 +315,14 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     {
                         AppConfig::instance().cnf_disp_ratio = ((AppConfig::instance().cnf_disp_ratio.load() >= 2U) ? 1U : 2U);
                         cmdEvent.user.code = ID_CMD_POP_MENU99;
-                        amb->setcursor(0U);
+                        setcursor(0U);
                         break;
                     }
                     case ResManager::IndexStringResource::RES_STR_POSINFO:
                     {
                         AppConfig::instance().cnf_ispos = !(AppConfig::instance().cnf_ispos);
                         if (!AppConfig::instance().cnf_ispos)
-                            amb->infoset(MgrType::MGR_MENU, "", -1, ev);
+                            infoset(MgrType::MGR_MENU, "", -1, ev);
                         return true;
                     }
                     case ResManager::IndexStringResource::RES_STR_CAPTURE_C:
@@ -343,18 +343,18 @@ bool AppMenuBar::mousebutton(SDL_Event *ev, AppMenuBar *amb, int32_t ucode)
                     case ResManager::IndexStringResource::RES_STR_FULLSCREEN:
                     {
                         SDL_SetWindowFullscreen(
-                            amb->m_app->m_window,
+                            m_app->m_window,
                             ((AppConfig::instance().cnf_isfullscreen) ? 0U : SDL_WINDOW_FULLSCREEN_DESKTOP)
                         );
                         if (AppConfig::instance().cnf_isfullscreen)
                         {
                             SDL_SetWindowSize(
-                                    amb->m_app->m_window,
+                                    m_app->m_window,
                                     AppConfig::instance().cnf_disp_point.x,
                                     AppConfig::instance().cnf_disp_point.y
                                 );
                             SDL_SetWindowPosition(
-                                    amb->m_app->m_window,
+                                    m_app->m_window,
                                     SDL_WINDOWPOS_CENTERED,
                                     SDL_WINDOWPOS_CENTERED
                                 );

@@ -104,7 +104,7 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
             {
                 if (isvalid)
                     if (!(m_textures[i] = SDL_CreateTextureFromSurface(
-                                            m_app->m_renderer,
+                                            guiBase::getgui()->m_renderer,
                                             l_sprites[i]
                         )))
                         isvalid = false;
@@ -150,6 +150,7 @@ void guiAnimation::run()
     m_timer.loop(
         0U,
         30U,
+        0U,
         [=]()
         {
             do

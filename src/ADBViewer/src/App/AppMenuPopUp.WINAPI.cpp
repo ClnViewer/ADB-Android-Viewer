@@ -82,7 +82,7 @@ bool AppMenuPopUp::init(App *app)
     if (!(m_hwnd = AppSysDialog::gethwnd(m_app->m_window)))
         return false;
 
-    bool ret = initgui(app);
+    bool ret = guiBase::initgui(app);
     if (ret)
         guiBase::ActiveOff();
     return ret;
@@ -176,6 +176,10 @@ void AppMenuPopUp::show()
             }
         }
 
+        MENU_ITEM_ADD(ID_CMD_POP_MENU100, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_44, l_hPopMenu);
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU24, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_45, l_hPopMenu);
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU1, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_1, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU2, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_2, l_hPopMenu);
@@ -285,6 +289,9 @@ void AppMenuPopUp::show()
             auto wtxt = ResManager::stringpopup(l_acmdkey[i].sid, AppConfig::instance().cnf_lang);
             ::AppendMenuW(l_hCmdMenu, MF_STRING, l_acmdkey[i].cid, wtxt);
         }
+        /// Android notify call command to menu list
+        MENU_ITEM_ADD(ID_CMD_POP_MENU50, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_46, l_hCmdMenu);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU51, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_47, l_hCmdMenu);
 
         /// light: RGB(191,227,103)
         if (!(l_hbrush = ::CreateSolidBrush(RGB(151,192,36))))
@@ -452,6 +459,26 @@ void AppMenuPopUp::show()
                             break;
                         }
                     cmdEvent.user.code = 0;
+                    break;
+                }
+            case ID_CMD_POP_MENU50:
+            case ID_CMD_POP_MENU51:
+                {
+                    int32_t key = ((idx == ID_CMD_POP_MENU50) ? 82 : 92
+                                    /* 75 : 78 */
+                                );
+                    for (uint32_t i = 0; i < 2; i++)
+                        AppConfig::instance().cnf_adb.SendSpecialKey(
+                                GameDev::ADBDriver::KeysType::KEYS_ANDROID,
+                                key
+                            );
+
+                    cmdEvent.user.code = 0;
+                    break;
+                }
+            case ID_CMD_POP_MENU100:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU100;
                     break;
                 }
             case 50000 ... 50999:

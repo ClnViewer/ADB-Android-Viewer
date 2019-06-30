@@ -38,12 +38,12 @@ bool guiBase::initgui(guiMain *gm) noexcept
 
         gui.instance = this;
         gui.active = true;
+        m_guimain = gm;
 
         /// virtual, create in all method
         if (!tinit(&gui.texture))
             return false;
 
-        m_guimain = gm;
         m_guimain->addpool(&gui);
         return gui.active.load();
     }

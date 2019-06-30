@@ -80,11 +80,8 @@ App::App()
         (!m_appeditor.init(this))  || /// this editor GUI screen
         (!m_appmsgbar.init(this))  || /// this message BAR box
         (!m_screen.init(this))     || /// this screen capture/save
-        (!m_appinput.init(
-                this,
-                ResManager::IndexFontResource::RES_FONT_FREESANS,
-                ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE
-            ))                        /// keyboard input rectangle
+        (!m_terminal.init(this))   || /// terminal window
+        (!m_appinput.init(this))      /// keyboard input rectangle
     )
     {
         SDL_ShowSimpleMessageBox(
@@ -129,7 +126,7 @@ App::App()
 
     /// event call only
     gui.texture = nullptr;
-    (void) initgui(this);
+    (void) guiBase::initgui(this);
 
     Plugins::AppPluginManager::instance().init();
 }
@@ -158,6 +155,9 @@ bool App::event(SDL_Event *ev, const void *instance)
     App *app = static_cast<App*>(
                 const_cast<void*>(instance)
             );
+
+    if (ev->type == AppConfig::instance().cnf_uevent)
+        return false;
 
     switch(ev->type)
     {
@@ -198,6 +198,11 @@ bool App::event(SDL_Event *ev, const void *instance)
 
         case SDL_KEYDOWN:
         {
+            if (ev->key.keysym.mod != KMOD_NONE)
+                for (auto & m : AppConfig::instance().cnf_keymod_disabled)
+                    if (ev->key.keysym.mod & m)
+                        return false;
+
             switch (ev->key.keysym.sym)
             {
                 case SDLK_ESCAPE:
@@ -209,31 +214,6 @@ bool App::event(SDL_Event *ev, const void *instance)
                     }
                     break;
                 }
-                case SDLK_RETURN:
-                case SDLK_RETURN2:
-                {
-                    if (AppConfig::instance().cnf_isstop)
-                        break;
-
-                    if (!app->m_appinput.isactive())
-                    {
-                        app->m_appinput.begin(
-                            ResManager::stringload(
-                                ResManager::IndexStringResource::RES_STR_ENTER_TEXT,
-                                AppConfig::instance().cnf_lang
-                            )
-                        );
-                    }
-                    else
-                    {
-                        if (app->m_appinput.isresult())
-                            AppConfig::instance().cnf_adb.SendTextASCII(app->m_appinput.getresult());
-                            /// No UTF8 !! Cyrillic and other national language
-                    }
-                    return true;
-                }
-                default:
-                    break;
             }
         }
     }

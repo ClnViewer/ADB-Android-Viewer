@@ -29,6 +29,7 @@
     SOFTWARE.
  */
 
+#define NO_CPP_HEADERS 1
 #include "../../../ADBViewer/src/loader.h"
 #include "../ResManager.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #if defined(OS_WIN)
 # define DECL_STRINGLOAD_M() \
@@ -47,12 +48,15 @@ namespace Resources
             {
                 RES_COLOR_GREEN_BLACK,
                 RES_COLOR_BLACK_WHITE,
-                RES_COLOR_GREEN_BG
+                RES_COLOR_GREEN_BG,
+                RES_COLOR_GREEN_CURSOR
             };
             enum IndexFontResource
             {
                 RES_FONT_16704,
-                RES_FONT_FREESANS
+                RES_FONT_FREESANS,
+                RES_FONT_CONSOLAS,
+                RES_FONT_DEFAULT = RES_FONT_FREESANS
             };
             enum IndexImageResource
             {
@@ -96,7 +100,9 @@ namespace Resources
                 RES_STR_ERR_UNKNOWN,
                 RES_STR_ENTER_TEXT,
                 RES_STR_BENDER_ON,
-                RES_STR_BENDER_OFF
+                RES_STR_BENDER_OFF,
+                RES_STR_ADB_LANG_NOT_SUPPORT,
+                RES_STR_ADB_LANG_NOT_SUPPORT_ENG
             };
             enum IndexStringPopUpMenu
             {
@@ -144,13 +150,19 @@ namespace Resources
                 RES_STR_POPUP_41,
                 RES_STR_POPUP_42,
                 RES_STR_POPUP_43,
+                RES_STR_POPUP_44,
+                RES_STR_POPUP_45,
+                RES_STR_POPUP_46,
+                RES_STR_POPUP_47,
                 RES_STR_POPUP_NONE
             };
 
             ResManager();
             ~ResManager();
 
-            static SDL_RWops   * fontload(ResManager::IndexFontResource);
+            static TTF_Font    * fontload(ResManager::IndexFontResource);
+            static void          fontcachefree();
+            static void          fontcachefree(ResManager::IndexFontResource);
             static SDL_Color   * colorload(ResManager::IndexColorResource);
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
@@ -165,7 +177,8 @@ namespace Resources
 #           endif
 
         private:
-            static SDL_Surface * imagedata(const ImageResource_s *res);
+            static SDL_Surface * imagedata(const ImageResource_s*);
+            static SDL_RWops   * fontloadraw(ResManager::IndexFontResource);
 
 #           if defined(OS_WIN)
             static const wchar_t * stringpopup_ru(ResManager::IndexStringPopUpMenu);

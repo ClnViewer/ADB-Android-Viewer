@@ -44,5 +44,9 @@ static inline const char *popup_strings_en[] = {
     /* 41 */ "Save configuration",
     /* 42 */ "Copy",
     /* 43 */ "Mirror Image",
+    /* 44 */ "Text entry field",
+    /* 45 */ "Terminal",
+    /* 46 */ "Notify open/expand",
+    /* 47 */ "Notify close/collapse",
     nullptr
 };

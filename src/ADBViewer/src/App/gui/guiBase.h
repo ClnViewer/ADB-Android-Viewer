@@ -23,7 +23,7 @@ class guiBase
 public:
     //
     guiRenderer_s gui;
-    std::mutex    m_lock;
+    std::mutex   m_lock;
 
     guiMain * getgui() const;
     virtual bool tinit(SDL_Texture**);
@@ -36,6 +36,7 @@ public:
 
     guiBase();
     ~guiBase();
+    //guiBase& operator=(guiBase const&) = delete;
 
 protected:
     //

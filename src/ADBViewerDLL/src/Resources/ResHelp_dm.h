@@ -29,5 +29,7 @@ static inline const char *help_strings_dm[] = {
     "Text eingeben:",
     "Bender: Ich werde bald kommen ..",
     "Bender: Ich schalte aus ..",
+    "! ADB unterstützt keinen Eingabetext in der Landessprache !",
+    "! ADB not support input text in national language !",
     nullptr
 };

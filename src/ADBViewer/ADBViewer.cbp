@@ -14,13 +14,10 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add option="-Wno-unknown-pragmas" />
-					<Add option="-IC:/__BuildSource/__LIB__/SDL2/include" />
 					<Add option="-D_BUILD_FRAME_NO_TITLE" />
 					<Add option="-D_DEBUG" />
 				</Compiler>
 				<Linker>
-					<Add option="-lADBViewer" />
-					<Add option="-lADBDriver" />
 					<Add option="-lexchndl" />
 					<Add option="-lmgwhelp" />
 					<Add option="-L../bin/Debug" />
@@ -38,13 +35,10 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add option="-Wno-unknown-pragmas" />
-					<Add option="-IC:/__BuildSource/__LIB__/SDL2/include" />
 					<Add option="-D_BUILD_FRAME_NO_TITLE" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lADBViewer" />
-					<Add option="-lADBDriver" />
 					<Add option="-L../bin/Release" />
 				</Linker>
 				<ExtraCommands>
@@ -54,21 +48,29 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wall" />
 			<Add option="-std=c++17" />
 			<Add option="-fconcepts" />
-			<Add option="-Wall" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
+			<Add directory="C:/__BuildSource/__LIB__/pdcurses/include" />
 		</Compiler>
 		<Linker>
 			<Add option="-static-libstdc++" />
 			<Add option="-static-libgcc" />
 			<Add option="-lmingw32" />
+			<Add option="-Wl,--start-group" />
 			<Add option="-lSDL2main" />
 			<Add option="-lSDL2.dll" />
 			<Add option="-lSDL2_ttf.dll" />
+			<Add option="-Wl,--end-group" />
 			<Add option="-luser32" />
 			<Add option="-lgdi32" />
+			<Add option="-lwinmm" />
+			<Add option="-ldxguid" />
+			<Add option="-lADBViewer" />
+			<Add option="-lADBDriver" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
+			<Add directory="C:/__BuildSource/__LIB__/pdcurses/lib" />
 		</Linker>
 		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />
 		<Unit filename="../ADBViewerDLL/src/ResManager.h" />
@@ -83,8 +85,11 @@
 		<Unit filename="src/App/AppAnimationBender.h" />
 		<Unit filename="src/App/AppConfig.cpp" />
 		<Unit filename="src/App/AppConfig.h" />
+		<Unit filename="src/App/AppConfigUtf8.cpp" />
 		<Unit filename="src/App/AppEditor.cpp" />
 		<Unit filename="src/App/AppEditor.h" />
+		<Unit filename="src/App/AppInputText.cpp" />
+		<Unit filename="src/App/AppInputText.h" />
 		<Unit filename="src/App/AppMenuBar.cpp" />
 		<Unit filename="src/App/AppMenuBar.h" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
@@ -98,6 +103,8 @@
 		<Unit filename="src/App/AppScreen.h" />
 		<Unit filename="src/App/AppSysDialog.WINAPI.cpp" />
 		<Unit filename="src/App/AppSysDialog.h" />
+		<Unit filename="src/App/AppTerminal.cpp" />
+		<Unit filename="src/App/AppTerminal.h" />
 		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
@@ -106,10 +113,15 @@
 		<Unit filename="src/App/gui/guiAnimation.h" />
 		<Unit filename="src/App/gui/guiBase.cpp" />
 		<Unit filename="src/App/gui/guiBase.h" />
-		<Unit filename="src/App/gui/guiBoxTextInput.h" />
+		<Unit filename="src/App/gui/guiCursor.cpp" />
+		<Unit filename="src/App/gui/guiCursor.h" />
+		<Unit filename="src/App/gui/guiMain.WINAPI.cpp" />
 		<Unit filename="src/App/gui/guiMain.cpp" />
 		<Unit filename="src/App/gui/guiMain.h" />
+		<Unit filename="src/App/gui/guiStaticText.cpp" />
 		<Unit filename="src/App/gui/guiStaticText.h" />
+		<Unit filename="src/App/gui/guiTextInputBox.cpp" />
+		<Unit filename="src/App/gui/guiTextInputBox.h" />
 		<Unit filename="src/App/plugin/AppIPlugin.h" />
 		<Unit filename="src/App/plugin/AppIPluginCallBack.h" />
 		<Unit filename="src/App/plugin/AppPluginManager.cpp" />

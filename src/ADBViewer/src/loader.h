@@ -51,6 +51,8 @@
 
 #ifdef __cplusplus
 
+#  if !defined(NO_CPP_HEADERS)
+
 #  include <iostream>
 #  include <atomic>
 #  include <memory>
@@ -64,6 +66,13 @@
 #  include <sstream>
 #  include <fstream>
 #  include <future>
+#  include <valarray>
+
+#  else
+
+#  include <cstdio>
+
+#  endif
 
 #endif
 

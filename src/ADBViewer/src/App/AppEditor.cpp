@@ -77,7 +77,7 @@ bool AppEditor::init(App *app)
         guiBase::gui.rect.y = (AppConfig::instance().cnf_disp_point.y - 32);
         guiBase::gui.texture = nullptr;
 
-        return initgui(app);
+        return guiBase::initgui(app);
     }
 
 void AppEditor::stop()
@@ -286,94 +286,6 @@ bool AppEditor::foundpos(std::vector<AppEditor::_PIXELS> & v, AppEditor::_PIXELS
         return true;
     }
 
-bool AppEditor::event(SDL_Event *ev, const void *instance)
-    {
-    AppEditor *ape = static_cast<AppEditor*>(
-                const_cast<void*>(instance)
-            );
-
-    if (
-        (!ape) ||
-        (AppConfig::instance().cnf_isstop)  ||
-        (ape->m_app->m_appinput.isactive())
-       )
-        return false;
-
-    if (ev->type == AppConfig::instance().cnf_uevent)
-    {
-        switch(ev->user.code)
-        {
-            case ID_CMD_POP_MENU6:
-                {
-                    ///  (tiger)
-                    if (ape->isactive())
-                        /// stop and write LUA script
-                        ape->stop();
-                    else
-                        /// start edit pixels 5x5 for check && identify
-                        ape->run();
-                    return true;
-                }
-            case ID_CMD_POP_MENU7:
-                {
-                    if (ape->isactive())
-                        /// cancel and clear pixels list
-                        ape->cancel();
-                    return true;
-                }
-            case ID_CMD_POP_MENU8:
-                {
-                    ///  (tiger)
-                    /// add endpoint action
-                    m_target = !m_target;
-                    return true;
-                }
-            default:
-                break;
-        }
-    }
-
-    if (!ape->isactive())
-        return false;
-
-    switch(ev->type)
-    {
-        case SDL_MOUSEBUTTONDOWN:
-        {
-            switch (ev->button.button)
-            {
-                case SDL_BUTTON_LEFT:
-                {
-                    if (
-                        (ev->motion.x < ape->gui.rect.w) &&
-                        (ev->motion.y > ape->gui.rect.y)
-                       )
-                    {
-                        ape->stop();
-                        return true;
-                    }
-
-                    if (ev->motion.x <= ape->gui.rect.w)
-                        break;
-
-                    if (ape->isupdate())
-                        break;
-
-                    ape->ppixel.x = (ev->motion.x - ape->m_app->m_appmenubar.gui.rect.w);
-                    ape->ppixel.y = ev->motion.y;
-                    return true;
-                }
-                default:
-                    break;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    return false;
-    }
-
 void AppEditor::write_script(std::string const & fname)
     {
         if (fname.empty())
@@ -467,8 +379,8 @@ void AppEditor::gui_icon_on()
 
         do
         {
-            gui.texture = SDL_CreateTexture(
-                m_app->m_renderer,
+            guiBase::gui.texture = SDL_CreateTexture(
+                guiBase::getgui()->m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
                 guiBase::gui.rect.w,
@@ -503,4 +415,92 @@ void AppEditor::gui_icon_off()
         gui.texture = nullptr;
     }
 
+
+bool AppEditor::event(SDL_Event *ev, const void *instance)
+    {
+    AppEditor *ape = static_cast<AppEditor*>(
+                const_cast<void*>(instance)
+            );
+
+    if (
+        (!ape) ||
+        (AppConfig::instance().cnf_isstop)  ||
+        (ape->m_app->m_appinput.isactive())
+       )
+        return false;
+
+    if (ev->type == AppConfig::instance().cnf_uevent)
+    {
+        switch(ev->user.code)
+        {
+            case ID_CMD_POP_MENU6:
+                {
+                    ///  (triger)
+                    if (ape->isactive())
+                        /// stop and write LUA script
+                        ape->stop();
+                    else
+                        /// start edit pixels 5x5 for check && identify
+                        ape->run();
+                    return true;
+                }
+            case ID_CMD_POP_MENU7:
+                {
+                    if (ape->isactive())
+                        /// cancel and clear pixels list
+                        ape->cancel();
+                    return true;
+                }
+            case ID_CMD_POP_MENU8:
+                {
+                    ///  (triger)
+                    /// add endpoint action
+                    m_target = !m_target;
+                    return true;
+                }
+            default:
+                break;
+        }
+    }
+
+    if (!ape->isactive())
+        return false;
+
+    switch(ev->type)
+    {
+        case SDL_MOUSEBUTTONDOWN:
+        {
+            switch (ev->button.button)
+            {
+                case SDL_BUTTON_LEFT:
+                {
+                    if (
+                        (ev->motion.x < ape->gui.rect.w) &&
+                        (ev->motion.y > ape->gui.rect.y)
+                       )
+                    {
+                        ape->stop();
+                        return true;
+                    }
+
+                    if (ev->motion.x <= ape->gui.rect.w)
+                        break;
+
+                    if (ape->isupdate())
+                        break;
+
+                    ape->ppixel.x = (ev->motion.x - ape->m_app->m_appmenubar.gui.rect.w);
+                    ape->ppixel.y = ev->motion.y;
+                    return true;
+                }
+                default:
+                    break;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return false;
+    }
 

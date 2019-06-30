@@ -60,7 +60,7 @@ bool AppVideo::init(App *app)
     m_app = app;
     guiBase::gui.texture = nullptr;
 
-    return initgui(app);
+    return guiBase::initgui(app);
 }
 
 bool AppVideo::tinit(SDL_Texture **texture)
@@ -71,7 +71,7 @@ bool AppVideo::tinit(SDL_Texture **texture)
         guiBase::gui.rect.y = 0;
 
         SDL_Texture *l_texture = SDL_CreateTexture(
-                m_app->m_renderer,
+                guiBase::getgui()->m_renderer,
                 SDL_PIXELFORMAT_RGB24,
                 SDL_TEXTUREACCESS_STREAMING,
                 guiBase::gui.rect.w,
@@ -199,6 +199,7 @@ void AppVideo::stop()
     defscreen();
     m_app->m_appabender.run();
     guiBase::ActiveOn();
+    m_app->flushicon(3);
 }
 
 void AppVideo::run()
@@ -290,6 +291,7 @@ void AppVideo::run()
         }
     };
     m_thu = move(thu);
+    m_app->flushicon(3);
 }
 
 bool AppVideo::update(std::vector<uint8_t> & v, uint32_t w, uint32_t h)
@@ -438,8 +440,21 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                )
                 break;
 
+            if (ev->key.keysym.mod != KMOD_NONE)
+                for (auto & m : AppConfig::instance().cnf_keymod_disabled)
+                    if (ev->key.keysym.mod & m)
+                        return false;
+
             switch (ev->key.keysym.sym)
             {
+                case SDLK_RETURN:
+                {
+                    AppConfig::instance().cnf_adb.SendSpecialKey(
+                            GameDev::ADBDriver::KeysType::KEYS_SDL,
+                            SDL_SCANCODE_KP_ENTER // SDL_SCANCODE_RETURN
+                    );
+                    return true;
+                }
                 case SDLK_LEFT:
                 {
                     AppConfig::instance().cnf_adb_rect.x1 = std::min((AppConfig::instance().cnf_adb_rect.x1 + 30), apv->gui.rect.w);
