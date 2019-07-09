@@ -38,7 +38,7 @@ static inline const LPCSTR l_openCurDir = ".\\";
 
 AppEditor::AppEditor()
     : ppixel{}, scrtype(SCR_CHECK_AND_CLICK),
-      m_app{nullptr}, m_active(false), m_target(false)
+      m_app{nullptr}, m_enable(false), m_target(false)
     {
         ppixel.x = ppixel.y = -1;
     }
@@ -48,9 +48,9 @@ AppEditor::~AppEditor()
         guiBase::ActiveOff();
     }
 
-bool AppEditor::isactive() const
+bool AppEditor::isenabled() const
     {
-        return m_active.load();
+        return m_enable.load();
     }
 
 bool AppEditor::istarget() const
@@ -60,7 +60,7 @@ bool AppEditor::istarget() const
 
 bool AppEditor::isupdate() const
     {
-        return ((m_active.load()) ?
+        return ((m_enable.load()) ?
                 ((ppixel.x > -1) && (ppixel.y > -1)) : false);
     }
 
@@ -70,22 +70,57 @@ bool AppEditor::init(App *app)
             return false;
 
         m_app = app;
-
-        guiBase::gui.rect.h = 32;
-        guiBase::gui.rect.w = 32;
-        guiBase::gui.rect.x = 0;
-        guiBase::gui.rect.y = (AppConfig::instance().cnf_disp_point.y - 32);
+        guiBase::gui.rect = {};
         guiBase::gui.texture = nullptr;
 
-        return guiBase::initgui(app);
+        bool ret = guiBase::initgui(app);
+        if (ret)
+        {
+            SDL_Rect rect{};
+
+            rect.x = 0;
+            rect.y = (AppConfig::instance().cnf_disp_point.y - __MENU_W_default);
+
+            ret = m_icon_record.init(
+                    app,
+                    rect,
+                    ResManager::IndexImageResource::RES_IMG_RCORD,
+                    [=](SDL_Event *ev, SDL_Rect *r)
+                    {
+                        switch (ev->type)
+                        {
+                            case SDL_MOUSEMOTION:
+                                {
+                                    AddMessageQueue(
+                                        ResManager::stringload(
+                                            ResManager::IndexStringResource::RES_STR_SCRIPTEDIT_END,
+                                            AppConfig::instance().cnf_lang
+                                        ),
+                                        5U,
+                                        (__LINE__ + 1001)
+                                    );
+                                    return true;
+                                }
+                            case SDL_MOUSEBUTTONDOWN:
+                                {
+                                    guiBase::PushEvent(ID_CMD_POP_MENU6);
+                                    return true;
+                                }
+                        }
+                        return false;
+                    }
+                );
+
+        }
+        return ret;
     }
 
 void AppEditor::stop()
     {
-        if ((!m_app) || (!m_active.load()))
+        if ((!m_app) || (!m_enable.load()))
             return;
 
-        m_active = false;
+        m_enable = false;
         m_target = false;
 
         std::string fname(
@@ -94,47 +129,61 @@ void AppEditor::stop()
                 AppConfig::instance().cnf_lang
             )
         );
-        if (!AppSysDialog::savefile(m_app->m_window, fname, l_openLuaFilter, l_openLuaExt, l_openCurDir))
-            return;
 
-        write_script(fname);
-        gui_icon_off();
+        do
+        {
+            if (!AppSysDialog::savefile(
+                                guiBase::GetGui<SDL_Window>(),
+                                fname,
+                                l_openLuaFilter,
+                                l_openLuaExt,
+                                l_openCurDir
+                        ))
+                break;
+            write_script(fname);
+        }
+        while (0);
+
+        m_icon_record.Off();
         m_app->m_appmsgbar.clear();
+        guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 
 void AppEditor::run()
     {
-        if ((!m_app) || (m_active.load()))
+        if ((!m_app) || (m_enable.load()))
             return;
 
         m_pixels.clear();
         m_ptarget.clear();
         ppixel.x = ppixel.y = -1;
 
-        gui_icon_on();
+        m_icon_record.On();
 
         m_target = false;
-        m_active = true;
+        m_enable = true;
         m_app->m_appmsgbar.clear();
+        guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 
 void AppEditor::cancel()
     {
-        if ((!m_app) || (!m_active.load()))
+        if ((!m_app) || (!m_enable.load()))
             return;
 
-        gui_icon_off();
+        m_icon_record.Off();
 
-        m_active = false;
+        m_enable = false;
         m_target = false;
         m_pixels.clear();
         m_ptarget.clear();
         m_app->m_appmsgbar.clear();
+        guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 
 void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
     {
-        if ((!m_app) || (!m_active.load()))
+        if ((!m_app) || (!m_enable.load()))
             return;
 
         do
@@ -144,7 +193,7 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
 
             do
             {
-                bool     iswriteinfo = false;
+                bool    iswriteinfo = false;
                 int32_t x = ppixel.x,
                         y = ppixel.y,
                         p = ((m_target) ? 4 : 2),
@@ -165,6 +214,9 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
                 for (int32_t xx = 0; xx < z; xx++)
                     for (int32_t yy = 0; yy < z; yy++)
                     {
+                        if ((!AppConfig::instance().cnf_isrun) || (AppConfig::instance().cnf_isstop))
+                            return;
+
                         AppEditor::_PIXELS pixel{};
                         pixel.x = (x + xx);
                         pixel.y = (y + yy);
@@ -239,9 +291,11 @@ void AppEditor::update(uint32_t w, uint32_t h, std::vector<uint8_t> & v)
                 }
         }
 
+        if ((!AppConfig::instance().cnf_isrun) || (AppConfig::instance().cnf_isstop))
+            return;
+
         for (auto &rgbs : m_pixels)
             ::memcpy(&v[rgbs.pos], rgb_, sizeof(m_redrgb));
-
         for (auto &rgbs : m_ptarget)
             ::memcpy(&v[rgbs.pos], &m_bluergb, sizeof(m_bluergb));
     }
@@ -291,11 +345,12 @@ void AppEditor::write_script(std::string const & fname)
         if (fname.empty())
             return;
 
+        SDL_Rect *r = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
         int32_t sc = static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio);
         std::time_t tnow = std::time(NULL);
         std::stringstream ss;
         ss << "\n -- Android ADB Viewer " AVIEW_FULLVERSION_STRING " - " AVIEW_DATE "/" AVIEW_MONTH "/" AVIEW_YEAR;
-        ss << "\n -- Display resolution: " << m_app->m_appvideo.gui.rect.w << "x" << m_app->m_appvideo.gui.rect.h;
+        ss << "\n -- Display resolution: " << r->w << "x" << r->h;
         ss << "\n -- Date build script: " << std::ctime(&tnow);
         ss << "\n\nfunction main (stateOld)\n";
 
@@ -373,70 +428,21 @@ void AppEditor::write_script(std::string const & fname)
         fwrite(ss.str().c_str(), 1, ss.str().length(), fp);
     }
 
-void AppEditor::gui_icon_on()
+bool AppEditor::uevent(SDL_Event *ev, const void *instance)
     {
-        SDL_Surface *l_image_surface = nullptr;
-
-        do
-        {
-            guiBase::gui.texture = SDL_CreateTexture(
-                guiBase::getgui()->m_renderer,
-                SDL_PIXELFORMAT_RGB24,
-                SDL_TEXTUREACCESS_STREAMING,
-                guiBase::gui.rect.w,
-                guiBase::gui.rect.h
-            );
-
-            if (!gui.texture)
-                break;
-
-            if (!(l_image_surface = ResManager::imageload(
-                        ResManager::IndexImageResource::RES_IMG_RCORD
-                )))
-                break;
-
-            SDL_UpdateTexture(gui.texture, nullptr, l_image_surface->pixels, l_image_surface->pitch);
-            SDL_FreeSurface(l_image_surface);
-            return;
-        }
-        while (0);
-
-        if (l_image_surface)
-            SDL_FreeSurface(l_image_surface);
-
-        gui_icon_off();
-    }
-
-void AppEditor::gui_icon_off()
-    {
-        if (gui.texture)
-            SDL_DestroyTexture(gui.texture);
-
-        gui.texture = nullptr;
-    }
-
-
-bool AppEditor::event(SDL_Event *ev, const void *instance)
-    {
-    AppEditor *ape = static_cast<AppEditor*>(
+        AppEditor *ape = static_cast<AppEditor*>(
                 const_cast<void*>(instance)
             );
 
-    if (
-        (!ape) ||
-        (AppConfig::instance().cnf_isstop)  ||
-        (ape->m_app->m_appinput.isactive())
-       )
-        return false;
+        if (!ape)
+            return false;
 
-    if (ev->type == AppConfig::instance().cnf_uevent)
-    {
         switch(ev->user.code)
         {
             case ID_CMD_POP_MENU6:
                 {
-                    ///  (triger)
-                    if (ape->isactive())
+                    /// (trigger)
+                    if (ape->isenabled())
                         /// stop and write LUA script
                         ape->stop();
                     else
@@ -446,14 +452,14 @@ bool AppEditor::event(SDL_Event *ev, const void *instance)
                 }
             case ID_CMD_POP_MENU7:
                 {
-                    if (ape->isactive())
+                    if (ape->isenabled())
                         /// cancel and clear pixels list
                         ape->cancel();
                     return true;
                 }
             case ID_CMD_POP_MENU8:
                 {
-                    ///  (triger)
+                    /// (trigger)
                     /// add endpoint action
                     m_target = !m_target;
                     return true;
@@ -461,46 +467,53 @@ bool AppEditor::event(SDL_Event *ev, const void *instance)
             default:
                 break;
         }
+        return false;
     }
 
-    if (!ape->isactive())
-        return false;
-
-    switch(ev->type)
+bool AppEditor::event(SDL_Event *ev, const void *instance)
     {
-        case SDL_MOUSEBUTTONDOWN:
+        AppEditor *ape = static_cast<AppEditor*>(
+                const_cast<void*>(instance)
+            );
+
+        if (!ape)
+            return false;
+
+        if (!ape->isenabled())
+            return false;
+
+        if ((ev->type == SDL_RENDER_TARGETS_RESET) || (ev->type == SDL_RENDER_DEVICE_RESET))
+            return false;
+
+        if (!ape->guiBase::IsRegion(ev, ape->m_app->m_appvideo.guiBase::GetGui<SDL_Rect>()))
+            return false;
+
+        switch(ev->type)
         {
-            switch (ev->button.button)
+            case SDL_MOUSEBUTTONDOWN:
             {
-                case SDL_BUTTON_LEFT:
+                switch (ev->button.button)
                 {
-                    if (
-                        (ev->motion.x < ape->gui.rect.w) &&
-                        (ev->motion.y > ape->gui.rect.y)
-                       )
+                    case SDL_BUTTON_LEFT:
                     {
-                        ape->stop();
+                        if (ev->motion.x <= __MENU_W_default)
+                            break;
+
+                        if (ape->isupdate())
+                            break;
+
+                        ape->ppixel.x = (ev->motion.x - __MENU_W_default);
+                        ape->ppixel.y = ev->motion.y;
                         return true;
                     }
-
-                    if (ev->motion.x <= ape->gui.rect.w)
+                    default:
                         break;
-
-                    if (ape->isupdate())
-                        break;
-
-                    ape->ppixel.x = (ev->motion.x - ape->m_app->m_appmenubar.gui.rect.w);
-                    ape->ppixel.y = ev->motion.y;
-                    return true;
                 }
-                default:
-                    break;
+                break;
             }
-            break;
+            default:
+                break;
         }
-        default:
-            break;
-    }
-    return false;
+        return false;
     }
 

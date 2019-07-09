@@ -8,14 +8,16 @@ class AppTerminalOutput : public guiBase
 {
 public:
     //
-    bool init(App*);
-    bool tinit(SDL_Texture**) override;
-    bool evresize(SDL_Texture**) override;
-    bool event(SDL_Event*, const void*) override;
+    bool init(App*, SDL_Rect&);
+    void start();
+    void stop();
+    void draw(std::string const &);
 
 private:
     //
     App        *m_app;
     //
+    bool tinit(SDL_Texture**) override;
+    bool evresize(SDL_Texture**) override;
 };
 

@@ -2,9 +2,9 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="src\ResManagerPopUp.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\ResManager.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="507" topLine="0" />
+			<Cursor1 position="5708" topLine="177" />
 		</Cursor>
 	</File>
 	<File name="src\ResManagerPopUp\ResManagerPopUp936_cn.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -14,12 +14,12 @@
 	</File>
 	<File name="src\ResManager.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1521" topLine="49" />
+			<Cursor1 position="808" topLine="4" />
 		</Cursor>
 	</File>
-	<File name="src\ResManager.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\ResManagerPopUp.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="8318" topLine="279" />
+			<Cursor1 position="507" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

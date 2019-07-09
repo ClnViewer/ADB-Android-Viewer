@@ -54,10 +54,7 @@ typedef struct
 AppMenuPopUp::AppMenuPopUp()
     : m_app(nullptr)
 {
-    guiBase::gui.rect.h = 0;
-    guiBase::gui.rect.w = 0;
-    guiBase::gui.rect.x = 0;
-    guiBase::gui.rect.y = 0;
+    guiBase::gui.rect = {};
     guiBase::gui.texture = nullptr;
     guiBase::gui.instance = nullptr;
     guiBase::ActiveOff();
@@ -79,12 +76,19 @@ bool AppMenuPopUp::init(App *app)
         return false;
 
     m_app = app;
-    if (!(m_hwnd = AppSysDialog::gethwnd(m_app->m_window)))
-        return false;
+    guiBase::gui.rect = {};
+    guiBase::gui.texture = nullptr;
 
     bool ret = guiBase::initgui(app);
-    if (ret)
-        guiBase::ActiveOff();
+    do
+    {
+        if (!ret)
+            break;
+        ret = ((m_hwnd = AppSysDialog::gethwnd(guiBase::GetGui<SDL_Window>())));
+    }
+    while (0);
+
+    guiBase::ActiveOff();
     return ret;
 }
 
@@ -137,7 +141,7 @@ void AppMenuPopUp::show()
         MENU_ADD(l_hPlugMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_12, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
 
-        if ((m_app) && (!m_app->m_appeditor.isactive()))
+        if ((m_app) && (!m_app->m_appeditor.isenabled()))
             MENU_ITEM_ADD(ID_CMD_POP_MENU6, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_7, l_hScrMenu);
         else
         {
@@ -445,6 +449,11 @@ void AppMenuPopUp::show()
             case ID_CMD_POP_MENU22:
                 {
                     cmdEvent.user.code = ID_CMD_POP_MENU22;
+                    break;
+                }
+            case ID_CMD_POP_MENU24:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU24;
                     break;
                 }
             case ID_CMD_POP_MENU30 ... ID_CMD_POP_MENU39:

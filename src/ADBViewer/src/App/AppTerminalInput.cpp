@@ -31,93 +31,112 @@
 
 #include "../ADBViewer.h"
 
-/*
-#include <curses.h>
-PDCEX SDL_Window  *pdc_window = nullptr;
-PDCEX SDL_Surface *pdc_screen = nullptr;
-PDCEX int32_t      pdc_yoffset = 0;
-*/
-
-bool AppTerminal::init(App *app)
+bool AppTerminalInput::init(App *app, SDL_Rect & irect)
     {
         if (!app)
             return false;
 
         m_app = app;
-        //pdc_window = m_app->m_window;
+        SDL_Point point = { irect.x, irect.y };
+        bool ret = false;
 
-        return guiBase::initgui(app);
-    }
-
-bool AppTerminal::tinit(SDL_Texture **texture)
-    {
-        /*
-        guiBase::gui.rect.w = AppConfig::instance().cnf_disp_point.x;
-        guiBase::gui.rect.h = 300;
-        guiBase::gui.rect.x = 0;
-        guiBase::gui.rect.y = AppConfig::instance().cnf_disp_point.y;
-
-        if (!pdc_screen)
-            pdc_screen = SDL_CreateRGBSurface(
-                0U,
-                guiBase::gui.rect.w,
-                guiBase::gui.rect.h,
-                16,
-#               if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff
-#               else
-                0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000
-#               endif
-            );
-        if (!pdc_screen)
-            return false;
-
-        SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
-                guiBase::getgui()->m_renderer,
-                pdc_screen
-            );
-        if (!l_texture)
-            return false;
-
-        GuiLock(
-            std::swap(*texture, l_texture);
-        );
-
-        if (l_texture)
-            SDL_DestroyTexture(l_texture);
-        */
-
-        return true;
-    }
-
-bool AppTerminal::evresize(SDL_Texture **texture)
-    {
-        if ((!texture) || (!*texture))
-            return false;
-
-        guiBase::ActiveOff();
-        if (tinit(texture))
-            guiBase::ActiveOn();
-        return guiBase::IsActive();
-    }
-
-bool AppTerminal::event(SDL_Event *ev, const void *instance)
-{
-    AppTerminal *asc = static_cast<AppTerminal*>(
-                const_cast<void*>(instance)
-            );
-
-    if (ev->type == AppConfig::instance().cnf_uevent)
-    {
-        switch(ev->user.code)
+        do
         {
-            /// x
-            case ID_CMD_POP_MENU4:
-                {
-                    return false;
-                }
+            ret = guiTextInputBox::init(
+                    app,
+                    point,
+                    "> ",
+                    ResManager::IndexFontResource::RES_FONT_CONSOLAS,
+                    ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE,
+                    ResManager::IndexColorResource::RES_COLOR_GREEN_CURSOR
+            );
+            if (!ret)
+                break;
+
+            SDL_Rect rect{};
+            rect.x = 0;
+            rect.y = 0;
+
+            ret = m_icon_editmenu.init(
+                    app,
+                    rect,
+                    ResManager::IndexImageResource::RES_IMG_EDITMENU,
+                    [=](SDL_Event *ev, SDL_Rect *r)
+                    {
+                        switch (ev->type)
+                        {
+                            case SDL_MOUSEMOTION:
+                                {
+                                    guiBase::PushEvent(ID_CMD_POP_MENU26);
+                                    return true;
+                                }
+                            case SDL_MOUSEBUTTONDOWN:
+                                {
+                                    int32_t pos = (ev->motion.y - r->y);
+#                                   pragma GCC diagnostic push
+#                                   pragma GCC diagnostic ignored "-Wpedantic"
+                                    switch (pos)
+                                    {
+                                        case 5   ... 35:
+                                            {
+                                                (void) guiTextInputBox::getresult("> ");
+                                                break;
+                                            }
+                                        case 40  ... 70:
+                                            {
+                                                if (guiTextInputBox::isresult())
+                                                    AppConfig::instance().cnf_adb.SendTextASCII(
+                                                                guiTextInputBox::getresult("> ")
+                                                        );
+                                                break;
+                                            }
+                                        default:
+                                            break;
+                                    }
+#                                   pragma GCC diagnostic pop
+                                    return true;
+                                }
+                        }
+                        return false;
+                    }
+                );
+        }
+        while (0);
+        return ret;
+    }
+
+bool AppTerminalInput::isenabled()
+    {
+        return guiTextInputBox::isactive();
+    }
+
+void AppTerminalInput::start()
+    {
+        start(nullptr);
+    }
+
+void AppTerminalInput::start(SDL_Point *p)
+    {
+        if (guiTextInputBox::isactive())
+            return;
+        guiTextInputBox::begin();
+
+        if (p)
+            m_icon_editmenu.On(p);
+        else
+        {
+            SDL_Point point{};
+            SDL_GetWindowSize(guiTextInputBox::guiBase::GetGui<SDL_Window>(), &point.x, &point.y);
+            point.x = 0;
+            point.y -= __EMENU_H_default;
+            m_icon_editmenu.On(p);
         }
     }
-    return false;
-}
 
+void AppTerminalInput::stop()
+    {
+        if (!guiTextInputBox::isactive())
+            return;
+        guiTextInputBox::end();
+        m_icon_editmenu.Off();
+    }

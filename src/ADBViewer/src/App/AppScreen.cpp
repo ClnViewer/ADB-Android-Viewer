@@ -72,12 +72,14 @@ uint32_t AppScreen::getpixel(SDL_Surface *s, int32_t x, int32_t y)
 SDL_Surface * AppScreen::getscreen()
     {
         SDL_Surface *l_ss_surface = nullptr;
+        SDL_Rect *r = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
+
         do
         {
             l_ss_surface = SDL_CreateRGBSurface(
                 0U,
-                m_app->m_appvideo.guiBase::gui.rect.w,
-                m_app->m_appvideo.guiBase::gui.rect.h,
+                r->w,
+                r->h,
                 32,
 #               if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
                 0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff
@@ -89,9 +91,9 @@ SDL_Surface * AppScreen::getscreen()
                 break;
 
             SDL_RenderReadPixels(
-                guiBase::getgui()->m_renderer,
-                &m_app->m_appvideo.guiBase::gui.rect,
-                SDL_GetWindowPixelFormat(m_app->guiMain::m_window),
+                guiBase::GetGui<SDL_Renderer>(),
+                r,
+                SDL_GetWindowPixelFormat(guiBase::GetGui<SDL_Window>()),
                 l_ss_surface->pixels,
                 l_ss_surface->pitch
             );
@@ -168,7 +170,7 @@ bool AppScreen::screenshot(bool isdialog)
             if (isdialog)
             {
                 if (!AppSysDialog::savefile(
-                        m_app->m_window,
+                        guiBase::GetGui<SDL_Window>(),
                         fname,
                         l_openBmpFilter,
                         l_openBmpExt,
@@ -273,14 +275,15 @@ bool  AppScreen::savepng(SDL_Surface *s, std::string const & fpath)
     return false;
 }
 
-bool AppScreen::event(SDL_Event *ev, const void *instance)
-{
-    AppScreen *asc = static_cast<AppScreen*>(
+bool AppScreen::uevent(SDL_Event *ev, const void *instance)
+    {
+        AppScreen *asc = static_cast<AppScreen*>(
                 const_cast<void*>(instance)
             );
 
-    if (ev->type == AppConfig::instance().cnf_uevent)
-    {
+        if (!asc)
+            return false;
+
         switch(ev->user.code)
         {
             /// Save Screen to default name
@@ -302,7 +305,7 @@ bool AppScreen::event(SDL_Event *ev, const void *instance)
                     return true;
                 }
         }
+        return false;
     }
-    return false;
-}
+
 

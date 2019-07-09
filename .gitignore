@@ -47,3 +47,5 @@ src/license_header.template
 *.cmd
 /src/ADBViewerInstaller/Android-ADB-Viewer-cache/*
 /src/ADBViewer/*.rpt
+/src/ADBViewer/doxygen
+/src/ADBViewerDLL/src/Resources/image/old

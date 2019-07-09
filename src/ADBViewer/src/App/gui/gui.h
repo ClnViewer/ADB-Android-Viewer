@@ -4,6 +4,7 @@
 #include "guiBase.h"
 #include "guiMain.h"
 #include "guiCursor.h"
+#include "guiIcon.h"
 #include "guiStaticText.h"
 #include "guiTextInputBox.h"
 #include "guiAnimation.h"

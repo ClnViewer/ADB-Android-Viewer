@@ -40,7 +40,7 @@ void guiMain::flushicon(int32_t cnt)
         f.cbSize = sizeof(f);
         f.uCount = cnt;
         f.dwTimeout = 500;
-        f.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG; //FLASHW_TIMERNOFG;
+        f.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG;
         f.hwnd = AppSysDialog::gethwnd(m_window);
 
         if (!f.hwnd)

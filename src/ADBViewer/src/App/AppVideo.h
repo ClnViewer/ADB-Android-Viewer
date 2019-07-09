@@ -17,6 +17,7 @@ public:
     void run();
     void stop();
     bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
 
 private:
     //

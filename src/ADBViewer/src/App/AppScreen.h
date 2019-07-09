@@ -9,7 +9,7 @@ class AppScreen : public guiBase
 public:
     //
     bool init(App*);
-    bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
 
     bool screenshot(bool);
     bool screencopy();

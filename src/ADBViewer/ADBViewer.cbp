@@ -86,12 +86,15 @@
 		<Unit filename="src/App/AppConfig.cpp" />
 		<Unit filename="src/App/AppConfig.h" />
 		<Unit filename="src/App/AppConfigUtf8.cpp" />
+		<Unit filename="src/App/AppCursor.cpp" />
+		<Unit filename="src/App/AppCursor.h" />
 		<Unit filename="src/App/AppEditor.cpp" />
 		<Unit filename="src/App/AppEditor.h" />
 		<Unit filename="src/App/AppInputText.cpp" />
 		<Unit filename="src/App/AppInputText.h" />
 		<Unit filename="src/App/AppMenuBar.cpp" />
 		<Unit filename="src/App/AppMenuBar.h" />
+		<Unit filename="src/App/AppMenuBarCmd.cpp" />
 		<Unit filename="src/App/AppMenuPopUp.WINAPI.cpp" />
 		<Unit filename="src/App/AppMenuPopUp.h" />
 		<Unit filename="src/App/AppMessageBar.cpp" />
@@ -105,6 +108,10 @@
 		<Unit filename="src/App/AppSysDialog.h" />
 		<Unit filename="src/App/AppTerminal.cpp" />
 		<Unit filename="src/App/AppTerminal.h" />
+		<Unit filename="src/App/AppTerminalInput.cpp" />
+		<Unit filename="src/App/AppTerminalInput.h" />
+		<Unit filename="src/App/AppTerminalOutput.cpp" />
+		<Unit filename="src/App/AppTerminalOutput.h" />
 		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />
@@ -115,6 +122,8 @@
 		<Unit filename="src/App/gui/guiBase.h" />
 		<Unit filename="src/App/gui/guiCursor.cpp" />
 		<Unit filename="src/App/gui/guiCursor.h" />
+		<Unit filename="src/App/gui/guiIcon.cpp" />
+		<Unit filename="src/App/gui/guiIcon.h" />
 		<Unit filename="src/App/gui/guiMain.WINAPI.cpp" />
 		<Unit filename="src/App/gui/guiMain.cpp" />
 		<Unit filename="src/App/gui/guiMain.h" />
@@ -145,6 +154,15 @@
 				<Changes_Log show_changes_editor="0" app_title="released version %M.%m.%b of %p" changeslog_path="ChangesLog.txt" />
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="AVIEW" />
 			</AutoVersioning>
+			<DoxyBlocks>
+				<comment_style block="0" line="0" />
+				<doxyfile_project output_language="Russian" use_auto_version="1" />
+				<doxyfile_build />
+				<doxyfile_warnings />
+				<doxyfile_output html_help="1" rtf="1" />
+				<doxyfile_dot />
+				<general use_at_in_tags="1" />
+			</DoxyBlocks>
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>

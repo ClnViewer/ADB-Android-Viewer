@@ -61,9 +61,12 @@ namespace Resources
             enum IndexImageResource
             {
                 RES_IMG_LOGO,
-                RES_IMG_MENU,
+                RES_IMG_MENU_ACTIVE,
+                RES_IMG_MENU_DISABLED,
                 RES_IMG_SCREEN,
-                RES_IMG_RCORD
+                RES_IMG_RCORD,
+                RES_IMG_TERMCLOSE,
+                RES_IMG_EDITMENU
             };
             enum IndexSpriteResource
             {
@@ -102,7 +105,9 @@ namespace Resources
                 RES_STR_BENDER_ON,
                 RES_STR_BENDER_OFF,
                 RES_STR_ADB_LANG_NOT_SUPPORT,
-                RES_STR_ADB_LANG_NOT_SUPPORT_ENG
+                RES_STR_ADB_LANG_NOT_SUPPORT_ENG,
+                RES_STR_SCRIPTEDIT_END,
+                RES_STR_CLOSE_TERM
             };
             enum IndexStringPopUpMenu
             {

@@ -33,19 +33,19 @@
 
 #define DRAWLINE1(A) \
     { \
-        draw(A, m_input_point); \
+        draw(A, m_point); \
         m_cursor.setstring(getencode(A), A, A.length()); \
     }
 
 #define DRAWLINE2(A,B) \
     { \
-        draw(A, m_input_point); \
+        draw(A, m_point); \
         m_cursor.setstring(getencode(A), A, B); \
     }
 
 #define DRAWLINE3(A,B,C) \
     { \
-        draw(B, m_input_point); \
+        draw(B, m_point); \
         m_cursor.setstring(A, B, C); \
     }
 
@@ -78,7 +78,7 @@ guiTextInputBox::guiTextInputBox()
 
 bool guiTextInputBox::init(
             App *app,
-            SDL_Point point,
+            SDL_Point & point,
             std::string const & prompt,
             ResManager::IndexFontResource ifx,
             ResManager::IndexColorResource icx,
@@ -87,7 +87,7 @@ bool guiTextInputBox::init(
     {
         do
         {
-            m_input_point = point;
+            m_point = point;
             m_prompt = prompt;
 
             if (!guiStaticText::init(app, ifx, icx))
@@ -106,6 +106,12 @@ bool guiTextInputBox::init(
 bool guiTextInputBox::tinit(SDL_Texture**)
     {
         return true;
+    }
+
+void guiTextInputBox::setcord(SDL_Point & p)
+    {
+        m_point = p;
+        m_cursor.setcord(p);
     }
 
 void guiTextInputBox::draw(std::string const & s, SDL_Point & point)
@@ -130,7 +136,7 @@ void guiTextInputBox::begin(std::string const & s)
         SDL_StartTextInput();
         m_str.erase();
         DRAWLINE1(s);
-        m_cursor.start();
+        m_cursor.On();
     }
 
 void guiTextInputBox::end()
@@ -140,7 +146,7 @@ void guiTextInputBox::end()
 
         SDL_StopTextInput();
         m_active = false;
-        m_cursor.stop();
+        m_cursor.Off();
         guiStaticText::clear();
     }
 
@@ -152,6 +158,13 @@ bool guiTextInputBox::isactive() const
 bool guiTextInputBox::isresult()
     {
         return (!m_str.empty());
+    }
+
+std::string guiTextInputBox::getresult(std::string const & prompt)
+    {
+        std::string s = getresult();
+        DRAWLINE1(prompt);
+        return s;
     }
 
 std::string guiTextInputBox::getresult()
@@ -240,9 +253,9 @@ void guiTextInputBox::addhistory(std::string const & s)
         m_history_array[m_history_idx].assign(s.c_str());
     }
 
-bool guiTextInputBox::inputev(SDL_Event *ev)
+bool guiTextInputBox::eventcb(SDL_Event *ev)
     {
-        /// enable only system key:
+        /// Enabled only system key:
         /// KMOD_NUM, KMOD_CAPS,
         /// KMOD_RSHIFT, KMOD_LSHIFT, KMOD_SHIFT,
         /// KMOD_CTRL*
@@ -287,9 +300,7 @@ bool guiTextInputBox::inputev(SDL_Event *ev)
                     }
                 case SDLK_ESCAPE:
                     {
-                        end();
-                        m_str.erase();
-                        break;
+                        return false;
                     }
                 case SDLK_RETURN:
                 case SDLK_RETURN2:

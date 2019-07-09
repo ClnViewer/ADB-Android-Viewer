@@ -30,5 +30,7 @@ static inline const char *help_strings_en[] = {
 	"Bender: I will come soon ..",
 	"Bender: I turn off ..",
 	"! ADB not support input text in national language !",
+	"Close and Save Script",
+	"Close terminal",
 	nullptr
 };

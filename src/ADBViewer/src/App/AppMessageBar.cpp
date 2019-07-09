@@ -31,14 +31,6 @@
 
 #include "../ADBViewer.h"
 
-AppMessageBar::AppMessageBar()
-    {
-    }
-
-AppMessageBar::~AppMessageBar()
-    {
-    }
-
 bool AppMessageBar::init(App *app)
     {
         if (!app)
@@ -66,7 +58,114 @@ bool AppMessageBar::evresize(SDL_Texture**)
         return false;
     }
 
-bool AppMessageBar::event(SDL_Event *ev, const void *instance)
+void AppMessageBar::PrintInfo(MgrType mgrt, std::string const & s, int32_t id, SDL_Event *ev)
+    {
+    std::stringstream ss;
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+#   else
+    ss << ResManager::stringload(
+            ResManager::IndexStringResource::RES_STR_APPTITLENAME,
+            AppConfig::instance().cnf_lang
+        );
+    ss << "v." << AVIEW_FULLVERSION_STRING;
+    ss << " r." << AVIEW_SVN_REVISION;
+#   endif
+
+    switch(mgrt)
+    {
+        case MgrType::MGR_MAIN:
+        {
+            SDL_Rect *r = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
+
+            if (ev->motion.x > __MENU_W_default)
+            {
+                if ((!AppConfig::instance().cnf_isstop) && (AppConfig::instance().cnf_ispos))
+                {
+                    uint32_t x = ((AppConfig::instance().cnf_disp_ratio) ?
+                        ((ev->motion.x - __MENU_W_default) * AppConfig::instance().cnf_disp_ratio) :
+                         (ev->motion.x - __MENU_W_default)
+                        );
+                    uint32_t y = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (ev->motion.y * AppConfig::instance().cnf_disp_ratio) :
+                         ev->motion.y
+                        );
+                    uint32_t w = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (r->w * AppConfig::instance().cnf_disp_ratio) :
+                         r->w
+                        );
+                    uint32_t h = ((AppConfig::instance().cnf_disp_ratio) ?
+                        (r->h * AppConfig::instance().cnf_disp_ratio) :
+                         r->h
+                        );
+#                   if !defined (_BUILD_FRAME_NO_TITLE)
+                    ss << " - ";
+#                   endif
+                    ss << "( " << w << "x" << h << " )";
+                    ss << " - " << "( X: " << x << " Y: " << y << " )";
+                }
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                else
+                {
+                    m_app->m_appmsgbar.clear();
+                    return;
+                }
+#               endif
+            }
+            else
+            {
+                /*
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                m_app->m_appmsgbar.clear();
+#               endif
+                */
+                return;
+            }
+            break;
+        }
+        case MgrType::MGR_MENU:
+        {
+#           if defined (_BUILD_FRAME_NO_TITLE)
+            if (s.empty())
+            {
+                m_app->m_appmsgbar.clear();
+                return;
+            }
+            ss << s.c_str();
+#           else
+            if (!s.empty())
+                ss << " - " << s.c_str();
+#           endif
+            break;
+        }
+        default:
+            {
+                /*
+#               if defined (_BUILD_FRAME_NO_TITLE)
+                m_app->m_appmsgbar.clear();
+#               endif
+                */
+                return;
+            }
+    }
+#   if defined (_BUILD_FRAME_NO_TITLE)
+    ss << "  ";
+    AddMessageQueue(
+        ss.str(),
+        3U,
+        id
+    );
+#   else
+    settitle(ss.str());
+#   endif
+    }
+
+void AppMessageBar::settitle(std::string const & s)
+    {
+        SDL_SetWindowTitle(guiBase::GetGui<SDL_Window>(), s.c_str());
+    }
+
+bool AppMessageBar::uevent(SDL_Event *ev, const void *instance)
 {
     do
     {
@@ -77,18 +176,7 @@ bool AppMessageBar::event(SDL_Event *ev, const void *instance)
         if (!amb)
             break;
 
-        if (
-            (ev->type == SDL_RENDER_TARGETS_RESET) ||
-            (ev->type == SDL_RENDER_DEVICE_RESET)
-            )
-        {
-            (void) amb->evresize(&amb->guiStaticText::gui.texture);
-            break;
-        }
-        if (
-            (ev->type != AppConfig::instance().cnf_uevent) ||
-            (ev->user.code != ID_CMD_MSGBAR)
-            )
+        if (ev->user.code != ID_CMD_MSGBAR)
             break;
 
         if (!AppMessageQueue::instance().checkData())
@@ -114,10 +202,23 @@ bool AppMessageBar::event(SDL_Event *ev, const void *instance)
                     amb->clear();
                 }
             );
+        return true;
     }
     while (0);
 
     return false;
 }
 
+bool AppMessageBar::event(SDL_Event *ev, const void *instance)
+    {
+        AppMessageBar *amb = static_cast<AppMessageBar*>(
+                    const_cast<void*>(instance)
+                );
 
+        if (!amb)
+            return false;
+
+        if ((ev->type == SDL_RENDER_TARGETS_RESET) || (ev->type == SDL_RENDER_DEVICE_RESET))
+            (void) amb->evresize(&amb->guiStaticText::gui.texture);
+        return false;
+    }

@@ -10,7 +10,7 @@ private:
 public:
     //
     std::string       m_prompt;
-    SDL_Point         m_input_point;
+    SDL_Point         m_point;
     //
 
     guiTextInputBox();
@@ -18,7 +18,7 @@ public:
 
     bool init(
             App*,
-            SDL_Point,
+            SDL_Point&,
             std::string const&,
             ResManager::IndexFontResource,
             ResManager::IndexColorResource,
@@ -30,7 +30,9 @@ public:
     bool isactive() const;
     bool isresult();
     std::string getresult();
-    bool inputev(SDL_Event*);
+    std::string getresult(std::string const&);
+    bool eventcb(SDL_Event*);
+    void setcord(SDL_Point&);
 
 private:
     //

@@ -64,10 +64,10 @@
 		<Unit filename="../ADBViewer/src/loader.h" />
 		<Unit filename="../ADBViewer/src/version.h" />
 		<Unit filename="src/ADBDriver.h" />
+		<Unit filename="src/ADBDriverDLL.cpp" />
 		<Unit filename="src/ADBDriverDLL.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="src/ADBDriverDLL.cpp" />
 		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.cpp" />
 		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.h" />
 		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialogInternal.h" />

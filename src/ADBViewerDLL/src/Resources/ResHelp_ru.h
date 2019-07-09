@@ -31,5 +31,7 @@ static inline const char *help_strings_ru[] = {
     "Бендер: я выключаюсь..",
     "! ADB не поддерживает ввод текста на национальном языке !",
     "! ADB not support input text in national language !",
+    "Закрыть и Сохранить скрипт",
+    "Закрыть терминал",
     nullptr
 };

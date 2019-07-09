@@ -10,10 +10,11 @@
 #define __H_default 400
 #define __MENU_W_default  32
 #define __MENU_H_dragable 330
+#define __EMENU_H_default 75
 
 #define ID_CMD_POP_MENU0 20180
-#define ID_CMD_POP_MENU1 20181
-#define ID_CMD_POP_MENU2 20182
+#define ID_CMD_POP_MENU1 20181  // Install APK
+#define ID_CMD_POP_MENU2 20182  // Stop ADB connect, send event ID_CMD_POP_MENU98
 #define ID_CMD_POP_MENU3 20183
 #define ID_CMD_POP_MENU4 20184  // Save Screen to default name
 #define ID_CMD_POP_MENU5 20185  // Save Screen to select user dialog name
@@ -37,7 +38,10 @@
 #define ID_CMD_POP_MENU21 20201
 #define ID_CMD_POP_MENU22 20202 // Copy Screen to clipboard
 #define ID_CMD_POP_MENU23 20203 // Display rotate menu (current status disabled)
-#define ID_CMD_POP_MENU24 20203 // Display Terminal open/close (triger)
+#define ID_CMD_POP_MENU24 20203 // Display Terminal open/close (trigger)
+
+#define ID_CMD_POP_MENU25 20204 // Change cursor (SDL_SYSTEM_CURSOR_ARROW)
+#define ID_CMD_POP_MENU26 20205 // Change cursor (SDL_SYSTEM_CURSOR_HAND)
 
 #define ID_CMD_POP_MENU30 20300 // Android ADB command ID_CMD_POP_MENU30 - ID_CMD_POP_MENU40
 #define ID_CMD_POP_MENU31 20301
@@ -60,6 +64,9 @@
 
 #define ID_CMD_POP_MENU100 20501 // Input text box start
 #define ID_CMD_POP_MENU101 20502 // Input text box stop ???
+
+#define ID_CMD_POP_MENU102 20503 // Change menu enable/disable
+
 
 #define ID_CMD_MSGBAR     49999
 
@@ -85,6 +92,7 @@ using GameDev::ADBDriver;
 #  include "App/plugin/AppPluginManager.h"
 #  include "App/gui/gui.h"
 #  include "App/AppMessageBar.h"
+#  include "App/AppCursor.h"
 #  include "App/AppScreen.h"
 #  include "App/AppEditor.h"
 #  include "App/AppAnimationBender.h"
@@ -92,8 +100,8 @@ using GameDev::ADBDriver;
 #  include "App/AppMenuBar.h"
 #  include "App/AppMenuPopUp.h"
 #  include "App/AppInputText.h"
-#  include "AppTerminalInput.h"
-#  include "AppTerminalOutput.h"
+#  include "App/AppTerminalInput.h"
+#  include "App/AppTerminalOutput.h"
 #  include "App/AppTerminal.h"
 #  include "App/App.h"
 

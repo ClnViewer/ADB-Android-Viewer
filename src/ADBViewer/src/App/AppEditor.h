@@ -29,7 +29,7 @@ public:
     AppEditor();
     ~AppEditor();
 
-    bool isactive() const;
+    bool isenabled() const;
     bool isupdate() const;
     bool istarget() const;
     bool init(App*);
@@ -38,11 +38,13 @@ public:
     void cancel();
     void update(uint32_t, uint32_t, std::vector<uint8_t> &);
     bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
 
 private:
     //
     App                            *m_app;
-    std::atomic<bool>               m_active;
+    guiIcon                         m_icon_record;
+    std::atomic<bool>               m_enable;
     std::atomic<bool>               m_target;
     std::vector<AppEditor::_PIXELS> m_pixels;
     std::vector<AppEditor::_PIXELS> m_ptarget;
@@ -55,7 +57,5 @@ private:
     int32_t getpos(int32_t, int32_t, uint32_t, uint32_t);
     int32_t checkpos(uint32_t, uint32_t, int32_t);
     bool    foundpos(std::vector<AppEditor::_PIXELS>&, AppEditor::_PIXELS&);
-    void    gui_icon_on();
-    void    gui_icon_off();
     void    write_script(std::string const&);
 };

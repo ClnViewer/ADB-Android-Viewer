@@ -115,13 +115,24 @@ void guiMain::draw()
 void guiMain::events(SDL_Event *ev)
     {
         for (auto &gr : m_guipool)
-            if ((gr) && (gr->active) && (gr->instance))
+            if ((gr) && (gr->instance))
             {
                 guiBase *gb = static_cast<guiBase*>(
                                 const_cast<void*>(gr->instance)
                                 );
-                if ((gb) && (gb->event(ev, gr->instance)))
-                    break;
+                if (gb)
+                {
+                    if (ev->type == AppConfig::instance().cnf_uevent)
+                    {
+                        if (gb->uevent(ev, gr->instance))
+                            break;
+                    }
+                    else if (gr->active)
+                    {
+                        if (gb->event(ev, gr->instance))
+                            break;
+                    }
+                }
             }
     }
 

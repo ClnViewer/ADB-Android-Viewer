@@ -31,5 +31,7 @@ static inline const char *help_strings_dm[] = {
     "Bender: Ich schalte aus ..",
     "! ADB unterstützt keinen Eingabetext in der Landessprache !",
     "! ADB not support input text in national language !",
+    "Skript schließen und speichern",
+    "Terminal schließen",
     nullptr
 };

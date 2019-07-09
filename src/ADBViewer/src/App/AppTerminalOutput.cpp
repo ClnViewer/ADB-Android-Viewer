@@ -31,25 +31,21 @@
 
 #include "../ADBViewer.h"
 
-/*
-#include <curses.h>
-PDCEX SDL_Window  *pdc_window = nullptr;
-PDCEX SDL_Surface *pdc_screen = nullptr;
-PDCEX int32_t      pdc_yoffset = 0;
-*/
 
-bool AppTerminal::init(App *app)
+bool AppTerminalOutput::init(App *app, SDL_Rect & rect)
     {
         if (!app)
             return false;
 
         m_app = app;
-        //pdc_window = m_app->m_window;
+        guiBase::gui.rect = rect;
 
-        return guiBase::initgui(app);
+        bool ret = guiBase::initgui(app);
+        guiBase::ActiveOff();
+        return ret;
     }
 
-bool AppTerminal::tinit(SDL_Texture **texture)
+bool AppTerminalOutput::tinit(SDL_Texture **texture)
     {
         /*
         guiBase::gui.rect.w = AppConfig::instance().cnf_disp_point.x;
@@ -73,7 +69,7 @@ bool AppTerminal::tinit(SDL_Texture **texture)
             return false;
 
         SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
-                guiBase::getgui()->m_renderer,
+                guiBase::GetGui<SDL_Renderer>(),
                 pdc_screen
             );
         if (!l_texture)
@@ -90,7 +86,7 @@ bool AppTerminal::tinit(SDL_Texture **texture)
         return true;
     }
 
-bool AppTerminal::evresize(SDL_Texture **texture)
+bool AppTerminalOutput::evresize(SDL_Texture **texture)
     {
         if ((!texture) || (!*texture))
             return false;
@@ -101,23 +97,25 @@ bool AppTerminal::evresize(SDL_Texture **texture)
         return guiBase::IsActive();
     }
 
-bool AppTerminal::event(SDL_Event *ev, const void *instance)
-{
-    AppTerminal *asc = static_cast<AppTerminal*>(
-                const_cast<void*>(instance)
-            );
-
-    if (ev->type == AppConfig::instance().cnf_uevent)
+void AppTerminalOutput::start()
     {
-        switch(ev->user.code)
-        {
-            /// x
-            case ID_CMD_POP_MENU4:
-                {
-                    return false;
-                }
-        }
+        if (!guiBase::gui.texture)
+            if (!tinit(&guiBase::gui.texture))
+                return;
+        guiBase::ActiveOn();
     }
-    return false;
-}
+
+void AppTerminalOutput::stop()
+    {
+        guiBase::ActiveOff();
+
+        if (guiBase::gui.texture)
+            SDL_DestroyTexture(guiBase::gui.texture);
+
+        guiBase::gui.texture = nullptr;
+    }
+
+void AppTerminalOutput::draw(std::string const & s)
+    {
+    }
 

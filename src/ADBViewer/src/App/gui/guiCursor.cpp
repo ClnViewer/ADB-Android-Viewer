@@ -83,12 +83,17 @@ bool guiCursor::tinit(SDL_Texture **texture)
                             )))
                 break;
 
-            guiBase::gui.rect.w = surface->w;
-            guiBase::gui.rect.h = surface->h;
-            guiBase::gui.rect.x = m_point.x + surface->w;
-            guiBase::gui.rect.y = m_point.y;
+            SDL_Rect *r = guiBase::GetGui<SDL_Rect>();
 
-            if (!(*texture = SDL_CreateTextureFromSurface(guiBase::getgui()->m_renderer, surface)))
+            r->w = surface->w;
+            r->h = surface->h;
+            r->x = m_point.x + surface->w;
+            r->y = m_point.y;
+
+            if (!(*texture = SDL_CreateTextureFromSurface(
+                                guiBase::GetGui<SDL_Renderer>(),
+                                surface)
+                  ))
                 break;
 
             ret = true;
@@ -110,7 +115,12 @@ bool guiCursor::evresize(SDL_Texture **texture)
         return true;
     }
 
-void guiCursor::stop()
+void guiCursor::setcord(SDL_Point & p)
+    {
+        m_point = p;
+    }
+
+void guiCursor::Off()
     {
         guiBase::ActiveOff();
 
@@ -119,7 +129,7 @@ void guiCursor::stop()
         m_pos = 0;
     }
 
-void guiCursor::start()
+void guiCursor::On()
     {
         if ((!m_font) || (m_timer.isactive()))
             return;
@@ -156,6 +166,8 @@ void guiCursor::setstring(guiCursor::IndexTextType t, std::string const & s, int
 
 void guiCursor::setstring(guiCursor::IndexTextType t, std::string const & s)
     {
+        SDL_Rect *r = guiBase::GetGui<SDL_Rect>();
+
         do
         {
             int32_t w, h, ret = -1;
@@ -194,14 +206,14 @@ void guiCursor::setstring(guiCursor::IndexTextType t, std::string const & s)
             if (ret)
                 break;
 
-            guiBase::gui.rect.x = m_point.x + w;
-            guiBase::gui.rect.y = m_point.y;
+            r->x = m_point.x + w;
+            r->y = m_point.y;
             return;
         }
         while (0);
 
-        guiBase::gui.rect.x = m_point.x;
-        guiBase::gui.rect.y = m_point.y;
+        r->x = m_point.x;
+        r->y = m_point.y;
         return;
     }
 

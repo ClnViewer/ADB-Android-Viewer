@@ -48,7 +48,7 @@ bool guiStaticText::init(
 
 void guiStaticText::draw(std::string const & s, SDL_Point *offset, int32_t id)
     {
-        if ((!guiBase::getgui()) || (!m_font) || (!m_color))
+        if ((!guiBase::GetGui<guiMain>()) || (!m_font) || (!m_color))
             return;
 
         if ((id > 0) && (m_id == id))
@@ -70,6 +70,7 @@ void guiStaticText::draw(std::string const & s, SDL_Point *offset, int32_t id)
             SDL_DestroyTexture(tmp_texture);
 
         SDL_Surface *surface = nullptr;
+        SDL_Rect    *r = guiBase::GetGui<SDL_Rect>();
 
         do
         {
@@ -81,12 +82,15 @@ void guiStaticText::draw(std::string const & s, SDL_Point *offset, int32_t id)
                             )))
                 break;
 
-            guiBase::gui.rect.w = surface->w;
-            guiBase::gui.rect.h = surface->h;
-            guiBase::gui.rect.x = offset->x;
-            guiBase::gui.rect.y = offset->y;
+            r->w = surface->w;
+            r->h = surface->h;
+            r->x = offset->x;
+            r->y = offset->y;
 
-            if ((tmp_texture = SDL_CreateTextureFromSurface(guiBase::getgui()->m_renderer, surface)))
+            if ((tmp_texture = SDL_CreateTextureFromSurface(
+                                    guiBase::GetGui<SDL_Renderer>(),
+                                    surface)
+                 ))
             {
                 GuiLock(
                     std::swap(guiBase::gui.texture, tmp_texture);

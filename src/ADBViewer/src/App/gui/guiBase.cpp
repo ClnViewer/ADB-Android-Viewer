@@ -71,6 +71,11 @@ bool guiBase::event(SDL_Event *ev, const void*)
         return false;
     }
 
+bool guiBase::uevent(SDL_Event *ev, const void*)
+    {
+        return false;
+    }
+
 void guiBase::ActiveOn()
     {
         if (!gui.active)
@@ -88,10 +93,55 @@ bool guiBase::IsActive()
         return gui.active.load();
     }
 
-guiMain * guiBase::getgui() const
+bool guiBase::IsRegion(SDL_Event *ev)
     {
-        return m_guimain;
+        return IsRegion(ev, nullptr);
     }
+
+bool guiBase::IsRegion(SDL_Event *ev, SDL_Rect *irect)
+    {
+        SDL_Rect *rect = ((!irect) ? &gui.rect : irect);
+
+        if ((!rect->w) || (!rect->h))
+            return false;
+        if (
+            ((ev->motion.x >= rect->x) && (ev->motion.x <= (rect->x + rect->w))) &&
+            ((ev->motion.y >= rect->y) && (ev->motion.y <= (rect->y + rect->h)))
+           )
+            return true;
+        return false;
+    }
+
+void guiBase::PushEvent(int32_t id)
+    {
+        SDL_Event cmdEvent{};
+        cmdEvent.type = AppConfig::instance().cnf_uevent;
+        cmdEvent.user.code = id;
+        SDL_PushEvent(&cmdEvent);
+    }
+
+template<typename T>
+T * guiBase::GetGui()
+    {
+        if constexpr (std::is_same<T, SDL_Window>::value)
+            return m_guimain->m_window;
+        else if constexpr (std::is_same<T, SDL_Renderer>::value)
+            return m_guimain->m_renderer;
+        else if constexpr (std::is_same<T, SDL_Rect>::value)
+            return &gui.rect;
+        else if constexpr (std::is_same<T, guiRenderer_s>::value)
+            return &gui;
+        else if constexpr (std::is_same<T, guiMain>::value)
+            return m_guimain;
+        else
+            return nullptr;
+    }
+
+template guiMain * guiBase::GetGui<guiMain>();
+template SDL_Rect * guiBase::GetGui<SDL_Rect>();
+template SDL_Window * guiBase::GetGui<SDL_Window>();
+template SDL_Renderer * guiBase::GetGui<SDL_Renderer>();
+template guiRenderer_s * guiBase::GetGui<guiRenderer_s>();
 
 guiBase::guiBase()
      :  gui{}, m_guimain(nullptr)
@@ -106,6 +156,9 @@ guiBase::~guiBase()
             m_guimain->removepool(gui.id);
 
         if (gui.texture)
+        {
+            std::lock_guard<std::mutex> l_lock(m_lock);
             SDL_DestroyTexture(gui.texture);
+        }
         gui.texture = nullptr;
     }

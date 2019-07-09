@@ -46,7 +46,7 @@ void * AppScreen::getsysscreen(SDL_Surface *s)
             if (!s)
                 break;
 
-            if (!(l_hWnd = AppSysDialog::gethwnd(m_app->guiMain::m_window)))
+            if (!(l_hWnd = AppSysDialog::gethwnd(guiBase::GetGui<SDL_Window>())))
                 break;
 
             if (!(l_wDC = ::GetDC(l_hWnd)))
@@ -90,7 +90,7 @@ bool AppScreen::setclipboard(void *vsrc)
             if (!vsrc)
                 break;
 
-            if (!(l_hWnd = AppSysDialog::gethwnd(m_app->guiMain::m_window)))
+            if (!(l_hWnd = AppSysDialog::gethwnd(guiBase::GetGui<SDL_Window>())))
                 break;
 
             if (

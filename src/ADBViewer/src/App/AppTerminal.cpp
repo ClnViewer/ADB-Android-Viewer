@@ -31,92 +31,233 @@
 
 #include "../ADBViewer.h"
 
-/*
-#include <curses.h>
-PDCEX SDL_Window  *pdc_window = nullptr;
-PDCEX SDL_Surface *pdc_screen = nullptr;
-PDCEX int32_t      pdc_yoffset = 0;
-*/
-
 bool AppTerminal::init(App *app)
     {
         if (!app)
             return false;
 
         m_app = app;
-        //pdc_window = m_app->m_window;
+        guiBase::gui.rect = {};
+        guiBase::gui.texture = nullptr;
 
-        return guiBase::initgui(app);
+        bool ret = guiBase::initgui(app);
+        if (ret)
+        {
+            do
+            {
+                SDL_Rect rect{};
+
+                rect.x = 0;
+                rect.y = AppConfig::instance().cnf_disp_point.y;
+
+                ret = m_icon_close.init(
+                        app,
+                        rect,
+                        ResManager::IndexImageResource::RES_IMG_TERMCLOSE,
+                        [=](SDL_Event *ev, SDL_Rect *r)
+                        {
+                            switch (ev->type)
+                            {
+                                case SDL_MOUSEMOTION:
+                                    {
+                                        AddMessageQueue(
+                                            ResManager::stringload(
+                                                ResManager::IndexStringResource::RES_STR_CLOSE_TERM,
+                                                AppConfig::instance().cnf_lang
+                                            ),
+                                            5U,
+                                            (__LINE__ + 1000)
+                                        );
+                                        guiBase::PushEvent(ID_CMD_POP_MENU26);
+                                        return true;
+                                    }
+                                case SDL_MOUSEBUTTONDOWN:
+                                    {
+                                        guiBase::PushEvent(ID_CMD_POP_MENU24);
+                                        return true;
+                                    }
+                            }
+                            return false;
+                        }
+                    );
+                if (!ret)
+                    break;
+
+                ret = getwcord();
+                if (!ret)
+                    break;
+
+                rect.w = m_rect.w;
+                rect.h = __MENU_W_default;
+                rect.x = m_rect.x;
+                rect.y = (m_rect.h - __MENU_W_default);
+                ret = m_tinput.init(app, rect);
+                if (!ret)
+                    break;
+            }
+            while (0);
+        }
+        return ret;
     }
 
 bool AppTerminal::tinit(SDL_Texture **texture)
     {
-        /*
-        guiBase::gui.rect.w = AppConfig::instance().cnf_disp_point.x;
-        guiBase::gui.rect.h = 300;
-        guiBase::gui.rect.x = 0;
-        guiBase::gui.rect.y = AppConfig::instance().cnf_disp_point.y;
-
-        if (!pdc_screen)
-            pdc_screen = SDL_CreateRGBSurface(
-                0U,
-                guiBase::gui.rect.w,
-                guiBase::gui.rect.h,
-                16,
-#               if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff
-#               else
-                0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000
-#               endif
-            );
-        if (!pdc_screen)
-            return false;
-
-        SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
-                guiBase::getgui()->m_renderer,
-                pdc_screen
-            );
-        if (!l_texture)
-            return false;
-
         GuiLock(
-            std::swap(*texture, l_texture);
+            if ((texture) && (*texture))
+                SDL_DestroyTexture(*texture);
+            *texture = nullptr;
         );
-
-        if (l_texture)
-            SDL_DestroyTexture(l_texture);
-        */
-
         return true;
     }
 
 bool AppTerminal::evresize(SDL_Texture **texture)
     {
-        if ((!texture) || (!*texture))
+        return tinit(texture);
+    }
+
+bool AppTerminal::isenabled() const
+    {
+        return m_enable.load();
+    }
+
+bool AppTerminal::getwcord()
+    {
+        do
+        {
+            SDL_DisplayMode dm{};
+            SDL_Point point1{};
+
+            SDL_GetWindowPosition(guiBase::GetGui<SDL_Window>(), &point1.x, &point1.y);
+            if ((!point1.x) && (!point1.y))
+                break;
+
+            if (SDL_GetCurrentDisplayMode(0, &dm) < 0)
+                break;
+
+            SDL_Point & point2 = AppConfig::instance().cnf_disp_point;
+
+            m_rect.w = point2.x;
+            m_rect.h = dm.h - point1.y;
+            m_rect.y = point2.y;
+            m_rect.x = __MENU_W_default;
+
+            return true;
+        }
+        while (0);
+
+        return false;
+    }
+
+void AppTerminal::runselect()
+    {
+        std::lock_guard<std::mutex> l_lock(m_lock);
+
+        if (m_enable.load())
+        {
+            m_enable = false;
+            m_tinput.stop();
+            m_icon_close.Off();
+
+            SDL_SetWindowSize(
+                guiBase::GetGui<SDL_Window>(),
+                AppConfig::instance().cnf_disp_point.x,
+                AppConfig::instance().cnf_disp_point.y
+            );
+        }
+        else
+        {
+            if ((m_rect.h - AppConfig::instance().cnf_disp_point.y) < 100)
+            {
+                return;
+            }
+            m_enable = true;
+
+            getwcord();
+            SDL_Point point{};
+            point.x = m_rect.x;
+            point.y = (m_rect.h - ((__MENU_W_default / 3) * 2) - 2);
+            m_tinput.guiTextInputBox::setcord(point);
+
+            SDL_SetWindowSize(
+                guiBase::GetGui<SDL_Window>(),
+                m_rect.w,
+                m_rect.h
+            );
+
+            point.x = 0;
+            point.y = (m_rect.h - __EMENU_H_default);
+            m_tinput.start(&point);
+            m_icon_close.On();
+        }
+    }
+
+bool AppTerminal::uevent(SDL_Event *ev, const void *instance)
+    {
+        AppTerminal *apt = static_cast<AppTerminal*>(
+                const_cast<void*>(instance)
+            );
+
+        if (!apt)
             return false;
 
-        guiBase::ActiveOff();
-        if (tinit(texture))
-            guiBase::ActiveOn();
-        return guiBase::IsActive();
+        if (ev->user.code != ID_CMD_POP_MENU24)
+            return false;
+
+        apt->runselect();
+        return true;
     }
 
 bool AppTerminal::event(SDL_Event *ev, const void *instance)
 {
-    AppTerminal *asc = static_cast<AppTerminal*>(
+    AppTerminal *apt = static_cast<AppTerminal*>(
                 const_cast<void*>(instance)
             );
 
-    if (ev->type == AppConfig::instance().cnf_uevent)
+    if (!apt)
+         return false;
+
+    if (!m_enable.load())
+        return false;
+
+    auto istate = apt->m_app->state();
+    if ((istate[App::AppStateType::STATE_APP_STOP]) ||
+        (istate[App::AppStateType::STATE_APP_EDIT]) ||
+        (istate[App::AppStateType::STATE_APP_INPUT]))
+        return false;
+
+    /// todo check input & otput screen size
+    if (apt->guiBase::IsRegion(ev, apt->m_app->m_appvideo.guiBase::GetGui<SDL_Rect>()))
+        return false;
+
+    switch (ev->type)
     {
-        switch(ev->user.code)
-        {
-            /// x
-            case ID_CMD_POP_MENU4:
+        case SDL_KEYDOWN:
+            {
+                if (ev->key.keysym.mod != KMOD_NONE)
+                    for (auto & m : AppConfig::instance().cnf_keymod_alt)
+                        if (ev->key.keysym.mod & m)
+                            return false;
+
+                switch (ev->key.keysym.sym)
                 {
-                    return false;
+                    /// Text input panel end input (CTRL + ENTER) or (ENTER NUMPAD)
+                    case SDLK_RETURN:
+                    case SDLK_RETURN2:
+                        {
+                            if (apt->m_tinput.guiTextInputBox::isresult())
+                                AppConfig::instance().cnf_adb.SendTextASCII(
+                                        apt->m_tinput.guiTextInputBox::getresult("> ")
+                                    );
+                            return true;
+                        }
                 }
-        }
+                return apt->m_tinput.guiTextInputBox::eventcb(ev);
+            }
+        case SDL_TEXTINPUT:
+            {
+                return apt->m_tinput.guiTextInputBox::eventcb(ev);
+            }
+
     }
     return false;
 }

@@ -41,9 +41,12 @@ namespace Resources
 #include "Resources/ResHelp_dm.h"
 #include "Resources/ResHelp_cn.h"
 #include "Resources/ResLogo.h"
-#include "Resources/ResMenu.h"
+#include "Resources/ResMenu0.h"
+#include "Resources/ResMenu1.h"
 #include "Resources/ResScreen.h"
 #include "Resources/ResRecord.h"
+#include "Resources/ResEditMenu.h"
+#include "Resources/ResTermClose.h"
 #include "Resources/Res16704font.h"
 #include "Resources/ResConsolafont.h"
 #include "Resources/ResFreeSansfont.h"
@@ -176,9 +179,13 @@ SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
         {
             return imagedata(&img_logo);
         }
-        case ResManager::IndexImageResource::RES_IMG_MENU:
+        case ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE:
         {
             return imagedata(&img_menu0);
+        }
+        case ResManager::IndexImageResource::RES_IMG_MENU_DISABLED:
+        {
+            return imagedata(&img_menu1);
         }
         case ResManager::IndexImageResource::RES_IMG_SCREEN:
         {
@@ -187,6 +194,14 @@ SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
         case ResManager::IndexImageResource::RES_IMG_RCORD:
         {
             return imagedata(&img_record);
+        }
+        case ResManager::IndexImageResource::RES_IMG_TERMCLOSE:
+        {
+            return imagedata(&img_termclose);
+        }
+        case ResManager::IndexImageResource::RES_IMG_EDITMENU:
+        {
+            return imagedata(&img_editmenu);
         }
         default:
             return nullptr;

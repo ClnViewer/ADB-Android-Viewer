@@ -12,6 +12,8 @@ public:
     void run() override;
     void stop() override;
     bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
+    bool isenabled();
 
 private:
     //

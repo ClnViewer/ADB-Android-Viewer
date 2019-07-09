@@ -4,18 +4,20 @@
 
 class App;
 
-class AppTerminalInput : public guiBase
+class AppTerminalInput : public guiTextInputBox
 {
 public:
     //
-    bool init(App*);
-    bool tinit(SDL_Texture**) override;
-    bool evresize(SDL_Texture**) override;
-    bool event(SDL_Event*, const void*) override;
+    bool init(App*, SDL_Rect&);
+    bool isenabled();
+    void start(SDL_Point*);
+    void start();
+    void stop();
 
 private:
     //
     App        *m_app;
+    guiIcon     m_icon_editmenu;
     //
 };
 

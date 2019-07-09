@@ -104,7 +104,7 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
             {
                 if (isvalid)
                     if (!(m_textures[i] = SDL_CreateTextureFromSurface(
-                                            guiBase::getgui()->m_renderer,
+                                            guiBase::GetGui<SDL_Renderer>(),
                                             l_sprites[i]
                         )))
                         isvalid = false;
@@ -158,11 +158,13 @@ void guiAnimation::run()
                 if (!m_app)
                     break;
 
-                int32_t pad = m_app->m_appmenubar.gui.rect.w,
-                        l_key_y = (m_app->m_appvideo.gui.rect.h - guiBase::gui.rect.h);
-                guiBase::gui.rect.x = (pad + m_key_x);
-                guiBase::gui.rect.y = l_key_y;
-                pad += m_app->m_appvideo.gui.rect.w;
+                SDL_Rect *r   = guiBase::GetGui<SDL_Rect>();
+                SDL_Rect *rw  = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
+                int32_t   pad = __MENU_W_default,
+                          l_key_y = (rw->h - r->h);
+                r->x = (pad + m_key_x);
+                r->y = l_key_y;
+                pad += rw->w;
 
                 for (uint32_t i = 0U; i < m_textures_sz; i++)
                 {
@@ -172,11 +174,11 @@ void guiAnimation::run()
                     guiBase::ActiveOff();
                     GuiLock(
                         guiBase::gui.texture = m_textures[i];
-                        guiBase::gui.rect.x += (5 + m_key_x);
-                        guiBase::gui.rect.y = (m_key_y + l_key_y);
+                        r->x += (5 + m_key_x);
+                        r->y = (m_key_y + l_key_y);
                     );
 
-                    if (guiBase::gui.rect.x >= pad)
+                    if (r->x >= pad)
                         break;
 
                     if (!AppConfig::instance().cnf_isrun)

@@ -10,6 +10,8 @@ public:
     //
     bool init(App*);
     bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
+    bool isenabled();
 
 private:
     //

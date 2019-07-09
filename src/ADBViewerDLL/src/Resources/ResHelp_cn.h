@@ -31,5 +31,7 @@ static inline const char *help_strings_cn[] = {
     "本德：我关掉......",
     "！ 亚行不支持国家语言的输入文字 ！",
     "! ADB not support input text in national language !",
+    "“关闭并保存脚本",
+    "关闭终端",
     nullptr
 };

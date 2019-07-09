@@ -8,25 +8,31 @@ class AppMenuBar : public guiBase
 {
 public:
     //
-    AppMenuBar();
     ~AppMenuBar();
 
     bool init(App*);
-    bool tinit(SDL_Texture**) override;
-    bool evresize(SDL_Texture**) override;
-    void setcursor(uint32_t);
-    void infoset(MgrType, std::string const&, int32_t, SDL_Event *ev);
-    bool event(SDL_Event*, const void*) override;
+    bool uevent(SDL_Event*, const void*) override;
+    bool isenabled();
 
 private:
     //
-    App        *m_app;
-    SDL_Color   m_color[2];
-    SDL_Cursor *m_cursor[2];
+    App        *m_app = nullptr;
+    guiIcon     m_icon_menu[2];
+    uint32_t    m_icon_idx = 0;
+    SDL_Color   m_color[2]{};
     //
-    ResManager::IndexStringResource clickpos(int32_t, int32_t, int32_t, int32_t);
-    bool mousemove(SDL_Event*);
-    bool mousebutton(SDL_Event*, int32_t);
+    bool iconstate();
+    bool eventcb(SDL_Event*);
 
-    void settitle(std::string const&);
+    // CMD
+    int32_t mb_cmd_QUIT(SDL_Event*);
+    int32_t mb_cmd_START(SDL_Event*);
+    int32_t mb_cmd_STOP(SDL_Event*);
+    int32_t mb_cmd_ADBSET(SDL_Event*);
+    int32_t mb_cmd_SCALE(SDL_Event*);
+    int32_t mb_cmd_POSINFO(SDL_Event*);
+    int32_t mb_cmd_CAPTURE_D(SDL_Event*);
+    int32_t mb_cmd_FULLSCREEN(SDL_Event*);
+    int32_t mb_cmd_APK(SDL_Event*);
+
 };

@@ -38,6 +38,11 @@ bool AppAnimationBender::init(App *app)
     return guiAnimation::init(app, &m_color, ResManager::IndexSpriteResource::RES_SPRITE_BENDER);
 }
 
+bool AppAnimationBender::isenabled()
+    {
+        return guiAnimation::guiBase::IsActive();
+    }
+
 void AppAnimationBender::stop()
 {
     if (!AppConfig::instance().cnf_disp_bender)
@@ -56,20 +61,18 @@ void AppAnimationBender::run()
     guiAnimation::run();
 }
 
-bool AppAnimationBender::event(SDL_Event *ev, const void *instance)
-{
-    AppAnimationBender *aab = static_cast<AppAnimationBender*>(
+bool AppAnimationBender::uevent(SDL_Event *ev, const void *instance)
+    {
+        AppAnimationBender *aab = static_cast<AppAnimationBender*>(
                 const_cast<void*>(instance)
             );
 
-    if (!aab)
-        return false;
+        if (!aab)
+            return false;
 
-    if (
-        (ev->type == AppConfig::instance().cnf_uevent) &&
-        (ev->user.code == ID_CMD_POP_MENU15)
-       )
-    {
+        if (ev->user.code != ID_CMD_POP_MENU15)
+            return false;
+
         if (AppConfig::instance().cnf_disp_bender.load())
         {
             if (!aab->guiAnimation::isinit())
@@ -101,27 +104,46 @@ bool AppAnimationBender::event(SDL_Event *ev, const void *instance)
         return true;
     }
 
-    if ((!AppConfig::instance().cnf_isstop) || (!aab->guiBase::IsActive()))
+bool AppAnimationBender::event(SDL_Event *ev, const void *instance)
+{
+    AppAnimationBender *aab = static_cast<AppAnimationBender*>(
+            const_cast<void*>(instance)
+        );
+
+    if (!aab)
+        return false;
+
+    if ((ev->type == SDL_RENDER_TARGETS_RESET) || (ev->type == SDL_RENDER_DEVICE_RESET))
+    {
+        if (aab->guiAnimation::guiBase::IsActive())
+        {
+            aab->guiBase::ActiveOff();
+            aab->guiBase::gui.texture = nullptr;
+        }
+        return false;
+    }
+    if (
+        (!AppConfig::instance().cnf_isstop) ||
+        (!aab->guiAnimation::guiBase::IsActive())
+       )
         return false;
 
     switch(ev->type)
     {
-        case SDL_RENDER_TARGETS_RESET:
-        case SDL_RENDER_DEVICE_RESET:
-            {
-                aab->guiBase::ActiveOff();
-                aab->guiBase::gui.texture = nullptr;
-                return false;
-            }
         case SDL_MOUSEBUTTONDOWN:
         {
             if (ev->button.button == SDL_BUTTON_LEFT)
             {
+                SDL_Rect *r = aab->guiAnimation::guiBase::GetGui<SDL_Rect>();
+                if (!aab->guiAnimation::guiBase::IsRegion(ev, r))
+                    return false;
+
+                /// Bender speak..
                 if (
-                    (ev->motion.x >=  aab->guiBase::gui.rect.x) &&
-                    (ev->motion.x <= (aab->guiBase::gui.rect.x + aab->guiBase::gui.rect.w)) &&
-                    (ev->motion.y >=  aab->guiBase::gui.rect.y) &&
-                    (ev->motion.y <= (aab->guiBase::gui.rect.y + aab->guiBase::gui.rect.h))
+                    (ev->motion.x >=  r->x) &&
+                    (ev->motion.x <= (r->x + r->w)) &&
+                    (ev->motion.y >=  r->y) &&
+                    (ev->motion.y <= (r->y + r->h))
                     )
                 {
                     AddMessageQueue(
@@ -151,6 +173,7 @@ bool AppAnimationBender::event(SDL_Event *ev, const void *instance)
                     return true;
                 }
             }
+            break;
         }
     }
     return false;

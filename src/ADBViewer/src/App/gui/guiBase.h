@@ -23,20 +23,25 @@ class guiBase
 public:
     //
     guiRenderer_s gui;
-    std::mutex   m_lock;
+    std::mutex    m_lock;
 
-    guiMain * getgui() const;
+    guiBase();
+    ~guiBase();
+    guiBase& operator=(guiBase const&) = delete;
+
     virtual bool tinit(SDL_Texture**);
     virtual bool event(SDL_Event*, const void*);
+    virtual bool uevent(SDL_Event*, const void*);
     virtual bool evresize(SDL_Texture**);
 
     void ActiveOn();
     void ActiveOff();
     bool IsActive();
+    bool IsRegion(SDL_Event*, SDL_Rect*);
+    bool IsRegion(SDL_Event*);
+    void PushEvent(int32_t);
 
-    guiBase();
-    ~guiBase();
-    //guiBase& operator=(guiBase const&) = delete;
+    template <typename T> T * GetGui();
 
 protected:
     //
@@ -46,3 +51,10 @@ private:
     //
     guiMain *m_guimain;
 };
+
+extern template guiMain * guiBase::GetGui<guiMain>();
+extern template SDL_Rect * guiBase::GetGui<SDL_Rect>();
+extern template SDL_Window * guiBase::GetGui<SDL_Window>();
+extern template SDL_Renderer * guiBase::GetGui<SDL_Renderer>();
+extern template guiRenderer_s * guiBase::GetGui<guiRenderer_s>();
+

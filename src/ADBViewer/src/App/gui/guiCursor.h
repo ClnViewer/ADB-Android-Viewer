@@ -23,8 +23,9 @@ public:
     void setpos(int32_t);
     void setstring(guiCursor::IndexTextType, std::string const &);
     void setstring(guiCursor::IndexTextType, std::string const &, int32_t);
-    void start();
-    void stop();
+    void setcord(SDL_Point&);
+    void On();
+    void Off();
 
 protected:
     //

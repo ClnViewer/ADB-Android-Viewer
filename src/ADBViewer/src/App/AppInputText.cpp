@@ -44,10 +44,15 @@ bool AppInputText::init(App *app)
                     ResManager::IndexStringResource::RES_STR_ENTER_TEXT,
                     AppConfig::instance().cnf_lang
                 ),
-                ResManager::IndexFontResource::RES_FONT_CONSOLAS, //RES_FONT_FREESANS,
+                ResManager::IndexFontResource::RES_FONT_CONSOLAS,
                 ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE,
                 ResManager::IndexColorResource::RES_COLOR_GREEN_CURSOR
             );
+    }
+
+bool AppInputText::isenabled()
+    {
+        return guiTextInputBox::isactive();
     }
 
 bool AppInputText::runselect(bool ismod, int32_t ctrl)
@@ -58,6 +63,7 @@ bool AppInputText::runselect(bool ismod, int32_t ctrl)
                 AppConfig::instance().cnf_adb.SendTextASCII(guiTextInputBox::getresult());
 
             guiTextInputBox::end();
+            guiBase::PushEvent(ID_CMD_POP_MENU102);
             return true;
         }
         else
@@ -68,8 +74,29 @@ bool AppInputText::runselect(bool ismod, int32_t ctrl)
                 )
             {
                 guiTextInputBox::begin();
+                guiBase::PushEvent(ID_CMD_POP_MENU102);
                 return true;
             }
+        }
+        return false;
+    }
+
+bool AppInputText::uevent(SDL_Event *ev, const void *instance)
+    {
+        AppInputText *ait = static_cast<AppInputText*>(
+                const_cast<void*>(instance)
+            );
+
+        if ((!ait) || (AppConfig::instance().cnf_isstop))
+            return false;
+
+        switch(ev->user.code)
+        {
+            /// Input text box start
+            case ID_CMD_POP_MENU100:
+            /// Input text box stop
+            case ID_CMD_POP_MENU101:
+                return ait->runselect(false, -1);
         }
         return false;
     }
@@ -81,22 +108,16 @@ bool AppInputText::event(SDL_Event *ev, const void *instance)
             );
 
     if (!ait)
-         return false;
+        return false;
 
-    if (AppConfig::instance().cnf_isstop)
-         return false;
+    auto istate = ait->m_app->state();
+    if ((istate[App::AppStateType::STATE_APP_STOP]) ||
+        (istate[App::AppStateType::STATE_APP_EDIT]) ||
+        (istate[App::AppStateType::STATE_APP_TERM]))
+        return false;
 
-    if (ev->type == AppConfig::instance().cnf_uevent)
-    {
-        switch(ev->user.code)
-        {
-            /// Input text box start
-            case ID_CMD_POP_MENU100:
-            /// Input text box stop
-            case ID_CMD_POP_MENU101:
-                    return ait->runselect(false, -1);
-        }
-    }
+    //if (!ait->guiBase::IsRegion(ev, ait->m_app->m_appvideo.guiBase::GetGui<SDL_Rect>()))
+        //return false;
 
     switch(ev->type)
     {
@@ -117,16 +138,31 @@ bool AppInputText::event(SDL_Event *ev, const void *instance)
                                     (SDL_GetModState() & KMOD_CTRL),
                                     ((ev->key.keysym.sym == SDLK_RETURN) ? SDLK_RETURN : -1)
                                 ))
-                            return false;
+                            return true;
+                        break;
+                    }
+                case SDLK_ESCAPE:
+                    {
+                        if (ait->guiTextInputBox::isactive())
+                        {
+                            ait->guiTextInputBox::end();
+                            ait->guiBase::PushEvent(ID_CMD_POP_MENU102);
+                            return true;
+                        }
                         break;
                     }
             }
+            if (!ait->guiTextInputBox::isactive())
+                break;
+            return ait->guiTextInputBox::eventcb(ev);
+        }
+        case SDL_TEXTINPUT:
+        {
+            if (!ait->guiTextInputBox::isactive())
+                break;
+            return ait->guiTextInputBox::eventcb(ev);
         }
     }
-
-    if (!ait->guiTextInputBox::isactive())
-        return false;
-
-    return ait->guiTextInputBox::inputev(ev);
+    return false;
 }
 

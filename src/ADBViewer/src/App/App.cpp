@@ -33,11 +33,30 @@
 
 static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt, void *data)
 {
-    SDL_Rect *rmenu = static_cast<SDL_Rect*>(data);
-    if (
-        (pt->x <= rmenu->w) &&
-        (pt->y >= __MENU_H_dragable)
-       )
+    App *app = static_cast<App*>(data);
+    auto istate = app->state();
+    int32_t x = __MENU_W_default, y = 0, yy = 0;
+
+    /// Script editor active | Input field active
+    if ((istate[App::AppStateType::STATE_APP_EDIT]) ||
+        (istate[App::AppStateType::STATE_APP_INPUT]))
+    {
+        yy = (AppConfig::instance().cnf_disp_point.y - __MENU_W_default);
+    }
+    /// Terminal active
+    else if (istate[App::AppStateType::STATE_APP_TERM])
+    {
+        y = ((istate[App::AppStateType::STATE_APP_MENU]) ? __MENU_H_dragable : y);
+        yy = AppConfig::instance().cnf_disp_point.y;
+    }
+    /// Menu bar active
+    else if (istate[App::AppStateType::STATE_APP_MENU])
+    {
+        y = __MENU_H_dragable;
+        yy = AppConfig::instance().cnf_disp_point.y;
+    }
+
+    if ((pt->x <= x) && (pt->y >= y) && (pt->y <= yy))
         return SDL_HITTEST_DRAGGABLE;
     return SDL_HITTEST_NORMAL;
 }
@@ -73,14 +92,15 @@ App::App()
 
     /// Instance initiation by step of renderer (Overwrite prevision screen region)
     if (
+        (!m_appcursor.init(this))  || /// this all Application cursors
         (!m_appvideo.init(this))   || /// this main GUI screen
         (!m_appabender.init(this)) || /// this animation default GUI screen
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_appeditor.init(this))  || /// this editor GUI screen
         (!m_appmsgbar.init(this))  || /// this message BAR box
-        (!m_screen.init(this))     || /// this screen capture/save
-        (!m_terminal.init(this))   || /// terminal window
+        (!m_appscreen.init(this))  || /// this screen capture/save
+        (!m_appterminal.init(this))|| /// terminal window
         (!m_appinput.init(this))      /// keyboard input rectangle
     )
     {
@@ -91,7 +111,7 @@ App::App()
                 AppConfig::instance().cnf_lang
             ),
             SDL_GetError(),
-            m_window
+            guiMain::m_window
         );
         return;
     }
@@ -103,10 +123,10 @@ App::App()
         return;
 
     SDL_SetColorKey(l_image_surface, SDL_TRUE, SDL_MapRGB(l_image_surface->format, 255, 255, 255));
-    SDL_SetWindowIcon(m_window, l_image_surface);
+    SDL_SetWindowIcon(guiMain::m_window, l_image_surface);
     SDL_FreeSurface(l_image_surface);
 
-    if (SDL_SetWindowHitTest(m_window, f_hitTest, &m_appmenubar.gui.rect) < 0)
+    if (SDL_SetWindowHitTest(guiMain::m_window, f_hitTest, this) < 0)
     {
         SDL_ShowSimpleMessageBox(
             0,
@@ -115,7 +135,7 @@ App::App()
                 AppConfig::instance().cnf_lang
             ),
             SDL_GetError(),
-            m_window
+            guiMain::m_window
         );
         return;
     }
@@ -131,9 +151,19 @@ App::App()
     Plugins::AppPluginManager::instance().init();
 }
 
-App::~App()
-{
-}
+std::array<bool, APP_STATE_SIZE> const App::state()
+    {
+        std::array<bool, APP_STATE_SIZE> const astate = {
+            !AppConfig::instance().cnf_isrun, /// 0 - Application exit
+            AppConfig::instance().cnf_isstop, /// 1 - No session run
+            m_appeditor.isenabled(),          /// 2 - Script editor active
+            m_appinput.isenabled(),           /// 3 - Input field active
+            m_appterminal.isenabled(),        /// 4 - Terminal active
+            m_appmenubar.isenabled(),         /// 5 - Menu bar active
+            m_appabender.isenabled()          /// 6 - Bender active
+        };
+        return astate;
+    }
 
 void App::loop()
 {
@@ -156,7 +186,7 @@ bool App::event(SDL_Event *ev, const void *instance)
                 const_cast<void*>(instance)
             );
 
-    if (ev->type == AppConfig::instance().cnf_uevent)
+    if ((!app) || (ev->type == AppConfig::instance().cnf_uevent))
         return false;
 
     switch(ev->type)
@@ -167,54 +197,33 @@ bool App::event(SDL_Event *ev, const void *instance)
             AppConfig::instance().cnf_isrun = false;
             return true;
         }
-
         case SDL_MOUSEBUTTONDOWN:
         {
-            if (
-                (AppConfig::instance().cnf_isstop) ||
-                (ev->motion.x <= app->m_appmenubar.gui.rect.w)
-               )
-                break;
-
-            if (ev->button.button == SDL_BUTTON_RIGHT)
+            if ((ev->button.button == SDL_BUTTON_RIGHT) &&
+                (!AppConfig::instance().cnf_isstop) &&
+                (app->guiBase::IsRegion(ev, app->m_appvideo.guiBase::GetGui<SDL_Rect>())))
             {
                 app->m_appmenupop.show();
                 return true;
             }
             break;
         }
-
-        case SDL_MOUSEMOTION:
-        {
-            if (
-                (AppConfig::instance().cnf_isstop) ||
-                (ev->motion.x <= app->m_appmenubar.gui.rect.w)
-               )
-                break;
-
-            app->m_appmenubar.infoset(MgrType::MGR_MAIN, "", -1, ev);
-            return true;
-        }
-
         case SDL_KEYDOWN:
         {
+            if (!AppConfig::instance().cnf_isstop)
+                break;
+
             if (ev->key.keysym.mod != KMOD_NONE)
                 for (auto & m : AppConfig::instance().cnf_keymod_disabled)
                     if (ev->key.keysym.mod & m)
                         return false;
 
-            switch (ev->key.keysym.sym)
+            if (ev->key.keysym.sym == SDLK_ESCAPE)
             {
-                case SDLK_ESCAPE:
-                {
-                    if (AppConfig::instance().cnf_isstop)
-                    {
-                        AppConfig::instance().cnf_isrun = false;
-                        return true;
-                    }
-                    break;
-                }
+                AppConfig::instance().cnf_isrun = false;
+                return true;
             }
+            break;
         }
     }
     return false;
