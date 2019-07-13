@@ -61,15 +61,16 @@ public:
     ADBDriver();
     ADBDriver(std::wstring&);
 
-    uint32_t GetDisplayWidth() const;
-    uint32_t GetDisplayHeight() const;
-    uint32_t GetDisplayType() const;
-    uint32_t GetDisplaySize() const;
-    bool     IsDeviceID() const;
-    void     SetDeviceID(const std::wstring&);
-    void     SetAdbBin(const std::wstring&);
+    uint32_t     GetDisplayWidth() const;
+    uint32_t     GetDisplayHeight() const;
+    uint32_t     GetDisplayType() const;
+    uint32_t     GetDisplaySize() const;
+    bool         IsDeviceID() const;
+    void         SetDeviceID(const std::wstring&);
 
-    const wchar_t * GetDeviceID() const;
+    template <typename T> DLL_EXPORT T GetDeviceID();
+
+    void            SetAdbBin(const std::wstring&);
     const wchar_t * GetAdbBin() const;
 
     bool         AdbCheck();
@@ -86,6 +87,7 @@ public:
     void SendTextASCII(std::wstring const &);
     void SendTextASCII(std::string const &);
     void SendSpecialKey(ADBDriver::KeysType, int32_t);
+    bool SendToShell(std::string const&, std::string&);
 
     bool InstallApk(std::string const&);
     bool SendFile(std::string const&, std::string const&);
@@ -101,6 +103,10 @@ public:
     bool Video(uint32_t, uint32_t, uint32_t, std::function<bool(std::vector<uint8_t>&, uint32_t, uint32_t)>);
 
 };
+
+extern template const wchar_t * ADBDriver::GetDeviceID<const wchar_t*>();
+extern template std::string     ADBDriver::GetDeviceID<std::string>();
+extern template std::wstring    ADBDriver::GetDeviceID<std::wstring>();
 
 extern template bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&, bool);
 extern template bool ADBDriver::AdbRawT<std::string>(std::string, std::string const &, std::string&, bool);

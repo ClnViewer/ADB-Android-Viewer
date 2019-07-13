@@ -82,9 +82,14 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
     m_app = ((!m_app) ? app : m_app);
     guiBase::gui.texture = nullptr;
 
+    bool ret = guiBase::initgui(app);
+    guiBase::ActiveOff();
+
     do
     {
-        bool isvalid = true;
+        if (!ret)
+            break;
+
         SDL_Surface **l_sprites  = nullptr;
 
         if (
@@ -93,8 +98,8 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
             )
             break;
 
-        guiBase::gui.rect.w = l_sprites[0]->w;
-        guiBase::gui.rect.h = l_sprites[0]->h;
+        guiBase::gui.rdst.w = l_sprites[0]->w;
+        guiBase::gui.rdst.h = l_sprites[0]->h;
 
         m_textures = new SDL_Texture*[m_textures_sz]{};
 
@@ -102,12 +107,12 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
         {
             if (l_sprites[i])
             {
-                if (isvalid)
+                if (ret)
                     if (!(m_textures[i] = SDL_CreateTextureFromSurface(
                                             guiBase::GetGui<SDL_Renderer>(),
                                             l_sprites[i]
                         )))
-                        isvalid = false;
+                        ret = false;
 
                 SDL_FreeSurface(l_sprites[i]);
                 l_sprites[i] = nullptr;
@@ -115,21 +120,16 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
         }
         delete [] l_sprites;
 
-        if (!isvalid)
-        {
-            cleanup();
-            return false;
-        }
+        if (!ret)
+            break;
+
+        run();
+        return true;
     }
     while (0);
 
-    bool ret = guiBase::initgui(app);
-    guiBase::ActiveOff();
-
-    if (ret)
-        run();
-
-    return ret;
+    cleanup();
+    return false;
 }
 
 void guiAnimation::stop()

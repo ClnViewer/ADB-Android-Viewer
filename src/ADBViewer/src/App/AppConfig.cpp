@@ -43,7 +43,8 @@ static inline const char *cnf_l_file_tag[] =
     "display-height",
     "display-ratio",
     "display-rotate",
-    "display-bender"
+    "display-bender",
+    "terminal-bottom"
 };
 
 static inline const wchar_t *cnf_l_file_lang[] =
@@ -259,6 +260,10 @@ void AppConfig::OnceUpdateFromFile()
             if (((val = l_strToUint<std::wstring>(wstr))) && (val <= 360))
                 cnf_disp_rotate = val;
 
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_TERM_BOTTOM), wstr))
+            if ((val = l_strToUint<std::wstring>(wstr)))
+                cnf_term_bottom_pad = val;
+
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_BENDER), wstr))
         {
             val = l_strToUint<std::wstring>(wstr);
@@ -343,7 +348,7 @@ void AppConfig::SaveToFile()
                     }
                 case ConfigIdType::CNF_ADB_DEVICE:
                     {
-                        wstr = cnf_adb.GetDeviceID();
+                        wstr = cnf_adb.GetDeviceID<std::wstring>();
                         break;
                     }
                 case ConfigIdType::CNF_LANGUAGE:
@@ -381,6 +386,11 @@ void AppConfig::SaveToFile()
                 case ConfigIdType::CNF_DISP_BENDER:
                     {
                         wstr = std::to_wstring(cnf_disp_bender);
+                        break;
+                    }
+                case ConfigIdType::CNF_TERM_BOTTOM:
+                    {
+                        wstr = std::to_wstring(cnf_term_bottom_pad);
                         break;
                     }
             }

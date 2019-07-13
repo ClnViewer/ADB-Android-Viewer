@@ -218,10 +218,46 @@ bool App::event(SDL_Event *ev, const void *instance)
                     if (ev->key.keysym.mod & m)
                         return false;
 
-            if (ev->key.keysym.sym == SDLK_ESCAPE)
+            switch (ev->key.keysym.sym)
             {
-                AppConfig::instance().cnf_isrun = false;
-                return true;
+                case SDLK_ESCAPE:
+                    {
+                        AppConfig::instance().cnf_isrun = false;
+                        return true;
+                    }
+                case SDLK_a:
+                    {
+                        (void) m_appmenubar.mb_cmd_ADBSET(ev);
+                        return true;
+                    }
+                case SDLK_b:
+                    {
+                        AppConfig::instance().cnf_disp_bender = !(AppConfig::instance().cnf_disp_bender.load());
+                        guiBase::PushEvent(ID_CMD_POP_MENU15);
+                        return true;
+                    }
+                case SDLK_c:
+                    {
+                        int32_t id = m_appmenubar.mb_cmd_START(ev);
+                        if (id)
+                            guiBase::PushEvent(id);
+                        return true;
+                    }
+                /*
+                TODO - Ctrl + ...
+                case SDLK_i:
+                    {
+                        (void) m_appmenubar.mb_cmd_POSINFO(ev);
+                        return true;
+                    }
+                case SDLK_z:
+                    {
+                        int32_t id = m_appmenubar.mb_cmd_SCALE(ev);
+                        if (id)
+                            guiBase::PushEvent(id);
+                        return true;
+                    }
+                */
             }
             break;
         }

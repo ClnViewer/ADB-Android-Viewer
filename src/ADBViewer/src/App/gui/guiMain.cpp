@@ -106,7 +106,7 @@ void guiMain::draw()
                                 const_cast<void*>(gr->instance)
                                 );
                 std::lock_guard<std::mutex> l_lock(gb->m_lock);
-                SDL_RenderCopy(m_renderer, gr->texture, nullptr, &gr->rect);
+                SDL_RenderCopy(m_renderer, gr->texture, gr->rsrc, &gr->rdst);
             }
 
         SDL_RenderPresent(m_renderer);

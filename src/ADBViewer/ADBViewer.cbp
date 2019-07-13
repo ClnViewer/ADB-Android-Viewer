@@ -43,7 +43,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="upx -9 ../bin/Release/ADBViewer.exe" />
-					<Add after='cmd.exe /C &quot;C:\Program Files\Caphyon\Advanced Installer 16.0\bin\x86\AdvancedInstaller.com&quot; /rebuild ..\ADBViewerInstaller\Android-ADB-Viewer.aip' />
+					<Add after='cmd.exe /C &quot;C:\Program Files\Caphyon\Advanced Installer 16\bin\x86\AdvancedInstaller.com&quot; /rebuild ..\ADBViewerInstaller\Android-ADB-Viewer.aip' />
 				</ExtraCommands>
 			</Target>
 		</Build>
@@ -112,6 +112,10 @@
 		<Unit filename="src/App/AppTerminalInput.h" />
 		<Unit filename="src/App/AppTerminalOutput.cpp" />
 		<Unit filename="src/App/AppTerminalOutput.h" />
+		<Unit filename="src/App/AppTerminalPage.cpp" />
+		<Unit filename="src/App/AppTerminalPage.h" />
+		<Unit filename="src/App/AppTerminalPageNuber.cpp" />
+		<Unit filename="src/App/AppTerminalPageNuber.h" />
 		<Unit filename="src/App/AppTimer.h" />
 		<Unit filename="src/App/AppVideo.cpp" />
 		<Unit filename="src/App/AppVideo.h" />

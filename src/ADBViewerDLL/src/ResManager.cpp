@@ -77,6 +77,18 @@ static inline SDL_Color box_color[][2] =
     {
         { 104, 192, 0, 0 },
         { 155, 204, 38, 0 }
+    },
+    {
+        { 255, 255, 255, 255 },
+        { 0, 0, 0, 255 }
+    },
+    {
+        { 187, 229, 59, 255 },
+        { 0, 0, 0, 255 }
+    },
+    {
+        { 255, 255, 255, 255 },
+        { 151, 192, 36, 0 }
     }
 };
 
@@ -209,6 +221,60 @@ SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
 
 }
 
+SDL_Point ResManager::imagesize(ResManager::IndexImageResource idx)
+{
+    SDL_Point point{};
+
+    switch(idx)
+    {
+        case ResManager::IndexImageResource::RES_IMG_LOGO:
+        {
+            point.x = img_logo.w;
+            point.y = img_logo.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE:
+        {
+            point.x = img_menu0.w;
+            point.y = img_menu0.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_MENU_DISABLED:
+        {
+            point.x = img_menu1.w;
+            point.y = img_menu1.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_SCREEN:
+        {
+            point.x = img_screen.w;
+            point.y = img_screen.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_RCORD:
+        {
+            point.x = img_record.w;
+            point.y = img_record.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_TERMCLOSE:
+        {
+            point.x = img_termclose.w;
+            point.y = img_termclose.h;
+            break;
+        }
+        case ResManager::IndexImageResource::RES_IMG_EDITMENU:
+        {
+            point.x = img_editmenu.w;
+            point.y = img_editmenu.h;
+            break;
+        }
+        default:
+            break;
+    }
+    return point;
+}
+
 SDL_Surface * ResManager::imagedata(const ResManager::ImageResource_s *res)
 {
     if (!res)
@@ -325,29 +391,11 @@ SDL_RWops   * ResManager::fontloadraw(ResManager::IndexFontResource idx)
 
 SDL_Color * ResManager::colorload(ResManager::IndexColorResource idx)
 {
-    switch (idx)
-    {
-        case ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK:
-            {
-                return box_color[0];
-            }
-        case ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE:
-            {
-                return box_color[1];
-            }
-        case ResManager::IndexColorResource::RES_COLOR_GREEN_BG:
-            {
-                return box_color[2];
-            }
-        case ResManager::IndexColorResource::RES_COLOR_GREEN_CURSOR:
-            {
-                return box_color[3];
-            }
-        default:
-            {
-                return nullptr;
-            }
-    }
+    if ((idx < ResManager::IndexColorResource::RES_COLOR_GREEN_BLACK) ||
+        (idx > ResManager::IndexColorResource::RES_COLOR_TERMINAL_NUM))
+            return nullptr;
+
+    return box_color[idx];
 }
 
 }

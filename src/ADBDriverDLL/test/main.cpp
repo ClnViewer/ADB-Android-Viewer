@@ -34,7 +34,7 @@
 
 using namespace std;
 
-int _x_main()
+int main()
 {
     GameDev::ADBDriver m_adb;
 
@@ -56,7 +56,7 @@ int _x_main()
     ret = m_adb.GetDeviceSetupUI();
     std::wcout << L"GetDeviceSetupUI: " << ret << std::endl;
     ret = m_adb.GetDeviceListUI();
-    std::wcout << L"GetDeviceListUI: " << ret << L" - " << m_adb.GetDeviceID() << L" - " << m_adb.IsDeviceID() << std::endl;
+    std::wcout << L"GetDeviceListUI: " << ret << L" - " << m_adb.GetDeviceID<std::wstring>() << L" - " << m_adb.IsDeviceID() << std::endl;
 
     return 0;
 }
@@ -95,7 +95,7 @@ void getPixel(int x, int y, std::vector<uint8_t> const & buf)
     printf("position (%d/%d):%u\t - r:%u  \tg:%u\t b:%u\n", x, y, pos, rgb->r_, rgb->g_, rgb->b_);
 }
 
-int main()
+int y_main()
 {
     FILE *fp = fopen("..\\..\\template.raw", "rb");
     if (!fp)
@@ -120,4 +120,6 @@ int main()
     getPixel(3,218, buf);
     getPixel(8,218, buf);
     getPixel(8,216, buf);
+
+    return 0;
 }

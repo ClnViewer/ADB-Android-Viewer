@@ -8,16 +8,29 @@ class AppTerminalOutput : public guiBase
 {
 public:
     //
-    bool init(App*, SDL_Rect&);
+    ~AppTerminalOutput();
+
+    bool init(App*, AppTerminalPage*);
+    bool tinit(SDL_Texture**) override;
+    bool evresize(SDL_Texture**) override;
+    bool event(SDL_Event*, const void*) override;
     void start();
     void stop();
-    void draw(std::string const &);
+    void pageUp();
+    void pageDown();
+    void draw_cmd(std::string const &);
+    void draw_txt(std::string const &);
 
 private:
     //
-    App        *m_app;
+    App                 *m_app = nullptr;
+    SDL_Surface         *m_surface = nullptr;
+    TTF_Font            *m_font = nullptr;  // auto remove from cache in DLL
+    SDL_Color           *m_color_cmd = nullptr;
+    SDL_Color           *m_color_txt = nullptr;
+    AppTerminalPage     *m_page = nullptr;
+    AppTerminalPageNuber m_pagenum;
     //
-    bool tinit(SDL_Texture**) override;
-    bool evresize(SDL_Texture**) override;
+    void drawline(std::string const &, SDL_Color*, bool);
 };
 

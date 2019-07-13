@@ -100,7 +100,7 @@ bool guiBase::IsRegion(SDL_Event *ev)
 
 bool guiBase::IsRegion(SDL_Event *ev, SDL_Rect *irect)
     {
-        SDL_Rect *rect = ((!irect) ? &gui.rect : irect);
+        SDL_Rect *rect = ((!irect) ? &gui.rdst : irect);
 
         if ((!rect->w) || (!rect->h))
             return false;
@@ -128,7 +128,7 @@ T * guiBase::GetGui()
         else if constexpr (std::is_same<T, SDL_Renderer>::value)
             return m_guimain->m_renderer;
         else if constexpr (std::is_same<T, SDL_Rect>::value)
-            return &gui.rect;
+            return &gui.rdst;
         else if constexpr (std::is_same<T, guiRenderer_s>::value)
             return &gui;
         else if constexpr (std::is_same<T, guiMain>::value)

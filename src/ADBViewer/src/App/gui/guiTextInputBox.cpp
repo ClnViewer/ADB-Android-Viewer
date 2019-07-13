@@ -229,7 +229,7 @@ bool guiTextInputBox::gethistory(std::string & s, int32_t flag)
         if (m_history_array[m_history_idx].empty())
             return false;
 
-        s.assign(m_history_array[m_history_idx].c_str());
+        s.assign(m_history_array[m_history_idx]);
         return true;
     }
 
@@ -307,6 +307,11 @@ bool guiTextInputBox::eventcb(SDL_Event *ev)
                     {
                         return false;
                     }
+                case SDLK_PAGEDOWN:
+                case SDLK_PAGEUP:
+                    {
+                        return false;
+                    }
                 case SDLK_BACKSPACE:
                     {
                         drawstring(SDLK_BACKSPACE, m_str, "");
@@ -329,13 +334,12 @@ bool guiTextInputBox::eventcb(SDL_Event *ev)
                     }
                 case SDLK_UP:
                 case SDLK_DOWN:
-                case SDLK_PAGEDOWN:
-                case SDLK_PAGEUP:
                     {
                         m_str.erase();
                         if (gethistory(m_str, ev->key.keysym.sym))
                         {
-                            DRAWLINE1(m_str);
+                            if (!m_str.empty())
+                                DRAWLINE1(m_str);
                         }
                         break;
                     }

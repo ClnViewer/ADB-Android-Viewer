@@ -37,7 +37,8 @@ bool AppTerminal::init(App *app)
             return false;
 
         m_app = app;
-        guiBase::gui.rect = {};
+        guiBase::gui.rdst = {};
+        guiBase::gui.rsrc = nullptr;
         guiBase::gui.texture = nullptr;
 
         bool ret = guiBase::initgui(app);
@@ -45,14 +46,13 @@ bool AppTerminal::init(App *app)
         {
             do
             {
-                SDL_Rect rect{};
-
-                rect.x = 0;
-                rect.y = AppConfig::instance().cnf_disp_point.y;
+                ret = m_page.init(guiBase::GetGui<SDL_Window>());
+                if (!ret)
+                    break;
 
                 ret = m_icon_close.init(
                         app,
-                        rect,
+                        m_page.btn_r_close,
                         ResManager::IndexImageResource::RES_IMG_TERMCLOSE,
                         [=](SDL_Event *ev, SDL_Rect *r)
                         {
@@ -83,17 +83,18 @@ bool AppTerminal::init(App *app)
                 if (!ret)
                     break;
 
-                ret = getwcord();
+                ret = m_toutput.init(app, &m_page);
                 if (!ret)
                     break;
 
-                rect.w = m_rect.w;
-                rect.h = __MENU_W_default;
-                rect.x = m_rect.x;
-                rect.y = (m_rect.h - __MENU_W_default);
-                ret = m_tinput.init(app, rect);
-                if (!ret)
-                    break;
+                ret = m_tinput.init(
+                        app,
+                        &m_page,
+                        [=](std::string & s)
+                        {
+                            adbsend(s);
+                        }
+                    );
             }
             while (0);
         }
@@ -120,32 +121,33 @@ bool AppTerminal::isenabled() const
         return m_enable.load();
     }
 
-bool AppTerminal::getwcord()
+void AppTerminal::adbsend(std::string & s)
     {
+        std::string ss;
+
         do
         {
-            SDL_DisplayMode dm{};
-            SDL_Point point1{};
-
-            SDL_GetWindowPosition(guiBase::GetGui<SDL_Window>(), &point1.x, &point1.y);
-            if ((!point1.x) && (!point1.y))
+            if (!s.empty())
+            {
+                ss = s;
                 break;
-
-            if (SDL_GetCurrentDisplayMode(0, &dm) < 0)
-                break;
-
-            SDL_Point & point2 = AppConfig::instance().cnf_disp_point;
-
-            m_rect.w = point2.x;
-            m_rect.h = dm.h - point1.y;
-            m_rect.y = point2.y;
-            m_rect.x = __MENU_W_default;
-
-            return true;
+            }
+            if (m_tinput.guiTextInputBox::isresult())
+                ss = m_tinput.guiTextInputBox::getresult(m_page.getprompt());
+            else
+                (void) m_tinput.guiTextInputBox::getresult(m_page.getprompt());
         }
         while (0);
 
-        return false;
+        if (ss.empty())
+            return;
+
+        std::string so;
+        m_toutput.draw_cmd(ss);
+
+        if (AppConfig::instance().cnf_adb.SendToShell(ss, so))
+            if (!so.empty())
+                m_toutput.draw_txt(so);
     }
 
 void AppTerminal::runselect()
@@ -156,6 +158,7 @@ void AppTerminal::runselect()
         {
             m_enable = false;
             m_tinput.stop();
+            m_toutput.stop();
             m_icon_close.Off();
 
             SDL_SetWindowSize(
@@ -166,27 +169,23 @@ void AppTerminal::runselect()
         }
         else
         {
-            if ((m_rect.h - AppConfig::instance().cnf_disp_point.y) < 100)
+            if ((m_page.rbase.h - AppConfig::instance().cnf_disp_point.y) < 64)
             {
                 return;
             }
-            m_enable = true;
 
-            getwcord();
-            SDL_Point point{};
-            point.x = m_rect.x;
-            point.y = (m_rect.h - ((__MENU_W_default / 3) * 2) - 2);
-            m_tinput.guiTextInputBox::setcord(point);
+            m_enable = true;
+            m_page.init(guiBase::GetGui<SDL_Window>());
+            m_tinput.guiTextInputBox::setcord(m_page.c_p_input);
 
             SDL_SetWindowSize(
                 guiBase::GetGui<SDL_Window>(),
-                m_rect.w,
-                m_rect.h
+                m_page.rbase.w,
+                m_page.rbase.h
             );
 
-            point.x = 0;
-            point.y = (m_rect.h - __EMENU_H_default);
-            m_tinput.start(&point);
+            m_tinput.start();
+            m_toutput.start();
             m_icon_close.On();
         }
     }
@@ -244,10 +243,18 @@ bool AppTerminal::event(SDL_Event *ev, const void *instance)
                     case SDLK_RETURN:
                     case SDLK_RETURN2:
                         {
-                            if (apt->m_tinput.guiTextInputBox::isresult())
-                                AppConfig::instance().cnf_adb.SendTextASCII(
-                                        apt->m_tinput.guiTextInputBox::getresult("> ")
-                                    );
+                            std::string s;
+                            apt->adbsend(s);
+                            return true;
+                        }
+                    case SDLK_PAGEDOWN:
+                        {
+                            m_toutput.pageDown();
+                            return true;
+                        }
+                    case SDLK_PAGEUP:
+                        {
+                            m_toutput.pageUp();
                             return true;
                         }
                 }

@@ -13,10 +13,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/ClnViewer/ADB-Android-Viewer/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="PS"/>
-    <ROW Property="ProductCode" Value="1033:{005E3C17-2A94-4940-9B05-BC3CD80F378A} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{621A1F4F-12FB-45EC-ACF6-B05E915A5033} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ADBViewer"/>
-    <ROW Property="ProductVersion" Value="0.1.187.1016" Type="32" TargetFile="ADBViewer.exe"/>
+    <ROW Property="ProductVersion" Value="0.0.15.85" Type="32" TargetFile="ADBViewer.exe"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{2249214A-A9CD-4EF8-8AD5-073A2A54954F}"/>
@@ -68,6 +68,7 @@
     <ROW File="pluginlua.dll" Component_="pluginlua.dll" FileName="PLUGIN~1.DLL|plugin-lua.dll" Attributes="0" SourcePath="..\bin\Release\plugins\plugin-lua.dll" SelfReg="false"/>
     <ROW File="pluginlua.lua.example" Component_="pluginlua.lua.example" FileName="PLUGIN~1.EXA|plugin-lua.lua.example" Attributes="0" SourcePath="..\ADBViewer\src\App\plugin\plugin-lua\plugin-lua.lua.example" SelfReg="false"/>
     <ROW File="ADBViewer.ini" Component_="ADBViewer.ini" FileName="ADBVIE~1.INI|ADBViewer.ini" Attributes="0" SourcePath="..\ADBViewer\ADBViewer.ini" SelfReg="false"/>
+    <ROW File="ADBViewer.ini.default" Component_="ADBViewer.ini" FileName="ADBVIE~1.DEF|ADBViewer.ini.default" Version="65535.65535.65535.65535" Attributes="1" SourcePath="..\bin\Release\ADBViewer.ini.default" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>

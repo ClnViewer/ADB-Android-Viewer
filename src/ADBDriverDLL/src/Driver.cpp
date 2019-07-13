@@ -49,15 +49,30 @@ void ADBDriver::SetDeviceID(const std::wstring & ws)
         m_deviceid.assign(ws.c_str());
 }
 
-const wchar_t * ADBDriver::GetDeviceID() const
-{
-    return m_deviceid.c_str();
-}
-
 bool ADBDriver::IsDeviceID() const
 {
     return !(m_deviceid.empty());
 }
+
+template <typename T>
+DLL_EXPORT T ADBDriver::GetDeviceID()
+{
+    if constexpr (std::is_same<T, const wchar_t*>::value)
+        return m_deviceid.c_str();
+    if constexpr (std::is_same<T, std::wstring>::value)
+        return m_deviceid;
+    else if constexpr (std::is_same<T, std::string>::value)
+    {
+        std::string s;
+        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> cnv;
+        s = cnv.to_bytes(m_deviceid.c_str());
+        return s;
+    }
+}
+
+template const wchar_t * ADBDriver::GetDeviceID<const wchar_t*>();
+template std::wstring    ADBDriver::GetDeviceID<std::wstring>();
+template std::string     ADBDriver::GetDeviceID<std::string>();
 
 void ADBDriver::SetAdbBin(const std::wstring & ws)
 {

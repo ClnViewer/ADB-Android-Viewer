@@ -17,7 +17,8 @@ public:
         CNF_DISP_HEIGHT,
         CNF_DISP_RATIO,
         CNF_DISP_ROTATE,
-        CNF_DISP_BENDER
+        CNF_DISP_BENDER,
+        CNF_TERM_BOTTOM
     };
 
 private:
@@ -53,6 +54,7 @@ public:
     SDL_Point              cnf_input_point;
     SDL_Point              cnf_disp_point;
     uint32_t               cnf_uevent;
+    uint32_t               cnf_term_bottom_pad = 0;
     int32_t const          cnf_keymod_ctrl[3];
     int32_t const          cnf_keymod_alt[3];
     int32_t const          cnf_keymod_disabled[6];

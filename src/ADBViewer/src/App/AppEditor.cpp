@@ -70,7 +70,8 @@ bool AppEditor::init(App *app)
             return false;
 
         m_app = app;
-        guiBase::gui.rect = {};
+        guiBase::gui.rdst = {};
+        guiBase::gui.rsrc = nullptr;
         guiBase::gui.texture = nullptr;
 
         bool ret = guiBase::initgui(app);

@@ -54,7 +54,7 @@ typedef struct
 AppMenuPopUp::AppMenuPopUp()
     : m_app(nullptr)
 {
-    guiBase::gui.rect = {};
+    guiBase::gui.rdst = {};
     guiBase::gui.texture = nullptr;
     guiBase::gui.instance = nullptr;
     guiBase::ActiveOff();
@@ -76,7 +76,8 @@ bool AppMenuPopUp::init(App *app)
         return false;
 
     m_app = app;
-    guiBase::gui.rect = {};
+    guiBase::gui.rdst = {};
+    guiBase::gui.rsrc = nullptr;
     guiBase::gui.texture = nullptr;
 
     bool ret = guiBase::initgui(app);

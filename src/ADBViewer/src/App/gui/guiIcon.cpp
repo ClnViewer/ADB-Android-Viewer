@@ -45,7 +45,8 @@ bool guiIcon::init(
         m_resid = resid;
         m_func = f;
 
-        guiBase::gui.rect = rect;
+        guiBase::gui.rdst = rect;
+        guiBase::gui.rsrc = nullptr;
         guiBase::gui.texture = nullptr;
 
         bool ret = guiBase::initgui(app);

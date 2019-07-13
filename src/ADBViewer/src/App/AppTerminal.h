@@ -21,14 +21,12 @@ private:
     App              *m_app = nullptr;
     AppTerminalInput  m_tinput;
     AppTerminalOutput m_toutput;
+    AppTerminalPage   m_page;
     guiIcon           m_icon_close;
-    SDL_Rect          m_rect{};
-    std::atomic<bool> m_enable = false;
     std::mutex        m_lock;
+    std::atomic<bool> m_enable = false;
     //
-    bool getwcord();
     void runselect();
-    void gui_icon_on();
-    void gui_icon_off();
+    void adbsend(std::string&);
 };
 

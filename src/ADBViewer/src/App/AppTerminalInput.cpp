@@ -31,21 +31,22 @@
 
 #include "../ADBViewer.h"
 
-bool AppTerminalInput::init(App *app, SDL_Rect & irect)
+bool AppTerminalInput::init(App *app, AppTerminalPage *atp, std::function<void(std::string&)> f)
     {
-        if (!app)
+        if ((!app) || (!atp))
             return false;
 
         m_app = app;
-        SDL_Point point = { irect.x, irect.y };
-        bool ret = false;
+        m_func = f;
+        m_page = atp;
 
+        bool ret = false;
         do
         {
             ret = guiTextInputBox::init(
                     app,
-                    point,
-                    "> ",
+                    m_page->c_p_input,
+                    m_page->getprompt(),
                     ResManager::IndexFontResource::RES_FONT_CONSOLAS,
                     ResManager::IndexColorResource::RES_COLOR_BLACK_WHITE,
                     ResManager::IndexColorResource::RES_COLOR_GREEN_CURSOR
@@ -53,13 +54,9 @@ bool AppTerminalInput::init(App *app, SDL_Rect & irect)
             if (!ret)
                 break;
 
-            SDL_Rect rect{};
-            rect.x = 0;
-            rect.y = 0;
-
             ret = m_icon_editmenu.init(
                     app,
-                    rect,
+                    m_page->btn_r_edit,
                     ResManager::IndexImageResource::RES_IMG_EDITMENU,
                     [=](SDL_Event *ev, SDL_Rect *r)
                     {
@@ -79,15 +76,22 @@ bool AppTerminalInput::init(App *app, SDL_Rect & irect)
                                     {
                                         case 5   ... 35:
                                             {
-                                                (void) guiTextInputBox::getresult("> ");
+                                                (void) guiTextInputBox::getresult(m_page->getprompt());
                                                 break;
                                             }
                                         case 40  ... 70:
                                             {
-                                                if (guiTextInputBox::isresult())
-                                                    AppConfig::instance().cnf_adb.SendTextASCII(
-                                                                guiTextInputBox::getresult("> ")
-                                                        );
+                                                if (m_func)
+                                                {
+                                                    if (guiTextInputBox::isresult())
+                                                    {
+                                                        std::string s = guiTextInputBox::getresult(m_page->getprompt());
+                                                        if (!s.empty())
+                                                            m_func(s);
+                                                    }
+                                                }
+                                                else
+                                                    (void) guiTextInputBox::getresult(m_page->getprompt());
                                                 break;
                                             }
                                         default:
@@ -112,25 +116,14 @@ bool AppTerminalInput::isenabled()
 
 void AppTerminalInput::start()
     {
-        start(nullptr);
-    }
-
-void AppTerminalInput::start(SDL_Point *p)
-    {
         if (guiTextInputBox::isactive())
             return;
         guiTextInputBox::begin();
 
-        if (p)
-            m_icon_editmenu.On(p);
-        else
-        {
-            SDL_Point point{};
-            SDL_GetWindowSize(guiTextInputBox::guiBase::GetGui<SDL_Window>(), &point.x, &point.y);
-            point.x = 0;
-            point.y -= __EMENU_H_default;
-            m_icon_editmenu.On(p);
-        }
+        SDL_Point point;
+        point.x = m_page->btn_r_edit.x;
+        point.y = m_page->btn_r_edit.y;
+        m_icon_editmenu.On(&point);
     }
 
 void AppTerminalInput::stop()

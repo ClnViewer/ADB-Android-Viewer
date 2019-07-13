@@ -49,7 +49,10 @@ namespace Resources
                 RES_COLOR_GREEN_BLACK,
                 RES_COLOR_BLACK_WHITE,
                 RES_COLOR_GREEN_BG,
-                RES_COLOR_GREEN_CURSOR
+                RES_COLOR_GREEN_CURSOR,
+                RES_COLOR_TERMINAL_TXT,
+                RES_COLOR_TERMINAL_CMD,
+                RES_COLOR_TERMINAL_NUM
             };
             enum IndexFontResource
             {
@@ -172,6 +175,7 @@ namespace Resources
             static SDL_Surface * loadbmp(char const*);
             static SDL_Surface * imageload(ResManager::IndexImageResource);
             static SDL_Surface **spriteload(ResManager::IndexSpriteResource, SDL_Color*, uint32_t*);
+            static SDL_Point     imagesize(ResManager::IndexImageResource);
             static const char  * speechrandom();
             static const char  * stringload(ResManager::IndexStringResource, ResManager::IndexLanguageResource);
 

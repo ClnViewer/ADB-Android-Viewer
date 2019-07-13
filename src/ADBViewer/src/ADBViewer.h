@@ -100,6 +100,8 @@ using GameDev::ADBDriver;
 #  include "App/AppMenuBar.h"
 #  include "App/AppMenuPopUp.h"
 #  include "App/AppInputText.h"
+#  include "App/AppTerminalPage.h"
+#  include "App/AppTerminalPageNuber.h"
 #  include "App/AppTerminalInput.h"
 #  include "App/AppTerminalOutput.h"
 #  include "App/AppTerminal.h"

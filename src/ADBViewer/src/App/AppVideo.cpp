@@ -38,7 +38,7 @@ static void rect_default(ADBDriver::Swipe_s *adbr, SDL_Rect *sdlr)
 }
 
 AppVideo::AppVideo()
-    : m_app{nullptr} { guiBase::gui.rect = {}; }
+    : m_app{nullptr} { guiBase::gui.rdst = {}; }
 
 AppVideo::~AppVideo()
 {
@@ -58,7 +58,8 @@ bool AppVideo::init(App *app)
         return false;
 
     m_app = app;
-    guiBase::gui.rect = {};
+    guiBase::gui.rdst = {};
+    guiBase::gui.rsrc = nullptr;
     guiBase::gui.texture = nullptr;
 
     return guiBase::initgui(app);
@@ -214,7 +215,7 @@ void AppVideo::run()
     if (!AppConfig::instance().cnf_isstop)
         return;
 
-    rect_default(&AppConfig::instance().cnf_adb_rect, &gui.rect);
+    rect_default(&AppConfig::instance().cnf_adb_rect, &guiBase::gui.rdst);
     m_app->m_appabender.stop();
 
     if (!AppConfig::instance().cnf_adbinit)

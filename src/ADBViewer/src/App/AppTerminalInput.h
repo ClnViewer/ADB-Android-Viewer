@@ -8,16 +8,17 @@ class AppTerminalInput : public guiTextInputBox
 {
 public:
     //
-    bool init(App*, SDL_Rect&);
+    bool init(App*, AppTerminalPage*, std::function<void(std::string&)>);
     bool isenabled();
-    void start(SDL_Point*);
     void start();
     void stop();
 
 private:
     //
-    App        *m_app;
-    guiIcon     m_icon_editmenu;
+    App             *m_app;
+    AppTerminalPage *m_page = nullptr;
+    guiIcon          m_icon_editmenu;
+    std::function<void(std::string&)> m_func;
     //
 };
 

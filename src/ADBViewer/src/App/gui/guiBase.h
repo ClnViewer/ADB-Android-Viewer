@@ -13,7 +13,8 @@ typedef struct
 {
     const void       *instance;
     SDL_Texture      *texture;
-    SDL_Rect          rect;
+    SDL_Rect         *rsrc;
+    SDL_Rect          rdst;
     int32_t           id;
     std::atomic<bool> active;
 } guiRenderer_s;
@@ -22,7 +23,7 @@ class guiBase
 {
 public:
     //
-    guiRenderer_s gui;
+    guiRenderer_s gui{};
     std::mutex    m_lock;
 
     guiBase();
