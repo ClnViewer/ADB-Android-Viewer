@@ -64,7 +64,7 @@ bool AppTerminalInput::init(App *app, AppTerminalPage *atp, std::function<void(s
                         {
                             case SDL_MOUSEMOTION:
                                 {
-                                    guiBase::PushEvent(ID_CMD_POP_MENU26);
+                                    guiBase::PushEvent(ID_CMD_POP_MENU27);
                                     return true;
                                 }
                             case SDL_MOUSEBUTTONDOWN:

@@ -99,7 +99,10 @@ void guiIcon::On(SDL_Point *p)
             );
 
             if (!l_texture)
+            {
+                SDLErrorMessageQueue();
                 break;
+            }
 
             if (p)
             {

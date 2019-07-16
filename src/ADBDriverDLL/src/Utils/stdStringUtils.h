@@ -9,6 +9,13 @@
 namespace stdext
 {
     /// in line
+    inline void string_trimn(std::string & str)
+    {
+        str.erase(0, str.find_first_not_of('\n'));
+        str.erase(str.find_last_not_of('\n')+1);
+        str.erase(0, str.find_first_not_of('\r'));
+        str.erase(str.find_last_not_of('\r')+1);
+    }
     inline std::string string_trim(std::string str)
     {
         str.erase(0, str.find_first_not_of(' '));
@@ -141,6 +148,7 @@ namespace stdext
 using stdext::wstring_fmt;
 using stdext::wstring_trim;
 using stdext::string_trim;
+using stdext::string_trimn;
 using stdext::string_replace;
 using stdext::string_sprintf;
 using stdext::string_from_res;

@@ -160,11 +160,14 @@ void guiAnimation::run()
 
                 SDL_Rect *r   = guiBase::GetGui<SDL_Rect>();
                 SDL_Rect *rw  = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
-                int32_t   pad = __MENU_W_default,
+                SDL_Point point_img_menu = ResManager::imagesize(
+                    ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+                );
+                int32_t   l_pad = point_img_menu.x,
                           l_key_y = (rw->h - r->h);
-                r->x = (pad + m_key_x);
+                r->x = (l_pad + m_key_x);
                 r->y = l_key_y;
-                pad += rw->w;
+                l_pad += rw->w;
 
                 for (uint32_t i = 0U; i < m_textures_sz; i++)
                 {
@@ -178,7 +181,7 @@ void guiAnimation::run()
                         r->y = (m_key_y + l_key_y);
                     );
 
-                    if (r->x >= pad)
+                    if (r->x >= l_pad)
                         break;
 
                     if (!AppConfig::instance().cnf_isrun)

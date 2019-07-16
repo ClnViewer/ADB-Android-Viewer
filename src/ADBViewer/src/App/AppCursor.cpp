@@ -92,13 +92,13 @@ bool AppCursor::uevent(SDL_Event *ev, const void *instance)
         switch(ev->user.code)
         {
             /// Change cursor (SDL_SYSTEM_CURSOR_ARROW)
-            case ID_CMD_POP_MENU25:
+            case ID_CMD_POP_MENU26:
                 {
                     ac->Set(AppCursor::CursorType::APP_CURSOR_ARROW);
                     return true;
                 }
             /// Change cursor (SDL_SYSTEM_CURSOR_HAND)
-            case ID_CMD_POP_MENU26:
+            case ID_CMD_POP_MENU27:
                 {
                     ac->Set(AppCursor::CursorType::APP_CURSOR_HAND);
                     return true;

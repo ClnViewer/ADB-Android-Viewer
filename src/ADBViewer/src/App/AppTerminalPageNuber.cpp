@@ -77,6 +77,21 @@ bool AppTerminalPageNuber::evresize(SDL_Texture **texture)
         return false;
     }
 
+void AppTerminalPageNuber::stop()
+    {
+        guiBase::ActiveOff();
+        guiRenderer_s *gr = guiBase::GetGui<guiRenderer_s>();
+
+        if (!gr->texture)
+            return;
+
+        GuiLock(
+            SDL_DestroyTexture(gr->texture);
+        );
+        gr->texture = nullptr;
+
+    }
+
 void AppTerminalPageNuber::draw()
     {
         SDL_Surface *l_surface = nullptr;
@@ -116,16 +131,19 @@ void AppTerminalPageNuber::draw()
                 guiBase::GetGui<SDL_Renderer>(),
                 l_surface
             );
+            SDL_FreeSurface(l_surface); l_surface = nullptr;
 
             if (!l_texture)
+            {
+                SDLErrorMessageQueue();
                 break;
+            }
 
             GuiLock(
                 std::swap(gr->texture, l_texture);
             );
             if (l_texture)
                 SDL_DestroyTexture(l_texture);
-            SDL_FreeSurface(l_surface);
 
             guiBase::ActiveOn();
             return;
@@ -144,8 +162,8 @@ void AppTerminalPageNuber::draw()
         {
             GuiLock(
                 SDL_DestroyTexture(gr->texture);
+                gr->texture = nullptr;
             );
-            gr->texture = nullptr;
         }
     }
 
@@ -166,7 +184,7 @@ bool AppTerminalPageNuber::event(SDL_Event *ev, const void *instance)
         {
             if (!atpn->guiBase::IsRegion(ev, atpn->guiBase::GetGui<SDL_Rect>()))
                 return false;
-            atpn->guiBase::PushEvent(ID_CMD_POP_MENU26);
+            atpn->guiBase::PushEvent(ID_CMD_POP_MENU27);
             return true;
         }
         if ((ev->type == SDL_MOUSEBUTTONDOWN) && (ev->button.button == SDL_BUTTON_RIGHT))

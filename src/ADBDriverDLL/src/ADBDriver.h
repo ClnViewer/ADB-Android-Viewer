@@ -16,8 +16,14 @@ private:
     uint32_t             m_display[4];
     std::wstring         m_exepath;
     std::wstring         m_deviceid;
+    std::string          m_device_abi;
+    std::string          m_device_sdk;
+    std::string          m_device_rel;
+
     GameDev::DriverAsync m_cmdasync;
     GameDev::DriverNet   m_net;
+
+    void deviceinfo();
 
 public:
 
@@ -95,6 +101,7 @@ public:
     SelectedList GetDeviceList();
     bool         GetDeviceListUI();
     bool         GetDeviceSetupUI();
+    std::string  GetDeviceInfo();
     std::string  GetProperties(ADBDriver::DeviceInfoType);
 
     std::vector<uint8_t> Capture();

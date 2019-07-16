@@ -48,5 +48,9 @@ static inline const char *popup_strings_en[] = {
     /* 45 */ "Terminal",
     /* 46 */ "Notify open/expand",
     /* 47 */ "Notify close/collapse",
+    /* 48 */ "Terminal - indent from bottom edge",
+    /* 49 */ "Device info",
+    /* 50 */ "Version Information",
+    /* 51 */ "Device",
     nullptr
 };

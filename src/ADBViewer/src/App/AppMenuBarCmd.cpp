@@ -104,6 +104,7 @@ int32_t AppMenuBar::mb_cmd_SCALE(SDL_Event *ev)
     {
         AppConfig::instance().cnf_disp_ratio =
             ((AppConfig::instance().cnf_disp_ratio.load() >= 2U) ? 1U : 2U);
+        guiBase::PushEvent(ID_CMD_POP_MENU25); /// close terminal is opened
         return ID_CMD_POP_MENU99;
     }
 
@@ -140,6 +141,7 @@ int32_t AppMenuBar::mb_cmd_FULLSCREEN(SDL_Event *ev)
             );
         }
         AppConfig::instance().cnf_isfullscreen = !(AppConfig::instance().cnf_isfullscreen);
+        guiBase::PushEvent(ID_CMD_POP_MENU25); /// close terminal is opened
         return 0;
     }
 

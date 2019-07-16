@@ -8,9 +8,6 @@
 
 #define __W_default 640
 #define __H_default 400
-#define __MENU_W_default  32
-#define __MENU_H_dragable 330
-#define __EMENU_H_default 75
 
 #define ID_CMD_POP_MENU0 20180
 #define ID_CMD_POP_MENU1 20181  // Install APK
@@ -38,10 +35,14 @@
 #define ID_CMD_POP_MENU21 20201
 #define ID_CMD_POP_MENU22 20202 // Copy Screen to clipboard
 #define ID_CMD_POP_MENU23 20203 // Display rotate menu (current status disabled)
-#define ID_CMD_POP_MENU24 20203 // Display Terminal open/close (trigger)
+#define ID_CMD_POP_MENU24 20204 // Display Terminal open/close (trigger)
+#define ID_CMD_POP_MENU25 20205 // Display Terminal close (is resize (internal))
 
-#define ID_CMD_POP_MENU25 20204 // Change cursor (SDL_SYSTEM_CURSOR_ARROW)
-#define ID_CMD_POP_MENU26 20205 // Change cursor (SDL_SYSTEM_CURSOR_HAND)
+#define ID_CMD_POP_MENU26 20206 // Change cursor (SDL_SYSTEM_CURSOR_ARROW)
+#define ID_CMD_POP_MENU27 20207 // Change cursor (SDL_SYSTEM_CURSOR_HAND)
+
+#define ID_CMD_POP_MENU28 20208 // Device info
+#define ID_CMD_POP_MENU29 20209 // Version Information
 
 #define ID_CMD_POP_MENU30 20300 // Android ADB command ID_CMD_POP_MENU30 - ID_CMD_POP_MENU40
 #define ID_CMD_POP_MENU31 20301
@@ -66,6 +67,12 @@
 #define ID_CMD_POP_MENU101 20502 // Input text box stop ???
 
 #define ID_CMD_POP_MENU102 20503 // Change menu enable/disable
+
+#define ID_CMD_POP_MENU210 40010  // Terminal - indent from bottom edge (40010 - 40050)
+#define ID_CMD_POP_MENU220 40020
+#define ID_CMD_POP_MENU230 40030
+#define ID_CMD_POP_MENU240 40040
+#define ID_CMD_POP_MENU250 40050
 
 
 #define ID_CMD_MSGBAR     49999

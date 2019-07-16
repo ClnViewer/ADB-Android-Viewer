@@ -78,9 +78,12 @@ bool AppEditor::init(App *app)
         if (ret)
         {
             SDL_Rect rect{};
+            SDL_Point point_img_menu = ResManager::imagesize(
+                    ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+            );
 
             rect.x = 0;
-            rect.y = (AppConfig::instance().cnf_disp_point.y - __MENU_W_default);
+            rect.y = (AppConfig::instance().cnf_disp_point.y - point_img_menu.x);
 
             ret = m_icon_record.init(
                     app,
@@ -497,13 +500,17 @@ bool AppEditor::event(SDL_Event *ev, const void *instance)
                 {
                     case SDL_BUTTON_LEFT:
                     {
-                        if (ev->motion.x <= __MENU_W_default)
+                        SDL_Point point_img_menu = ResManager::imagesize(
+                            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+                        );
+
+                        if (ev->motion.x <= point_img_menu.x)
                             break;
 
                         if (ape->isupdate())
                             break;
 
-                        ape->ppixel.x = (ev->motion.x - __MENU_W_default);
+                        ape->ppixel.x = (ev->motion.x - point_img_menu.x);
                         ape->ppixel.y = ev->motion.y;
                         return true;
                     }

@@ -33,5 +33,6 @@ static inline const char *help_strings_ru[] = {
     "! ADB not support input text in national language !",
     "Закрыть и Сохранить скрипт",
     "Закрыть терминал",
+    "Для отображения команды слишком маленький размер окна терминала",
     nullptr
 };

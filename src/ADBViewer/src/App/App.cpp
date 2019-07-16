@@ -35,24 +35,27 @@ static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt,
 {
     App *app = static_cast<App*>(data);
     auto istate = app->state();
-    int32_t x = __MENU_W_default, y = 0, yy = 0;
+    SDL_Point point_img_menu = ResManager::imagesize(
+            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+    );
+    int32_t x = point_img_menu.x, y = 0, yy = 0;
 
     /// Script editor active | Input field active
     if ((istate[App::AppStateType::STATE_APP_EDIT]) ||
         (istate[App::AppStateType::STATE_APP_INPUT]))
     {
-        yy = (AppConfig::instance().cnf_disp_point.y - __MENU_W_default);
+        yy = (AppConfig::instance().cnf_disp_point.y - point_img_menu.x);
     }
     /// Terminal active
     else if (istate[App::AppStateType::STATE_APP_TERM])
     {
-        y = ((istate[App::AppStateType::STATE_APP_MENU]) ? __MENU_H_dragable : y);
+        y = ((istate[App::AppStateType::STATE_APP_MENU]) ? point_img_menu.y : y);
         yy = AppConfig::instance().cnf_disp_point.y;
     }
     /// Menu bar active
     else if (istate[App::AppStateType::STATE_APP_MENU])
     {
-        y = __MENU_H_dragable;
+        y = point_img_menu.y;
         yy = AppConfig::instance().cnf_disp_point.y;
     }
 

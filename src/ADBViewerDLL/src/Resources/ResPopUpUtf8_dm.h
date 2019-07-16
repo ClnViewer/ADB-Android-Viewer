@@ -48,5 +48,9 @@ static inline const char *popup_strings_dm[] = {
     /* 45 */ "Terminal",
     /* 46 */ "Benachrichtigen öffnen/erweitern",
     /* 47 */ "Benachrichtigen schließen/reduzieren",
+    /* 48 */ "Terminal - Einzug von der unteren kante",
+    /* 49 */ "Geräteinformationen",
+    /* 50 */ "Versionsinformationen",
+    /* 51 */ "Gerät",
     nullptr
 };

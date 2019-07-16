@@ -68,9 +68,13 @@ bool AppVideo::init(App *app)
 bool AppVideo::tinit(SDL_Texture **texture)
     {
         SDL_Rect *r = guiBase::GetGui<SDL_Rect>();
-        r->w = AppConfig::instance().cnf_disp_point.x - __MENU_W_default;
+        SDL_Point point_img_menu = ResManager::imagesize(
+            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+        );
+
+        r->w = AppConfig::instance().cnf_disp_point.x - point_img_menu.x;
         r->h = AppConfig::instance().cnf_disp_point.y;
-        r->x = __MENU_W_default;
+        r->x = point_img_menu.x;
         r->y = 0;
 
         SDL_Texture *l_texture = SDL_CreateTexture(
@@ -82,7 +86,10 @@ bool AppVideo::tinit(SDL_Texture **texture)
             );
 
         if (!l_texture)
+        {
+            SDLErrorMessageQueue();
             return false;
+        }
 
         GuiLock(
             std::swap(*texture, l_texture);
@@ -409,7 +416,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
         if (!apv->guiBase::IsRegion(ev, apv->guiBase::GetGui<SDL_Rect>()))
             return false;
 
-        apv->guiBase::PushEvent(ID_CMD_POP_MENU25);
+        apv->guiBase::PushEvent(ID_CMD_POP_MENU26);
         if ((AppConfig::instance().cnf_ispos) && (!isexit))
             apv->m_app->m_appmsgbar.PrintInfo(MgrType::MGR_MAIN, "", -1, ev);
         return true;
@@ -428,9 +435,13 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
             if (!apv->guiBase::IsRegion(ev, apv->guiBase::GetGui<SDL_Rect>()))
                 break;
 
+            SDL_Point point_img_menu = ResManager::imagesize(
+                ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+            );
+
             ADBDriver::Tap_s t =
             {
-                ((ev->motion.x - __MENU_W_default) *
+                ((ev->motion.x - point_img_menu.x) *
                         static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio.load())),
                 (ev->motion.y *
                         static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio.load()))

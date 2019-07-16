@@ -163,14 +163,14 @@ bool AppMenuBar::eventcb(SDL_Event *ev)
     /// Cursor normalize, left/right padding
     if ((ev->motion.x < 3) || ((m_icon_menu[0].guiBase::GetGui<SDL_Rect>()->w - ev->motion.x) < 3))
     {
-        guiBase::PushEvent(ID_CMD_POP_MENU25);
+        guiBase::PushEvent(ID_CMD_POP_MENU26);
         return true;
     }
 
     if (!iconstate())
         return false;
 
-    guiBase::PushEvent(ID_CMD_POP_MENU26);
+    guiBase::PushEvent(ID_CMD_POP_MENU27);
     ResManager::IndexStringResource res;
 
 #   pragma GCC diagnostic push
@@ -288,7 +288,7 @@ bool AppMenuBar::eventcb(SDL_Event *ev)
                                 ),
                                 __LINE__, ev
                             );
-                            guiBase::PushEvent(ID_CMD_POP_MENU25);
+                            guiBase::PushEvent(ID_CMD_POP_MENU26);
                             return false;
                         }
                 }

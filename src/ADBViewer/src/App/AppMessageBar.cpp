@@ -77,14 +77,17 @@ void AppMessageBar::PrintInfo(MgrType mgrt, std::string const & s, int32_t id, S
         case MgrType::MGR_MAIN:
         {
             SDL_Rect *r = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
+            SDL_Point point_img_menu = ResManager::imagesize(
+                    ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+            );
 
-            if (ev->motion.x > __MENU_W_default)
+            if (ev->motion.x > point_img_menu.x)
             {
                 if ((!AppConfig::instance().cnf_isstop) && (AppConfig::instance().cnf_ispos))
                 {
                     uint32_t x = ((AppConfig::instance().cnf_disp_ratio) ?
-                        ((ev->motion.x - __MENU_W_default) * AppConfig::instance().cnf_disp_ratio) :
-                         (ev->motion.x - __MENU_W_default)
+                        ((ev->motion.x - point_img_menu.x) * AppConfig::instance().cnf_disp_ratio) :
+                         (ev->motion.x - point_img_menu.x)
                         );
                     uint32_t y = ((AppConfig::instance().cnf_disp_ratio) ?
                         (ev->motion.y * AppConfig::instance().cnf_disp_ratio) :

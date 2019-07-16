@@ -46,18 +46,24 @@ bool AppTerminalPage::getwin(SDL_Window *swin)
             SDL_Point point_img_edit = ResManager::imagesize(
                     ResManager::IndexImageResource::RES_IMG_EDITMENU
                 );
+            int32_t input_offset = (((point_img_close.y / 3) * 2) + 2);
 
-            SDL_GetWindowPosition(swin, &rbase.x, &rbase.y);
-            if ((!rbase.x) && (!rbase.y))
-                break;
 
             if (SDL_GetCurrentDisplayMode(0, &dm) < 0)
                 break;
 
-            int32_t input_offset = (((point_img_close.y / 3) * 2) + 2);
+            if (AppConfig::instance().cnf_isfullscreen)
+                rbase.h = dm.h;
+            else
+            {
+                SDL_GetWindowPosition(swin, &rbase.x, &rbase.y);
+                if ((!rbase.x) && (!rbase.y))
+                    break;
+
+                rbase.h = dm.h - rbase.y - AppConfig::instance().cnf_term_bottom_pad;
+            }
 
             rbase.w = point.x;
-            rbase.h = dm.h - rbase.y - AppConfig::instance().cnf_term_bottom_pad;
             rbase.x = point_img_close.x;
             rbase.y = point.y;
             /// image button close
@@ -83,16 +89,20 @@ bool AppTerminalPage::getwin(SDL_Window *swin)
             /// Out page - terminal text frame source rectangle
             out_rsrc.w = out_rdst.w;
             out_rsrc.h = out_rdst.h;
-            out_rsrc.x = 0;
-            out_rsrc.y = 0;
+            out_rsrc.x = out_rsrc.y = 0;
             /// Out page - terminal surface/texture size
             out_ssize.x = out_rdst.w;
             out_ssize.y = (out_rdst.h * SCROLL_NUM_SCREEN);
+                /// limit SDL texture size 8192x8192
+            out_ssize.y = ((out_ssize.y > 8192) ? 8192 : out_ssize.y);
             /// Out page - position scroll
             out_pos.x = out_pos.y = 0;
+                /// max page, normalize number from limit SDL texture size
+                /// using in AppTerminalOutput::pageDown() to check limit
+            out_mpage = ((out_ssize.y / out_rdst.h) - 1);
             out_npage = 0;
             out_tpage = 0;
-            /// class page number
+            /// class page number - informer
             c_p_pnum.x = (AppConfig::instance().cnf_disp_point.x - 32);
             c_p_pnum.y = AppConfig::instance().cnf_disp_point.y;
 

@@ -33,5 +33,6 @@ static inline const char *help_strings_dm[] = {
     "! ADB not support input text in national language !",
     "Skript schließen und speichern",
     "Terminal schließen",
+    "Terminalfenster zu klein zum anzeigen des befehls",
     nullptr
 };

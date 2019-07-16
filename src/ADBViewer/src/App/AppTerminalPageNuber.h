@@ -12,6 +12,7 @@ public:
     // bool event(SDL_Event*, const void*) override;
     bool evresize(SDL_Texture**) override;
     void draw();
+    void stop();
 
 private:
     //

@@ -26,7 +26,7 @@ private:
     std::mutex        m_lock;
     std::atomic<bool> m_enable = false;
     //
-    void runselect();
+    void runselect(bool);
     void adbsend(std::string&);
 };
 

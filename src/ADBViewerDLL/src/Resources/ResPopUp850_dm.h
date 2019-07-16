@@ -48,5 +48,9 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 45 */ L"Terminal",
     /* 46 */ L"Benachrichtigen ”ffnen/erweitern",
     /* 47 */ L"Benachrichtigen schlieáen/reduzieren",
+    /* 48 */ L"Terminal - Einzug von der unteren kante",
+    /* 49 */ L"Ger„teinformationen",
+    /* 50 */ L"Versionsinformationen",
+    /* 51 */ L"Ger„t",
     nullptr
 };

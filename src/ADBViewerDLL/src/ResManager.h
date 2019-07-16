@@ -110,7 +110,8 @@ namespace Resources
                 RES_STR_ADB_LANG_NOT_SUPPORT,
                 RES_STR_ADB_LANG_NOT_SUPPORT_ENG,
                 RES_STR_SCRIPTEDIT_END,
-                RES_STR_CLOSE_TERM
+                RES_STR_CLOSE_TERM,
+                RES_STR_SMALL_TERM
             };
             enum IndexStringPopUpMenu
             {
@@ -162,6 +163,10 @@ namespace Resources
                 RES_STR_POPUP_45,
                 RES_STR_POPUP_46,
                 RES_STR_POPUP_47,
+                RES_STR_POPUP_48,
+                RES_STR_POPUP_49,
+                RES_STR_POPUP_50,
+                RES_STR_POPUP_51,
                 RES_STR_POPUP_NONE
             };
 

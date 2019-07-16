@@ -41,6 +41,16 @@ using namespace std::placeholders;
 namespace GameDev
 {
 
+void ADBDriver::deviceinfo()
+    {
+        if (m_device_abi.empty())
+            m_device_abi = GetProperties(ADBDriver::DeviceInfoType::DI_CPU_LIST);
+        if (m_device_sdk.empty())
+            m_device_sdk = GetProperties(ADBDriver::DeviceInfoType::DI_VERSION_SDK);
+        if (m_device_rel.empty())
+            m_device_rel = GetProperties(ADBDriver::DeviceInfoType::DI_VERSION_RELEASE);
+    }
+
 std::string ADBDriver::GetProperties(ADBDriver::DeviceInfoType t)
 {
     std::string result;
@@ -48,9 +58,24 @@ std::string ADBDriver::GetProperties(ADBDriver::DeviceInfoType t)
     ss << "getprop " << DriverConst::ls_arrayPropertis[t];
 
     if (AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, false))
+    {
+        string_trimn(result);
         return result;
+    }
+
     return std::string{};
 }
+
+std::string  ADBDriver::GetDeviceInfo()
+    {
+        deviceinfo();
+
+        std::stringstream ss;
+        ss << "Android " << m_device_rel;
+        ss << " [" << m_device_sdk;
+        ss << "] (" << m_device_abi << ")";
+        return ss.str();
+    }
 
 SelectedList ADBDriver::GetDeviceList()
 {
@@ -108,10 +133,9 @@ bool ADBDriver::InitRemote()
         if (!string_end<std::string>(result, DriverConst::ls_errorFile))
             break;
 
-        std::string wabi = GetProperties(ADBDriver::DeviceInfoType::DI_CPU_LIST);
-        std::string wsdk = GetProperties(ADBDriver::DeviceInfoType::DI_VERSION_SDK);
+        deviceinfo();
 
-        if (!Resources::PackManager::checkbin(wabi, wsdk))
+        if (!Resources::PackManager::checkbin(m_device_abi, m_device_sdk))
             break;
 
         std::stringstream ss;

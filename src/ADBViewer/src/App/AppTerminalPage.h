@@ -19,6 +19,7 @@ public:
     SDL_Point         out_pos{};
     int32_t           out_npage = 0;
     int32_t           out_tpage = 0;
+    int32_t           out_mpage = 0;
     //
     SDL_Rect          btn_r_close{};
     SDL_Rect          btn_r_edit{};

@@ -120,7 +120,10 @@ bool AppTerminalOutput::tinit(SDL_Texture **texture)
             );
 
         if (!l_texture)
+        {
+            SDLErrorMessageQueue();
             return false;
+        }
 
         GuiLock(
             std::swap(*texture, l_texture);
@@ -164,6 +167,17 @@ void AppTerminalOutput::start()
         gr->rsrc = &m_page->out_rsrc;
 
         guiBase::ActiveOn();
+        {
+            std::stringstream ss;
+            ss << ResManager::stringload(
+                    ResManager::IndexStringResource::RES_STR_APPTITLENAME,
+                    AppConfig::instance().cnf_lang
+                );
+            ss << "v." << AVIEW_FULLVERSION_STRING;
+            ss << " r." << AVIEW_SVN_REVISION;
+            draw_cmd(AppConfig::instance().cnf_adb.GetDeviceInfo());
+            draw_txt(ss.str());
+        }
     }
 
 void AppTerminalOutput::stop()
@@ -178,6 +192,8 @@ void AppTerminalOutput::stop()
         if (m_surface)
             SDL_FreeSurface(m_surface);
         m_surface = nullptr;
+
+        m_pagenum.stop();
     }
 
 void AppTerminalOutput::pageUp()
@@ -197,7 +213,7 @@ void AppTerminalOutput::pageDown()
         if (!m_page)
             return;
 
-        int32_t n = ((m_page->out_npage >= (SCROLL_NUM_SCREEN - 1)) ? 0 : (m_page->out_npage + 1)),
+        int32_t n = ((m_page->out_npage >= m_page->out_mpage) ? 0 : (m_page->out_npage + 1)),
                 y = (m_page->out_rdst.h * n);
 
         if (y >= m_page->out_pos.y)
@@ -324,16 +340,19 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
             );
 
             if (!l_texture)
+            {
+                SDLErrorMessageQueue();
                 break;
+            }
 
             GuiLock(
                 std::swap(gr->texture, l_texture);
             );
             m_page->out_pos.y += l_surface->h;
+            SDL_FreeSurface(l_surface);
 
             if (l_texture)
                 SDL_DestroyTexture(l_texture);
-            SDL_FreeSurface(l_surface);
 
             guiBase::ActiveOn();
 
@@ -348,10 +367,18 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
 
         guiBase::ActiveOff();
 
-        if (l_texture)
-            SDL_DestroyTexture(l_texture);
         if (l_surface)
             SDL_FreeSurface(l_surface);
+        if (l_texture)
+            SDL_DestroyTexture(l_texture);
+
+        if (gr->texture)
+        {
+            GuiLock(
+                SDL_DestroyTexture(gr->texture);
+                gr->texture = nullptr;
+            );
+        }
     }
 
 bool AppTerminalOutput::event(SDL_Event *ev, const void *instance)
@@ -370,7 +397,7 @@ bool AppTerminalOutput::event(SDL_Event *ev, const void *instance)
         {
             if (!ato->guiBase::IsRegion(ev, ato->guiBase::GetGui<SDL_Rect>()))
                 return false;
-            ato->guiBase::PushEvent(ID_CMD_POP_MENU25);
+            ato->guiBase::PushEvent(ID_CMD_POP_MENU26);
             return true;
         }
         return false;

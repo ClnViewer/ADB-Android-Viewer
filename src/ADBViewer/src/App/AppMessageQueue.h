@@ -14,6 +14,17 @@
         SDL_PushEvent(&ev);                         \
     }
 
+#define SDLErrorMessageQueue()                      \
+    {                                               \
+        const char *l_sdlerr = SDL_GetError();      \
+        if (l_sdlerr)                               \
+        {                                           \
+            AddMessageQueue(l_sdlerr, 10U, -1);     \
+            SDL_ClearError();                       \
+        }                                           \
+    }
+
+
 class AppMessageQueue
 {
 public:

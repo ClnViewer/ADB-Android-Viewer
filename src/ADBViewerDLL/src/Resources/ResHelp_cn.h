@@ -33,5 +33,6 @@ static inline const char *help_strings_cn[] = {
     "! ADB not support input text in national language !",
     "“关闭并保存脚本",
     "关闭终端",
+    "终端窗口太小，无法显示命令",
     nullptr
 };

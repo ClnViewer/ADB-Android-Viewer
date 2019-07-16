@@ -48,5 +48,9 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 45 */ L"Terminal",
     /* 46 */ L"Notify open/expand",
     /* 47 */ L"Notify close/collapse",
+    /* 48 */ L"Terminal - indent from bottom edge",
+    /* 49 */ L"Device info",
+    /* 50 */ L"Version Information",
+    /* 51 */ L"Device",
     nullptr
 };

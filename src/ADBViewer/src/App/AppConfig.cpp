@@ -96,6 +96,9 @@ AppConfig::AppConfig()
 
         SetDisplaySize(__W_default, __H_default);
         cnf_save_fmt = cnf_l_file_savefmt[0];
+        SDL_Point point_img_menu = ResManager::imagesize(
+            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+        );
 
         cnf_adb_rect.t  = 100U;
         cnf_cbcmd.click =
@@ -119,7 +122,7 @@ AppConfig::AppConfig()
                 cnf_adb.SendSpecialKey(t, k);
             };
         OnceUpdateFromFile();
-        cnf_input_point = { __MENU_W_default, (cnf_disp_point.y - 40) };
+        cnf_input_point = { point_img_menu.x, (cnf_disp_point.y - 40) };
     }
 
 AppConfig& AppConfig::instance()
@@ -153,7 +156,10 @@ const char * AppConfig::GetFileConfigId(ConfigIdType idx)
 
 void AppConfig::SetDisplaySize(uint32_t w, uint32_t h)
     {
-        cnf_disp_point.x = ((w) ? (static_cast<int32_t>(w) + __MENU_W_default) : cnf_disp_point.x);
+        SDL_Point point_img_menu = ResManager::imagesize(
+            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+        );
+        cnf_disp_point.x = ((w) ? (static_cast<int32_t>(w) + point_img_menu.x) : cnf_disp_point.x);
         cnf_disp_point.y = ((h) ? static_cast<int32_t>(h) : cnf_disp_point.y);
     }
 
@@ -324,6 +330,10 @@ void AppConfig::SaveToFile()
         if (!l_file.is_open())
             return;
 
+        SDL_Point point_img_menu = ResManager::imagesize(
+            ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+        );
+
         for (uint32_t i = 0U; i < __NELE(cnf_l_file_tag); i++)
         {
             wstr = L"";
@@ -365,7 +375,7 @@ void AppConfig::SaveToFile()
                     }
                 case ConfigIdType::CNF_DISP_WIDTH:
                     {
-                        wstr = std::to_wstring(cnf_disp_point.x - __MENU_W_default);
+                        wstr = std::to_wstring(cnf_disp_point.x - point_img_menu.x);
                         break;
                     }
                 case ConfigIdType::CNF_DISP_HEIGHT:

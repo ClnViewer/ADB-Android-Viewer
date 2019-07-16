@@ -68,7 +68,7 @@ bool AppTerminal::init(App *app)
                                             5U,
                                             (__LINE__ + 1000)
                                         );
-                                        guiBase::PushEvent(ID_CMD_POP_MENU26);
+                                        guiBase::PushEvent(ID_CMD_POP_MENU27);
                                         return true;
                                     }
                                 case SDL_MOUSEBUTTONDOWN:
@@ -150,7 +150,7 @@ void AppTerminal::adbsend(std::string & s)
                 m_toutput.draw_txt(so);
     }
 
-void AppTerminal::runselect()
+void AppTerminal::runselect(bool isclose)
     {
         std::lock_guard<std::mutex> l_lock(m_lock);
 
@@ -161,16 +161,25 @@ void AppTerminal::runselect()
             m_toutput.stop();
             m_icon_close.Off();
 
-            SDL_SetWindowSize(
-                guiBase::GetGui<SDL_Window>(),
-                AppConfig::instance().cnf_disp_point.x,
-                AppConfig::instance().cnf_disp_point.y
-            );
+            if (!isclose)
+                SDL_SetWindowSize(
+                    guiBase::GetGui<SDL_Window>(),
+                    AppConfig::instance().cnf_disp_point.x,
+                    AppConfig::instance().cnf_disp_point.y
+                );
         }
-        else
+        else if (!isclose)
         {
-            if ((m_page.rbase.h - AppConfig::instance().cnf_disp_point.y) < 64)
+            if ((m_page.rbase.h - AppConfig::instance().cnf_disp_point.y) < 100)
             {
+                AddMessageQueue(
+                    ResManager::stringload(
+                        ResManager::IndexStringResource::RES_STR_SMALL_TERM,
+                        AppConfig::instance().cnf_lang
+                    ),
+                    10U,
+                    -1
+                );
                 return;
             }
 
@@ -199,11 +208,20 @@ bool AppTerminal::uevent(SDL_Event *ev, const void *instance)
         if (!apt)
             return false;
 
-        if (ev->user.code != ID_CMD_POP_MENU24)
-            return false;
-
-        apt->runselect();
-        return true;
+        switch (ev->user.code)
+        {
+            case ID_CMD_POP_MENU24:
+                {
+                    apt->runselect(false);
+                    return true;
+                }
+            case ID_CMD_POP_MENU25:
+                {
+                    apt->runselect(true);
+                    return true;
+                }
+        }
+        return false;
     }
 
 bool AppTerminal::event(SDL_Event *ev, const void *instance)
