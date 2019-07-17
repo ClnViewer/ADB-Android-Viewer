@@ -17,7 +17,7 @@ namespace Resources
             PackManager();
             ~PackManager();
 
-            static bool checkbin(std::string&, std::string&);
+            static bool checkbin(std::string&, std::string&, std::string&);
 
         private:
             static bool savebin(const uint8_t*, size_t);

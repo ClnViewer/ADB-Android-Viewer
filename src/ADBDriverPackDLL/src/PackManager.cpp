@@ -45,9 +45,14 @@ typedef struct
     const uint8_t *datab;
     const uint8_t *datae;
     const size_t   dsz;
+} BinData_s;
+
+typedef struct
+{
+    BinData_s      data[3];
     const char   **outpath;
     const size_t   opsz;
-} BinData_s;
+} BinBase_s;
 
 namespace Resources
 {
@@ -55,10 +60,20 @@ namespace Resources
 static inline const char *outdir = "remotebin";
 static inline const char *outfile = "remotebin\\ascreencap";
 
-INCBIN(arm64v8a, "../../../AscreenCap/dist/arm64-v8a/ascreencap");
-INCBIN(armeabiv7a, "../../../AscreenCap/dist/armeabi-v7a/ascreencap");
-INCBIN(x86, "../../../AscreenCap/dist/x86/ascreencap");
-INCBIN(x86_64, "../../../AscreenCap/dist/x86_64/ascreencap");
+INCBIN(5_arm64v8a, "../../../AscreenCap/dist/5/arm64-v8a/ascreencap");
+INCBIN(5_armeabiv7a, "../../../AscreenCap/dist/5/armeabi-v7a/ascreencap");
+INCBIN(5_x86, "../../../AscreenCap/dist/5/x86/ascreencap");
+INCBIN(5_x86_64, "../../../AscreenCap/dist/5/x86_64/ascreencap");
+
+INCBIN(8_arm64v8a, "../../../AscreenCap/dist/8/arm64-v8a/ascreencap");
+INCBIN(8_armeabiv7a, "../../../AscreenCap/dist/8/armeabi-v7a/ascreencap");
+INCBIN(8_x86, "../../../AscreenCap/dist/8/x86/ascreencap");
+INCBIN(8_x86_64, "../../../AscreenCap/dist/8/x86_64/ascreencap");
+
+INCBIN(9_arm64v8a, "../../../AscreenCap/dist/9/arm64-v8a/ascreencap");
+INCBIN(9_armeabiv7a, "../../../AscreenCap/dist/9/armeabi-v7a/ascreencap");
+INCBIN(9_x86, "../../../AscreenCap/dist/9/x86/ascreencap");
+INCBIN(9_x86_64, "../../../AscreenCap/dist/9/x86_64/ascreencap");
 
 static inline const char *l_path_arm64v8a[] =
 {
@@ -77,39 +92,95 @@ static inline const char *l_path_x86_64[] =
     "x86_64", "X86_64"
 };
 
-static inline BinData_s l_binbase[] =
+static inline BinBase_s l_binbase[] =
 {
     {
-        .datab = bin_arm64v8aData,
-        .datae = bin_arm64v8aEnd,
-        .dsz  = bin_arm64v8aSize,
+        .data  = {
+            {
+                .datab = bin_5_arm64v8aData,
+                .datae = bin_5_arm64v8aEnd,
+                .dsz   = bin_5_arm64v8aSize
+            },
+            {
+                .datab = bin_8_arm64v8aData,
+                .datae = bin_8_arm64v8aEnd,
+                .dsz   = bin_8_arm64v8aSize
+            },
+            {
+                .datab = bin_9_arm64v8aData,
+                .datae = bin_9_arm64v8aEnd,
+                .dsz   = bin_9_arm64v8aSize
+            }
+        },
         .outpath = l_path_arm64v8a,
         .opsz = __NELE(l_path_arm64v8a)
     },
     {
-        .datab = bin_armeabiv7aData,
-        .datae = bin_armeabiv7aEnd,
-        .dsz  = bin_armeabiv7aSize,
+        .data  = {
+            {
+                .datab = bin_5_armeabiv7aData,
+                .datae = bin_5_armeabiv7aEnd,
+                .dsz   = bin_5_armeabiv7aSize
+            },
+            {
+                .datab = bin_8_armeabiv7aData,
+                .datae = bin_8_armeabiv7aEnd,
+                .dsz   = bin_8_armeabiv7aSize
+            },
+            {
+                .datab = bin_9_armeabiv7aData,
+                .datae = bin_9_armeabiv7aEnd,
+                .dsz   = bin_9_armeabiv7aSize
+            }
+        },
         .outpath = l_path_armeabiv7a,
         .opsz = __NELE(l_path_armeabiv7a)
     },
     {
-        .datab = bin_x86Data,
-        .datae = bin_x86End,
-        .dsz  = bin_x86Size,
+        .data  = {
+            {
+                .datab = bin_5_x86Data,
+                .datae = bin_5_x86End,
+                .dsz   = bin_5_x86Size
+            },
+            {
+                .datab = bin_8_x86Data,
+                .datae = bin_8_x86End,
+                .dsz   = bin_8_x86Size
+            },
+            {
+                .datab = bin_9_x86Data,
+                .datae = bin_9_x86End,
+                .dsz   = bin_9_x86Size
+            }
+        },
         .outpath = l_path_x86,
         .opsz = __NELE(l_path_x86)
     },
     {
-        .datab = bin_x86_64Data,
-        .datae = bin_x86_64End,
-        .dsz  = bin_x86_64Size,
+        .data  = {
+            {
+                .datab = bin_5_x86_64Data,
+                .datae = bin_5_x86_64End,
+                .dsz   = bin_5_x86_64Size
+            },
+            {
+                .datab = bin_8_x86_64Data,
+                .datae = bin_8_x86_64End,
+                .dsz   = bin_8_x86_64Size
+            },
+            {
+                .datab = bin_9_x86_64Data,
+                .datae = bin_9_x86_64End,
+                .dsz   = bin_9_x86_64Size
+            }
+        },
         .outpath = l_path_x86_64,
         .opsz = __NELE(l_path_x86_64)
     }
 };
 
-static uint32_t f_strToUint(std::string const opt)
+static uint32_t f_strToUint(std::string const & opt)
 {
     try
     {
@@ -129,20 +200,45 @@ static uint32_t f_strToUint(std::string const opt)
     }
 }
 
+static uint32_t f_releaseToIdx(std::string const & opt)
+    {
+        if (opt.empty())
+            return 1000U;
+
+        const char c[] = { opt.data()[0], '\0' };
+        std::string s = c;
+
+        switch (f_strToUint(s))
+        {
+            case 5U:
+            case 6U:
+            case 7U: return 0U;
+            case 8U: return 1U;
+            case 9U: return 2U;
+            default: return 1000U;
+        }
+    }
+
+
 PackManager::PackManager() {}
 PackManager::~PackManager() {}
 
-bool PackManager::checkbin(std::string & binlist, std::string & vsdk)
+bool PackManager::checkbin(std::string & binlist, std::string & vsdk, std::string & rel)
 {
     do
     {
         if (
-            (!binlist.length()) ||
-            (!vsdk.length())
+            (binlist.empty()) ||
+            (vsdk.empty()) ||
+            (rel.empty())
            )
            break;
 
         if (f_strToUint(vsdk) < MIN_ASDK_VERSION)
+           break;
+
+        uint32_t nrel = f_releaseToIdx(rel);
+        if (nrel >= __NELE(l_binbase[0].data))
            break;
 
         std::vector<std::string> platforms;
@@ -171,7 +267,7 @@ bool PackManager::checkbin(std::string & binlist, std::string & vsdk)
                 for (uint32_t k = 0; k < platforms.size(); k++)
                     if (!platforms[k].compare(0U, platforms[k].length(), l_binbase[i].outpath[n]))
                     {
-                        savebin(l_binbase[i].datab, l_binbase[i].dsz);
+                        savebin(l_binbase[i].data[nrel].datab, l_binbase[i].data[nrel].dsz);
                         return true;
                     }
     }
@@ -184,6 +280,9 @@ bool PackManager::savebin(const uint8_t *data, size_t dsz)
 {
     do
     {
+        if ((!data) || (!dsz))
+            break;
+
         FILE __AUTO(__autofile) *fp = nullptr;
 
         if (::_access(outdir, F_OK) < 0)

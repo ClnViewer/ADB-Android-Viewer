@@ -23,7 +23,7 @@ class DriverConst
         static inline const char    *ls_const_fail = "FAIL";
         static inline const char    *ls_const_ok   = "OKAY";
 
-        static inline const char    *ls_src_ascreencap  = "remotebin\\ascreencap";            /// push local file
+        static inline const char    *ls_src_ascreencap  = "remotebin\\ascreencap"; /// push local file
         static inline const char    *ls_path_file       = "/data/local/tmp/";
         static inline const char    *ls_mode_file       = ",0777";
         static inline const char    *ls_cmod_file       = "/system/bin/chmod 0777 /data/local/tmp/";
@@ -38,9 +38,10 @@ class DriverConst
         static inline const char    *ls_cmd_ascreencap_stream = " --stream --sdl";
         static inline const char    *ls_cmd_screencap_jpeg    = " -p";
 
+        static inline const char    *ls_driverInfo = "/data/local/tmp/ascreencap -i";
         static inline const char    *ls_checkFile = "ls -l /data/local/tmp/ascreencap";
-        static inline const char    *ls_errorFile = "No such file or directory\r\n";
-        static inline const char    *ls_foundFile = " ascreencap\r\n";
+        static inline const char    *ls_errorFile = "No such file or directory";
+        static inline const char    *ls_foundFile = ls_name_ascreencap;
 
         static inline const char    *ls_arrayPropertis[] =
         {

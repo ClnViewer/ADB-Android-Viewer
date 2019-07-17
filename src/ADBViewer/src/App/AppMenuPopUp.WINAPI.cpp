@@ -154,6 +154,8 @@ void AppMenuPopUp::show()
         ::AppendMenuW(l_hDeviceMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU28, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_49, l_hDeviceMenu);
         ::AppendMenuW(l_hDeviceMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU23, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_52, l_hDeviceMenu);
+        ::AppendMenuW(l_hDeviceMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU1, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_1, l_hDeviceMenu);
         ///
 
@@ -248,7 +250,7 @@ void AppMenuPopUp::show()
             ::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
             MENU_ITEM_ADD(ID_CMD_POP_MENU17, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_43, l_hDisplayRotateMenu);
             //::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
-            //MENU_ITEM_ADD(ID_CMD_POP_MENU23, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
+            //MENU_ITEM_ADD(ID_CMD_POP_MENU220, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
 
             switch (AppConfig::instance().cnf_disp_rotate)
             {
@@ -479,6 +481,16 @@ void AppMenuPopUp::show()
             case ID_CMD_POP_MENU22:
                 {
                     cmdEvent.user.code = ID_CMD_POP_MENU22;
+                    break;
+                }
+            case ID_CMD_POP_MENU23:
+                {
+                    AddMessageQueue(
+                        AppConfig::instance().cnf_adb.GetDriverInfo(),
+                        10U,
+                        -1
+                    );
+                    cmdEvent.user.code = 0;
                     break;
                 }
             case ID_CMD_POP_MENU24:

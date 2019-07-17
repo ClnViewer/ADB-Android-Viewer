@@ -59,7 +59,7 @@ std::string ADBDriver::GetProperties(ADBDriver::DeviceInfoType t)
 
     if (AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, false))
     {
-        string_trimn(result);
+        string_trimn<std::string>(result);
         return result;
     }
 
@@ -75,6 +75,27 @@ std::string  ADBDriver::GetDeviceInfo()
         ss << " [" << m_device_sdk;
         ss << "] (" << m_device_abi << ")";
         return ss.str();
+    }
+
+std::string  ADBDriver::GetDriverInfo()
+    {
+        std::string result;
+        do
+        {
+            if (!AdbRawT<std::string>(DriverConst::ls_driverInfo, DriverConst::ls_cmd_shell, result, false))
+                break;
+            if (result.empty())
+                break;
+
+            string_trimn<std::string>(result);
+            std::stringstream ss;
+            ss << "Driver: " << result;
+            return ss.str();
+        }
+        while (0);
+
+        result = "Driver unknown..";
+        return result;
     }
 
 SelectedList ADBDriver::GetDeviceList()
@@ -104,14 +125,14 @@ SelectedList ADBDriver::GetDeviceList()
         if ((pos = wsline.find(' ')) != std::wstring::npos)
             devices.insert(
                 std::make_pair(
-                    wstring_trim(wsline.substr(0, pos)),
-                    wstring_trim(wsline.substr(pos))
+                    string_trimr<std::wstring>(wsline.substr(0, pos)),
+                    string_trimr<std::wstring>(wsline.substr(pos))
                 )
             );
         else
             devices.insert(
                 std::make_pair(
-                    wstring_trim(wsline),
+                    string_trimr<std::wstring>(wsline),
                     L"-"
                 )
             );
@@ -128,6 +149,9 @@ bool ADBDriver::InitRemote()
 
         if (!AdbRawT<std::string>(DriverConst::ls_checkFile, DriverConst::ls_cmd_shell, result, false))
             break;
+
+        string_trimn<std::string>(result);
+
         if (string_end<std::string>(result, DriverConst::ls_foundFile))
             return true;
         if (!string_end<std::string>(result, DriverConst::ls_errorFile))
@@ -135,7 +159,7 @@ bool ADBDriver::InitRemote()
 
         deviceinfo();
 
-        if (!Resources::PackManager::checkbin(m_device_abi, m_device_sdk))
+        if (!Resources::PackManager::checkbin(m_device_abi, m_device_sdk, m_device_rel))
             break;
 
         std::stringstream ss;

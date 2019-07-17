@@ -52,5 +52,6 @@ static inline const char *popup_strings_cn[] = {
     /* 49 */ "设备信息",
     /* 50 */ "版本信息",
     /* 51 */ "设备",
+    /* 52 */ "司机信息",
     nullptr
 };

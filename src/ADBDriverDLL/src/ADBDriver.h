@@ -102,6 +102,7 @@ public:
     bool         GetDeviceListUI();
     bool         GetDeviceSetupUI();
     std::string  GetDeviceInfo();
+    std::string  GetDriverInfo();
     std::string  GetProperties(ADBDriver::DeviceInfoType);
 
     std::vector<uint8_t> Capture();

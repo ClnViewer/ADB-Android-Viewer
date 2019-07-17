@@ -32,9 +32,9 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
-					<Add option="-std=c++17" />
 					<Add option="-O2" />
 					<Add option="-Wall" />
+					<Add option="-std=c++17" />
 					<Add option="-D_BUILD_DLL" />
 					<Add directory="../ADBDriver/src" />
 				</Compiler>
@@ -43,14 +43,14 @@
 					<Add option="-luser32" />
 				</Linker>
 				<ExtraCommands>
-					<Add after="upx -8 ../bin/Release/ADBDriverPack.dll" />
+					<Add after="upx -4 ../bin/Release/ADBDriverPack.dll" />
 				</ExtraCommands>
 			</Target>
 		</Build>
+		<Unit filename="src/ADBDriverPackDLL.cpp" />
 		<Unit filename="src/ADBDriverPackDLL.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
-		<Unit filename="src/ADBDriverPackDLL.cpp" />
 		<Unit filename="src/PackManager.cpp" />
 		<Unit filename="src/PackManager.h" />
 		<Unit filename="src/extern/incbin.h" />

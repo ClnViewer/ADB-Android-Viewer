@@ -9,23 +9,51 @@
 namespace stdext
 {
     /// in line
-    inline void string_trimn(std::string & str)
+    template<typename T>
+    inline void string_trim_impl(T & str, T & delim)
     {
-        str.erase(0, str.find_first_not_of('\n'));
-        str.erase(str.find_last_not_of('\n')+1);
-        str.erase(0, str.find_first_not_of('\r'));
-        str.erase(str.find_last_not_of('\r')+1);
+        str.erase(0, str.find_first_not_of(delim));
+        str.erase(str.find_last_not_of(delim)+1);
     }
-    inline std::string string_trim(std::string str)
+    template<typename T>
+    inline void string_trimn(T & str)
     {
-        str.erase(0, str.find_first_not_of(' '));
-        str.erase(str.find_last_not_of(' ')+1);
-        return str;
+        T delim0;
+        T delim1;
+        T delim2;
+
+        if constexpr (std::is_same<T, std::wstring>::value)
+        {
+            delim0 = L"\n";
+            delim1 = L"\r";
+            delim2 = L" ";
+        }
+        else if constexpr (std::is_same<T, std::string>::value)
+        {
+            delim0 = "\n";
+            delim1 = "\r";
+            delim2 = " ";
+        }
+        string_trim_impl<T>(str, delim0);
+        string_trim_impl<T>(str, delim1);
+        string_trim_impl<T>(str, delim2);
     }
-    inline std::wstring wstring_trim(std::wstring str)
+    template<typename T>
+    inline void string_trim(T & str)
     {
-        str.erase(0, str.find_first_not_of(L' '));
-        str.erase(str.find_last_not_of(L' ')+1);
+        T delim;
+
+        if constexpr (std::is_same<T, std::wstring>::value)
+            delim = L" ";
+        else if constexpr (std::is_same<T, std::string>::value)
+            delim = " ";
+
+        string_trim_impl<T>(str, delim);
+    }
+    template<typename T>
+    inline T string_trimr(T str)
+    {
+        string_trim<T>(str);
         return str;
     }
     inline HMODULE hmodule_get()
@@ -34,7 +62,7 @@ namespace stdext
 #       if defined(_BUILD_DLL)
         if ((!GetModuleHandleEx(
                 GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                reinterpret_cast<LPCTSTR>(stdext::wstring_trim),
+                reinterpret_cast<LPCTSTR>(stdext::hmodule_get),
                 &hmd)
         ) || (hmd == INVALID_HANDLE_VALUE))
 #       else
@@ -146,9 +174,10 @@ namespace stdext
 }
 
 using stdext::wstring_fmt;
-using stdext::wstring_trim;
 using stdext::string_trim;
 using stdext::string_trimn;
+using stdext::string_trimr;
+using stdext::string_trim_impl;
 using stdext::string_replace;
 using stdext::string_sprintf;
 using stdext::string_from_res;

@@ -9,10 +9,10 @@
 #define __W_default 640
 #define __H_default 400
 
-#define ID_CMD_POP_MENU0 20180
+#define ID_CMD_POP_MENU0 20180  // ! empty ! not used
 #define ID_CMD_POP_MENU1 20181  // Install APK
 #define ID_CMD_POP_MENU2 20182  // Stop ADB connect, send event ID_CMD_POP_MENU98
-#define ID_CMD_POP_MENU3 20183
+#define ID_CMD_POP_MENU3 20183  // App exit
 #define ID_CMD_POP_MENU4 20184  // Save Screen to default name
 #define ID_CMD_POP_MENU5 20185  // Save Screen to select user dialog name
 #define ID_CMD_POP_MENU6 20186  // Editor LUA script - Start/Stop
@@ -21,28 +21,28 @@
 #define ID_CMD_POP_MENU9 20189  // Editor LUA script - Type: SCR_CHECK_AND_CLICK
 #define ID_CMD_POP_MENU10 20190 // Editor LUA script - Type:SCR_CLICK_ONLY
 
-#define ID_CMD_POP_MENU11 20191
-#define ID_CMD_POP_MENU12 20192
-#define ID_CMD_POP_MENU13 20193
-#define ID_CMD_POP_MENU14 20194
+#define ID_CMD_POP_MENU11 20191 // Language: RU
+#define ID_CMD_POP_MENU12 20192 // Language: EN
+#define ID_CMD_POP_MENU13 20193 // Language: DM
+#define ID_CMD_POP_MENU14 20194 // Language: CN
 
-#define ID_CMD_POP_MENU15 20195
-#define ID_CMD_POP_MENU16 20196
-#define ID_CMD_POP_MENU17 20197
-#define ID_CMD_POP_MENU18 20198
-#define ID_CMD_POP_MENU19 20199
-#define ID_CMD_POP_MENU20 20200
-#define ID_CMD_POP_MENU21 20201
+#define ID_CMD_POP_MENU15 20195 // Bender screen Off/On
+#define ID_CMD_POP_MENU16 20196 // Display orientation - landscape 
+#define ID_CMD_POP_MENU17 20197 // Display orientation - mirror 
+#define ID_CMD_POP_MENU18 20198 // Display - 1:1
+#define ID_CMD_POP_MENU19 20199 // Display - 1:2
+#define ID_CMD_POP_MENU20 20200 // Display - 1:3 (current status disabled)
+#define ID_CMD_POP_MENU21 20201 // Save configuration
 #define ID_CMD_POP_MENU22 20202 // Copy Screen to clipboard
-#define ID_CMD_POP_MENU23 20203 // Display rotate menu (current status disabled)
+#define ID_CMD_POP_MENU23 20203 // Version driver Information
 #define ID_CMD_POP_MENU24 20204 // Display Terminal open/close (trigger)
 #define ID_CMD_POP_MENU25 20205 // Display Terminal close (is resize (internal))
 
 #define ID_CMD_POP_MENU26 20206 // Change cursor (SDL_SYSTEM_CURSOR_ARROW)
 #define ID_CMD_POP_MENU27 20207 // Change cursor (SDL_SYSTEM_CURSOR_HAND)
 
-#define ID_CMD_POP_MENU28 20208 // Device info
-#define ID_CMD_POP_MENU29 20209 // Version Information
+#define ID_CMD_POP_MENU28 20208 // Device information
+#define ID_CMD_POP_MENU29 20209 // Version App information
 
 #define ID_CMD_POP_MENU30 20300 // Android ADB command ID_CMD_POP_MENU30 - ID_CMD_POP_MENU40
 #define ID_CMD_POP_MENU31 20301
@@ -68,8 +68,8 @@
 
 #define ID_CMD_POP_MENU102 20503 // Change menu enable/disable
 
-#define ID_CMD_POP_MENU210 40010  // Terminal - indent from bottom edge (40010 - 40050)
-#define ID_CMD_POP_MENU220 40020
+#define ID_CMD_POP_MENU210 40010 // Terminal - indent from bottom edge (40010 - 40050)
+#define ID_CMD_POP_MENU220 40020 // Display rotate menu (current status disabled), see next
 #define ID_CMD_POP_MENU230 40030
 #define ID_CMD_POP_MENU240 40040
 #define ID_CMD_POP_MENU250 40050
