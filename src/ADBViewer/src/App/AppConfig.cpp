@@ -44,7 +44,8 @@ static inline const char *cnf_l_file_tag[] =
     "display-ratio",
     "display-rotate",
     "display-bender",
-    "terminal-bottom"
+    "terminal-bottom",
+    "terminal-tab-cmd",
 };
 
 static inline const wchar_t *cnf_l_file_lang[] =
@@ -86,6 +87,7 @@ AppConfig::AppConfig()
         : cnf_isrun(false), cnf_isstop(true), cnf_ispos(false),
           cnf_isfullscreen(false), cnf_adbinit(false), cnf_isfcnf(false),
           cnf_disp_bender(true), cnf_disp_ratio(2U), cnf_disp_rotate(360U), cnf_compress(9),
+          cnf_term_bottom_pad(0U), cnf_term_cmd_idx(0U),
           cnf_input_point{}, cnf_disp_point{}, cnf_uevent(0U),
           cnf_keymod_ctrl { KMOD_CTRL, KMOD_LCTRL, KMOD_RCTRL },
           cnf_keymod_alt { KMOD_RALT, KMOD_LALT, KMOD_ALT },
@@ -162,7 +164,6 @@ void AppConfig::SetDisplaySize(uint32_t w, uint32_t h)
         cnf_disp_point.x = ((w) ? (static_cast<int32_t>(w) + point_img_menu.x) : cnf_disp_point.x);
         cnf_disp_point.y = ((h) ? static_cast<int32_t>(h) : cnf_disp_point.y);
     }
-
 
 std::vector<std::string> & AppConfig::GetFileConfig(std::string const & tag)
     {
@@ -277,6 +278,13 @@ void AppConfig::OnceUpdateFromFile()
         }
         ///
         {
+            std::vector<std::string> & l_tabcmd = GetFileConfig(GetFileConfigId(ConfigIdType::CNF_TERM_TABCMD));
+            for (auto & s : l_tabcmd)
+                if (!s.empty())
+                    cnf_term_cmd.push_back(s.c_str());
+        }
+        ///
+        {
             std::string sstr;
             if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_SAVE_TYPE), sstr))
                 if (!sstr.empty())
@@ -291,32 +299,43 @@ void AppConfig::OnceUpdateFromFile()
 
 bool AppConfig::GetFromFile()
     {
+        static const char delim[] = { '\n', '\r', ' ' };
         std::ifstream l_file(cnf_l_file);
+
         if (!l_file.is_open())
             return false;
 
         std::string line;
         while(getline(l_file, line))
         {
-            line.erase(
-                std::remove_if(line.begin(), line.end(), isspace), line.end()
-            );
+            if (line.empty())
+                continue;
+
+            for (auto & c : delim)
+            {
+                line.erase(0, line.find_first_not_of(c));
+                line.erase(line.find_last_not_of(c) + 1);
+            }
+
             if(line[0] == '#' || line.empty())
                 continue;
 
             auto pos = line.find("=");
+            if (pos == std::string::npos)
+                continue;
+
             auto tag = line.substr(0, pos);
-            auto value = line.substr(pos + 1);
+            auto val = line.substr(pos + 1);
 
             auto found = cnf_f_config.find(tag);
             if (found != cnf_f_config.end())
             {
-                found->second.push_back(value);
+                found->second.push_back(val);
             }
             else
             {
                 std::vector<std::string> l_list;
-                l_list.push_back(value);
+                l_list.push_back(val);
                 cnf_f_config.insert(make_pair(tag, l_list));
             }
         }
@@ -334,6 +353,8 @@ void AppConfig::SaveToFile()
             ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
         );
 
+        cnf_term_cmd_idx = 0U;
+
         for (uint32_t i = 0U; i < __NELE(cnf_l_file_tag); i++)
         {
             wstr = L"";
@@ -349,6 +370,13 @@ void AppConfig::SaveToFile()
                             if (plist[n].state)
                                 if (!plist[n].name.empty())
                                     l_file << cnf_l_file_tag[i] << "=" << plist[n].name.c_str() << L"\n";
+                        continue;
+                    }
+                case ConfigIdType::CNF_TERM_TABCMD:
+                    {
+                        for (uint32_t n = 0U; n < cnf_term_cmd.size(); n++)
+                            if (!cnf_term_cmd[n].empty())
+                                l_file << cnf_l_file_tag[i] << "=" << cnf_term_cmd[n].c_str() << L"\n";
                         continue;
                     }
                 case ConfigIdType::CNF_ADB_PATH:

@@ -267,12 +267,26 @@ bool AppTerminal::event(SDL_Event *ev, const void *instance)
                         }
                     case SDLK_PAGEDOWN:
                         {
-                            m_toutput.pageDown();
+                            apt->m_toutput.pageDown();
                             return true;
                         }
                     case SDLK_PAGEUP:
                         {
-                            m_toutput.pageUp();
+                            apt->m_toutput.pageUp();
+                            return true;
+                        }
+                    case SDLK_TAB:
+                        {
+                            if (!AppConfig::instance().cnf_term_cmd.size())
+                                return true;
+
+                            if (AppConfig::instance().cnf_term_cmd_idx >= AppConfig::instance().cnf_term_cmd.size())
+                                AppConfig::instance().cnf_term_cmd_idx = 0U;
+
+                            apt->m_tinput.settext(
+                                    AppConfig::instance().cnf_term_cmd[AppConfig::instance().cnf_term_cmd_idx]
+                                );
+                            AppConfig::instance().cnf_term_cmd_idx++;
                             return true;
                         }
                 }

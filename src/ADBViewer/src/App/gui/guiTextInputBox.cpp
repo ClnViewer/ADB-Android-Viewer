@@ -253,6 +253,15 @@ void guiTextInputBox::addhistory(std::string const & s)
         m_history_array[m_history_idx].assign(s.c_str());
     }
 
+void guiTextInputBox::settext(std::string const & s)
+    {
+        if (s.empty())
+            return;
+
+        m_str.assign(s);
+        DRAWLINE1(m_str);
+    }
+
 bool guiTextInputBox::eventcb(SDL_Event *ev)
     {
         /// Enabled only system key:
@@ -298,15 +307,10 @@ bool guiTextInputBox::eventcb(SDL_Event *ev)
                             SDL_SetClipboardText(m_str.data());
                         break;
                     }
+                case SDLK_TAB:
                 case SDLK_ESCAPE:
-                    {
-                        return false;
-                    }
                 case SDLK_RETURN:
                 case SDLK_RETURN2:
-                    {
-                        return false;
-                    }
                 case SDLK_PAGEDOWN:
                 case SDLK_PAGEUP:
                     {

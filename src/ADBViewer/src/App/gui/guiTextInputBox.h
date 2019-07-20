@@ -33,6 +33,7 @@ public:
     std::string getresult(std::string const&);
     bool eventcb(SDL_Event*);
     void setcord(SDL_Point&);
+    void settext(std::string const&);
 
 private:
     //

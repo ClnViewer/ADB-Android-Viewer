@@ -76,10 +76,23 @@ bool AppTerminalInput::init(App *app, AppTerminalPage *atp, std::function<void(s
                                     {
                                         case 5   ... 35:
                                             {
+                                                if (!AppConfig::instance().cnf_term_cmd.size())
+                                                    break;
+
+                                                if (AppConfig::instance().cnf_term_cmd_idx >= AppConfig::instance().cnf_term_cmd.size())
+                                                    AppConfig::instance().cnf_term_cmd_idx = 0U;
+                                                settext(
+                                                    AppConfig::instance().cnf_term_cmd[AppConfig::instance().cnf_term_cmd_idx]
+                                                );
+                                                AppConfig::instance().cnf_term_cmd_idx++;
+                                                break;
+                                            }
+                                        case 41  ... 71:
+                                            {
                                                 (void) guiTextInputBox::getresult(m_page->getprompt());
                                                 break;
                                             }
-                                        case 40  ... 70:
+                                        case 78  ... 107:
                                             {
                                                 if (m_func)
                                                 {
