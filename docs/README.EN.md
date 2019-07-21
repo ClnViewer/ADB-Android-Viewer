@@ -7,8 +7,7 @@
 
 # ADB Android Viewer
 
-> Android remote Viewer 
-developed to view and control your android device from a PC.
+> Android remote Viewer developed to view and control your android device from a PC.
 
 
 ![adbviewer](images/adbviewer-2-terminal-en.png)
@@ -22,7 +21,7 @@ Description and screenshots: [EN](https://clnviewer.github.io/Code-Blocks-Androi
 
 - Main characteristics:  
   - uses ADB to access the device  
-  - supports devices with Android versions from `5.x` to `9.x` and `Android API` from` 20` version  
+  - supports devices with Android versions from `5.x` to `9.x` and `Android API` from `20` version  
   - access and receipt of images made through their own drivers temporarily copied to the device  
   - supports [configuration file](https://github.com/ClnViewer/ADB-Android-Viewer/blob/master/src/ADBViewer/ADBViewer.ini) with basic interface settings  
   - built-in terminal for access to console commands of a remote device  
