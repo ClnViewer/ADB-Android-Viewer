@@ -1,4 +1,4 @@
-@import url(fontawesome-all.min.css);
+@import url(fontaw.min.css);
 
 /*
 	Fractal by HTML5 UP
@@ -3626,7 +3626,7 @@ input, select, textarea {
 		-webkit-justify-content: center;
 		-ms-justify-content: center;
 		justify-content: center;
-		background-image: url("images/overlay.png"), url("images/pattern-size1.svg");
+		background-image: url("images/ov.png"), url("images/psz1.svg");
 		background-position: top left, center center;
 		background-attachment: fixed, fixed;
 		background-size: auto, cover;
@@ -3891,7 +3891,7 @@ input, select, textarea {
 		@media screen and (max-width: 1280px) {
 
 			#header {
-				background-image: url("images/overlay.png"), url("images/pattern-size2.svg");
+				background-image: url("images/ov.png"), url("images/psz2.svg");
 			}
 
 		}
@@ -3942,7 +3942,7 @@ input, select, textarea {
 		@media screen and (max-width: 736px) {
 
 			#header {
-				background-image: url("images/overlay.png"), url("images/pattern-size3.svg");
+				background-image: url("images/ov.png"), url("images/psz3.svg");
 			}
 
 				#header h1 {
