@@ -12,7 +12,7 @@ developed to view and control your android device from a PC.
 
 ![adbviewer](docs/images/adbviewer-bender-logo.png)
 
->[`ADB Android Viewer` installer, `Bender Rodriguez edition :)`](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi)
+>[`ADB Android Viewer` installer](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `__Bender Rodriguez edition__ :)`
 
 > ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features..
 
