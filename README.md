@@ -12,8 +12,7 @@ developed to view and control your android device from a PC.
 
 ![adbviewer](docs/images/adbviewer-bender-logo.png)
 
->[`ADB Android Viewer` installer](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `__Bender Rodriguez edition__ :)`
-
+>[`ADB Android Viewer` installer](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `Bender Rodriguez edition :)`
 > ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features..
 
 ADB Android Viewer - графическое приложение отображающее экран мобильного устройства с возможностью управления. Поддержка масштабного просмотра, ввод касания с помощью мыши, пролистывание ввода с клавиатуры, скриншоты, выбор устройств, управление АДБ менеджером и другие функции ..  
