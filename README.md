@@ -10,7 +10,7 @@
 developed to view and control your android device from a PC.
 
 
-![adbviewer](docs/images/adbviewer-2-terminal-en.png)
+![adbviewer](docs/images/adbviewer-bender-logo.png)
 
 
 > ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features..
