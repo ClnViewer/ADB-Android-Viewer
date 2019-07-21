@@ -15,8 +15,8 @@ developed to view and control your android device from a PC.
 
 > ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features..
 
-ADB Android Viewer - графическое приложение отображающее экран мобильного устройства с возможностью управления. Поддержка масштабного просмотра, ввод касания с помощью мыши, пролистывание ввода с клавиатуры, скриншоты, выбор устройств, управление АДБ менеджером и другие функции ..  
-Описание и скриншоты: [EN](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html) | [RU](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)  
+ADB Android Viewer is a graphical application that displays the screen of a mobile device with the ability to control. Support for large-scale viewing, touch input with the mouse, flipping through keyboard input, screenshots, device selection, ADB manager management, and other functions ..  
+Description and screenshots: [EN](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html) | [RU](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)  
 
 
 ## Возможности
