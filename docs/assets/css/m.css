@@ -2242,7 +2242,7 @@ input, select, textarea {
 			text-rendering: auto;
 			line-height: 1;
 			text-transform: none !important;
-			font-family: 'Font Awesome 5 Free';
+			font-family: 'Font Awesome 5 Free', 'Font Awesome 5 Brands';
 			font-weight: 400;
 		}
 
