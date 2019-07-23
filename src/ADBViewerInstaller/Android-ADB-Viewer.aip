@@ -35,6 +35,7 @@
     <ROW Directory="DesktopFolder" Directory_Parent="TARGETDIR" DefaultDir="DESKTO~1|DesktopFolder" IsPseudoRoot="1"/>
     <ROW Directory="SHORTCUTDIR" Directory_Parent="TARGETDIR" DefaultDir="SHORTC~1|SHORTCUTDIR" IsPseudoRoot="1"/>
     <ROW Directory="TARGETDIR" DefaultDir="SourceDir"/>
+    <ROW Directory="adbbin_Dir" Directory_Parent="ADBViewer_Dir" DefaultDir="adbbin"/>
     <ROW Directory="plugins_Dir" Directory_Parent="ADBViewer_Dir" DefaultDir="plugins"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiCompsComponent">
@@ -44,10 +45,13 @@
     <ROW Component="ADBViewer.exe" ComponentId="{115AEBA6-214D-4035-A6C4-BF588B6FDBFF}" Directory_="ADBViewer_Dir" Attributes="0" KeyPath="ADBViewer.exe"/>
     <ROW Component="ADBViewer.ini" ComponentId="{4A6081E0-A613-4B1C-B3FE-3081AF613930}" Directory_="ADBViewer_Dir" Attributes="0" KeyPath="ADBViewer.ini" Type="0"/>
     <ROW Component="APPDIR" ComponentId="{3DF97EEB-2E85-40A1-9A94-B64107F8E771}" Directory_="APPDIR" Attributes="0"/>
+    <ROW Component="AdbWinApi.dll" ComponentId="{C4C01434-A814-407C-B546-1AA4F338EC05}" Directory_="adbbin_Dir" Attributes="0" KeyPath="AdbWinApi.dll"/>
+    <ROW Component="AdbWinUsbApi.dll" ComponentId="{4522C014-DAE3-4E16-A56B-6055B624E422}" Directory_="adbbin_Dir" Attributes="0" KeyPath="AdbWinUsbApi.dll"/>
     <ROW Component="ProductInformation" ComponentId="{6CEB78A4-6ED1-4C67-B08C-B3E091546C33}" Directory_="APPDIR" Attributes="4" KeyPath="Version"/>
     <ROW Component="SDL2.dll" ComponentId="{3DE3DD81-D4BE-43B7-84E0-4F82EC94C34D}" Directory_="ADBViewer_Dir" Attributes="0" KeyPath="SDL2.dll"/>
     <ROW Component="SDL2_ttf.dll" ComponentId="{86233050-4DBB-4FE8-973A-44E08C6CDA1B}" Directory_="ADBViewer_Dir" Attributes="0" KeyPath="SDL2_ttf.dll"/>
     <ROW Component="SHORTCUTDIR" ComponentId="{1D25E229-9AD1-451B-BFE4-6E61C6A316D8}" Directory_="SHORTCUTDIR" Attributes="0"/>
+    <ROW Component="adb.exe" ComponentId="{3B2DD423-27B4-4A4D-9718-1F56D3A7FEEF}" Directory_="adbbin_Dir" Attributes="0" KeyPath="adb.exe"/>
     <ROW Component="libfreetype6.dll" ComponentId="{FF70D28F-1BA7-43D3-9259-8378B9C96916}" Directory_="ADBViewer_Dir" Attributes="0" KeyPath="libfreetype6.dll"/>
     <ROW Component="pluginlua.dll" ComponentId="{B7CC6BB8-4ECC-4455-AD67-1692CEFE1AC0}" Directory_="plugins_Dir" Attributes="0" KeyPath="pluginlua.dll"/>
     <ROW Component="pluginlua.lua.example" ComponentId="{ABC6F451-3E1D-4B56-8971-F2C613D88F53}" Directory_="plugins_Dir" Attributes="0" KeyPath="pluginlua.lua.example" Type="0"/>
@@ -70,6 +74,9 @@
     <ROW File="pluginlua.lua.example" Component_="pluginlua.lua.example" FileName="PLUGIN~1.EXA|plugin-lua.lua.example" Attributes="0" SourcePath="..\ADBViewer\src\App\plugin\plugin-lua\plugin-lua.lua.example" SelfReg="false"/>
     <ROW File="ADBViewer.ini" Component_="ADBViewer.ini" FileName="ADBVIE~1.INI|ADBViewer.ini" Attributes="0" SourcePath="..\ADBViewer\ADBViewer.ini" SelfReg="false"/>
     <ROW File="ADBViewer.ini.default" Component_="ADBViewer.ini" FileName="ADBVIE~1.DEF|ADBViewer.ini.default" Version="65535.65535.65535.65535" Attributes="1" SourcePath="..\bin\Release\ADBViewer.ini.default" SelfReg="false"/>
+    <ROW File="adb.exe" Component_="adb.exe" FileName="adb.exe" Attributes="0" SourcePath="..\bin\Release\adbbin\adb.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="AdbWinApi.dll" Component_="AdbWinApi.dll" FileName="ADBWIN~1.DLL|AdbWinApi.dll" Attributes="0" SourcePath="..\bin\Release\adbbin\AdbWinApi.dll" SelfReg="false"/>
+    <ROW File="AdbWinUsbApi.dll" Component_="AdbWinUsbApi.dll" FileName="ADBWIN~2.DLL|AdbWinUsbApi.dll" Attributes="0" SourcePath="..\bin\Release\adbbin\AdbWinUsbApi.dll" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -157,6 +164,9 @@
     <ROW Feature_="MainFeature" Component_="pluginlua.lua.example"/>
     <ROW Feature_="MainFeature" Component_="ADBViewer.ini"/>
     <ROW Feature_="MainFeature" Component_="APPDIR"/>
+    <ROW Feature_="MainFeature" Component_="adb.exe"/>
+    <ROW Feature_="MainFeature" Component_="AdbWinApi.dll"/>
+    <ROW Feature_="MainFeature" Component_="AdbWinUsbApi.dll"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiIconsComponent">
     <ROW Name="ADBViewer.exe" SourcePath="..\ADBViewer\src\ADBViewer.ico" Index="0"/>
