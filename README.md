@@ -1,5 +1,6 @@
 
 [![Download MSI](https://img.shields.io/badge/Download-MSI-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi)
+[![Download EXE](https://img.shields.io/badge/Download-EXE-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe)
 [![Web](https://img.shields.io/badge/Presentation-WEB-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/)
 [![DOC EN](https://img.shields.io/badge/Features-EN-brightgreen.svg?style=flat)](https://github.com/ClnViewer/ADB-Android-Viewer/blob/master/docs/README.EN.md)
 [![Promo EN](https://img.shields.io/badge/Promo-EN-brightgreen.svg?style=flat)](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html)
@@ -15,6 +16,7 @@
 ![adbviewer](docs/images/adbviewer-bender-logo.png)
 
 >[`ADB Android Viewer` installer](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `Bender Rodriguez edition :)`   
+>[`ADB Android Viewer` single executable](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe)  
 > ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features..
 
 ## Features overview

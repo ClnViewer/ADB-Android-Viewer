@@ -1,5 +1,6 @@
 
 [![Download MSI](https://img.shields.io/badge/Download-MSI-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi)
+[![Download EXE](https://img.shields.io/badge/Download-EXE-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe)
 [![DOC EN](https://img.shields.io/badge/Features-EN-brightgreen.svg?style=flat)](https://github.com/ClnViewer/ADB-Android-Viewer/blob/master/docs/README.EN.md)
 [![Promo EN](https://img.shields.io/badge/Promo-EN-brightgreen.svg?style=flat)](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html)
 [![Promo RU](https://img.shields.io/badge/Promo-RU-brightgreen.svg?style=flat)](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)
@@ -13,6 +14,7 @@
 ![adbviewer](images/adbviewer-2-terminal-en.png)
 
 >[`ADB Android Viewer` инсталлятор](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `Bender Rodriguez edition :)`   
+>[`ADB Android Viewer` сборка одним исполняемым файлом](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe) не требует инсталляции, всегда готов к работе, включает в себя ADB  
 > ADB Android Viewer - графическое приложение отображающее экран мобильного устройства с возможностью управления. Поддержка масштабного просмотра, ввод касания с помощью мыши, пролистывание ввода с клавиатуры, скриншоты, выбор устройств, интерактивные скрипты, управление АДБ менеджером и другие функции ..  
 
 Описание и скриншоты: [EN](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html) | [RU](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)  

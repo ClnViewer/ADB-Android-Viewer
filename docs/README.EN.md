@@ -1,5 +1,6 @@
 
 [![Download MSI](https://img.shields.io/badge/Download-MSI-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi)
+[![Download EXE](https://img.shields.io/badge/Download-EXE-brightgreen.svg?style=flat)](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe)
 [![DOC RU](https://img.shields.io/badge/Features-RU-brightgreen.svg?style=flat)](https://github.com/ClnViewer/ADB-Android-Viewer/blob/master/docs/README.RU.md)
 [![Promo RU](https://img.shields.io/badge/Promo-RU-brightgreen.svg?style=flat)](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)
 [![Promo EN](https://img.shields.io/badge/Promo-EN-brightgreen.svg?style=flat)](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html)
@@ -14,6 +15,7 @@
 
 
 >[`ADB Android Viewer` installer](https://clnviewer.github.io/ADB-Android-Viewer/dist/Android-ADB-Viewer.msi) `Bender Rodriguez edition :)`   
+>[`ADB Android Viewer` single executable](https://clnviewer.github.io/ADB-Android-Viewer/dist/ADBViewer.exe) does not require installation, always ready to work, includes ADB  
 > ADB Android Viewer is a graphical application that displays the screen of a mobile device with the ability to control. Support for large-scale viewing, touch input with the mouse, flipping through keyboard input, screenshots, device selection, ADB manager management, and other functions ..  
 Description and screenshots: [EN](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.EN.html) | [RU](https://clnviewer.github.io/Code-Blocks-Android-NDK/ADBANDROIDVIEWER.RU.html)  
 
