@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../ADBViewer.h"
-#define APP_STATE_SIZE 7
+#define APP_STATE_SIZE 8
 
 class App : public guiMain, public guiBase
 {
@@ -15,7 +15,8 @@ public:
         STATE_APP_INPUT,           /// 3 - Input field active
         STATE_APP_TERM,            /// 4 - Terminal active
         STATE_APP_MENU,            /// 5 - Menu bar active
-        STATE_APP_BENDER           /// 6 - Menu bar active
+        STATE_APP_BENDER,          /// 6 - Menu bar active
+        STATE_APP_BROWSER          /// 7 - Menu bar active
     };
     //
     AppCursor          m_appcursor;
@@ -25,11 +26,12 @@ public:
     AppMenuBar         m_appmenubar;
     AppMenuPopUp       m_appmenupop;
     AppMessageBar      m_appmsgbar;
-    AppAnimationBender m_appabender;
+    AppAnimationBender m_appbender;
     AppScreen          m_appscreen;
     AppTerminal        m_appterminal;
+    AppBrowser         m_appbrowser;
 
-    App();
+    App(std::string const&);
 
     void loop();
     bool event(SDL_Event*, const void*) override;

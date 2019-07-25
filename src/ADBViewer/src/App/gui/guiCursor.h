@@ -16,6 +16,7 @@ public:
         TEXT_UNIC
     };
     //
+    guiCursor();
     ~guiCursor();
 
     bool init(App*, SDL_Point, ResManager::IndexFontResource, ResManager::IndexColorResource);
@@ -36,7 +37,7 @@ private:
     TTF_Font             *m_font;
     SDL_Color            *m_color;
     SDL_Point             m_point;
-    std::atomic<uint32_t> m_pos = 0;
+    std::atomic<uint32_t> m_pos;
     AppTimer              m_timer;
     //
     bool tinit(SDL_Texture**) override;

@@ -13,7 +13,6 @@ public:
     bool event(SDL_Event*, const void*) override;
     bool evresize(SDL_Texture**) override;
 
-    bool setcord(SDL_Rect&);
     void On(SDL_Point*);
     void On();
     void Off();

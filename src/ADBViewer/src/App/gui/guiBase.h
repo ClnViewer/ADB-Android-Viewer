@@ -40,7 +40,14 @@ public:
     bool IsActive();
     bool IsRegion(SDL_Event*, SDL_Rect*);
     bool IsRegion(SDL_Event*);
+    bool IsFocus(SDL_Rect*);
+    bool IsFocus();
     void PushEvent(int32_t);
+    void PushEvent(int32_t, void*);
+
+    bool SurfaceInit(SDL_Surface**, SDL_Point const &, SDL_Color const &, int32_t = 32);
+    bool SurfaceInit(SDL_Surface**, SDL_Point const &, SDL_Color const &, std::mutex&, int32_t = 32);
+    bool TextureInit(SDL_Texture**, SDL_Surface*, std::mutex&);
 
     template <typename T> T * GetGui();
 
@@ -51,6 +58,9 @@ protected:
 private:
     //
     guiMain *m_guimain;
+    //
+    bool          IsPosition(SDL_Point&, SDL_Rect*);
+    SDL_Surface * SurfaceCreate(SDL_Point const &, SDL_Color const &, int32_t = 32);
 };
 
 extern template guiMain * guiBase::GetGui<guiMain>();

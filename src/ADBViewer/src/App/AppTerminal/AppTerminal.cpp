@@ -29,7 +29,10 @@
     SOFTWARE.
  */
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
+
+AppTerminal::AppTerminal() :
+    m_enable(false) {}
 
 bool AppTerminal::init(App *app)
     {
@@ -42,62 +45,62 @@ bool AppTerminal::init(App *app)
         guiBase::gui.texture = nullptr;
 
         bool ret = guiBase::initgui(app);
-        if (ret)
+        do
         {
-            do
-            {
-                ret = m_page.init(guiBase::GetGui<SDL_Window>());
-                if (!ret)
-                    break;
+            if (!ret)
+                break;
 
-                ret = m_icon_close.init(
-                        app,
-                        m_page.btn_r_close,
-                        ResManager::IndexImageResource::RES_IMG_TERMCLOSE,
-                        [=](SDL_Event *ev, SDL_Rect *r)
+            ret = m_page.init(guiBase::GetGui<SDL_Window>());
+            if (!ret)
+                break;
+
+            ret = m_icon_close.init(
+                    app,
+                    m_page.btn_r_close,
+                    ResManager::IndexImageResource::RES_IMG_TERMCLOSE,
+                    [=](SDL_Event *ev, SDL_Rect*)
+                    {
+                        switch (ev->type)
                         {
-                            switch (ev->type)
-                            {
-                                case SDL_MOUSEMOTION:
-                                    {
-                                        AddMessageQueue(
-                                            ResManager::stringload(
-                                                ResManager::IndexStringResource::RES_STR_CLOSE_TERM,
-                                                AppConfig::instance().cnf_lang
-                                            ),
-                                            5U,
-                                            (__LINE__ + 1000)
-                                        );
-                                        guiBase::PushEvent(ID_CMD_POP_MENU27);
-                                        return true;
-                                    }
-                                case SDL_MOUSEBUTTONDOWN:
-                                    {
-                                        guiBase::PushEvent(ID_CMD_POP_MENU24);
-                                        return true;
-                                    }
-                            }
-                            return false;
+                            case SDL_MOUSEMOTION:
+                                {
+                                    AddMessageQueue(
+                                        ResManager::stringload(
+                                            ResManager::IndexStringResource::RES_STR_CLOSE_TERM,
+                                            AppConfig::instance().cnf_lang
+                                        ),
+                                        5U,
+                                        (__LINE__ + 1000)
+                                    );
+                                    guiBase::PushEvent(ID_CMD_POP_MENU27);
+                                    return true;
+                                }
+                            case SDL_MOUSEBUTTONDOWN:
+                                {
+                                    guiBase::PushEvent(ID_CMD_POP_MENU24);
+                                    return true;
+                                }
                         }
-                    );
-                if (!ret)
-                    break;
+                        return false;
+                    }
+                );
+            if (!ret)
+                break;
 
-                ret = m_toutput.init(app, &m_page);
-                if (!ret)
-                    break;
+            ret = m_toutput.init(app, &m_page);
+            if (!ret)
+                break;
 
-                ret = m_tinput.init(
-                        app,
-                        &m_page,
-                        [=](std::string & s)
-                        {
-                            adbsend(s);
-                        }
-                    );
-            }
-            while (0);
+            ret = m_tinput.init(
+                    app,
+                    &m_page,
+                    [=](std::string & s)
+                    {
+                        adbsend(s);
+                    }
+                );
         }
+        while (0);
         return ret;
     }
 
@@ -150,6 +153,21 @@ void AppTerminal::adbsend(std::string & s)
                 m_toutput.draw_txt(so);
     }
 
+void AppTerminal::resizewin(int32_t h)
+    {
+        SDL_Point point{};
+        SDL_GetWindowSize(
+            guiBase::GetGui<SDL_Window>(),
+            &point.x,
+            &point.y
+        );
+        SDL_SetWindowSize(
+            guiBase::GetGui<SDL_Window>(),
+            ((point.x) ? point.x : AppConfig::instance().cnf_disp_point.x),
+            h
+        );
+    }
+
 void AppTerminal::runselect(bool isclose)
     {
         std::lock_guard<std::mutex> l_lock(m_lock);
@@ -162,14 +180,12 @@ void AppTerminal::runselect(bool isclose)
             m_icon_close.Off();
 
             if (!isclose)
-                SDL_SetWindowSize(
-                    guiBase::GetGui<SDL_Window>(),
-                    AppConfig::instance().cnf_disp_point.x,
-                    AppConfig::instance().cnf_disp_point.y
-                );
+                resizewin(AppConfig::instance().cnf_disp_point.y);
         }
         else if (!isclose)
         {
+            m_page.init(guiBase::GetGui<SDL_Window>());
+
             if ((m_page.rbase.h - AppConfig::instance().cnf_disp_point.y) < 100)
             {
                 AddMessageQueue(
@@ -184,14 +200,9 @@ void AppTerminal::runselect(bool isclose)
             }
 
             m_enable = true;
-            m_page.init(guiBase::GetGui<SDL_Window>());
             m_tinput.guiTextInputBox::setcord(m_page.c_p_input);
 
-            SDL_SetWindowSize(
-                guiBase::GetGui<SDL_Window>(),
-                m_page.rbase.w,
-                m_page.rbase.h
-            );
+            resizewin(m_page.rbase.h);
 
             m_tinput.start();
             m_toutput.start();
@@ -242,8 +253,7 @@ bool AppTerminal::event(SDL_Event *ev, const void *instance)
         (istate[App::AppStateType::STATE_APP_INPUT]))
         return false;
 
-    /// todo check input & otput screen size
-    if (apt->guiBase::IsRegion(ev, apt->m_app->m_appvideo.guiBase::GetGui<SDL_Rect>()))
+    if (!guiBase::IsFocus(&apt->m_page.rbase))
         return false;
 
     switch (ev->type)
@@ -267,13 +277,21 @@ bool AppTerminal::event(SDL_Event *ev, const void *instance)
                         }
                     case SDLK_PAGEDOWN:
                         {
-                            apt->m_toutput.pageDown();
-                            return true;
+                            if (guiBase::IsFocus(&apt->m_page.rbase))
+                            {
+                                apt->m_toutput.pageDown();
+                                return true;
+                            }
+                            break;
                         }
                     case SDLK_PAGEUP:
                         {
-                            apt->m_toutput.pageUp();
-                            return true;
+                            if (guiBase::IsFocus(&apt->m_page.rbase))
+                            {
+                                apt->m_toutput.pageUp();
+                                return true;
+                            }
+                            break;
                         }
                     case SDLK_TAB:
                         {

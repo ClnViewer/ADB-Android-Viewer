@@ -29,7 +29,7 @@
     SOFTWARE.
  */
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 bool AppTerminalPageNuber::init(App *app, AppTerminalPage *atp, std::function<void()> f)
     {
@@ -115,7 +115,7 @@ void AppTerminalPageNuber::draw()
                                 m_font,
                                 ss.str().c_str(),
                                 m_color[0],
-                                m_color[1]
+                                ((guiBase::IsFocus(&m_page->rbase)) ? m_color[1] : m_color_disabled)
                 )))
                 break;
             }
@@ -166,35 +166,3 @@ void AppTerminalPageNuber::draw()
             );
         }
     }
-
-    /*
-bool AppTerminalPageNuber::event(SDL_Event *ev, const void *instance)
-    {
-        AppTerminalPageNuber *atpn = static_cast<AppTerminalPageNuber*>(
-                const_cast<void*>(instance)
-            );
-
-        if ((!atpn) || (!m_func))
-            return false;
-
-        if (!guiBase::IsActive())
-            return false;
-
-        if (ev->type == SDL_MOUSEMOTION)
-        {
-            if (!atpn->guiBase::IsRegion(ev, atpn->guiBase::GetGui<SDL_Rect>()))
-                return false;
-            atpn->guiBase::PushEvent(ID_CMD_POP_MENU27);
-            return true;
-        }
-        if ((ev->type == SDL_MOUSEBUTTONDOWN) && (ev->button.button == SDL_BUTTON_RIGHT))
-        {
-            if (!atpn->guiBase::IsRegion(ev, atpn->guiBase::GetGui<SDL_Rect>()))
-                return false;
-
-            atpn->m_func();
-            return true;
-        }
-        return false;
-    }
-*/

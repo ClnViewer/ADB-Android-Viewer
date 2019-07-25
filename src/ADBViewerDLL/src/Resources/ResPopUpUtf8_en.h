@@ -53,5 +53,6 @@ static inline const char *popup_strings_en[] = {
     /* 50 */ "Version Information",
     /* 51 */ "Device",
     /* 52 */ "Driver Information",
+    /* 53 */ "Browser",
     nullptr
 };

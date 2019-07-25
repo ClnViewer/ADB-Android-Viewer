@@ -68,7 +68,8 @@ static bool l_check_encode(std::string const & s, bool ischar)
         return false;
     }
 
-guiTextInputBox::guiTextInputBox()
+guiTextInputBox::guiTextInputBox() :
+    m_active(false)
     {
         m_history_array = std::valarray<std::string>(
                             m_history,
@@ -206,7 +207,7 @@ bool guiTextInputBox::gethistory(std::string & s, int32_t flag)
             case SDLK_UP:
                 {
                     i = ((!i) ? isz : (i - 1U));
-                    for (; i >= 0U; i--)
+                    for (; i > 0U; i--)
                         if (!m_history_array[i].empty())
                             break;
                     break;

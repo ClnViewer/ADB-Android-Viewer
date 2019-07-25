@@ -1,13 +1,17 @@
-#ifndef __BASE_PLUGIN_H__
-#define __BASE_PLUGIN_H__
+#pragma once
+
+#ifndef __PLUGIN_BASE_H__
+#define __PLUGIN_BASE_H__
 
 #include <windows.h>
 
-#ifdef _BUILD_DLL
-    #define DLL_EXPORT __declspec(dllexport)
+#if defined(_BUILD_DLL)
+#  define DLL_EXPORT __declspec(dllexport)
 #else
-    #define DLL_EXPORT __declspec(dllimport)
+#  define DLL_EXPORT __declspec(dllimport)
 #endif
+
+#define __ATTR_UNUSED __attribute__ (( __unused__ ))
 
 #ifdef __cplusplus
 

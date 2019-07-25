@@ -35,7 +35,7 @@ static inline const LPCSTR l_openApkFilter = "APK files (*.apk)\0*.apk\0\0";
 static inline const LPCSTR l_openApkExt = "apk";
 static inline const LPCSTR l_openCurDir = ".\\";
 
-int32_t AppMenuBar::mb_cmd_QUIT(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_QUIT(SDL_Event*)
     {
         AppConfig::instance().cnf_isrun = false;
         return 0;
@@ -94,17 +94,18 @@ int32_t AppMenuBar::mb_cmd_STOP(SDL_Event *ev)
         return ID_CMD_POP_MENU98;
     }
 
-int32_t AppMenuBar::mb_cmd_ADBSET(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_ADBSET(SDL_Event*)
     {
         AppConfig::instance().cnf_adb.GetDeviceSetupUI();
         return 0;
     }
 
-int32_t AppMenuBar::mb_cmd_SCALE(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_SCALE(SDL_Event*)
     {
         AppConfig::instance().cnf_disp_ratio =
             ((AppConfig::instance().cnf_disp_ratio.load() >= 2U) ? 1U : 2U);
         guiBase::PushEvent(ID_CMD_POP_MENU25); /// close terminal is opened
+        guiBase::PushEvent(ID_CMD_POP_MENU53); /// close browser is opened
         return ID_CMD_POP_MENU99;
     }
 
@@ -116,16 +117,16 @@ int32_t AppMenuBar::mb_cmd_POSINFO(SDL_Event *ev)
         return 0;
     }
 
-int32_t AppMenuBar::mb_cmd_CAPTURE_D(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_CAPTURE_D(SDL_Event*)
     {
         return ID_CMD_POP_MENU4;
     }
 
-int32_t AppMenuBar::mb_cmd_FULLSCREEN(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_FULLSCREEN(SDL_Event*)
     {
         SDL_SetWindowFullscreen(
             guiBase::GetGui<SDL_Window>(),
-            ((AppConfig::instance().cnf_isfullscreen) ? 0U : SDL_WINDOW_FULLSCREEN_DESKTOP)
+            ((AppConfig::instance().cnf_isfullscreen) ? 0U : AppConfig::cnf_display_fullscreen)
         );
         if (AppConfig::instance().cnf_isfullscreen)
         {
@@ -142,10 +143,11 @@ int32_t AppMenuBar::mb_cmd_FULLSCREEN(SDL_Event *ev)
         }
         AppConfig::instance().cnf_isfullscreen = !(AppConfig::instance().cnf_isfullscreen);
         guiBase::PushEvent(ID_CMD_POP_MENU25); /// close terminal is opened
+        guiBase::PushEvent(ID_CMD_POP_MENU53); /// close browser is opened
         return 0;
     }
 
-int32_t AppMenuBar::mb_cmd_APK(SDL_Event *ev)
+int32_t AppMenuBar::mb_cmd_APK(SDL_Event*)
     {
         std::string fname;
         if (AppSysDialog::openfile(

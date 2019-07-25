@@ -9,6 +9,7 @@ class guiStaticText : public guiBase
 {
 public:
     //
+    guiStaticText();
     guiStaticText& operator=(guiStaticText const&) = delete;
     //
     bool init(App*, ResManager::IndexFontResource, ResManager::IndexColorResource);
@@ -20,6 +21,6 @@ private:
     int32_t     m_id = -1;
     TTF_Font   *m_font = nullptr;  // auto remove from cache in DLL
     SDL_Color  *m_color = nullptr;
-    std::atomic<bool> m_iswrite = false;
+    std::atomic<bool> m_iswrite;
     //
 };

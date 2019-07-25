@@ -29,43 +29,42 @@
     SOFTWARE.
  */
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
-bool AppTerminalPage::getwin(SDL_Window *swin)
+bool AppTerminalPage::getwin(SDL_Window *sdlw)
     {
         do
         {
-            if (!swin)
+            if (!sdlw)
                 break;
 
-            SDL_DisplayMode dm{};
-            SDL_Point & point = AppConfig::instance().cnf_disp_point;
+            SDL_Point & point_default = AppConfig::instance().cnf_disp_point;
             SDL_Point point_img_close = ResManager::imagesize(
                     ResManager::IndexImageResource::RES_IMG_TERMCLOSE
                 );
             SDL_Point point_img_edit = ResManager::imagesize(
                     ResManager::IndexImageResource::RES_IMG_EDITMENU
                 );
-            int32_t input_offset = (((point_img_close.y / 3) * 2) + 2);
-
-
-            if (SDL_GetCurrentDisplayMode(0, &dm) < 0)
-                break;
-
-            if (AppConfig::instance().cnf_isfullscreen)
-                rbase.h = dm.h;
-            else
-            {
-                SDL_GetWindowPosition(swin, &rbase.x, &rbase.y);
-                if ((!rbase.x) && (!rbase.y))
+            SDL_Point point_display = guiPage::getdisplay();
+            if ((point_display.x < 0) && (point_display.y < 0))
                     break;
 
-                rbase.h = dm.h - rbase.y - AppConfig::instance().cnf_term_bottom_pad;
+            int32_t input_offset = (((point_img_close.y / 3) * 2) + 2);
+
+            if (AppConfig::instance().cnf_isfullscreen)
+                rbase.h = point_display.y;
+            else
+            {
+                SDL_Rect rect = guiPage::getwindow(sdlw);
+                if ((!rect.x) && (!rect.y) && (!rect.w) && (!rect.h))
+                    break;
+
+                rbase.h = point_display.y - rect.y - AppConfig::instance().cnf_term_bottom_pad;
             }
 
-            rbase.w = point.x;
+            rbase.w = point_default.x;
             rbase.x = point_img_close.x;
-            rbase.y = point.y;
+            rbase.y = point_default.y;
             /// image button close
             btn_r_close.x = 0;
             btn_r_close.y = AppConfig::instance().cnf_disp_point.y;
@@ -113,9 +112,9 @@ bool AppTerminalPage::getwin(SDL_Window *swin)
         return false;
     }
 
-bool AppTerminalPage::init(SDL_Window *swin)
+bool AppTerminalPage::init(SDL_Window *sdlw)
     {
-        return getwin(swin);
+        return getwin(sdlw);
     }
 
 std::string AppTerminalPage::getprompt()

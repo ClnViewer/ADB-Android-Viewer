@@ -34,5 +34,16 @@ static inline const char *help_strings_en[] = {
 	"Close and Save Script",
 	"Close terminal",
 	"Terminal window too small to display command",
+	"The browser window is too small to display a command",
+	"Browse Files",
+	"Device info",
+	"Information about APK packages",
+	"Show APK enabled packages",
+	"Show APK disabled packages",
+	"Show APK system packages",
+	"Show APK third party packages",
+	"Show local files",
+	"Show files on remote device",
+	"Select an item from\nthe menu to display",
 	nullptr
 };

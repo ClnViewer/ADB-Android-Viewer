@@ -31,10 +31,6 @@
 
 #include "../../ADBViewer.h"
 
-guiAnimation::guiAnimation()
-{
-}
-
 guiAnimation::~guiAnimation()
 {
     cleanup();
@@ -74,7 +70,7 @@ bool guiAnimation::init(App *app)
         return guiBase::initgui(app);
     }
 
-bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteResource res)
+bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteResource resid)
 {
     if (!app)
         return false;
@@ -93,7 +89,7 @@ bool guiAnimation::init(App *app, SDL_Color *bcolor, ResManager::IndexSpriteReso
         SDL_Surface **l_sprites  = nullptr;
 
         if (
-            (!(l_sprites = ResManager::spriteload(res, bcolor, &m_textures_sz))) ||
+            (!(l_sprites = ResManager::spriteload(resid, bcolor, &m_textures_sz))) ||
             (!m_textures_sz)
             )
             break;

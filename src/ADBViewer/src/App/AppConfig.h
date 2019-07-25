@@ -19,7 +19,9 @@ public:
         CNF_DISP_ROTATE,
         CNF_DISP_BENDER,
         CNF_TERM_BOTTOM,
-        CNF_TERM_TABCMD
+        CNF_TERM_TABCMD,
+        CNF_BROWSER_DIRLOCAL,
+        CNF_BROWSER_DIRDEVICE
     };
 
 private:
@@ -60,18 +62,23 @@ public:
     int32_t const            cnf_keymod_ctrl[3];
     int32_t const            cnf_keymod_alt[3];
     int32_t const            cnf_keymod_disabled[6];
+    std::string              cnf_root_path;
     std::string              cnf_save_fmt;
+    std::string              cnf_browser_dir_local;
+    std::string              cnf_browser_dir_device;
     std::vector<std::string> cnf_term_cmd;
 
     GameDev::ADBDriver          cnf_adb;
     GameDev::ADBDriver::Swipe_s cnf_adb_rect;
     ResManager::IndexLanguageResource cnf_lang = ResManager::IndexLanguageResource::LANG_DEFAULT;
 
+    static const uint32_t cnf_display_fullscreen = SDL_WINDOW_FULLSCREEN_DESKTOP;
+
 
     std::vector<std::string> & GetFileConfig(std::string const &);
     const char * GetFileConfigId(ConfigIdType);
 
-    void init();
+    void init(std::string const&);
     static AppConfig& instance();
     const void * GetAdbCb() const;
     const char * GetImageSaveFmt(uint32_t) const;

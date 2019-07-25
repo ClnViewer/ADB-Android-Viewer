@@ -33,7 +33,9 @@
 #include "../../../ADBViewer/src/loader.h"
 #include "../ResManager.h"
 
-/// this build use key  -finput-charset=cp1251
+/// this build use key
+//   -finput-charset=cp1251
+//   -fwide-exec-charset=cp1251
 
 namespace Resources
 {

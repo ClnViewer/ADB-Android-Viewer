@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 class App;
 
@@ -20,5 +20,6 @@ private:
     guiIcon          m_icon_editmenu;
     std::function<void(std::string&)> m_func;
     //
+    bool mevent(SDL_Event*, SDL_Rect*);
 };
 

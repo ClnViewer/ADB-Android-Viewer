@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 class App;
 
@@ -28,8 +28,10 @@ private:
     TTF_Font            *m_font = nullptr;  // auto remove from cache in DLL
     SDL_Color           *m_color_cmd = nullptr;
     SDL_Color           *m_color_txt = nullptr;
+    SDL_Color            m_color_black = { 0x0, 0x0, 0x0, 0x0 };
     AppTerminalPage     *m_page = nullptr;
     AppTerminalPageNuber m_pagenum;
+    std::mutex           s_lock;
     //
     void drawline(std::string const &, SDL_Color*, bool);
 };

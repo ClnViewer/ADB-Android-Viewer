@@ -53,5 +53,6 @@ static inline const wchar_t *popup_strings_cn[] = {
     /* 50 */ L"版本信息",
     /* 51 */ L"设备",
     /* 52 */ L"司机信息",
+    /* 53 */ L"浏览器",
     nullptr
 };

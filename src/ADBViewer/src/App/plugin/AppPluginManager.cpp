@@ -31,10 +31,17 @@
 
 #include "../../ADBViewer.h"
 
-#if defined(OS_WIN)
-#  include "IPluginLoader.WINAPI.h"
+#if defined(OS_CPP_FILESYSTEM)
+#  if defined(_DEBUG)
+#    pragma message "compiled using std::filesystem c++17"
+#  endif
+#  include "IPluginLoader.FILESYSTEM.h"
 #else
-#  include "IPluginLoader.LINUX.h"
+#  if defined(OS_WIN)
+#    include "IPluginLoader.WINAPI.h"
+#  else
+#    include "IPluginLoader.LINUX.h"
+#  endif
 #endif
 
 using namespace std::placeholders;
@@ -165,7 +172,6 @@ void AppPluginManager::run(std::vector<uint8_t> &v, uint32_t w, uint32_t h)
 
 bool AppPluginManager::isplugin(std::string const & s)
     {
-        //std::lock_guard<std::mutex> l_lock(m_lock);
         auto plg = find_if(
                     m_plugins.begin(),
                     m_plugins.end(),
@@ -179,7 +185,6 @@ bool AppPluginManager::isplugin(std::string const & s)
 
 AppPluginManager::Plugin_s * AppPluginManager::findplugin(std::string const & s)
     {
-        // std::lock_guard<std::mutex> l_lock(m_lock);
         auto plg = find_if(
                     m_plugins.begin(),
                     m_plugins.end(),

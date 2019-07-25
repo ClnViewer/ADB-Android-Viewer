@@ -53,5 +53,6 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 50 */ L"Versionsinformationen",
     /* 51 */ L"Ger„t",
     /* 52 */ L"Fahrerinformation",
+    /* 53 */ L"Browser",
     nullptr
 };

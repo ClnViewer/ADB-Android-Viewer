@@ -31,6 +31,11 @@
 
 #include "../ADBViewer.h"
 
+#if defined(OS_CPP_FILESYSTEM)
+#  include <filesystem>
+   namespace fs = std::filesystem;
+#endif
+
 static inline const char *cnf_l_file = "ADBViewer.ini";
 static inline const char *cnf_l_file_tag[] =
 {
@@ -46,6 +51,8 @@ static inline const char *cnf_l_file_tag[] =
     "display-bender",
     "terminal-bottom",
     "terminal-tab-cmd",
+    "browser-dir-local",
+    "browser-dir-device"
 };
 
 static inline const wchar_t *cnf_l_file_lang[] =
@@ -123,8 +130,13 @@ AppConfig::AppConfig()
             {
                 cnf_adb.SendSpecialKey(t, k);
             };
+
+        cnf_browser_dir_local = "/";
+        cnf_browser_dir_device = "/";
+
         OnceUpdateFromFile();
         cnf_input_point = { point_img_menu.x, (cnf_disp_point.y - 40) };
+
     }
 
 AppConfig& AppConfig::instance()
@@ -133,9 +145,17 @@ AppConfig& AppConfig::instance()
         return m_instance;
     }
 
-void AppConfig::init()
+void AppConfig::init(std::string const & execpath)
     {
-
+#       if defined(OS_CPP_FILESYSTEM)
+        cnf_root_path = fs::canonical(fs::path(execpath)).parent_path().generic_string();
+#       else
+        size_t pos = execpath.find_last_of("/\\");
+        if (pos != std::string::npos)
+            cnf_root_path = execpath.substr(0, pos);
+        else
+            cnf_root_path = ".";
+#       endif
     }
 
 const char * AppConfig::GetImageSaveFmt(uint32_t idx) const
@@ -219,83 +239,10 @@ bool AppConfig::GetFromSection(const char *tag, T & dstr)
         }
         while (0);
 
+        dstr.clear();
         return false;
     }
 
-void AppConfig::OnceUpdateLang(std::wstring const & wstr)
-    {
-        if (wstr.empty())
-            return;
-
-        for (uint32_t i = 0U; i < __NELE(cnf_l_file_lang); i++)
-        {
-            if (wstr.compare(cnf_l_file_lang[i]) == 0)
-            {
-                cnf_lang = static_cast<ResManager::IndexLanguageResource>(i);
-                break;
-            }
-        }
-    }
-
-void AppConfig::OnceUpdateFromFile()
-    {
-        std::wstring wstr;
-        uint32_t val;
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
-            cnf_adb.SetAdbBin(wstr);
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
-            cnf_adb.SetDeviceID(wstr);
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_LANGUAGE), wstr))
-            OnceUpdateLang(wstr);
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_WIDTH), wstr))
-            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
-                SetDisplaySize(val, 0U);
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_HEIGHT), wstr))
-            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
-                SetDisplaySize(0U, val);
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_RATIO), wstr))
-            if (((val = l_strToUint<std::wstring>(wstr))) && (val < 6))
-                cnf_disp_ratio = val;
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_ROTATE), wstr))
-            if (((val = l_strToUint<std::wstring>(wstr))) && (val <= 360))
-                cnf_disp_rotate = val;
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_TERM_BOTTOM), wstr))
-            if ((val = l_strToUint<std::wstring>(wstr)))
-                cnf_term_bottom_pad = val;
-
-        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_BENDER), wstr))
-        {
-            val = l_strToUint<std::wstring>(wstr);
-            cnf_disp_bender = static_cast<bool>(val);
-        }
-        ///
-        {
-            std::vector<std::string> & l_tabcmd = GetFileConfig(GetFileConfigId(ConfigIdType::CNF_TERM_TABCMD));
-            for (auto & s : l_tabcmd)
-                if (!s.empty())
-                    cnf_term_cmd.push_back(s.c_str());
-        }
-        ///
-        {
-            std::string sstr;
-            if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_SAVE_TYPE), sstr))
-                if (!sstr.empty())
-                    for (uint32_t i = 0U; i < __NELE(cnf_l_file_savefmt); i++)
-                        if (sstr.compare(0U, sstr.length(), cnf_l_file_savefmt[i]) == 0)
-                        {
-                            cnf_save_fmt = cnf_l_file_savefmt[i];
-                            break;
-                        }
-        }
-    }
 
 bool AppConfig::GetFromFile()
     {
@@ -340,6 +287,87 @@ bool AppConfig::GetFromFile()
             }
         }
         return true;
+    }
+
+void AppConfig::OnceUpdateLang(std::wstring const & wstr)
+    {
+        if (wstr.empty())
+            return;
+
+        for (uint32_t i = 0U; i < __NELE(cnf_l_file_lang); i++)
+        {
+            if (wstr.compare(cnf_l_file_lang[i]) == 0)
+            {
+                cnf_lang = static_cast<ResManager::IndexLanguageResource>(i);
+                break;
+            }
+        }
+    }
+
+void AppConfig::OnceUpdateFromFile()
+    {
+        std::string  sstr;
+        std::wstring wstr;
+        uint32_t val;
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
+            cnf_adb.SetAdbBin(wstr);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
+            cnf_adb.SetDeviceID(wstr);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_LANGUAGE), wstr))
+            OnceUpdateLang(wstr);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_WIDTH), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
+                SetDisplaySize(val, 0U);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_HEIGHT), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val >= 200))
+                SetDisplaySize(0U, val);
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_RATIO), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val < 6))
+                cnf_disp_ratio = val;
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_ROTATE), wstr))
+            if (((val = l_strToUint<std::wstring>(wstr))) && (val <= 360))
+                cnf_disp_rotate = val;
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_TERM_BOTTOM), wstr))
+            if ((val = l_strToUint<std::wstring>(wstr)))
+                cnf_term_bottom_pad = val;
+
+        if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_BROWSER_DIRLOCAL), sstr))
+            if (!sstr.empty())
+                cnf_browser_dir_local.assign(sstr.c_str());
+
+        if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_BROWSER_DIRDEVICE), sstr))
+            if (!sstr.empty())
+                cnf_browser_dir_device.assign(sstr.c_str());
+
+        if (GetFromSection<std::string>(GetFileConfigId(ConfigIdType::CNF_SAVE_TYPE), sstr))
+            if (!sstr.empty())
+                for (uint32_t i = 0U; i < __NELE(cnf_l_file_savefmt); i++)
+                    if (sstr.compare(0U, sstr.length(), cnf_l_file_savefmt[i]) == 0)
+                    {
+                        cnf_save_fmt = cnf_l_file_savefmt[i];
+                        break;
+                    }
+
+        if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_DISP_BENDER), wstr))
+        {
+            val = l_strToUint<std::wstring>(wstr);
+            cnf_disp_bender = static_cast<bool>(val);
+        }
+        ///
+        {
+            std::vector<std::string> & l_tabcmd = GetFileConfig(GetFileConfigId(ConfigIdType::CNF_TERM_TABCMD));
+            for (auto & s : l_tabcmd)
+                if (!s.empty())
+                    cnf_term_cmd.push_back(s.c_str());
+        }
     }
 
 void AppConfig::SaveToFile()
@@ -429,6 +457,18 @@ void AppConfig::SaveToFile()
                 case ConfigIdType::CNF_TERM_BOTTOM:
                     {
                         wstr = std::to_wstring(cnf_term_bottom_pad);
+                        break;
+                    }
+                case ConfigIdType::CNF_BROWSER_DIRLOCAL:
+                    {
+                        if (!cnf_browser_dir_local.empty())
+                            wstr.assign(cnf_browser_dir_local.begin(), cnf_browser_dir_local.end());
+                        break;
+                    }
+                case ConfigIdType::CNF_BROWSER_DIRDEVICE:
+                    {
+                        if (!cnf_browser_dir_device.empty())
+                            wstr.assign(cnf_browser_dir_device.begin(), cnf_browser_dir_device.end());
                         break;
                     }
             }

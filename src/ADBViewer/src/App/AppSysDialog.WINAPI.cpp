@@ -48,7 +48,9 @@ static void f_SetupFileDialog(
     sfn->lpstrInitialDir = s_openDir;
     sfn->nFilterIndex = 1;
     sfn->hwndOwner = hWnd;
-    sfn->lpstrFile = static_cast<LPSTR>(s.data());
+    sfn->lpstrFile = static_cast<LPSTR>(
+                        const_cast<char*>(s.data())
+                    );
     sfn->nMaxFile = s.size();
 }
 

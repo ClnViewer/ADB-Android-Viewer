@@ -39,6 +39,20 @@
 
 #endif
 
+#if defined(__GNUC__)
+
+#  if defined(OS_WIN)
+#    if (__GNUC__ >= 9)
+#      define OS_CPP_FILESYSTEM 1
+#    endif
+#  else
+#    if (__GNUC__ >= 7)
+#      define OS_CPP_FILESYSTEM 1
+#    endif
+#  endif
+
+#endif
+
 #if !defined(OS_WIN)
 #   define _access access
 #   define _mkdir mkdir
@@ -48,6 +62,7 @@
 
 #define __NELE(a) (sizeof(a) / sizeof(a[0]))
 #define __AUTO(x) __attribute__((cleanup(x)))
+#define __ATTR_UNUSED __attribute__ (( __unused__ ))
 
 #ifdef __cplusplus
 

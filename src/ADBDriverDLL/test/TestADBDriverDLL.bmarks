@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="main.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="3864" topLine="94" />
-	</File>
 </BrowseTracker_layout_file>

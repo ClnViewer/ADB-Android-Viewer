@@ -9,7 +9,6 @@ class AppMenuPopUp : public guiBase
 public:
     //
     AppMenuPopUp();
-    ~AppMenuPopUp();
 
     void show();
     bool init(App*);

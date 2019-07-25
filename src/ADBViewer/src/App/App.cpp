@@ -31,7 +31,7 @@
 
 #include "../ADBViewer.h"
 
-static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt, void *data)
+static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window*, const SDL_Point *pt, void *data)
 {
     App *app = static_cast<App*>(data);
     auto istate = app->state();
@@ -64,9 +64,9 @@ static SDL_HitTestResult SDLCALL f_hitTest(SDL_Window *win, const SDL_Point *pt,
     return SDL_HITTEST_NORMAL;
 }
 
-App::App()
+App::App(std::string const & execpath)
 {
-    AppConfig::instance().init();
+    AppConfig::instance().init(execpath);
     AppMessageQueue::instance().init();
 
     switch (initm(&AppConfig::instance().cnf_disp_point))
@@ -97,14 +97,15 @@ App::App()
     if (
         (!m_appcursor.init(this))  || /// this all Application cursors
         (!m_appvideo.init(this))   || /// this main GUI screen
-        (!m_appabender.init(this)) || /// this animation default GUI screen
         (!m_appmenubar.init(this)) || /// this menu BAR screen
         (!m_appmenupop.init(this)) || /// this menu POPUP event
         (!m_appeditor.init(this))  || /// this editor GUI screen
         (!m_appmsgbar.init(this))  || /// this message BAR box
         (!m_appscreen.init(this))  || /// this screen capture/save
         (!m_appterminal.init(this))|| /// terminal window
-        (!m_appinput.init(this))      /// keyboard input rectangle
+        (!m_appbrowser.init(this))    || /// browser window
+        (!m_appinput.init(this))   || /// keyboard input rectangle
+        (!m_appbender.init(this))    /// this animation default GUI screen
     )
     {
         SDL_ShowSimpleMessageBox(
@@ -163,7 +164,8 @@ std::array<bool, APP_STATE_SIZE> const App::state()
             m_appinput.isenabled(),           /// 3 - Input field active
             m_appterminal.isenabled(),        /// 4 - Terminal active
             m_appmenubar.isenabled(),         /// 5 - Menu bar active
-            m_appabender.isenabled()          /// 6 - Bender active
+            m_appbender.isenabled(),          /// 6 - Bender active
+            m_appbrowser.isenabled()          /// 7 - Browser active
         };
         return astate;
     }

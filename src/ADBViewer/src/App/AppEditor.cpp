@@ -89,7 +89,7 @@ bool AppEditor::init(App *app)
                     app,
                     rect,
                     ResManager::IndexImageResource::RES_IMG_RCORD,
-                    [=](SDL_Event *ev, SDL_Rect *r)
+                    [=](SDL_Event *ev, SDL_Rect*)
                     {
                         switch (ev->type)
                         {
@@ -149,7 +149,7 @@ void AppEditor::stop()
         while (0);
 
         m_icon_record.Off();
-        m_app->m_appmsgbar.clear();
+        m_app->m_appmsgbar.clean();
         guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 
@@ -166,7 +166,7 @@ void AppEditor::run()
 
         m_target = false;
         m_enable = true;
-        m_app->m_appmsgbar.clear();
+        m_app->m_appmsgbar.clean();
         guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 
@@ -181,7 +181,7 @@ void AppEditor::cancel()
         m_target = false;
         m_pixels.clear();
         m_ptarget.clear();
-        m_app->m_appmsgbar.clear();
+        m_app->m_appmsgbar.clean();
         guiBase::PushEvent(ID_CMD_POP_MENU102);
     }
 

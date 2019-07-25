@@ -59,6 +59,10 @@
 #define ID_CMD_POP_MENU50 20311 // Android ADB command 2 x SDLK_PAGEUP = Notify open/expand
 #define ID_CMD_POP_MENU51 20312 // Android ADB command 2 x SDLK_PAGEDOWN = Notify close/collapse
 
+#define ID_CMD_POP_MENU52 20313 // Display Browser open/close (trigger)
+#define ID_CMD_POP_MENU53 20314 // Display Browser close (is resize (internal))
+#define ID_CMD_POP_MENU54 20315 // Display Browser event push (adb command is complette)
+
 #define ID_CMD_POP_MENU97 20401 // Connect device         - MenuBar event
 #define ID_CMD_POP_MENU98 20402 // Disconnect device      - MenuBar event
 #define ID_CMD_POP_MENU99 20403 // Restart connect device - MenuBar event
@@ -68,11 +72,15 @@
 
 #define ID_CMD_POP_MENU102 20503 // Change menu enable/disable
 
+#define ID_CMD_POP_MENU105 40020 // Browser read local files
+#define ID_CMD_POP_MENU106 40021 // Browser read device files
+#define ID_CMD_POP_MENU107 40022 // Browser read APK list (user data)
+
 #define ID_CMD_POP_MENU210 40010 // Terminal - indent from bottom edge (40010 - 40050)
 #define ID_CMD_POP_MENU220 40020 // Display rotate menu (current status disabled), see next
-#define ID_CMD_POP_MENU230 40030
-#define ID_CMD_POP_MENU240 40040
-#define ID_CMD_POP_MENU250 40050
+#define ID_CMD_POP_MENU230 40030 // ..
+#define ID_CMD_POP_MENU240 40040 // ..
+#define ID_CMD_POP_MENU250 40050 // ..
 
 
 #define ID_CMD_MSGBAR     49999
@@ -107,11 +115,15 @@ using GameDev::ADBDriver;
 #  include "App/AppMenuBar.h"
 #  include "App/AppMenuPopUp.h"
 #  include "App/AppInputText.h"
-#  include "App/AppTerminalPage.h"
-#  include "App/AppTerminalPageNuber.h"
-#  include "App/AppTerminalInput.h"
-#  include "App/AppTerminalOutput.h"
-#  include "App/AppTerminal.h"
+#  include "App/AppTerminal/AppTerminalPage.h"
+#  include "App/AppTerminal/AppTerminalPageNuber.h"
+#  include "App/AppTerminal/AppTerminalInput.h"
+#  include "App/AppTerminal/AppTerminalOutput.h"
+#  include "App/AppTerminal/AppTerminal.h"
+#  include "App/AppBrowser/AppBrowserPage.h"
+#  include "App/AppBrowser/AppBrowserParse.h"
+#  include "App/AppBrowser/AppBrowserList.h"
+#  include "App/AppBrowser/AppBrowser.h"
 #  include "App/App.h"
 
 #endif

@@ -1,6 +1,6 @@
 #pragma once
 
- #include "IPluginLoader.h"
+#include "IPluginLoader.h"
 
 namespace Plugins
 {

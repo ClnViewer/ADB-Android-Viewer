@@ -11,7 +11,6 @@ public:
     int32_t           m_key_x = 0U;
     int32_t           m_key_y = 0U;
 
-    guiAnimation();
     ~guiAnimation();
     guiAnimation& operator=(guiAnimation const&) = delete;
 

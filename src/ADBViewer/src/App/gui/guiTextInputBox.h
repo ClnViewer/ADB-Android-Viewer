@@ -38,7 +38,7 @@ public:
 private:
     //
     uint32_t          m_history_idx = 0U;
-    std::atomic<bool> m_active = false;
+    std::atomic<bool> m_active;
     std::string       m_str;
     std::string       m_history[10]; /// create history
     std::valarray<std::string> m_history_array;

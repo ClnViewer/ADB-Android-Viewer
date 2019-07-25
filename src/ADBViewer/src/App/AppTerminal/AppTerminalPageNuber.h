@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 class App;
 
@@ -19,6 +19,7 @@ private:
     App                  *m_app = nullptr;
     TTF_Font             *m_font = nullptr;  // auto remove from cache in DLL
     SDL_Color            *m_color = nullptr;
+    SDL_Color             m_color_disabled = { 64, 64, 64, 0 }; // not texture focus color
     AppTerminalPage      *m_page = nullptr;
     std::function<void()> m_func = nullptr;
     //

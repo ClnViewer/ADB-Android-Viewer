@@ -52,28 +52,62 @@ void AppVideo::jointh()
         m_thu.join();
 }
 
+
 bool AppVideo::init(App *app)
-{
-    if (!app)
-        return false;
+    {
+        if (!app)
+            return false;
 
-    m_app = app;
-    guiBase::gui.rdst = {};
-    guiBase::gui.rsrc = nullptr;
-    guiBase::gui.texture = nullptr;
+        m_app = app;
+        guiBase::gui.rdst = {};
+        guiBase::gui.rsrc = nullptr;
+        guiBase::gui.texture = nullptr;
 
-    return guiBase::initgui(app);
-}
+        bool ret = guiBase::initgui(app);
+        do
+        {
+            if (!ret)
+                break;
+
+            /// other control initialize
+            SDL_Point point_img_menu = ResManager::imagesize(
+                    ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
+                );
+            SDL_Point point_img_keyboard = ResManager::spritesize(
+                        ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE
+                );
+            SDL_Rect rect =
+            {
+                .x = 0,
+                .y = point_img_menu.y,
+                .w = point_img_keyboard.x,
+                .h = point_img_keyboard.y
+            };
+            ret = m_icon_keyboard.init(
+                    app,
+                    rect,
+                    &m_color,
+                    ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE,
+                    [=](SDL_Event*, SDL_Rect*)
+                    {
+                        return false;
+                    }
+                );
+        }
+        while (0);
+        return ret;
+    }
 
 bool AppVideo::tinit(SDL_Texture **texture)
     {
         SDL_Rect *r = guiBase::GetGui<SDL_Rect>();
+        SDL_Point & point_default = AppConfig::instance().cnf_disp_point;
         SDL_Point point_img_menu = ResManager::imagesize(
             ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE
         );
 
-        r->w = AppConfig::instance().cnf_disp_point.x - point_img_menu.x;
-        r->h = AppConfig::instance().cnf_disp_point.y;
+        r->w = point_default.x - point_img_menu.x;
+        r->h = point_default.y;
         r->x = point_img_menu.x;
         r->y = 0;
 
@@ -142,34 +176,15 @@ bool AppVideo::defscreen(SDL_Texture **texture)
         {
             rbg.w = r->w;
             rbg.h = r->h;
-
-            if (!(l_image_surface_bg = SDL_CreateRGBSurface(
-                    0U,
-                    rbg.w,
-                    rbg.h,
-                    24,
-#                   if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                    0xff000000, 0x00ff0000, 0x0000ff00, 0x000000ff
-#                   else
-                    0x000000ff, 0x0000ff00, 0x00ff0000, 0xff000000
-#                   endif
-                )))
-                break;
+            SDL_Point point = { rbg.w, rbg.h };
 
             if (!(l_bgcolor = ResManager::colorload(
                             ResManager::IndexColorResource::RES_COLOR_GREEN_BG
                 )))
                 break;
 
-            SDL_FillRect(l_image_surface_bg,
-                     &rbg,
-                     SDL_MapRGB(
-                            l_image_surface_bg->format,
-                            l_bgcolor[0].r,
-                            l_bgcolor[0].g,
-                            l_bgcolor[0].b
-                        )
-                );
+            if (!guiBase::SurfaceInit(&l_image_surface_bg, point, *l_bgcolor, 24))
+                break;
 
             guiBase::ActiveOff();
             GuiLock(
@@ -203,15 +218,57 @@ bool AppVideo::defscreen(SDL_Texture **texture)
 
 void AppVideo::stop()
 {
-    if (AppConfig::instance().cnf_isstop)
-        return;
-    AppConfig::instance().cnf_isstop = true;
-    guiBase::ActiveOff();
-    jointh();
-    defscreen();
-    m_app->m_appabender.run();
-    guiBase::ActiveOn();
-    m_app->flushicon(3);
+    std::lock_guard<std::mutex> l_lock(m_lockrun);
+
+    uint32_t state = ((AppConfig::instance().cnf_isstop) ? 0 : 1);
+    state += ((
+               (m_psize.x != AppConfig::instance().cnf_disp_point.x) ||
+               (m_psize.y != AppConfig::instance().cnf_disp_point.y)
+               ) ? 2 : 0);
+
+    switch (state)
+    {
+        case 1:
+        case 3:
+            {
+                guiBase::ActiveOff();
+                AppConfig::instance().cnf_isstop = true;
+                jointh();
+                break;
+            }
+        case 2:
+            {
+                guiBase::ActiveOff();
+                SDL_SetWindowSize(
+                    guiBase::GetGui<SDL_Window>(),
+                    AppConfig::instance().cnf_disp_point.x,
+                    AppConfig::instance().cnf_disp_point.y
+                );
+                m_psize = AppConfig::instance().cnf_disp_point;
+                break;
+            }
+        default:
+            {
+                return;
+            }
+    }
+    switch (state)
+    {
+        case 1:
+        case 2:
+        case 3:
+            {
+                defscreen();
+                m_app->m_appbender.run();
+                m_app->flushicon(3);
+                guiBase::ActiveOn();
+                break;
+            }
+        default:
+            {
+                return;
+            }
+    }
 }
 
 void AppVideo::run()
@@ -219,11 +276,13 @@ void AppVideo::run()
     if (!m_app)
         return;
 
+    std::lock_guard<std::mutex> l_lock(m_lockrun);
+
     if (!AppConfig::instance().cnf_isstop)
         return;
 
     rect_default(&AppConfig::instance().cnf_adb_rect, &guiBase::gui.rdst);
-    m_app->m_appabender.stop();
+    m_app->m_appbender.stop();
 
     if (!AppConfig::instance().cnf_adbinit)
     {
@@ -247,6 +306,7 @@ void AppVideo::run()
     }
 
     AppConfig::instance().cnf_isstop = false;
+    m_psize = AppConfig::instance().cnf_disp_point;
 
     std::thread thu
     {
@@ -368,10 +428,14 @@ bool AppVideo::uevent(SDL_Event *ev, const void *instance)
             /// Restart connect to device event
             case ID_CMD_POP_MENU99:
                 {
+                    bool state = (!AppConfig::instance().cnf_isstop);
                     apv->stop();
-                    std::this_thread::yield();
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
-                    apv->run();
+                    if (state)
+                    {
+                        std::this_thread::yield();
+                        std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                        apv->run();
+                    }
                     return true;
                 }
             /// MenuBar device connect event
@@ -406,23 +470,37 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
     }
 
     auto istate = apv->m_app->state();
-    bool isexit = ((istate[App::AppStateType::STATE_APP_STOP]) ||
-        (istate[App::AppStateType::STATE_APP_INPUT]) ||
-        (istate[App::AppStateType::STATE_APP_EDIT])  ||
-        (istate[App::AppStateType::STATE_APP_TERM]));
+    if ((istate[App::AppStateType::STATE_APP_STOP]) ||
+        (istate[App::AppStateType::STATE_APP_EDIT]) ||
+        (istate[App::AppStateType::STATE_APP_INPUT]))
+        return false;
+
+    bool isparent = ((istate[App::AppStateType::STATE_APP_BROWSER]) ||
+                     (istate[App::AppStateType::STATE_APP_TERM]));
+    bool isfocus  = guiBase::IsFocus(apv->guiBase::GetGui<SDL_Rect>());
 
     if (ev->type == SDL_MOUSEMOTION)
     {
+        if ((isparent) && (isfocus))
+            m_icon_keyboard.On(0U);
+        else if ((isparent) && (!isfocus))
+            m_icon_keyboard.On(1U);
+        else if (!isparent)
+            m_icon_keyboard.Off();
+
         if (!apv->guiBase::IsRegion(ev, apv->guiBase::GetGui<SDL_Rect>()))
             return false;
 
         apv->guiBase::PushEvent(ID_CMD_POP_MENU26);
-        if ((AppConfig::instance().cnf_ispos) && (!isexit))
+        if ((AppConfig::instance().cnf_ispos) && (!isparent))
             apv->m_app->m_appmsgbar.PrintInfo(MgrType::MGR_MAIN, "", -1, ev);
+
+        if (isparent)
+            return false;
         return true;
     }
 
-    if (isexit)
+    if ((isparent) && (!isfocus))
         return false;
 
     switch(ev->type)

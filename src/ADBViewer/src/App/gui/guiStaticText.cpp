@@ -31,6 +31,9 @@
 
 #include "../../ADBViewer.h"
 
+guiStaticText::guiStaticText() :
+    m_iswrite(false) {}
+
 bool guiStaticText::init(
             App *app,
             ResManager::IndexFontResource ifx,

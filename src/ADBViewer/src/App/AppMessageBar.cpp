@@ -46,7 +46,7 @@ bool AppMessageBar::init(App *app)
         return ret;
 }
 
-void AppMessageBar::clear()
+void AppMessageBar::clean()
     {
         guiStaticText::clear();
         guiStaticText::ActiveOn();
@@ -54,7 +54,7 @@ void AppMessageBar::clear()
 
 bool AppMessageBar::evresize(SDL_Texture**)
     {
-        clear();
+        clean();
         return false;
     }
 
@@ -110,7 +110,7 @@ void AppMessageBar::PrintInfo(MgrType mgrt, std::string const & s, int32_t id, S
 #               if defined (_BUILD_FRAME_NO_TITLE)
                 else
                 {
-                    m_app->m_appmsgbar.clear();
+                    m_app->m_appmsgbar.clean();
                     return;
                 }
 #               endif
@@ -131,7 +131,7 @@ void AppMessageBar::PrintInfo(MgrType mgrt, std::string const & s, int32_t id, S
 #           if defined (_BUILD_FRAME_NO_TITLE)
             if (s.empty())
             {
-                m_app->m_appmsgbar.clear();
+                m_app->m_appmsgbar.clean();
                 return;
             }
             ss << s.c_str();
@@ -202,7 +202,7 @@ bool AppMessageBar::uevent(SDL_Event *ev, const void *instance)
                 0U,
                 [=]()
                 {
-                    amb->clear();
+                    amb->clean();
                 }
             );
         return true;

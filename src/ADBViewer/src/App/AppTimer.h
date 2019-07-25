@@ -11,7 +11,7 @@ class AppTimer
 {
 private:
     //
-    std::atomic<bool>               m_active = false;
+    std::atomic<bool>               m_active;
     std::future<void>               m_task;
     //
     void sleeps(uint32_t sec)
@@ -27,7 +27,7 @@ private:
 
 public:
     //
-    AppTimer() {}
+    AppTimer() : m_active(false) {}
     ~AppTimer()
     {
         if (m_task.valid())

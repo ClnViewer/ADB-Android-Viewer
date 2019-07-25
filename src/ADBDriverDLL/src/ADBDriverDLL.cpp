@@ -31,7 +31,8 @@
 
 #include "../../ADBViewer/src/loader.h"
 
-extern "C" DLL_EXPORT BOOL APIENTRY DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+extern "C" DLL_EXPORT BOOL APIENTRY DllMain(
+        HINSTANCE hinstDLL __ATTR_UNUSED, DWORD fdwReason, LPVOID pvReserved __ATTR_UNUSED)
 {
     switch (fdwReason)
     {

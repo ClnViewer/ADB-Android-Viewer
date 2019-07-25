@@ -65,7 +65,7 @@ bool AppMenuBar::init(App *app)
                     app,
                     rect,
                     ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE,
-                    [=](SDL_Event *ev, SDL_Rect *r)
+                    [=](SDL_Event *ev, SDL_Rect*)
                     {
                         return eventcb(ev);
                     }
@@ -77,7 +77,7 @@ bool AppMenuBar::init(App *app)
                     app,
                     rect,
                     ResManager::IndexImageResource::RES_IMG_MENU_DISABLED,
-                    [=](SDL_Event *ev, SDL_Rect *r)
+                    [=](SDL_Event*, SDL_Rect*)
                     {
                         return false;
                     }

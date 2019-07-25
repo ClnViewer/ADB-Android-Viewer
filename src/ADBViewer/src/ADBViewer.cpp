@@ -31,7 +31,7 @@
 
 #include "ADBViewer.h"
 
-int main( int argc, char * argv[])
+int main( int argc __ATTR_UNUSED, char * argv[])
 {
 #   if defined(_DEBUG)
     static const char *CrashLogFileName = "ADBViewer.rpt";
@@ -41,7 +41,7 @@ int main( int argc, char * argv[])
 
     try
     {
-        App app;
+        App app(argv[0]);
         app.loop();
     }
     catch(std::exception const & _ex)

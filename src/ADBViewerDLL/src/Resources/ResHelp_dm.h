@@ -34,5 +34,16 @@ static inline const char *help_strings_dm[] = {
     "Skript schließen und speichern",
     "Terminal schließen",
     "Terminalfenster zu klein zum anzeigen des befehls",
+    "Das Browserfenster ist zu klein, um einen Befehl anzuzeigen.",
+    "Dateien durchsuchen",
+    "Geräteinformationen",
+    "Informationen zu APK-Paketen",
+    "APK-fähige Pakete anzeigen",
+    "APK deaktivierte Pakete anzeigen",
+    "APK-Systempakete anzeigen",
+    "APK-Pakete von Drittanbietern anzeigen",
+    "Lokale Dateien anzeigen",
+    "Dateien auf dem Remote-Gerät anzeigen",
+    "Wählen Sie aus dem Menü\neinen Eintrag aus,\nder angezeigt werden soll",
     nullptr
 };

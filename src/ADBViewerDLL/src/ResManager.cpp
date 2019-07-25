@@ -52,6 +52,9 @@ namespace Resources
 #include "Resources/ResFreeSansfont.h"
 #include "Resources/clip/bender-anime-8/bender8sprite.h"
 #include "Resources/clip/bender-anime-8/bender8speech.h"
+#include "Resources/clip/browser-menu4/browser_menu4sprite.h"
+#include "Resources/clip/browser-menu9/browser_menu9sprite.h"
+#include "Resources/clip/keyboard-active/keyboard_active2sprite.h"
 
 typedef struct
 {
@@ -135,12 +138,31 @@ SDL_Surface ** ResManager::spriteload(ResManager::IndexSpriteResource idx, SDL_C
 
             switch (idx)
             {
-                default:
-                //case ResManager::IndexSpriteResource::RES_SPRITE_BENDER
+                case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU9:
+                {
+                    l_ssz = __NELE(img_menu9sprites);
+                    l_res = img_menu9sprites;
+                    break;
+                }
+                case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU4:
+                {
+                    l_ssz = __NELE(img_menu4sprites);
+                    l_res = img_menu4sprites;
+                    break;
+                }
+                case ResManager::IndexSpriteResource::RES_SPRITE_BENDER:
                 {
                     l_ssz = __NELE(img_bender8sprites);
                     l_res = img_bender8sprites;
+                    break;
                 }
+                case ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE:
+                {
+                    l_ssz = __NELE(img_keyboard_active2sprites);
+                    l_res = img_keyboard_active2sprites;
+                    break;
+                }
+                default: return nullptr;
             }
 
             SDL_Surface **surf = new SDL_Surface*[l_ssz]{};
@@ -182,6 +204,54 @@ SDL_Surface ** ResManager::spriteload(ResManager::IndexSpriteResource idx, SDL_C
 
         return nullptr;
     }
+
+SDL_Point ResManager::spritesize(ResManager::IndexSpriteResource idx)
+{
+    SDL_Point point{};
+
+    switch (idx)
+    {
+        case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU9:
+        {
+            if (__NELE(img_menu9sprites))
+            {
+                point.x = img_menu9sprites[0]->w;
+                point.y = img_menu9sprites[0]->h;
+            }
+            break;
+        }
+        case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU4:
+        {
+            if (__NELE(img_menu4sprites))
+            {
+                point.x = img_menu4sprites[0]->w;
+                point.y = img_menu4sprites[0]->h;
+            }
+            break;
+        }
+        case ResManager::IndexSpriteResource::RES_SPRITE_BENDER:
+        {
+            if (__NELE(img_bender8sprites))
+            {
+                point.x = img_bender8sprites[0]->w;
+                point.y = img_bender8sprites[0]->h;
+            }
+            break;
+        }
+        case ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE:
+        {
+            if (__NELE(img_keyboard_active2sprites))
+            {
+                point.x = img_keyboard_active2sprites[0]->w;
+                point.y = img_keyboard_active2sprites[0]->h;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return point;
+}
 
 SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
 {

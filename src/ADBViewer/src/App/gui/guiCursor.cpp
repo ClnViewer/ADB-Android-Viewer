@@ -31,6 +31,9 @@
 
 #include "../../ADBViewer.h"
 
+guiCursor::guiCursor() :
+    m_pos(0) {}
+
 guiCursor::~guiCursor()
     {
         guiBase::ActiveOff();

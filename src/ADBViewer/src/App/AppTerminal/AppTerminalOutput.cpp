@@ -29,7 +29,7 @@
     SOFTWARE.
  */
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 AppTerminalOutput::~AppTerminalOutput()
     {
@@ -89,50 +89,25 @@ bool AppTerminalOutput::init(App *app, AppTerminalPage *atp)
 
 bool AppTerminalOutput::tinit(SDL_Texture **texture)
     {
-        if ((!m_page->out_ssize.x) || (!m_page->out_ssize.y))
-            return true;
-
-        bool ison = guiBase::IsActive();
-        if (ison)
+        bool isact = guiBase::IsActive();
+        if (isact)
             guiBase::ActiveOff();
 
-        if (m_surface)
-            SDL_FreeSurface(m_surface);
-        m_surface = nullptr;
-
-        if (!(m_surface = SDL_CreateRGBSurface(
-                    SDL_SWSURFACE,
-                    m_page->out_ssize.x,
-                    m_page->out_ssize.y,
-                    32,
-#                   if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                    0x0000ff00, 0x00ff0000, 0xff000000, 0x000000ff
-#                   else
-                    0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000
-#                   endif
-                )))
-            return false;
-
-        SDL_FillRect(m_surface, nullptr, SDL_MapRGB(m_surface->format, 0, 0, 0));
-        SDL_Texture *l_texture = SDL_CreateTextureFromSurface(
-                guiBase::GetGui<SDL_Renderer>(),
-                m_surface
-            );
-
-        if (!l_texture)
+        do
         {
-            SDLErrorMessageQueue();
+            if ((!m_page->out_ssize.x) || (!m_page->out_ssize.y))
+                break;
+            if (!guiBase::SurfaceInit(&m_surface, m_page->out_ssize, m_color_black, s_lock))
+                break;
+            if (guiBase::TextureInit(texture, m_surface, s_lock))
+                break;
+
+            guiBase::ActiveOff();
             return false;
         }
+        while (0);
 
-        GuiLock(
-            std::swap(*texture, l_texture);
-        );
-
-        if (l_texture)
-            SDL_DestroyTexture(l_texture);
-
-        if (ison)
+        if (isact)
             guiBase::ActiveOn();
 
         return true;
@@ -153,15 +128,14 @@ void AppTerminalOutput::start()
     {
         guiRenderer_s *gr = guiBase::GetGui<guiRenderer_s>();
 
-        if (!gr->texture)
-            if (!tinit(&gr->texture))
-            {
-                if (gr->texture)
-                    SDL_DestroyTexture(gr->texture);
+        if (!tinit(&gr->texture))
+        {
+            if (gr->texture)
+                SDL_DestroyTexture(gr->texture);
 
-                gr->texture = nullptr;
-                return;
-            }
+            gr->texture = nullptr;
+            return;
+        }
 
         ::memcpy(&gr->rdst, &m_page->out_rdst, sizeof(SDL_Rect));
         gr->rsrc = &m_page->out_rsrc;
@@ -240,6 +214,7 @@ void AppTerminalOutput::draw_cmd(std::string const & s)
             ss << sid;
         ss << AppTerminalPage::term_prompt << s;
         drawline(ss.str(), m_color_cmd, true);
+        guiBase::TextureInit(&guiBase::GetGui<guiRenderer_s>()->texture, m_surface, s_lock);
     }
 
 void AppTerminalOutput::draw_txt(std::string const & s)
@@ -247,9 +222,10 @@ void AppTerminalOutput::draw_txt(std::string const & s)
         if (s.empty())
             return;
 
+        std::vector<std::string> vs;
+
         do
         {
-            std::vector<std::string> vs;
             std::string found("\n");
             size_t prev = 0U,
                    pos  = 0U;
@@ -272,12 +248,12 @@ void AppTerminalOutput::draw_txt(std::string const & s)
 
             for (auto & str : vs)
                 drawline(str, m_color_txt, false);
-
-            return;
         }
         while (0);
 
-        drawline(s, m_color_txt, false);
+        if (!vs.size())
+            drawline(s, m_color_txt, false);
+        guiBase::TextureInit(&guiBase::GetGui<guiRenderer_s>()->texture, m_surface, s_lock);
     }
 
 void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool isclean)
@@ -286,8 +262,6 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
             return;
 
         SDL_Surface *l_surface = nullptr;
-        SDL_Texture *l_texture = nullptr;
-        guiRenderer_s *gr = guiBase::GetGui<guiRenderer_s>();
         isclean = (((!m_surface) || (m_page->out_ssize.y <= m_page->out_pos.y)) ? true : isclean);
 
         do
@@ -299,8 +273,12 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
                 m_page->out_pos.y = 0;
                 m_page->out_npage = 0;
 
-                if (!tinit(&gr->texture))
-                    break;
+                if (m_surface)
+                {
+                    std::lock_guard<std::mutex> l_lock(s_lock);
+                    SDL_FreeSurface(m_surface);
+                    m_surface = nullptr;
+                }
             }
             else if (m_page->out_rdst.h < m_page->out_pos.y)
             {
@@ -333,28 +311,13 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
             srect.x = 0;
             srect.y = 0;
 
+            if (!m_surface)
+                if (!guiBase::SurfaceInit(&m_surface, m_page->out_ssize, m_color_black, s_lock))
+                    break;
+
             SDL_BlitSurface(l_surface, &srect, m_surface, &drect);
-            l_texture = SDL_CreateTextureFromSurface(
-                guiBase::GetGui<SDL_Renderer>(),
-                m_surface
-            );
-
-            if (!l_texture)
-            {
-                SDLErrorMessageQueue();
-                break;
-            }
-
-            GuiLock(
-                std::swap(gr->texture, l_texture);
-            );
             m_page->out_pos.y += l_surface->h;
             SDL_FreeSurface(l_surface);
-
-            if (l_texture)
-                SDL_DestroyTexture(l_texture);
-
-            guiBase::ActiveOn();
 
             if (m_page->out_npage != m_page->out_tpage)
             {
@@ -369,16 +332,6 @@ void AppTerminalOutput::drawline(std::string const & s, SDL_Color *color, bool i
 
         if (l_surface)
             SDL_FreeSurface(l_surface);
-        if (l_texture)
-            SDL_DestroyTexture(l_texture);
-
-        if (gr->texture)
-        {
-            GuiLock(
-                SDL_DestroyTexture(gr->texture);
-                gr->texture = nullptr;
-            );
-        }
     }
 
 bool AppTerminalOutput::event(SDL_Event *ev, const void *instance)
@@ -395,8 +348,12 @@ bool AppTerminalOutput::event(SDL_Event *ev, const void *instance)
 
         if (ev->type == SDL_MOUSEMOTION)
         {
+            if (ato->m_page->out_tpage)
+                m_pagenum.draw();
+
             if (!ato->guiBase::IsRegion(ev, ato->guiBase::GetGui<SDL_Rect>()))
                 return false;
+
             ato->guiBase::PushEvent(ID_CMD_POP_MENU26);
             return true;
         }

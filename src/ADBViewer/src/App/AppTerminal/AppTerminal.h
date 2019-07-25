@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 class App;
 
@@ -8,6 +8,8 @@ class AppTerminal : public guiBase
 {
 public:
     //
+    AppTerminal();
+
     bool init(App*);
     bool tinit(SDL_Texture**) override;
     bool event(SDL_Event*, const void*) override;
@@ -24,9 +26,10 @@ private:
     AppTerminalPage   m_page;
     guiIcon           m_icon_close;
     std::mutex        m_lock;
-    std::atomic<bool> m_enable = false;
+    std::atomic<bool> m_enable;
     //
     void runselect(bool);
     void adbsend(std::string&);
+    void resizewin(int32_t);
 };
 

@@ -21,8 +21,13 @@ public:
 
 private:
     //
-    App         *m_app;
-    std::thread  m_thu;
+    App           *m_app;
+    guiIconTrigger m_icon_keyboard;
+    std::thread    m_thu;
+    std::mutex     m_lockrun;
+    SDL_Point      m_psize{};
+    SDL_Color      m_color = { 0x0, 0x0, 0x0, 0x0 };
+
     //
     void jointh();
     bool defscreen();

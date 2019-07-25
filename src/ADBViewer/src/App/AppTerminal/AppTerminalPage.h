@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../ADBViewer.h"
+#include "../../ADBViewer.h"
 
 #define SCROLL_NUM_SCREEN 20
 
-class AppTerminalPage
+class AppTerminalPage : public guiPage
 {
 public:
     //

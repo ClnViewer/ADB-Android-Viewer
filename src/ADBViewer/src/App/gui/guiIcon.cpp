@@ -64,7 +64,7 @@ bool guiIcon::tinit(SDL_Texture **texture)
         return true;
     }
 
-bool guiIcon::evresize(SDL_Texture **texture)
+bool guiIcon::evresize(SDL_Texture**)
     {
         Off();
         On();

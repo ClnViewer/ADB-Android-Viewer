@@ -74,6 +74,9 @@ namespace Resources
             enum IndexSpriteResource
             {
                 RES_SPRITE_BENDER,
+                RES_SPRITE_BROWSER_MENU4,
+                RES_SPRITE_BROWSER_MENU9,
+                RES_SPRITE_KEYBOARD_ACTIVE,
                 RES_SPRITE_DEFAULT = RES_SPRITE_BENDER
             };
             enum IndexStringResource
@@ -111,7 +114,18 @@ namespace Resources
                 RES_STR_ADB_LANG_NOT_SUPPORT_ENG,
                 RES_STR_SCRIPTEDIT_END,
                 RES_STR_CLOSE_TERM,
-                RES_STR_SMALL_TERM
+                RES_STR_SMALL_TERM,
+                RES_STR_SMALL_BROWSER,
+                RES_STR_BROWSER_M4_FILE,
+                RES_STR_BROWSER_M4_INFO,
+                RES_STR_BROWSER_M4_APK,
+                RES_STR_BROWSER_M9_APK_E,
+                RES_STR_BROWSER_M9_APK_D,
+                RES_STR_BROWSER_M9_APK_S,
+                RES_STR_BROWSER_M9_APK_O,
+                RES_STR_BROWSER_M9_FILE_PC,
+                RES_STR_BROWSER_M9_FILE_ANDROID,
+                RES_STR_BROWSER_START_BANNER
             };
             enum IndexStringPopUpMenu
             {
@@ -168,6 +182,7 @@ namespace Resources
                 RES_STR_POPUP_50,
                 RES_STR_POPUP_51,
                 RES_STR_POPUP_52,
+                RES_STR_POPUP_53,
                 RES_STR_POPUP_NONE
             };
 
@@ -182,6 +197,7 @@ namespace Resources
             static SDL_Surface * imageload(ResManager::IndexImageResource);
             static SDL_Surface **spriteload(ResManager::IndexSpriteResource, SDL_Color*, uint32_t*);
             static SDL_Point     imagesize(ResManager::IndexImageResource);
+            static SDL_Point     spritesize(ResManager::IndexSpriteResource);
             static const char  * speechrandom();
             static const char  * stringload(ResManager::IndexStringResource, ResManager::IndexLanguageResource);
 

@@ -60,8 +60,6 @@ AppMenuPopUp::AppMenuPopUp()
     guiBase::ActiveOff();
 }
 
-AppMenuPopUp::~AppMenuPopUp() {}
-
 #if defined(OS_WIN)
 
 static ACmdKey l_acmdkey[] =
@@ -202,6 +200,8 @@ void AppMenuPopUp::show()
         MENU_ITEM_ADD(ID_CMD_POP_MENU100, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_44, l_hPopMenu);
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ITEM_ADD(ID_CMD_POP_MENU24, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_45, l_hPopMenu);
+        ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
+        MENU_ITEM_ADD(ID_CMD_POP_MENU52, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_53, l_hPopMenu);
 
         ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, NULL);
         MENU_ADD(l_hLangMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_27, l_hPopMenu);
@@ -250,7 +250,7 @@ void AppMenuPopUp::show()
             ::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
             MENU_ITEM_ADD(ID_CMD_POP_MENU17, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_43, l_hDisplayRotateMenu);
             //::AppendMenuW(l_hDisplayRotateMenu,  MF_SEPARATOR, 0, NULL);
-            //MENU_ITEM_ADD(ID_CMD_POP_MENU220, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
+            //MENU_ITEM_ADD(ID_CMD_POP_MENU???, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_36, l_hDisplayRotateMenu);
 
             switch (AppConfig::instance().cnf_disp_rotate)
             {
@@ -468,7 +468,8 @@ void AppMenuPopUp::show()
                         case ID_CMD_POP_MENU19: AppConfig::instance().cnf_disp_ratio = 2U; break;
                         // case ID_CMD_POP_MENU20: AppConfig::instance().cnf_disp_ratio = 3U; break;
                     }
-                    guiBase::PushEvent(ID_CMD_POP_MENU25);
+                    guiBase::PushEvent(ID_CMD_POP_MENU25); /// close terminal is opened
+                    guiBase::PushEvent(ID_CMD_POP_MENU53); /// close browser is opened
                     cmdEvent.user.code = ID_CMD_POP_MENU99;
                     break;
                 }
@@ -517,6 +518,7 @@ void AppMenuPopUp::show()
                         );
                     ss << "v." << AVIEW_FULLVERSION_STRING;
                     ss << " r." << AVIEW_SVN_REVISION;
+                    ss << ", mingw-gcc " << __VERSION__;
 
                     AddMessageQueue(
                         ss.str(),
@@ -553,6 +555,11 @@ void AppMenuPopUp::show()
                             );
 
                     cmdEvent.user.code = 0;
+                    break;
+                }
+            case ID_CMD_POP_MENU52:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU52;
                     break;
                 }
             case ID_CMD_POP_MENU100:
