@@ -43,6 +43,7 @@
 				</Linker>
 				<ExtraCommands>
 					<Add after="upx -9 ../bin/Release/ADBViewer.exe" />
+					<Add after="C:\__Bin\EnigmaVirtualBox\enigmavbconsole.exe ..\ADBViewerInstaller\ADBViewer.evb" />
 					<Add after='cmd.exe /C &quot;C:\Program Files\Caphyon\Advanced Installer 16\bin\x86\AdvancedInstaller.com&quot; /rebuild ..\ADBViewerInstaller\Android-ADB-Viewer.aip' />
 				</ExtraCommands>
 			</Target>
