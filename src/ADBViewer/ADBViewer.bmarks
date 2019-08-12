@@ -1,70 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Release" />
-	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="10612" topLine="237" />
-		<BrowseMarks positions="10502" />
+	<ActiveTarget name="Debug" />
+	<File name="src\App\AppBrowser\AppBrowserListEvent.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="1994" topLine="42" />
 	</File>
-	<File name="src\App\AppBrowser\AppBrowserPage.cpp" open="0" top="0" tabpos="8">
-		<Cursor position="3604" topLine="77" />
-	</File>
-	<File name="src\App\plugin\IPluginLoader.FILESYSTEM.h" open="0" top="0" tabpos="0">
-		<Cursor position="1231" topLine="0" />
-		<BrowseMarks positions="121,272,3176" />
-	</File>
-	<File name="src\App\AppConfig.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4477" topLine="133" />
-	</File>
-	<File name="src\App\plugin\IPluginLoader.LINUX.h" open="0" top="0" tabpos="0">
-		<Cursor position="239" topLine="0" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserMenu4.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="2070" topLine="31" />
-		<BrowseMarks positions="5006" />
-	</File>
-	<File name="src\App\App.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="2721" topLine="50" />
-	</File>
-	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="0">
-		<Cursor position="2451" topLine="61" />
-	</File>
-	<File name="src\loader.h" open="0" top="0" tabpos="0">
-		<Cursor position="1039" topLine="28" />
-	</File>
-	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="5945" topLine="0" />
+	<File name="src\App\AppBrowser\AppBrowser.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7668" topLine="225" />
 	</File>
 	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="6331" topLine="24" />
 		<BrowseMarks positions="1655" />
 	</File>
+	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="10612" topLine="237" />
+		<BrowseMarks positions="10502" />
+	</File>
 	<File name="src\App\plugin\IPluginLoader.WINAPI.h" open="0" top="0" tabpos="0">
 		<Cursor position="794" topLine="17" />
 		<BrowseMarks positions="1059" />
 	</File>
-	<File name="src\App\AppVideo.h" open="0" top="0" tabpos="0">
-		<Cursor position="479" topLine="0" />
+	<File name="src\App\AppVideo.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="5945" topLine="0" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowser.h" open="0" top="0" tabpos="0">
+		<Cursor position="476" topLine="0" />
+		<BrowseMarks positions="673" />
+		<Book_Marks positions="840" />
+	</File>
+	<File name="src\App\plugin\IPluginLoader.LINUX.h" open="0" top="0" tabpos="0">
+		<Cursor position="239" topLine="0" />
 	</File>
 	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1704" topLine="29" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserList.h" open="1" top="0" tabpos="1">
-		<Cursor position="795" topLine="17" />
-		<BrowseMarks positions="121" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowser.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="7668" topLine="225" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserList.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="6093" topLine="175" />
-		<BrowseMarks positions="4773,6991,7033,7229,7667,7858,8064,8477,9724,10412,12432" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserListDraw.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="4746" topLine="134" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserParse.h" open="1" top="0" tabpos="6">
-		<Cursor position="481" topLine="0" />
 	</File>
 	<File name="src\App\gui\guiBase.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="3976" topLine="130" />
@@ -74,10 +41,36 @@
 		<Cursor position="1828" topLine="43" />
 		<BrowseMarks positions="2028" />
 	</File>
+	<File name="src\App\App.h" open="0" top="0" tabpos="0">
+		<Cursor position="1076" topLine="10" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowserList.h" open="1" top="0" tabpos="1">
+		<Cursor position="795" topLine="17" />
+		<BrowseMarks positions="121" />
+	</File>
+	<File name="src\App\AppVideo.h" open="0" top="0" tabpos="0">
+		<Cursor position="479" topLine="0" />
+	</File>
 	<File name="src\App\AppBrowser\AppBrowserParse.cpp" open="1" top="0" tabpos="5">
 		<Cursor position="6340" topLine="193" />
 		<BrowseMarks positions="17984,5270,5376,5472,6863,7067,8029,8503,10078,12202,13488,14432,15132,15470,15576,15836,16078,16774,17477,17655" />
 		<Book_Marks positions="3488" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowserMenu4.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="2070" topLine="31" />
+		<BrowseMarks positions="5006" />
+	</File>
+	<File name="src\loader.h" open="0" top="0" tabpos="0">
+		<Cursor position="1039" topLine="28" />
+	</File>
+	<File name="src\App\AppConfig.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4477" topLine="133" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowserPage.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="3604" topLine="77" />
+	</File>
+	<File name="src\App\AppConfig.h" open="0" top="0" tabpos="0">
+		<Cursor position="2451" topLine="61" />
 	</File>
 	<File name="src\App\gui\guiBase.h" open="0" top="0" tabpos="0">
 		<Cursor position="1024" topLine="40" />
@@ -86,21 +79,28 @@
 	<File name="src\App\gui\guiPage.h" open="0" top="0" tabpos="0">
 		<Cursor position="27" topLine="0" />
 	</File>
-	<File name="src\App\AppBrowser\AppBrowser.h" open="0" top="0" tabpos="0">
-		<Cursor position="476" topLine="0" />
-		<BrowseMarks positions="673" />
-		<Book_Marks positions="840" />
-	</File>
-	<File name="src\App\AppBrowser\AppBrowserMenu9.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="3019" topLine="73" />
+	<File name="src\App\AppBrowser\AppBrowserList.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="6093" topLine="175" />
+		<BrowseMarks positions="4773,6991,7033,7229,7667,7858,8064,8477,9724,10412,12432" />
+		<Book_Marks positions="" />
 	</File>
 	<File name="src\App\AppTerminal\AppTerminalOutput.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="1456" topLine="217" />
 	</File>
-	<File name="src\App\App.h" open="0" top="0" tabpos="0">
-		<Cursor position="1076" topLine="10" />
+	<File name="src\App\App.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2721" topLine="50" />
 	</File>
-	<File name="src\App\AppBrowser\AppBrowserListEvent.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="1994" topLine="42" />
+	<File name="src\App\AppBrowser\AppBrowserListDraw.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="4746" topLine="134" />
+	</File>
+	<File name="src\App\plugin\IPluginLoader.FILESYSTEM.h" open="0" top="0" tabpos="0">
+		<Cursor position="1231" topLine="0" />
+		<BrowseMarks positions="121,272,3176" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowserMenu9.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="3019" topLine="73" />
+	</File>
+	<File name="src\App\AppBrowser\AppBrowserParse.h" open="1" top="1" tabpos="6">
+		<Cursor position="481" topLine="0" />
 	</File>
 </BrowseTracker_layout_file>

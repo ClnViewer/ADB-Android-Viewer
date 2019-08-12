@@ -63,6 +63,13 @@ typedef struct
 
 } font_cache_s;
 
+typedef struct
+{
+    const Resources::ResManager::ImageResource_s **sp;
+    uint32_t   sz;
+
+} sprites_base_s;
+
 static inline SDL_Color box_color[][2] =
 {
     {
@@ -96,6 +103,37 @@ static inline SDL_Color box_color[][2] =
 };
 
 static font_cache_s font_cache[3]{};
+
+static const ResManager::ImageResource_s *image_base[] =
+{
+    &img_logo,
+    &img_menu0,
+    &img_menu1,
+    &img_screen,
+    &img_record,
+    &img_termclose,
+    &img_editmenu
+};
+
+static sprites_base_s sprite_base[] =
+{
+    {
+        img_bender8sprites,
+        __NELE(img_bender8sprites)
+    },
+    {
+        img_menu4sprites,
+        __NELE(img_menu4sprites)
+    },
+    {
+        img_menu9sprites,
+        __NELE(img_menu9sprites)
+    },
+    {
+        img_keyboard_active2sprites,
+        __NELE(img_keyboard_active2sprites)
+    }
+};
 
 __attribute__((constructor)) static void initialize_ResourcesRand()
 {
@@ -132,38 +170,13 @@ SDL_Surface ** ResManager::spriteload(ResManager::IndexSpriteResource idx, SDL_C
             if (psz)
                 *psz = 0U;
 
-            uint32_t i = 0U,
-                     l_ssz = 0U;
-            const ResManager::ImageResource_s **l_res = nullptr;
+            if ((idx < ResManager::IndexSpriteResource::RES_SPRITE_BENDER) ||
+                (idx >= ResManager::IndexSpriteResource::RES_SPRITE_END))
+                return nullptr;
 
-            switch (idx)
-            {
-                case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU9:
-                {
-                    l_ssz = __NELE(img_menu9sprites);
-                    l_res = img_menu9sprites;
-                    break;
-                }
-                case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU4:
-                {
-                    l_ssz = __NELE(img_menu4sprites);
-                    l_res = img_menu4sprites;
-                    break;
-                }
-                case ResManager::IndexSpriteResource::RES_SPRITE_BENDER:
-                {
-                    l_ssz = __NELE(img_bender8sprites);
-                    l_res = img_bender8sprites;
-                    break;
-                }
-                case ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE:
-                {
-                    l_ssz = __NELE(img_keyboard_active2sprites);
-                    l_res = img_keyboard_active2sprites;
-                    break;
-                }
-                default: return nullptr;
-            }
+            uint32_t i = 0U,
+                     l_ssz = sprite_base[idx].sz;
+            const ResManager::ImageResource_s **l_res = sprite_base[idx].sp;
 
             SDL_Surface **surf = new SDL_Surface*[l_ssz]{};
             if (!surf)
@@ -207,142 +220,40 @@ SDL_Surface ** ResManager::spriteload(ResManager::IndexSpriteResource idx, SDL_C
 
 SDL_Point ResManager::spritesize(ResManager::IndexSpriteResource idx)
 {
-    SDL_Point point{};
+    if ((idx < ResManager::IndexSpriteResource::RES_SPRITE_BENDER) ||
+        (idx >= ResManager::IndexSpriteResource::RES_SPRITE_END) ||
+        (!sprite_base[idx].sz))
+        return { 0, 0 };
 
-    switch (idx)
+    return
     {
-        case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU9:
-        {
-            if (__NELE(img_menu9sprites))
-            {
-                point.x = img_menu9sprites[0]->w;
-                point.y = img_menu9sprites[0]->h;
-            }
-            break;
-        }
-        case ResManager::IndexSpriteResource::RES_SPRITE_BROWSER_MENU4:
-        {
-            if (__NELE(img_menu4sprites))
-            {
-                point.x = img_menu4sprites[0]->w;
-                point.y = img_menu4sprites[0]->h;
-            }
-            break;
-        }
-        case ResManager::IndexSpriteResource::RES_SPRITE_BENDER:
-        {
-            if (__NELE(img_bender8sprites))
-            {
-                point.x = img_bender8sprites[0]->w;
-                point.y = img_bender8sprites[0]->h;
-            }
-            break;
-        }
-        case ResManager::IndexSpriteResource::RES_SPRITE_KEYBOARD_ACTIVE:
-        {
-            if (__NELE(img_keyboard_active2sprites))
-            {
-                point.x = img_keyboard_active2sprites[0]->w;
-                point.y = img_keyboard_active2sprites[0]->h;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    return point;
+        static_cast<int32_t>(sprite_base[idx].sp[0]->w),
+        static_cast<int32_t>(sprite_base[idx].sp[0]->h)
+
+    };
 }
 
 SDL_Surface * ResManager::imageload(ResManager::IndexImageResource idx)
 {
-    switch(idx)
-    {
-        case ResManager::IndexImageResource::RES_IMG_LOGO:
-        {
-            return imagedata(&img_logo);
-        }
-        case ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE:
-        {
-            return imagedata(&img_menu0);
-        }
-        case ResManager::IndexImageResource::RES_IMG_MENU_DISABLED:
-        {
-            return imagedata(&img_menu1);
-        }
-        case ResManager::IndexImageResource::RES_IMG_SCREEN:
-        {
-            return imagedata(&img_screen);
-        }
-        case ResManager::IndexImageResource::RES_IMG_RCORD:
-        {
-            return imagedata(&img_record);
-        }
-        case ResManager::IndexImageResource::RES_IMG_TERMCLOSE:
-        {
-            return imagedata(&img_termclose);
-        }
-        case ResManager::IndexImageResource::RES_IMG_EDITMENU:
-        {
-            return imagedata(&img_editmenu);
-        }
-        default:
-            return nullptr;
-    }
+    if ((idx < ResManager::IndexImageResource::RES_IMG_LOGO) ||
+        (idx >= ResManager::IndexImageResource::RES_IMG_END))
+        return nullptr;
 
+    return imagedata(image_base[idx]);
 }
 
 SDL_Point ResManager::imagesize(ResManager::IndexImageResource idx)
 {
-    SDL_Point point{};
+    if ((idx < ResManager::IndexImageResource::RES_IMG_LOGO) ||
+        (idx >= ResManager::IndexImageResource::RES_IMG_END))
+        return { 0, 0 };
 
-    switch(idx)
+    return
     {
-        case ResManager::IndexImageResource::RES_IMG_LOGO:
-        {
-            point.x = img_logo.w;
-            point.y = img_logo.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_MENU_ACTIVE:
-        {
-            point.x = img_menu0.w;
-            point.y = img_menu0.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_MENU_DISABLED:
-        {
-            point.x = img_menu1.w;
-            point.y = img_menu1.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_SCREEN:
-        {
-            point.x = img_screen.w;
-            point.y = img_screen.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_RCORD:
-        {
-            point.x = img_record.w;
-            point.y = img_record.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_TERMCLOSE:
-        {
-            point.x = img_termclose.w;
-            point.y = img_termclose.h;
-            break;
-        }
-        case ResManager::IndexImageResource::RES_IMG_EDITMENU:
-        {
-            point.x = img_editmenu.w;
-            point.y = img_editmenu.h;
-            break;
-        }
-        default:
-            break;
-    }
-    return point;
+        static_cast<int32_t>(image_base[idx]->w),
+        static_cast<int32_t>(image_base[idx]->h)
+
+    };
 }
 
 SDL_Surface * ResManager::imagedata(const ResManager::ImageResource_s *res)

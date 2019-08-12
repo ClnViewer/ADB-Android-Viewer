@@ -63,21 +63,22 @@ namespace Resources
             };
             enum IndexImageResource
             {
-                RES_IMG_LOGO,
+                RES_IMG_LOGO = 0,
                 RES_IMG_MENU_ACTIVE,
                 RES_IMG_MENU_DISABLED,
                 RES_IMG_SCREEN,
                 RES_IMG_RCORD,
                 RES_IMG_TERMCLOSE,
-                RES_IMG_EDITMENU
+                RES_IMG_EDITMENU,
+                RES_IMG_END
             };
             enum IndexSpriteResource
             {
-                RES_SPRITE_BENDER,
+                RES_SPRITE_BENDER = 0,
                 RES_SPRITE_BROWSER_MENU4,
                 RES_SPRITE_BROWSER_MENU9,
                 RES_SPRITE_KEYBOARD_ACTIVE,
-                RES_SPRITE_DEFAULT = RES_SPRITE_BENDER
+                RES_SPRITE_END
             };
             enum IndexStringResource
             {
