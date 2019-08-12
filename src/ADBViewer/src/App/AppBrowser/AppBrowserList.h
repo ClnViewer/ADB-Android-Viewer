@@ -68,7 +68,7 @@ private:
     //
     ListPosition * selectsource();
     void listselect(AppBrowserList::ListPosition*);
+    void clickselectfile(AppBrowserPage::DrawItem const&, int32_t);    //    int32_t popupmenu_apk();    int32_t popupmenu_info();    int32_t popupmenu_file();
 
-    void clickselectfile(AppBrowserPage::DrawItem const&, int32_t);
 };
 

@@ -268,20 +268,19 @@ void AppBrowserList::lineSelect(SDL_Event *ev)
             {
                 case AppBrowserPage::MenuKey::MENUKEY_INFO:
                     {
-                        /// Todo: menu
+                        if (m_drawitems[src->sel].desc.empty())                            break;                        switch (popupmenu_info())                        {                            case -1:                                break;                            case ID_CMD_POP_MENU263:                                {                                    AppSysDialog::cliptextset(                                            guiBase::GetGui<SDL_Window>(),                                            m_drawitems[src->sel].desc                                        );                                    break;                                }                            default:                                break;                        }
                         break;
                     }
                 case AppBrowserPage::MenuKey::MENUKEY_APK:
                     {
                         if (m_drawitems[src->sel].cmds.empty())
-                            break;
-                        /// Todo: menu
+                            break;                        switch (popupmenu_apk())                        {                            case -1:                                break;                            default:                                break;                        }
                         break;
                     }
                 case AppBrowserPage::MenuKey::MENUKEY_FILE:
                     {
                         if (m_drawitems[src->sel].cmds.empty())
-                            break;
+                            break;                        /// popupmenu_file() .....
 
                         switch (m_page->mikey)
                         {

@@ -184,6 +184,11 @@ namespace Resources
                 RES_STR_POPUP_51,
                 RES_STR_POPUP_52,
                 RES_STR_POPUP_53,
+                RES_STR_POPUP_54,
+                RES_STR_POPUP_55,
+                RES_STR_POPUP_56,
+                RES_STR_POPUP_57,
+                RES_STR_POPUP_58,
                 RES_STR_POPUP_NONE
             };
 

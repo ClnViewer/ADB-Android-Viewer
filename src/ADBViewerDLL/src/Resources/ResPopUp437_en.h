@@ -54,5 +54,10 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 51 */ L"Device",
     /* 52 */ L"Driver Information",
     /* 53 */ L"Browser",
+    /* 54 */ L"Move",
+    /* 55 */ L"Copy",
+    /* 56 */ L"Delete",
+    /* 57 */ L"Copy to clipboard",
+    /* 58 */ L"Uninstall APK",
     nullptr
 };

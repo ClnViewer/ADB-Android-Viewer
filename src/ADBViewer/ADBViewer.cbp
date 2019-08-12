@@ -4,13 +4,13 @@
 	<Project>
 		<Option title="Android ADB Viewer" />
 		<Option pch_mode="2" />
-		<Option compiler="gnu_gcc_compiler_910_msys2" />
+		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
 				<Option output="../bin/Debug/ADBViewer" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../obj/Debug/ADBViewer/" />
 				<Option type="0" />
-				<Option compiler="gnu_gcc_compiler_910_msys2" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -22,7 +22,7 @@
 				<Option output="../bin/Release/ADBViewer" prefix_auto="1" extension_auto="1" />
 				<Option object_output="../obj/Release/ADBViewer/" />
 				<Option type="0" />
-				<Option compiler="gnu_gcc_compiler_910_msys2" />
+				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
 				</Compiler>
@@ -81,6 +81,7 @@
 		<Unit filename="src/App/AppBrowser/AppBrowserList.h" />
 		<Unit filename="src/App/AppBrowser/AppBrowserListDraw.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserListEvent.cpp" />
+		<Unit filename="src/App/AppBrowser/AppBrowserListMenu.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserMenu4.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserMenu9.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserPage.cpp" />
@@ -139,6 +140,8 @@
 		<Unit filename="src/App/gui/guiMain.cpp" />
 		<Unit filename="src/App/gui/guiMain.h" />
 		<Unit filename="src/App/gui/guiPage.h" />
+		<Unit filename="src/App/gui/guiPopUpMenu.WINAPI.cpp" />
+		<Unit filename="src/App/gui/guiPopUpMenu.WINAPI.h" />
 		<Unit filename="src/App/gui/guiStaticText.cpp" />
 		<Unit filename="src/App/gui/guiStaticText.h" />
 		<Unit filename="src/App/gui/guiTextInputBox.cpp" />

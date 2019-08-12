@@ -9,7 +9,7 @@ public:
     bool inf_name(std::string const&, AppBrowserPage::DrawItem&);
     bool apk_name(std::string const&, AppBrowserPage::DrawItem&);
     bool dir_list_local(std::string const&, std::vector<AppBrowserPage::DrawItem>&);
-    bool dir_list_device(std::string const&, std::vector<AppBrowserPage::DrawItem>&, std::string const&);
+    bool dir_list_device(std::string const&, std::vector<AppBrowserPage::DrawItem>&, std::string const&);    //    std::string basedir(AppBrowserPage::DrawItem const &, AppBrowserPage::MenuInput);
 
 private:
     //

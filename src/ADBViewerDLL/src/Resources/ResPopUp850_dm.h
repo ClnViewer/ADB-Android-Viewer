@@ -54,5 +54,10 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 51 */ L"Ger„t",
     /* 52 */ L"Fahrerinformation",
     /* 53 */ L"Browser",
+    /* 54 */ L"Bewegen Sie sich",
+    /* 55 */ L"Kopieren",
+    /* 56 */ L"L”schen",
+    /* 57 */ L"In die Zwischenablage kopieren",
+    /* 58 */ L"APK deinstallieren",
     nullptr
 };

@@ -54,5 +54,10 @@ static inline const char *popup_strings_en[] = {
     /* 51 */ "Device",
     /* 52 */ "Driver Information",
     /* 53 */ "Browser",
+    /* 54 */ "Move",
+    /* 55 */ "Copy",
+    /* 56 */ "Delete",
+    /* 57 */ "Copy to clipboard",
+    /* 58 */ "Uninstall APK",
     nullptr
 };

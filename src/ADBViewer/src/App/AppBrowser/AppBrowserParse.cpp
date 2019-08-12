@@ -37,8 +37,10 @@
 
 namespace fs = std::filesystem;
 
-static const char *l_permd = " (Permission denied)";
-static const char *l_perr  = "parser not calculate symlink location";
+static const char *l_permd             = " (Permission denied)";
+static const char *l_perr              = "parser not calculate symlink location";static const char *l_datalocaltmp_txt  = "-> /data/local/tmp";
+static const char *l_datalocaltmp_cmd  = "/data/local/tmp";
+static const char *l_datalocaltmp_desc = "hardcore link to /data/local/tmp";
 
 static std::string l_CalcSize(uintmax_t sz)
     {
@@ -143,6 +145,7 @@ static std::string l_DirectoryDescription(fs::path const & dir)
         catch (...) {}
         return ss.str();
     }
+std::string AppBrowserParse::basedir(AppBrowserPage::DrawItem const & di, AppBrowserPage::MenuInput mi)    {        do        {            if (di.cmds.empty())                break;            fs::path l_root{ di.cmds };            switch (di.type)            {                case AppBrowserPage::FileType::FILETYPE_DIR:                case AppBrowserPage::FileType::FILETYPE_ROOT:                case AppBrowserPage::FileType::FILETYPE_BACK:                    {                        switch (mi)                        {                            case AppBrowserPage::MenuInput::MENUINPUT_PC:                                {                                    if (fs::is_directory(l_root))                                        return l_root.generic_string();                                    else if (fs::is_regular_file(l_root))                                        return l_root.parent_path().generic_string();                                    break;                                }                            case AppBrowserPage::MenuInput::MENUINPUT_ANDROID:                                {                                    return l_root.generic_string();                                }                            default:                                break;                        }                        break;                    }                case AppBrowserPage::FileType::FILETYPE_FILE:                case AppBrowserPage::FileType::FILETYPE_SYMLINK:                    {                        switch (mi)                        {                            case AppBrowserPage::MenuInput::MENUINPUT_PC:                                {                                    if (fs::is_regular_file(l_root))                                        return l_root.parent_path().generic_string();                                    else if (fs::is_directory(l_root))                                        return l_root.generic_string();                                    break;                                }                            case AppBrowserPage::MenuInput::MENUINPUT_ANDROID:                                {                                    return l_root.parent_path().generic_string();                                }                            default:                                break;                        }                        break;                    }                default:                    break;            }        }        while (0);        return "/";    }
 
 bool AppBrowserParse::apk_name(std::string const & s, AppBrowserPage::DrawItem & di)
     {
@@ -379,23 +382,30 @@ bool AppBrowserParse::dir_list_device(
                         AppBrowserPage::FileType::FILETYPE_BACK,
                         { 255, 228, 43, 0 }
                 );
-                vdi.push_back(di1);
-
-                AddMessageQueue(
+                vdi.push_back(di1);                AddMessageQueue(
                     l_root.generic_string().c_str(),
                     10U,
                     -1
                 );
             }
-            else
+            else            {                AppBrowserPage::DrawItem di0(
+                        l_datalocaltmp_txt,
+                        l_datalocaltmp_cmd,
+                        l_datalocaltmp_desc,
+                        AppBrowserPage::FileType::FILETYPE_DIR,
+                        { 133, 175, 33, 0 }
+                );
+                vdi.push_back(di0);
+
                 AddMessageQueue(
                     m_rootpath_device.c_str(),
                     10U,
                     -1
                 );
+            }
 
             if (!tokens.size())
-                break;
+                return false;
 
             std::vector<AppBrowserPage::DrawItem> vdirs;
             std::vector<AppBrowserPage::DrawItem> vfiles;

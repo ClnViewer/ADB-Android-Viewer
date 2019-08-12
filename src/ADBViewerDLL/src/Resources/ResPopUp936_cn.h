@@ -54,5 +54,10 @@ static inline const wchar_t *popup_strings_cn[] = {
     /* 51 */ L"设备",
     /* 52 */ L"司机信息",
     /* 53 */ L"浏览器",
+    /* 54 */ L"移动",
+    /* 55 */ L"复制",
+    /* 56 */ L"删除",
+    /* 57 */ L"复制到剪贴板",
+    /* 58 */ L"卸载APK",
     nullptr
 };

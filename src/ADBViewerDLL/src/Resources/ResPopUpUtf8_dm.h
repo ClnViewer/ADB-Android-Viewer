@@ -54,5 +54,10 @@ static inline const char *popup_strings_dm[] = {
     /* 51 */ "Gerät",
     /* 52 */ "Fahrerinformation",
     /* 53 */ "Browser",
+    /* 54 */ L"Bewegen Sie sich",
+    /* 55 */ L"Kopieren",
+    /* 56 */ L"Löschen",
+    /* 57 */ L"In die Zwischenablage kopieren",
+    /* 58 */ L"APK deinstallieren",
     nullptr
 };

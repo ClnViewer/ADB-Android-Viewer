@@ -172,13 +172,13 @@ void AppBrowser::mevent9button_file(int32_t pos)
                 case AppBrowserPage::MenuInput::MENUINPUT_PC:
                     {
                         /// read local drive..
-                        guiBase::PushEvent(ID_CMD_POP_MENU105);
+                        guiBase::PushEvent(ID_CMD_POP_MENU108);
                         break;
                     }
                 case AppBrowserPage::MenuInput::MENUINPUT_ANDROID:
                     {
                         /// read device file system..
-                        guiBase::PushEvent(ID_CMD_POP_MENU106);
+                        guiBase::PushEvent(ID_CMD_POP_MENU109);
                         break;
                     }
                 default:

@@ -76,11 +76,20 @@
 #define ID_CMD_POP_MENU106 40021 // Browser read device files
 #define ID_CMD_POP_MENU107 40022 // Browser read APK list (user data)
 
+#define ID_CMD_POP_MENU108 40023 // Browser clean list (local files)
+#define ID_CMD_POP_MENU109 40024 // Browser clean list (device files)
+
 #define ID_CMD_POP_MENU210 40010 // Terminal - indent from bottom edge (40010 - 40050)
 #define ID_CMD_POP_MENU220 40020 // Display rotate menu (current status disabled), see next
 #define ID_CMD_POP_MENU230 40030 // ..
 #define ID_CMD_POP_MENU240 40040 // ..
 #define ID_CMD_POP_MENU250 40050 // ..
+
+#define ID_CMD_POP_MENU260 40060 // browser popup Move
+#define ID_CMD_POP_MENU261 40061 // browser popup Copy
+#define ID_CMD_POP_MENU262 40062 // browser popup Delete
+#define ID_CMD_POP_MENU263 40063 // browser popup Copy to clipboard
+#define ID_CMD_POP_MENU264 40064 // browser popup Uninstall APK
 
 
 #define ID_CMD_MSGBAR     49999

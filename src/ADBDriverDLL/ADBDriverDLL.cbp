@@ -131,7 +131,6 @@
 		<Unit filename="src/lz4/lz4.c">
 			<Option compilerVar="CC" />
 			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c17 $options $includes -c $file -o $object" />
-			<Option compiler="gnu_gcc_compiler_910_msys2" use="1" buildCommand="$compiler -std=c++17 $options $includes -c $file -o $object" />
 		</Unit>
 		<Unit filename="src/lz4/lz4.h" />
 		<Extensions>

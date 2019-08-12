@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="..\ADBViewer\src\loader.h" open="1" top="0" tabpos="1">
+	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1">
 		<Cursor position="0" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
 	</File>
 </BrowseTracker_layout_file>
