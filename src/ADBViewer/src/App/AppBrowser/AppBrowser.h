@@ -42,5 +42,6 @@ private:
     void mevent9motion_file(int32_t);
     void mevent9motion_apk(int32_t);
     void mevent9button_file(int32_t);
-    void mevent9button_apk(int32_t);};
+    void mevent9button_apk(int32_t);
+};
 

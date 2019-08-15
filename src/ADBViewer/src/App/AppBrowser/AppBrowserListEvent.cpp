@@ -38,7 +38,9 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
             );
 
         if (!abl)
-            return false;        int32_t cidx = ev->user.code;
+            return false;
+
+        int32_t cidx = ev->user.code;
 
         switch (cidx)
         {
@@ -46,7 +48,8 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
             case ID_CMD_POP_MENU106:
             case ID_CMD_POP_MENU107:
             case ID_CMD_POP_MENU108:
-            case ID_CMD_POP_MENU109:                break;
+            case ID_CMD_POP_MENU109:
+                break;
             default:
                 return false;
         }
@@ -60,7 +63,14 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
         switch (cidx)
         {
             case ID_CMD_POP_MENU108:
-            case ID_CMD_POP_MENU109:                {                    src->sel = -1;                    cidx = ((cidx == ID_CMD_POP_MENU108) ?                                ID_CMD_POP_MENU105 : ID_CMD_POP_MENU106                            );                    break;                }
+            case ID_CMD_POP_MENU109:
+                {
+                    src->sel = -1;
+                    cidx = ((cidx == ID_CMD_POP_MENU108) ?
+                                ID_CMD_POP_MENU105 : ID_CMD_POP_MENU106
+                            );
+                    break;
+                }
             default:
                 break;
         }
@@ -78,14 +88,19 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                     m_isclick = true;
                     ///
                     std::vector<AppBrowserPage::DrawItem> vdi;
-                    std::string sroot = ((l_isselect) ?                                abl->m_parser.basedir(                                    abl->m_drawitems[src->sel],                                    AppBrowserPage::MenuInput::MENUINPUT_PC                                ) :
+                    std::string sroot = ((l_isselect) ?
+                                abl->m_parser.basedir(
+                                    abl->m_drawitems[src->sel],
+                                    AppBrowserPage::MenuInput::MENUINPUT_PC
+                                ) :
                                 AppConfig::instance().cnf_browser_dir_local
                              );
 
                     if (abl->m_parser.dir_list_local(sroot, vdi))
                     {
                         if (l_isselect)
-                            AppConfig::instance().cnf_browser_dir_local = sroot;
+                            AppConfig::instance().cnf_browser_dir_local = sroot;
+
                         src->Default();
                         abl->draw(vdi, src);
                     }
@@ -107,17 +122,24 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                     std::vector<AppBrowserPage::DrawItem> vdi;
                     std::string s;
                     std::string cmds = "ls -l ";
-                    std::string sroot = ((l_isselect) ?                                abl->m_parser.basedir(                                    abl->m_drawitems[src->sel],                                    AppBrowserPage::MenuInput::MENUINPUT_ANDROID                                ) :
+                    std::string sroot = ((l_isselect) ?
+                                abl->m_parser.basedir(
+                                    abl->m_drawitems[src->sel],
+                                    AppBrowserPage::MenuInput::MENUINPUT_ANDROID
+                                ) :
                                 AppConfig::instance().cnf_browser_dir_device
                              );
                     cmds += sroot;
-        FILE *fp = fopen("__event_android__.txt", "a+");
+
+        /*
+        FILE *fp = fopen("__event_android__.txt", "a+");
         fprintf(fp, "- _cmds:[%s] _di:[%s] _cnf:[%s]\n",
                 cmds.c_str(),
                 ((src->sel >= 0) ? abl->m_drawitems[src->sel].cmds.c_str() : ""),
                 AppConfig::instance().cnf_browser_dir_device.c_str()
             );
         fclose(fp);
+        */
 
                     if (!AppConfig::instance().cnf_adb.SendToShell(cmds, s))
                         break;
@@ -128,9 +150,15 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                     if (abl->m_parser.dir_list_device(s, vdi, sroot))
                     {
                         if (l_isselect)
-                            AppConfig::instance().cnf_browser_dir_device = sroot;                    }                    else                        src->sel = -1;                    if (vdi.size())
+                            AppConfig::instance().cnf_browser_dir_device = sroot;
+                    }
+                    else
+                        src->sel = -1;
+
+                    if (vdi.size())
                         abl->draw(vdi, src);
-                    m_isclick = false;
+
+                    m_isclick = false;
                     return true;
                 }
             case ID_CMD_POP_MENU107:
