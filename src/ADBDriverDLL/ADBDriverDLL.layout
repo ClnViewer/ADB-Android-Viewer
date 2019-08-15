@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveTarget name="Release" />
+	<ActiveTarget name="Debug" />
+	<File name="src\DriverSocket\DriverSocketRawCmd.cpp" open="0" top="0" tabpos="13" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1479" topLine="8" />
+		</Cursor>
+	</File>
+	<File name="src\DriverInput.cpp" open="0" top="0" tabpos="14" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="5616" topLine="143" />
+		</Cursor>
+	</File>
+	<File name="src\ADBDriver.h" open="0" top="0" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2111" topLine="80" />
+		</Cursor>
+	</File>
 	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DriverDevice.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="6368" topLine="200" />
+		</Cursor>
+	</File>
+	<File name="src\DriverConst.h" open="1" top="1" tabpos="12" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="383" topLine="0" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

@@ -12,6 +12,7 @@ class DriverConst
         static inline const char    *ls_cmd_exec  = "exec:";
         static inline const char    *ls_cmd_shell = "shell:";
         static inline const char    *ls_cmd_sunc  = "sync:";
+        static inline const char    *ls_cmd_uninstall  = "uninstall:";
 
         static inline const wchar_t *lw_host_transport     = L"host:transport:";
         static inline const wchar_t *lw_host_transport_any = L"host:transport-any";

@@ -96,6 +96,7 @@ public:
     bool SendToShell(std::string const&, std::string&);
 
     bool InstallApk(std::string const&);
+    bool UnInstallApk(std::string const&, std::string&);
     bool SendFile(std::string const&, std::string const&);
 
     SelectedList GetDeviceList();

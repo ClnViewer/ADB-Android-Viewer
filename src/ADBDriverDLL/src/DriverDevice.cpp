@@ -215,6 +215,25 @@ bool ADBDriver::InstallApk(std::string const & fpath)
     return false;
 }
 
+bool ADBDriver::UnInstallApk(std::string const & name, std::string & sr)
+{
+    if (name.empty())
+        return false;
+
+    if (!AdbRawT<std::string>(
+            name,
+            DriverConst::ls_cmd_uninstall,
+            sr,
+            false
+        ))
+        return false;
+
+    if (sr.empty())
+        return false;
+
+    return true;
+}
+
 bool ADBDriver::GetDeviceListUI()
 {
     try

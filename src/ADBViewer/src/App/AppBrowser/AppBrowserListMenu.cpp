@@ -34,7 +34,7 @@
 
 int32_t AppBrowserList::popupmenu_apk()
     {
-        return 0;
+        int32_t idx       = -1;        HMENU  l_hPopMenu = nullptr;        do        {            if (!(l_hPopMenu = ::CreatePopupMenu()))                break;            MENU_ITEM_ADD(ID_CMD_POP_MENU264, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_58, l_hPopMenu);            ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);            guiPopUp::style(l_hPopMenu);            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());        }        while (0);        if (l_hPopMenu)            ::DestroyMenu(l_hPopMenu);        return idx;
     }
 int32_t AppBrowserList::popupmenu_info()
     {        int32_t idx       = -1;        HMENU  l_hPopMenu = nullptr;        do        {            if (!(l_hPopMenu = ::CreatePopupMenu()))                break;            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);            //::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);            guiPopUp::style(l_hPopMenu);            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());        }        while (0);        if (l_hPopMenu)            ::DestroyMenu(l_hPopMenu);        return idx;
