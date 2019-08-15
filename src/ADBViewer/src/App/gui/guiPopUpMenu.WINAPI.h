@@ -13,4 +13,16 @@
     AppendMenuW(M, MF_STRING | MF_POPUP, (UINT_PTR)PM, wtxt);                   \
     })
 
-class guiPopUp{public:    //    static void style(HMENU);    static int32_t show(HMENU, SDL_Window*);    static void clean();private:    //    static HBRUSH m_hbrush;};
+class guiPopUp
+{
+public:
+    //
+    static void style(HMENU);
+    static int32_t show(HMENU, SDL_Window*);
+    static void clean();
+
+private:
+    //
+    static HBRUSH m_hbrush;
+
+};

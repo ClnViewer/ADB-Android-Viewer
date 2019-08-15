@@ -117,7 +117,35 @@ bool AppSysDialog::openfile(
     if (GetOpenFileNameA(&sfn))
         return true;
     return false;
-}void AppSysDialog::cliptextset(SDL_Window *win, std::string const & s){    do    {        HWND l_hwnd;        if (!(l_hwnd = f_GetHWND(win)))            break;        if (!::OpenClipboard(l_hwnd))            break;        do        {            HGLOBAL hmem = ::GlobalAlloc(GMEM_MOVEABLE, (s.length() + 1));            if (!hmem)                break;            ::memcpy(::GlobalLock(hmem), s.c_str(), s.length());            ::GlobalUnlock(hmem);            ::EmptyClipboard();            ::SetClipboardData(CF_TEXT, hmem);        }        while (0);        ::CloseClipboard();    }    while (0);}
+}
+
+void AppSysDialog::cliptextset(SDL_Window *win, std::string const & s)
+{
+    do
+    {
+        HWND l_hwnd;
+        if (!(l_hwnd = f_GetHWND(win)))
+            break;
+        if (!::OpenClipboard(l_hwnd))
+            break;
+
+        do
+        {
+            HGLOBAL hmem = ::GlobalAlloc(GMEM_MOVEABLE, (s.length() + 1));
+            if (!hmem)
+                break;
+            ::memcpy(::GlobalLock(hmem), s.c_str(), s.length());
+            ::GlobalUnlock(hmem);
+
+            ::EmptyClipboard();
+            ::SetClipboardData(CF_TEXT, hmem);
+        }
+        while (0);
+
+        ::CloseClipboard();
+    }
+    while (0);
+}
 
 HWND AppSysDialog::gethwnd(SDL_Window *win)
 {
@@ -134,5 +162,7 @@ bool AppSysDialog::openfile(std::string&, const char*, const char*, const char*)
 {
     return false;
 }
-void cliptextset(SDL_Window*, std::string const&) {}
-#endif
+
+void cliptextset(SDL_Window*, std::string const&) {}
+
+#endif

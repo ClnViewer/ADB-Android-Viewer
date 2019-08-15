@@ -31,7 +31,33 @@
 
 #include "../../ADBViewer.h"
 #include  "guiPopUpMenu.WINAPI.h"
-HBRUSH guiPopUp::m_hbrush = nullptr;void guiPopUp::clean()    {        if (m_hbrush)            ::DeleteObject(m_hbrush);        m_hbrush = nullptr;    }int32_t guiPopUp::show(HMENU hmenu, SDL_Window *swin)    {        int32_t idx = -1;        do        {            if (!hmenu)                break;            int32_t x, y;            HWND l_hWnd = nullptr;            if (!(l_hWnd = AppSysDialog::gethwnd(swin)))                break;            ::SDL_GetGlobalMouseState(&x, &y);            idx = static_cast<int32_t>(::TrackPopupMenu(
+
+HBRUSH guiPopUp::m_hbrush = nullptr;
+
+void guiPopUp::clean()
+    {
+        if (m_hbrush)
+            ::DeleteObject(m_hbrush);
+        m_hbrush = nullptr;
+    }
+
+int32_t guiPopUp::show(HMENU hmenu, SDL_Window *swin)
+    {
+        int32_t idx = -1;
+
+        do
+        {
+            if (!hmenu)
+                break;
+
+            int32_t x, y;
+            HWND l_hWnd = nullptr;
+
+            if (!(l_hWnd = AppSysDialog::gethwnd(swin)))
+                break;
+
+            ::SDL_GetGlobalMouseState(&x, &y);
+            idx = static_cast<int32_t>(::TrackPopupMenu(
                         hmenu,
                         TPM_RETURNCMD | TPM_NONOTIFY |
                         TPM_RIGHTBUTTON | TPM_TOPALIGN | TPM_LEFTALIGN,
@@ -40,4 +66,30 @@
                         l_hWnd,
                         nullptr
                     ));
-        }        while (0);        guiPopUp::clean();        return idx;    }void guiPopUp::style(HMENU hmenu)    {        if (!hmenu)            return;        m_hbrush = ((m_hbrush) ?                m_hbrush :                ::CreateSolidBrush(RGB(151,192,36))        );        if (!m_hbrush)            return;        MENUINFO mim{};        mim.cbSize = sizeof(mim);        mim.hbrBack = (HBRUSH) m_hbrush;        mim.fMask = MIM_APPLYTOSUBMENUS | MIM_STYLE | MIM_BACKGROUND;        mim.dwStyle = MNS_AUTODISMISS | MNS_NOCHECK;        ::SetMenuInfo(hmenu, &mim);    }
+        }
+        while (0);
+
+        guiPopUp::clean();
+        return idx;
+    }
+
+void guiPopUp::style(HMENU hmenu)
+    {
+        if (!hmenu)
+            return;
+
+        m_hbrush = ((m_hbrush) ?
+                m_hbrush :
+                ::CreateSolidBrush(RGB(151,192,36))
+        );
+
+        if (!m_hbrush)
+            return;
+
+        MENUINFO mim{};
+        mim.cbSize = sizeof(mim);
+        mim.hbrBack = (HBRUSH) m_hbrush;
+        mim.fMask = MIM_APPLYTOSUBMENUS | MIM_STYLE | MIM_BACKGROUND;
+        mim.dwStyle = MNS_AUTODISMISS | MNS_NOCHECK;
+        ::SetMenuInfo(hmenu, &mim);
+    }
