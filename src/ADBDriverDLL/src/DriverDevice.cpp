@@ -220,9 +220,20 @@ bool ADBDriver::UnInstallApk(std::string const & name, std::string & sr)
     if (name.empty())
         return false;
 
+    std::stringstream ss{};
+    ss << DriverConst::ls_apk_uninstall << " " << name.c_str();
+
+    /*
+    m_cmdasync.add<std::string>(
+        ss.str(),
+        DriverConst::ls_cmd_shell,
+        BIND_ASYNC(std::string)
+    );
+    */
+
     if (!AdbRawT<std::string>(
-            name,
-            DriverConst::ls_cmd_uninstall,
+            ss.str(),
+            DriverConst::ls_cmd_shell,
             sr,
             false
         ))
@@ -231,6 +242,17 @@ bool ADBDriver::UnInstallApk(std::string const & name, std::string & sr)
     if (sr.empty())
         return false;
 
+    sr.erase(
+        std::remove_if(
+            sr.begin(),
+            sr.end(),
+            [](char c)
+            {
+                return ((c == '\r') || (c == '\n'));
+            }
+        ),
+        sr.end()
+    );
     return true;
 }
 

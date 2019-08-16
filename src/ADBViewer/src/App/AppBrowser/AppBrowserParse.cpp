@@ -151,7 +151,10 @@ bool AppBrowserParse::apk_name(std::string const & s, AppBrowserPage::DrawItem &
     {
         size_t sp;
         if ((sp = s.find_last_of("=")) != std::wstring::npos)
+        {
             di.desc = s.substr(0, sp);
+            di.cmds = s.substr((sp + 1), (s.length() - sp));
+        }
         else
             di.desc = s;
 
@@ -175,6 +178,27 @@ bool AppBrowserParse::apk_name(std::string const & s, AppBrowserPage::DrawItem &
         else
             di.s = di.desc;
 
+        if (!di.cmds.empty())
+        {
+            di.cmds.erase(
+                std::remove_if(
+                    di.cmds.begin(),
+                    di.cmds.end(),
+                    [](char c)
+                        {
+                            return ((c == '\r') || (c == '\n'));
+                        }
+                    ),
+                    di.cmds.end()
+                );
+
+            if (!di.cmds.empty())
+            {
+                di.desc += " [";
+                di.desc += di.cmds.c_str();
+                di.desc += "]";
+            }
+        }
         return true;
     }
 

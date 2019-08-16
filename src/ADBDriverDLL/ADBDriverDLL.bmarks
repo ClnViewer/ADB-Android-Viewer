@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src\DriverSocket\DriverSocketRawCmd.cpp" open="0" top="0" tabpos="13">
-		<Cursor position="1479" topLine="8" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
 	<File name="src\DriverInput.cpp" open="0" top="0" tabpos="14">
 		<Cursor position="5616" topLine="143" />
 		<BrowseMarks positions="4094" />
-		<Book_Marks positions="" />
 	</File>
-	<File name="src\ADBDriver.h" open="0" top="0" tabpos="12">
-		<Cursor position="2111" topLine="80" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+	<File name="src\DriverConst.h" open="0" top="0" tabpos="12">
+		<Cursor position="252" topLine="3" />
 	</File>
 	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="src\DriverDevice.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="6368" topLine="200" />
+	<File name="src\DriverSocket\DriverSocketRawCmd.cpp" open="0" top="0" tabpos="13">
+		<Cursor position="1479" topLine="8" />
 	</File>
-	<File name="src\DriverConst.h" open="1" top="1" tabpos="12">
-		<Cursor position="383" topLine="0" />
+	<File name="src\DriverDevice.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="7028" topLine="228" />
+	</File>
+	<File name="src\ADBDriver.h" open="0" top="0" tabpos="12">
+		<Cursor position="2111" topLine="80" />
 	</File>
 </BrowseTracker_layout_file>

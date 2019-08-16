@@ -307,16 +307,37 @@ void AppBrowserList::lineSelect(SDL_Event *ev)
                                 }
                             case ID_CMD_POP_MENU264:
                                 {
-                                    if (m_drawitems[src->sel].s.empty())
+                                    if (m_drawitems[src->sel].cmds.empty())
                                         break;
 
                                     std::string s;
-                                    AppConfig::instance().cnf_adb.UnInstallApk(
-                                                m_drawitems[src->sel].s,
+                                    if (AppConfig::instance().cnf_adb.UnInstallApk(
+                                                m_drawitems[src->sel].cmds,
                                                 s
-                                            );
-                                    if (!s.empty())
-                                        AddMessageQueue(s, 5U, -1);
+                                        ))
+                                    {
+                                        if (!s.empty())
+                                        {
+                                            std::stringstream ss;
+                                            ss << "UnInstall '" << m_drawitems[src->sel].cmds;
+                                            ss << "': " << s.c_str();
+                                            AddMessageQueue(ss.str(), 5U, -1);
+                                        }
+                                        m_drawitems.erase(m_drawitems.begin() + src->sel);
+                                        src->idx = (((src->idx - 1) <= m_list_step) ?
+                                                    0 : (src->idx - m_list_step - 1)
+                                                );
+                                        src->sel = -1;
+                                        draw();
+                                    }
+                                    else
+                                    {
+                                        std::stringstream ss;
+                                        ss << "UnInstall error: '" << m_drawitems[src->sel].cmds << "'!";
+                                        if (!s.empty())
+                                            ss << " - " << s.c_str();
+                                        AddMessageQueue(ss.str(), 5U, -1);
+                                    }
                                     break;
                                 }
                             default:
