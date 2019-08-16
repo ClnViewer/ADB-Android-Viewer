@@ -34,12 +34,95 @@
 
 int32_t AppBrowserList::popupmenu_apk()
     {
-        int32_t idx       = -1;        HMENU  l_hPopMenu = nullptr;        do        {            if (!(l_hPopMenu = ::CreatePopupMenu()))                break;            MENU_ITEM_ADD(ID_CMD_POP_MENU264, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_58, l_hPopMenu);            ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);            guiPopUp::style(l_hPopMenu);            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());        }        while (0);        if (l_hPopMenu)            ::DestroyMenu(l_hPopMenu);        return idx;
+        int32_t idx       = -1;
+        HMENU  l_hPopMenu = nullptr;
+
+        do
+        {
+            if (!(l_hPopMenu = ::CreatePopupMenu()))
+                break;
+
+            MENU_ITEM_ADD(ID_CMD_POP_MENU264, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_58, l_hPopMenu);
+            ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);
+
+            guiPopUp::style(l_hPopMenu);
+            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());
+        }
+        while (0);
+
+        if (l_hPopMenu)
+            ::DestroyMenu(l_hPopMenu);
+
+        return idx;
     }
-int32_t AppBrowserList::popupmenu_info()
-    {        int32_t idx       = -1;        HMENU  l_hPopMenu = nullptr;        do        {            if (!(l_hPopMenu = ::CreatePopupMenu()))                break;            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);            //::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);            guiPopUp::style(l_hPopMenu);            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());        }        while (0);        if (l_hPopMenu)            ::DestroyMenu(l_hPopMenu);        return idx;
-    }
-int32_t AppBrowserList::popupmenu_file()
+
+int32_t AppBrowserList::popupmenu_info()
     {
-        return 0;
+        int32_t idx       = -1;
+        HMENU  l_hPopMenu = nullptr;
+
+        do
+        {
+            if (!(l_hPopMenu = ::CreatePopupMenu()))
+                break;
+
+            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);
+            //::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);
+
+            guiPopUp::style(l_hPopMenu);
+            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());
+        }
+        while (0);
+
+        if (l_hPopMenu)
+            ::DestroyMenu(l_hPopMenu);
+
+        return idx;
+    }
+
+int32_t AppBrowserList::popupmenu_file(bool isfattr)
+    {
+        int32_t idx       = -1;
+        HMENU  l_hPopMenu = nullptr;
+        HMENU  l_hPermMenu = nullptr;
+
+        do
+        {
+            if (!(l_hPopMenu = ::CreatePopupMenu()))
+                break;
+
+            MENU_ITEM_ADD(ID_CMD_POP_MENU261, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_55, l_hPopMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU260, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_54, l_hPopMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU262, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_56, l_hPopMenu);
+            if (isfattr)
+            {
+                if (!(l_hPermMenu = ::CreateMenu()))
+                    break;
+
+                MENU_ITEM_ADD(ID_CMD_POP_MENU265, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_60, l_hPermMenu);
+                MENU_ITEM_ADD(ID_CMD_POP_MENU266, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_61, l_hPermMenu);
+                MENU_ITEM_ADD(ID_CMD_POP_MENU267, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_62, l_hPermMenu);
+                MENU_ITEM_ADD(ID_CMD_POP_MENU268, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_63, l_hPermMenu);
+                MENU_ITEM_ADD(ID_CMD_POP_MENU269, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_64, l_hPermMenu);
+                MENU_ITEM_ADD(ID_CMD_POP_MENU270, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_65, l_hPermMenu);
+
+                guiPopUp::style(l_hPermMenu, MNS_AUTODISMISS | MNS_CHECKORBMP);
+                ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);
+                MENU_ADD(l_hPermMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_59, l_hPopMenu);
+            }
+            ::AppendMenuW(l_hPopMenu,  MF_SEPARATOR, 0, nullptr);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU263, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_57, l_hPopMenu);
+
+            guiPopUp::style(l_hPopMenu);
+            idx = guiPopUp::show(l_hPopMenu, guiBase::GetGui<SDL_Window>());
+        }
+        while (0);
+
+        if (l_hPermMenu)
+            ::DestroyMenu(l_hPermMenu);
+        if (l_hPopMenu)
+            ::DestroyMenu(l_hPopMenu);
+
+        return idx;
     }

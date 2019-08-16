@@ -45,5 +45,16 @@ static inline const char *help_strings_dm[] = {
     "Lokale Dateien anzeigen",
     "Dateien auf dem Remote-Gerät anzeigen",
     "Wählen Sie aus dem Menü\neinen Eintrag aus,\nder angezeigt werden soll",
+    "Error move file: ",
+    "File moved to: ",
+    "Error send file: ",
+    "File copied to: ",
+    "File deleted: ",
+    "Error delete, file: ",
+    "Change permission status: ",
+    "Permission changed to ",
+    "Error change permission, file: ",
+    "UnInstall ",
+    "UnInstall error: ",
     nullptr
 };

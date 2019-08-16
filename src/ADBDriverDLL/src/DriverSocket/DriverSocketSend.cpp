@@ -110,7 +110,7 @@ static bool f__SessionSendSunc(
 
         if (!rsz)
         {
-            req = { {'D','O','N','E'}, static_cast<uint32_t>(time(NULL)) };
+            req = { {'D','O','N','E'}, static_cast<uint32_t>(::time(NULL)) };
             if (!f__SessionSendData(client, (const char*)&req, sizeof(req)))
                 break;
         }
@@ -126,7 +126,7 @@ static bool f__SessionSendSunc(
     return false;
 }
 
-bool ADBDriver::SendFile(std::string const & src, std::string const & dst)
+bool ADBDriver::sendfileraw(std::string const & src, std::string const & dst)
 {
     SOCKET l_client = INVALID_SOCKET;
 

@@ -42,9 +42,9 @@ public:
     void draw();
     void draw(AppBrowserList::ListPosition*);
     void draw(std::string const&);
-    void draw(std::string const&, std::function<bool(std::string const&, AppBrowserPage::DrawItem&)>);
-    void draw(std::vector<AppBrowserPage::DrawItem>&);
-    void draw(std::vector<AppBrowserPage::DrawItem>&, AppBrowserList::ListPosition*);
+    void draw(std::string const&, std::function<bool(std::string const&, GameDev::ADBDriver::DirItem&)>);
+    void draw(std::vector<GameDev::ADBDriver::DirItem>&);
+    void draw(std::vector<GameDev::ADBDriver::DirItem>&, AppBrowserList::ListPosition*);
     //
 
 private:
@@ -57,22 +57,23 @@ private:
     //
     std::atomic<bool>    m_isclick = false;
     std::mutex           s_lock;
-    std::vector<AppBrowserPage::DrawItem> m_drawitems;
+    std::vector<GameDev::ADBDriver::DirItem> m_drawitems;
     //
     int32_t              m_list_step = 0;
     ListPosition         m_listpos_default;
     ListPosition         m_listpos_files_local;
     ListPosition         m_listpos_files_device;
     //
-    void drawline(AppBrowserPage::DrawItem const&, int32_t);
+    void drawline(GameDev::ADBDriver::DirItem const&, int32_t);
     //
     ListPosition * selectsource();
     void listselect(AppBrowserList::ListPosition*);
-    void clickselectfile(AppBrowserPage::DrawItem const&, int32_t);
+    void listdelete(AppBrowserList::ListPosition*);
+    void clickselectfile(GameDev::ADBDriver::DirItem const&, int32_t);
     //
     int32_t popupmenu_apk();
     int32_t popupmenu_info();
-    int32_t popupmenu_file();
+    int32_t popupmenu_file(bool);
 
 };
 

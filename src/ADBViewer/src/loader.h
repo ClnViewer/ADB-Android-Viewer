@@ -61,6 +61,7 @@
 #endif
 
 #define __NELE(a) (sizeof(a) / sizeof(a[0]))
+#define __CSZ(a) __extension__ ({uint32_t r = __NELE(a); r = ((r > 0) ? (r - 1U) : 0U ); r; })
 #define __AUTO(x) __attribute__((cleanup(x)))
 #define __ATTR_UNUSED __attribute__ (( __unused__ ))
 

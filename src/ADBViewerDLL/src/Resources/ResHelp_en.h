@@ -45,5 +45,16 @@ static inline const char *help_strings_en[] = {
 	"Show local files",
 	"Show files on remote device",
 	"Select an item from\nthe menu to display",
+	"Error move file: ",
+	"File moved to: ",
+	"Error send file: ",
+	"File copied to: ",
+	"File deleted: ",
+	"Error delete, file: ",
+	"Change permission status: ",
+	"Permission changed to ",
+	"Error change permission, file: ",
+	"APK uninstalled:  ",
+	"APK uninstall error: ",
 	nullptr
 };

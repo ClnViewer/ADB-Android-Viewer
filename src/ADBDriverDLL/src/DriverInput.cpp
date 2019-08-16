@@ -195,18 +195,20 @@ void ADBDriver::SendSpecialKey(ADBDriver::KeysType t, int32_t key)
         );
 }
 
-bool ADBDriver::SendToShell(std::string const & s, std::string & sr)
-{
-    if (s.empty())
+bool ADBDriver::SendToShell(std::string const & s, std::string & sr, bool isclear)
+    {
+        do
+        {
+            if (s.empty())
+                break;
+            if (!AdbRawT<std::string>(s, DriverConst::ls_cmd_shell, sr, false))
+                break;
+            if ((!sr.empty()) && (isclear))
+                clearend<std::string>(sr);
+            return true;
+        }
+        while (0);
         return false;
-
-    if (!AdbRawT<std::string>(s, DriverConst::ls_cmd_shell, sr, false))
-        return false;
-
-    if (sr.empty())
-        return false;
-
-    return true;
-}
+    }
 
 }

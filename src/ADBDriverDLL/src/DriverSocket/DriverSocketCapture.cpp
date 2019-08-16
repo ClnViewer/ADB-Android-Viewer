@@ -61,7 +61,7 @@ std::vector<uint8_t> ADBDriver::Capture(CapType cap, uint32_t capratio, uint32_t
             case CAP_ACAP_BMP:
             case CAP_ACAP_STREAM:
                 {
-                    ss << DriverConst::ls_cmd_exec << DriverConst::ls_path_file << DriverConst::ls_name_ascreencap;
+                    ss << DriverConst::ls_cmd_exec << DriverConst::ls_path_dir << "/" << DriverConst::ls_name_ascreencap;
                     if (capratio)
                         ss << DriverConst::ls_cmd_ascreencap_ratio << std::to_string(capratio);
                     if (caprotate)
@@ -145,7 +145,7 @@ bool ADBDriver::Video(
         if (!f__SessionSendTarget(l_client, m_deviceid))
             break;
 
-        ss << DriverConst::ls_cmd_exec << DriverConst::ls_path_file << DriverConst::ls_name_ascreencap;
+        ss << DriverConst::ls_cmd_exec << DriverConst::ls_path_dir << "/" << DriverConst::ls_name_ascreencap;
         ss << DriverConst::ls_cmd_ascreencap_stream;
 
         if (capratio)

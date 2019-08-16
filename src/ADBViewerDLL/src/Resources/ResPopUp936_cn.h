@@ -59,5 +59,12 @@ static inline const wchar_t *popup_strings_cn[] = {
     /* 56 */ L"É¾³ý",
     /* 57 */ L"¸´ÖÆµ½¼ôÌù°å",
     /* 58 */ L"Ð¶ÔØAPK",
+    /* 59 */ L"File permission",
+    /* 60 */ L"rw- --- ---",
+    /* 61 */ L"rwx --- ---",
+    /* 62 */ L"rw- rw- ---",
+    /* 63 */ L"rwx rwx ---",
+    /* 64 */ L"rw- rw- rw-",
+    /* 65 */ L"rwx rwx rwx",
     nullptr
 };

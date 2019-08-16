@@ -45,7 +45,6 @@
 			<Add option="-Wno-unknown-pragmas" />
 			<Add option="-D_BUILD_FRAME_NO_TITLE=1" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/include" />
-			<Add directory="C:/__BuildSource/__LIB__/pdcurses/include" />
 		</Compiler>
 		<Linker>
 			<Add option="-static-libstdc++" />
@@ -82,6 +81,18 @@
 		<Unit filename="src/App/AppBrowser/AppBrowserListDraw.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserListEvent.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserListMenu.cpp" />
+		<Unit filename="src/App/AppBrowser/AppBrowserList_LineSelect/AppBrowserList_MENUKEY_APK.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/App/AppBrowser/AppBrowserList_LineSelect/AppBrowserList_MENUKEY_FILE.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/App/AppBrowser/AppBrowserList_LineSelect/AppBrowserList_MENUKEY_INFO.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="src/App/AppBrowser/AppBrowserMenu4.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserMenu9.cpp" />
 		<Unit filename="src/App/AppBrowser/AppBrowserPage.cpp" />
@@ -171,7 +182,7 @@
 				<Code header_guard="VERSION_H" namespace="AutoVersion" prefix="AVIEW" />
 			</AutoVersioning>
 			<DoxyBlocks>
-				<comment_style block="0" line="0" />
+				<comment_style block="2" line="2" />
 				<doxyfile_project output_language="Russian" use_auto_version="1" />
 				<doxyfile_build />
 				<doxyfile_warnings />

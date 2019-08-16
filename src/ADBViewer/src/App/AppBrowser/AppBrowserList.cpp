@@ -180,18 +180,18 @@ AppBrowserList::ListPosition * AppBrowserList::selectsource()
         return &m_listpos_default;
     }
 
-void AppBrowserList::clickselectfile(AppBrowserPage::DrawItem const & di, int32_t id)
+void AppBrowserList::clickselectfile(GameDev::ADBDriver::DirItem const & di, int32_t id)
     {
         switch (di.type)
         {
-            case AppBrowserPage::FileType::FILETYPE_DIR:
-            case AppBrowserPage::FileType::FILETYPE_ROOT:
-            case AppBrowserPage::FileType::FILETYPE_BACK:
+            case GameDev::ADBDriver::FileType::FILETYPE_DIR:
+            case GameDev::ADBDriver::FileType::FILETYPE_ROOT:
+            case GameDev::ADBDriver::FileType::FILETYPE_BACK:
                 {
                     guiBase::PushEvent(id);
                     break;
                 }
-            case AppBrowserPage::FileType::FILETYPE_FILE:
+            case GameDev::ADBDriver::FileType::FILETYPE_FILE:
                 {
                     /// Todo: menu
                     break;
@@ -266,109 +266,9 @@ void AppBrowserList::lineSelect(SDL_Event *ev)
         {
             switch (m_page->mskey)
             {
-                case AppBrowserPage::MenuKey::MENUKEY_INFO:
-                    {
-                        if (m_drawitems[src->sel].desc.empty())
-                            break;
-
-                        switch (popupmenu_info())
-                        {
-                            case -1:
-                                break;
-                            case ID_CMD_POP_MENU263:
-                                {
-                                    AppSysDialog::cliptextset(
-                                            guiBase::GetGui<SDL_Window>(),
-                                            m_drawitems[src->sel].desc
-                                        );
-                                    break;
-                                }
-                            default:
-                                break;
-                        }
-                        break;
-                    }
-                case AppBrowserPage::MenuKey::MENUKEY_APK:
-                    {
-                        switch (popupmenu_apk())
-                        {
-                            case -1:
-                                break;
-                            case ID_CMD_POP_MENU263:
-                                {
-                                    AppSysDialog::cliptextset(
-                                            guiBase::GetGui<SDL_Window>(),
-                                            ((m_drawitems[src->sel].desc.empty()) ?
-                                                m_drawitems[src->sel].s :
-                                                m_drawitems[src->sel].desc
-                                            )
-                                        );
-                                    break;
-                                }
-                            case ID_CMD_POP_MENU264:
-                                {
-                                    if (m_drawitems[src->sel].cmds.empty())
-                                        break;
-
-                                    std::string s;
-                                    if (AppConfig::instance().cnf_adb.UnInstallApk(
-                                                m_drawitems[src->sel].cmds,
-                                                s
-                                        ))
-                                    {
-                                        if (!s.empty())
-                                        {
-                                            std::stringstream ss;
-                                            ss << "UnInstall '" << m_drawitems[src->sel].cmds;
-                                            ss << "': " << s.c_str();
-                                            AddMessageQueue(ss.str(), 5U, -1);
-                                        }
-                                        m_drawitems.erase(m_drawitems.begin() + src->sel);
-                                        src->idx = (((src->idx - 1) <= m_list_step) ?
-                                                    0 : (src->idx - m_list_step - 1)
-                                                );
-                                        src->sel = -1;
-                                        draw();
-                                    }
-                                    else
-                                    {
-                                        std::stringstream ss;
-                                        ss << "UnInstall error: '" << m_drawitems[src->sel].cmds << "'!";
-                                        if (!s.empty())
-                                            ss << " - " << s.c_str();
-                                        AddMessageQueue(ss.str(), 5U, -1);
-                                    }
-                                    break;
-                                }
-                            default:
-                                break;
-                        }
-                        break;
-                    }
-                case AppBrowserPage::MenuKey::MENUKEY_FILE:
-                    {
-                        if (m_drawitems[src->sel].cmds.empty())
-                            break;
-
-                        /// popupmenu_file() .....
-
-                        switch (m_page->mikey)
-                        {
-                            case AppBrowserPage::MenuInput::MENUINPUT_PC:
-                                {
-                                    clickselectfile(m_drawitems[src->sel], ID_CMD_POP_MENU105);
-                                    break;
-                                }
-                            case AppBrowserPage::MenuInput::MENUINPUT_ANDROID:
-                                {
-                                    clickselectfile(m_drawitems[src->sel], ID_CMD_POP_MENU106);
-                                    break;
-                                }
-                            default:
-                                break;
-                        }
-                        break;
-                    }
+#               include "AppBrowserList_LineSelect/AppBrowserList_MENUKEY_APK.cpp"
+#               include "AppBrowserList_LineSelect/AppBrowserList_MENUKEY_INFO.cpp"
+#               include "AppBrowserList_LineSelect/AppBrowserList_MENUKEY_FILE.cpp"
                 default:
                         break;
             }
@@ -493,5 +393,20 @@ void AppBrowserList::listselect(AppBrowserList::ListPosition *src)
         }
         while (0);
 
+        src->sel = -1;
+    }
+
+void AppBrowserList::listdelete(AppBrowserList::ListPosition *src)
+    {
+        if (!m_drawitems.size())
+        {
+            src->idx = 0;
+            src->sel = -1;
+            return;
+        }
+        m_drawitems.erase(m_drawitems.begin() + src->sel);
+        src->idx = (((src->idx - 1) <= m_list_step) ?
+                        0 : (src->idx - m_list_step - 1)
+                    );
         src->sel = -1;
     }

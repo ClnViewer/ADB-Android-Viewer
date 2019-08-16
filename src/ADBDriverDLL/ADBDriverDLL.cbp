@@ -98,7 +98,10 @@
 		<Unit filename="src/DriverAsync.h" />
 		<Unit filename="src/DriverConst.h" />
 		<Unit filename="src/DriverDevice.cpp" />
+		<Unit filename="src/DriverDirItem.cpp" />
+		<Unit filename="src/DriverDirectory.cpp" />
 		<Unit filename="src/DriverExcept.h" />
+		<Unit filename="src/DriverFile.cpp" />
 		<Unit filename="src/DriverInput.cpp" />
 		<Unit filename="src/DriverInternal.h" />
 		<Unit filename="src/DriverKey.h" />

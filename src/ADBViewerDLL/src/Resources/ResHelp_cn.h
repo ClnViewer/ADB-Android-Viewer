@@ -45,5 +45,16 @@ static inline const char *help_strings_cn[] = {
     "显示本地文件",
     "在远程设备上显示文件",
     "从菜单中选择要显示的项目",
+    "Error move file: ",
+    "File moved to: ",
+    "Error send file: ",
+    "File copied to: ",
+    "File deleted: ",
+    "Error delete, file: ",
+    "Change permission status: ",
+    "Permission changed to ",
+    "Error change permission, file: ",
+    "UnInstall ",
+    "UnInstall error: ",
     nullptr
 };

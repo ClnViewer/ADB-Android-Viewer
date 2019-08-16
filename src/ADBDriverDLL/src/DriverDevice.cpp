@@ -162,20 +162,11 @@ bool ADBDriver::InitRemote()
         if (!Resources::PackManager::checkbin(m_device_abi, m_device_sdk, m_device_rel))
             break;
 
-        std::stringstream ss;
-        ss << DriverConst::ls_path_file << DriverConst::ls_name_ascreencap << DriverConst::ls_mode_file;
-        if (!SendFile(DriverConst::ls_src_ascreencap, ss.str()))
+        if (!SendFile(DriverConst::ls_src_ascreencap, DriverConst::ls_path_dir, GameDev::ADBDriver::FilePermissionType::PERM_RWXRWXRWX))
             break;
-
-        ss.str(std::string());
-        ss << DriverConst::ls_cmod_file << DriverConst::ls_name_ascreencap;
-        if (!AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, false))
-            break;
-
         return true;
     }
     while (0);
-
     return false;
 }
 
@@ -183,24 +174,11 @@ bool ADBDriver::InstallApk(std::string const & fpath)
 {
     do
     {
-        if (::_access(fpath.c_str(), F_OK) < 0)
+        if (!SendFile(fpath, DriverConst::ls_path_dir, GameDev::ADBDriver::FilePermissionType::PERM_RWXRWXRWX))
             break;
 
-        size_t pos;
-        std::string fname;
-        std::stringstream ss{};
-
-        ss << DriverConst::ls_path_file;
-        if ((pos = fpath.find_last_of("/\\")) == std::string::npos)
-            fname = fpath.c_str();
-        else
-            fname = fpath.substr((pos + 1), (fpath.length() - 1)).c_str();
-
-        ss << fname.c_str() << DriverConst::ls_mode_file;
-        if (!SendFile(fpath, ss.str()))
-            break;
-
-        ss.str(std::string());
+        std::string fname = GameDev::filename<std::string>(fpath);
+        std::stringstream ss;
         ss << DriverConst::ls_apk_install << fname.c_str();
 
         m_cmdasync.add<std::string>(
@@ -220,7 +198,7 @@ bool ADBDriver::UnInstallApk(std::string const & name, std::string & sr)
     if (name.empty())
         return false;
 
-    std::stringstream ss{};
+    std::stringstream ss;
     ss << DriverConst::ls_apk_uninstall << " " << name.c_str();
 
     /*
@@ -242,17 +220,7 @@ bool ADBDriver::UnInstallApk(std::string const & name, std::string & sr)
     if (sr.empty())
         return false;
 
-    sr.erase(
-        std::remove_if(
-            sr.begin(),
-            sr.end(),
-            [](char c)
-            {
-                return ((c == '\r') || (c == '\n'));
-            }
-        ),
-        sr.end()
-    );
+    clearend<std::string>(sr);
     return true;
 }
 

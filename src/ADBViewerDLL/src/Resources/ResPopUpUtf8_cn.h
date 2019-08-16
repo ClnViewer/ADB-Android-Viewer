@@ -59,5 +59,12 @@ static inline const char *popup_strings_cn[] = {
     /* 56 */ "删除",
     /* 57 */ "复制到剪贴板",
     /* 58 */ "卸载APK",
+    /* 59 */ "File permission",
+    /* 60 */ "rw- --- ---",
+    /* 61 */ "rwx --- ---",
+    /* 62 */ "rw- rw- ---",
+    /* 63 */ "rwx rwx ---",
+    /* 64 */ "rw- rw- rw-",
+    /* 65 */ "rwx rwx rwx",
     nullptr
 };

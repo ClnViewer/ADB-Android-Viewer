@@ -78,6 +78,14 @@ void guiPopUp::style(HMENU hmenu)
         if (!hmenu)
             return;
 
+        guiPopUp::style(hmenu, MNS_AUTODISMISS | MNS_NOCHECK);
+    }
+
+void guiPopUp::style(HMENU hmenu, int32_t flag)
+    {
+        if (!hmenu)
+            return;
+
         m_hbrush = ((m_hbrush) ?
                 m_hbrush :
                 ::CreateSolidBrush(RGB(151,192,36))
@@ -90,6 +98,6 @@ void guiPopUp::style(HMENU hmenu)
         mim.cbSize = sizeof(mim);
         mim.hbrBack = (HBRUSH) m_hbrush;
         mim.fMask = MIM_APPLYTOSUBMENUS | MIM_STYLE | MIM_BACKGROUND;
-        mim.dwStyle = MNS_AUTODISMISS | MNS_NOCHECK;
+        mim.dwStyle = flag;
         ::SetMenuInfo(hmenu, &mim);
     }

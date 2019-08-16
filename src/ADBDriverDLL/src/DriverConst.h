@@ -24,9 +24,8 @@ class DriverConst
         static inline const char    *ls_const_ok   = "OKAY";
 
         static inline const char    *ls_src_ascreencap  = "remotebin\\ascreencap"; /// push local file
-        static inline const char    *ls_path_file       = "/data/local/tmp/";
-        static inline const char    *ls_mode_file       = ",0777";
-        static inline const char    *ls_cmod_file       = "/system/bin/chmod 0777 /data/local/tmp/";
+        static inline const char    *ls_path_dir        = "/data/local/tmp";
+        static inline const char    *ls_cmod_file       = "/system/bin/chmod ";
         static inline const char    *ls_apk_install     = "pm install -r /data/local/tmp/";
         static inline const char    *ls_apk_uninstall   = "pm uninstall";
         static inline const char    *ls_name_ascreencap = "ascreencap";
@@ -49,6 +48,16 @@ class DriverConst
             "ro.product.cpu.abilist",  /// armeabi-v7a,armeabi
             "ro.build.version.sdk",    /// 22
             "ro.build.version.release" /// 5.1
+        };
+        static inline const int32_t  ls_arrayModeFile[] =
+        {
+            600,
+            700,
+            660,
+            770,
+            666,
+            777,
+            400
         };
 };
 

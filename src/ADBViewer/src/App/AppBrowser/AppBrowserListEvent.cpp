@@ -87,7 +87,7 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                         return true;
                     m_isclick = true;
                     ///
-                    std::vector<AppBrowserPage::DrawItem> vdi;
+                    std::vector<GameDev::ADBDriver::DirItem> vdi;
                     std::string sroot = ((l_isselect) ?
                                 abl->m_parser.basedir(
                                     abl->m_drawitems[src->sel],
@@ -119,9 +119,7 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                         return true;
                     m_isclick = true;
                     ///
-                    std::vector<AppBrowserPage::DrawItem> vdi;
-                    std::string s;
-                    std::string cmds = "ls -l ";
+                    std::vector<GameDev::ADBDriver::DirItem> vdi;
                     std::string sroot = ((l_isselect) ?
                                 abl->m_parser.basedir(
                                     abl->m_drawitems[src->sel],
@@ -129,25 +127,18 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                                 ) :
                                 AppConfig::instance().cnf_browser_dir_device
                              );
-                    cmds += sroot;
 
-        /*
-        FILE *fp = fopen("__event_android__.txt", "a+");
-        fprintf(fp, "- _cmds:[%s] _di:[%s] _cnf:[%s]\n",
-                cmds.c_str(),
-                ((src->sel >= 0) ? abl->m_drawitems[src->sel].cmds.c_str() : ""),
-                AppConfig::instance().cnf_browser_dir_device.c_str()
-            );
-        fclose(fp);
-        */
+                    /*
+                        FILE *fp = fopen("__event_android__.txt", "a+");
+                        fprintf(fp, "- _cmds:[%s] _di:[%s] _cnf:[%s]\n",
+                            cmds.c_str(),
+                            ((src->sel >= 0) ? abl->m_drawitems[src->sel].cmds.c_str() : ""),
+                            AppConfig::instance().cnf_browser_dir_device.c_str()
+                        );
+                        fclose(fp);
+                    */
 
-                    if (!AppConfig::instance().cnf_adb.SendToShell(cmds, s))
-                        break;
-
-                    if (s.empty())
-                        break;
-
-                    if (abl->m_parser.dir_list_device(s, vdi, sroot))
+                    if (abl->m_parser.dir_list_device(sroot, vdi))
                     {
                         if (l_isselect)
                             AppConfig::instance().cnf_browser_dir_device = sroot;
@@ -212,7 +203,7 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                             case AppBrowserPage::MenuKey::MENUKEY_APK:
                                 {
                                     abl->draw(s,
-                                        [=](std::string const & str, AppBrowserPage::DrawItem & di)
+                                        [=](std::string const & str, GameDev::ADBDriver::DirItem & di)
                                         {
                                             return abl->m_parser.apk_name(str, di);
                                         }
@@ -222,7 +213,7 @@ bool AppBrowserList::uevent(SDL_Event *ev, const void *instance)
                             case AppBrowserPage::MenuKey::MENUKEY_INFO:
                                 {
                                     abl->draw(s,
-                                        [=](std::string const & str, AppBrowserPage::DrawItem & di)
+                                        [=](std::string const & str, GameDev::ADBDriver::DirItem & di)
                                         {
                                             return abl->m_parser.inf_name(str, di);
                                         }

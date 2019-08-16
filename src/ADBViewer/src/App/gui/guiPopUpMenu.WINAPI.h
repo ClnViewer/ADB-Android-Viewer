@@ -18,6 +18,7 @@ class guiPopUp
 public:
     //
     static void style(HMENU);
+    static void style(HMENU, int32_t);
     static int32_t show(HMENU, SDL_Window*);
     static void clean();
 

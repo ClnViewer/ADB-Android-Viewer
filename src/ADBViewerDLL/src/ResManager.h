@@ -126,7 +126,18 @@ namespace Resources
                 RES_STR_BROWSER_M9_APK_O,
                 RES_STR_BROWSER_M9_FILE_PC,
                 RES_STR_BROWSER_M9_FILE_ANDROID,
-                RES_STR_BROWSER_START_BANNER
+                RES_STR_BROWSER_START_BANNER,
+                RES_STR_BROWSER_FILE_MOVE_ERROR,
+                RES_STR_BROWSER_FILE_MOVE_OK,
+                RES_STR_BROWSER_FILE_SEND_ERROR,
+                RES_STR_BROWSER_FILE_COPY_OK,
+                RES_STR_BROWSER_FILE_DELETE_OK,
+                RES_STR_BROWSER_FILE_DELETE_ERROR,
+                RES_STR_BROWSER_FILE_PERM_STATUS,
+                RES_STR_BROWSER_FILE_PERM_OK,
+                RES_STR_BROWSER_FILE_PERM_ERROR,
+                RES_STR_BROWSER_APK_OK,
+                RES_STR_BROWSER_APK_ERROR
             };
             enum IndexStringPopUpMenu
             {
@@ -189,6 +200,13 @@ namespace Resources
                 RES_STR_POPUP_56,
                 RES_STR_POPUP_57,
                 RES_STR_POPUP_58,
+                RES_STR_POPUP_59,
+                RES_STR_POPUP_60,
+                RES_STR_POPUP_61,
+                RES_STR_POPUP_62,
+                RES_STR_POPUP_63,
+                RES_STR_POPUP_64,
+                RES_STR_POPUP_65,
                 RES_STR_POPUP_NONE
             };
 

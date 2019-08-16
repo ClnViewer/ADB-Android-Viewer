@@ -40,6 +40,53 @@
 #    include "Utils/stdStringUtils.h"
 #    include "ADBDriver.h"
 
+namespace GameDev
+{
+
+static inline bool endcheck(char c)
+{
+    return ((c == '\r') || (c == '\n'));
+}
+static inline bool endcheck(wchar_t c)
+{
+    return ((c == L'\r') || (c == L'\n'));
+}
+
+template<typename T>
+static inline void clearend(T & s)
+    {
+        s.erase(
+            std::remove_if(
+                s.begin(),
+                s.end(),
+                [](auto c)
+                    {
+                        return endcheck(c);
+                    }
+            ),
+            s.end()
+        );
+    }
+
+template<typename T>
+static inline T filename(T const & s)
+    {
+        size_t pos;
+        T fname;
+
+        if constexpr (std::is_same<T, std::string>::value)
+            pos = s.find_last_of("/\\");
+        else if constexpr (std::is_same<T, std::wstring>::value)
+            pos = s.find_last_of(L"/\\");
+
+        if (pos == std::string::npos)
+            fname = s.c_str();
+        else
+            fname = s.substr((pos + 1), (s.length() - 1)).c_str();
+        return fname;
+    }
+
+};
 #  endif
 
 #endif

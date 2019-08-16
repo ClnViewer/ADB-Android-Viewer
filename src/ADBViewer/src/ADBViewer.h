@@ -91,6 +91,12 @@
 #define ID_CMD_POP_MENU263 40063 // browser popup Copy to clipboard
 #define ID_CMD_POP_MENU264 40064 // browser popup Uninstall APK
 
+#define ID_CMD_POP_MENU265 40065 // browser android file permission (rw-------)
+#define ID_CMD_POP_MENU266 40066 // browser android file permission (rwx------)
+#define ID_CMD_POP_MENU267 40067 // browser android file permission (rw-rw----)
+#define ID_CMD_POP_MENU268 40068 // browser android file permission (rwxrwx---)
+#define ID_CMD_POP_MENU269 40069 // browser android file permission (rw-rw-rw)
+#define ID_CMD_POP_MENU270 40070 // browser android file permission (rwxrwxrwx)
 
 #define ID_CMD_MSGBAR     49999
 

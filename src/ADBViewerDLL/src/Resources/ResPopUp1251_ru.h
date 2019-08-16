@@ -59,5 +59,12 @@ static inline const wchar_t *popup_strings_ru[] = {
     /* 56 */ L"Удалить",
     /* 57 */ L"Копировать в буфер",
     /* 58 */ L"Деинсталировать APK",
+    /* 59 */ L"Доступ к файлу",
+    /* 60 */ L"rw- --- ---",
+    /* 61 */ L"rwx --- ---",
+    /* 62 */ L"rw- rw- ---",
+    /* 63 */ L"rwx rwx ---",
+    /* 64 */ L"rw- rw- rw-",
+    /* 65 */ L"rwx rwx rwx",
     nullptr
 };

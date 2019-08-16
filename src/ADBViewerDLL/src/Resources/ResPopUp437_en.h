@@ -59,5 +59,12 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 56 */ L"Delete",
     /* 57 */ L"Copy to clipboard",
     /* 58 */ L"Uninstall APK",
+    /* 59 */ L"File permission",
+    /* 60 */ L"rw- --- ---",
+    /* 61 */ L"rwx --- ---",
+    /* 62 */ L"rw- rw- ---",
+    /* 63 */ L"rwx rwx ---",
+    /* 64 */ L"rw- rw- rw-",
+    /* 65 */ L"rwx rwx rwx",
     nullptr
 };

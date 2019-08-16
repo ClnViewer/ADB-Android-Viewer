@@ -41,7 +41,7 @@ void AppBrowserList::draw()
         draw(src);
     }
 
-void AppBrowserList::draw(std::vector<AppBrowserPage::DrawItem> & v)
+void AppBrowserList::draw(std::vector<GameDev::ADBDriver::DirItem> & v)
     {
         AppBrowserList::ListPosition *src;
         if (!(src = selectsource()))
@@ -50,7 +50,7 @@ void AppBrowserList::draw(std::vector<AppBrowserPage::DrawItem> & v)
         draw(v, src);
     }
 
-void AppBrowserList::draw(std::vector<AppBrowserPage::DrawItem> & v, AppBrowserList::ListPosition *src)
+void AppBrowserList::draw(std::vector<GameDev::ADBDriver::DirItem> & v, AppBrowserList::ListPosition *src)
     {
         if (!src)
             return;
@@ -67,7 +67,7 @@ void AppBrowserList::draw(std::string const & s)
         draw(s, nullptr);
     }
 
-void AppBrowserList::draw(std::string const & s, std::function<bool(std::string const &, AppBrowserPage::DrawItem &)> fun)
+void AppBrowserList::draw(std::string const & s, std::function<bool(std::string const &, GameDev::ADBDriver::DirItem &)> fun)
     {
         if (s.empty())
             return;
@@ -95,19 +95,19 @@ void AppBrowserList::draw(std::string const & s, std::function<bool(std::string 
                 {
                     if (fun)
                     {
-                        AppBrowserPage::DrawItem di(
-                            m_color[0],
-                            m_color[1]
+                        GameDev::ADBDriver::DirItem di(
+                            static_cast<void*>(&m_color[0]),
+                            static_cast<void*>(&m_color[1])
                         );
                         if (fun(ss, di))
                             m_drawitems.push_back(di);
                     }
                     else
                     {
-                        AppBrowserPage::DrawItem di(
+                        GameDev::ADBDriver::DirItem di(
                             ss,
-                            m_color[0],
-                            m_color[1]
+                            static_cast<void*>(&m_color[0]),
+                            static_cast<void*>(&m_color[1])
                         );
                         m_drawitems.push_back(di);
                     }
@@ -145,7 +145,7 @@ void AppBrowserList::draw(AppBrowserList::ListPosition *src)
 
         for (; ((src->idx <= l_end) && (src->idx < l_size)); src->idx++)
         {
-            AppBrowserPage::DrawItem di = m_drawitems[src->idx];
+            GameDev::ADBDriver::DirItem di = m_drawitems[src->idx];
             if (src->sel == src->idx)
                 std::swap(di.ctxt, di.cbg);
             drawline(di, ((src->idx - l_start) * 16));
@@ -166,7 +166,7 @@ void AppBrowserList::draw(AppBrowserList::ListPosition *src)
         }
     }
 
-void AppBrowserList::drawline(AppBrowserPage::DrawItem const & dis, int32_t pos)
+void AppBrowserList::drawline(GameDev::ADBDriver::DirItem const & dis, int32_t pos)
     {
         SDL_Surface *l_surface = nullptr;
         SDL_Surface *t_surface = nullptr;
@@ -181,15 +181,15 @@ void AppBrowserList::drawline(AppBrowserPage::DrawItem const & dis, int32_t pos)
             if (!(t_surface = TTF_RenderUTF8_Shaded(
                                 m_font,
                                 dis.s.c_str(),
-                                dis.ctxt,
-                                dis.cbg
+                                *dis.ColorText<SDL_Color>(),
+                                *dis.ColorBg<SDL_Color>()
                             )))
                 break;
 
             SDL_Point point = { m_page->list_rdst.w, t_surface->h };
             SDL_Rect  drect{};
 
-            if (!guiBase::SurfaceInit(&l_surface, point, dis.cbg))
+            if (!guiBase::SurfaceInit(&l_surface, point, *dis.ColorBg<SDL_Color>()))
                 break;
 
             drect.x = 0;
