@@ -123,10 +123,10 @@ AppConfig::AppConfig()
         cnf_cbcmd.text =
             [=](std::string const & s)
             {
-                cnf_adb.SendTextASCII(s);
+                cnf_adb.SendTextT<std::string>(s);
             };
         cnf_cbcmd.key =
-            [=](ADBDriver::KeysType t, int32_t k)
+            [=](DriverConst::KeysType t, int32_t k)
             {
                 cnf_adb.SendSpecialKey(t, k);
             };
@@ -311,10 +311,10 @@ void AppConfig::OnceUpdateFromFile()
         uint32_t val;
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_PATH), wstr))
-            cnf_adb.SetAdbBin(wstr);
+            cnf_adb.AdbBin.Set<std::wstring>(wstr);
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_ADB_DEVICE), wstr))
-            cnf_adb.SetDeviceID(wstr);
+            cnf_adb.DeviceId.Set<std::wstring>(wstr);
 
         if (GetFromSection<std::wstring>(GetFileConfigId(ConfigIdType::CNF_LANGUAGE), wstr))
             OnceUpdateLang(wstr);
@@ -409,12 +409,12 @@ void AppConfig::SaveToFile()
                     }
                 case ConfigIdType::CNF_ADB_PATH:
                     {
-                        wstr = cnf_adb.GetAdbBin();
+                        wstr = cnf_adb.AdbBin.Get<std::wstring>();
                         break;
                     }
                 case ConfigIdType::CNF_ADB_DEVICE:
                     {
-                        wstr = cnf_adb.GetDeviceID<std::wstring>();
+                        wstr = cnf_adb.DeviceId.Get<std::wstring>();
                         break;
                     }
                 case ConfigIdType::CNF_LANGUAGE:

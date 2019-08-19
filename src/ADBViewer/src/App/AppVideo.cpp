@@ -548,7 +548,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 case SDLK_RETURN:
                 {
                     AppConfig::instance().cnf_adb.SendSpecialKey(
-                            GameDev::ADBDriver::KeysType::KEYS_SDL,
+                            GameDev::DriverConst::KeysType::KEYS_SDL,
                             SDL_SCANCODE_KP_ENTER // SDL_SCANCODE_RETURN
                     );
                     return true;
@@ -607,7 +607,7 @@ bool AppVideo::event(SDL_Event *ev, const void *instance)
                 default:
                 {
                     AppConfig::instance().cnf_adb.SendSpecialKey(
-                        GameDev::ADBDriver::KeysType::KEYS_SDL,
+                        GameDev::DriverConst::KeysType::KEYS_SDL,
                             ev->key.keysym.scancode
                     );
                     return true;

@@ -31,17 +31,41 @@
 
 #include "DriverInternal.h"
 
+/// Redefine to Android/POSIX value -> Type()
+#define	ADB_IFMT	 0170000		/* type of file */
+#define	ADB_IFIFO	 0010000		/* named pipe (fifo) */
+#define	ADB_IFCHR	 0020000		/* character special */
+#define	ADB_IFDIR	 0040000		/* directory */
+#define	ADB_IFBLK	 0060000		/* block special */
+#define	ADB_IFREG	 0100000		/* regular */
+#define	ADB_IFLNK	 0120000		/* symbolic link */
+#define	ADB_IFSOCK   0140000		/* socket */
+
+static const char *l_strPerm[] =
+{
+    "---", // 0
+    "--x", // 1
+    "-w-", // 2
+    "-wx", // 3
+    "r--", // 4
+    "r-x", // 5
+    "rw-", // 6
+    "rwx"  // 7
+};
+
 namespace GameDev
 {
     ADBDriver::DirItem::DirItem()
-            : type(ADBDriver::FileType::FILETYPE_NONE),
+            : type(DriverConst::FileType::FILETYPE_NONE),
               ctxt{ 255, 255, 255, 0 },
               cbg{ 0, 0, 0, 0 },
-              permission(0) {}
+              permission{ 0U, 0U, 0U },
+              pmode(0U) {}
 
     ADBDriver::DirItem::DirItem(void *ct_, void *cb_)
-            : type(ADBDriver::FileType::FILETYPE_NONE),
-              permission(0)
+            : type(DriverConst::FileType::FILETYPE_NONE),
+              permission{ 0U, 0U, 0U },
+              pmode(0U)
         {
             ctxt = *static_cast<ADBDriver::DirItemColor*>(ct_);
             cbg  = *static_cast<ADBDriver::DirItemColor*>(cb_);
@@ -49,21 +73,81 @@ namespace GameDev
 
     ADBDriver::DirItem::DirItem(std::string const & s_, void *ct_, void *cb_)
             : s(s_),
-              type(ADBDriver::FileType::FILETYPE_NONE),
-              permission(0)
+              type(DriverConst::FileType::FILETYPE_NONE),
+              permission{ 0U, 0U, 0U },
+              pmode(0U)
         {
             ctxt = *static_cast<ADBDriver::DirItemColor*>(ct_);
             cbg  = *static_cast<ADBDriver::DirItemColor*>(cb_);
         }
 
-    ADBDriver::DirItem::DirItem(std::string const & s_, std::string const & m_, std::string const & d_, ADBDriver::FileType f_, ADBDriver::DirItemColor const & c_)
+    ADBDriver::DirItem::DirItem(std::string const & s_, std::string const & m_, std::string const & d_, DriverConst::FileType f_, ADBDriver::DirItemColor const & c_)
             : s(s_),
               cmds(m_),
               desc(d_),
               type(f_),
               ctxt(c_),
               cbg{ 0, 0, 0, 0 },
-              permission(0) {}
+              permission{ 0U, 0U, 0U },
+              pmode(0U) {}
+
+    void ADBDriver::DirItem::Permission(uint32_t mode_)
+    {
+        this->pmode = mode_;
+        this->permission[0] = ((mode_ >> 6) & 7);
+        this->permission[1] = ((mode_ >> 3) & 7);
+        this->permission[2] =  (mode_ & 7);
+    }
+
+    std::string ADBDriver::DirItem::Permission()
+    {
+        std::stringstream ss;
+
+        if (this->permission[0] > 7)
+            ss << l_strPerm[0];
+        else
+            ss << l_strPerm[this->permission[0]];
+
+        if (this->permission[1] > 7)
+            ss << l_strPerm[0];
+        else
+            ss << l_strPerm[this->permission[1]];
+
+        if (this->permission[2] > 7)
+            ss << l_strPerm[0];
+        else
+            ss << l_strPerm[this->permission[2]];
+
+        return ss.str();
+    }
+
+    void ADBDriver::DirItem::Type(uint32_t mode_)
+    {
+        switch (mode_ & ADB_IFMT)
+        {
+            case ADB_IFREG:
+                this->type = DriverConst::FileType::FILETYPE_FILE; break;
+            case ADB_IFLNK:
+                this->type = DriverConst::FileType::FILETYPE_SYMLINK; break;
+            case ADB_IFDIR:
+                this->type = DriverConst::FileType::FILETYPE_DIR; break;
+            case ADB_IFIFO:
+                this->type = DriverConst::FileType::FILETYPE_FIFO; break;
+            case ADB_IFCHR:
+                this->type = DriverConst::FileType::FILETYPE_CHARDEV; break;
+            case ADB_IFBLK:
+                this->type = DriverConst::FileType::FILETYPE_BLKDEV; break;
+            case ADB_IFSOCK:
+                this->type = DriverConst::FileType::FILETYPE_SOCK; break;
+            default:
+                this->type = DriverConst::FileType::FILETYPE_NONE; break;
+        }
+    }
+
+    DriverConst::FileType ADBDriver::DirItem::Type()
+    {
+        return type;
+    }
 
     void ADBDriver::DirItem::Description(
             std::string  const & as_,

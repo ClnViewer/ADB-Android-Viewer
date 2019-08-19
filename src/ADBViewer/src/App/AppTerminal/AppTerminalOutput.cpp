@@ -208,8 +208,8 @@ void AppTerminalOutput::draw_cmd(std::string const & s)
         std::stringstream ss;
         m_page->out_tpage = 0;
 
-        if (AppConfig::instance().cnf_adb.IsDeviceID())
-            sid = AppConfig::instance().cnf_adb.GetDeviceID<std::string>();
+        if (AppConfig::instance().cnf_adb.DeviceId.Is())
+            sid = AppConfig::instance().cnf_adb.DeviceId.Get<std::string>();
         if (!sid.empty())
             ss << sid;
         ss << AppTerminalPage::term_prompt << s;

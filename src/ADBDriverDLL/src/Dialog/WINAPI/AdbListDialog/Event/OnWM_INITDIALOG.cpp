@@ -30,6 +30,7 @@
  */
 
 #include "../AdbListDialogInternal.h"
+#include "../../ResStringDialog.h"
 
 namespace GameDev
 {
@@ -41,7 +42,7 @@ INT_PTR AdbListDialog::_OnWM_INITDIALOG(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     (void) lParam;
 
         std::wstring ws{};
-        string_from_res<std::wstring> wres{};
+        ResStringDialog<std::wstring> wres;
         _hwnd = ::GetDlgItem(hWnd, DLG_LISTV);
 
         DWORD st =
@@ -58,33 +59,33 @@ INT_PTR AdbListDialog::_OnWM_INITDIALOG(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         col.cx = _p.x;
         ws = wres.go(_hinst, IDS_LSTV1).c_str();
         col.pszText = (LPWSTR) ws.c_str();
-        SendMessageW(_hwnd, LVM_INSERTCOLUMNW, (WPARAM)((int)0), (LPARAM) (const LVCOLUMNW*)&col);
+        ::SendMessageW(_hwnd, LVM_INSERTCOLUMNW, (WPARAM)((int)0), (LPARAM) (const LVCOLUMNW*)&col);
 
         col.cx = _p.y;
         ws = wres.go(_hinst, IDS_LSTV2).c_str();
         col.pszText = (LPWSTR) ws.c_str();
-        SendMessageW(_hwnd, LVM_INSERTCOLUMNW, (WPARAM)((int)01), (LPARAM) (const LVCOLUMNW*)&col);
+        ::SendMessageW(_hwnd, LVM_INSERTCOLUMNW, (WPARAM)((int)01), (LPARAM) (const LVCOLUMNW*)&col);
 
         LVITEMW lvi{};
         uint32_t i;
 
         for (i = 0U; i < _dict.size(); i++)
         {
-            SendMessageW(_hwnd, LVM_INSERTITEMW, (WPARAM)0, (LPARAM) (const LVITEMW*)&lvi);
+            ::SendMessageW(_hwnd, LVM_INSERTITEMW, (WPARAM)0, (LPARAM) (const LVITEMW*)&lvi);
         }
 
         i = 0U;
         SelectedList::iterator it = _dict.begin();
         while(it != _dict.end())
         {
-            memset(&lvi, 0, sizeof(LVITEMW));
+            ::memset(&lvi, 0, sizeof(LVITEMW));
             lvi.iSubItem = 0;
             lvi.pszText = (LPWSTR) ((_isreverse) ? it->second.c_str() : it->first.c_str());
-            SendMessageW(_hwnd, LVM_SETITEMTEXTW, (WPARAM)i, (LPARAM) (const LVITEMW*)&lvi);
+            ::SendMessageW(_hwnd, LVM_SETITEMTEXTW, (WPARAM)i, (LPARAM) (const LVITEMW*)&lvi);
 
             lvi.iSubItem = 1;
             lvi.pszText = (LPWSTR) ((_isreverse) ? it->first.c_str() : it->second.c_str());
-            SendMessageW(_hwnd, LVM_SETITEMTEXTW, (WPARAM)i, (LPARAM) (const LVITEMW*)&lvi);
+            ::SendMessageW(_hwnd, LVM_SETITEMTEXTW, (WPARAM)i, (LPARAM) (const LVITEMW*)&lvi);
 
             it++; i++;
         }

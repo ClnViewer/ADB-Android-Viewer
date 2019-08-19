@@ -15,7 +15,9 @@ public:
     bool file_delete_local(std::string const&);
     bool file_delete_device(std::string const&);
     //
-    std::string basedir(GameDev::ADBDriver::DirItem const &, AppBrowserPage::MenuInput);
+    std::string basedir(GameDev::ADBDriver::DirItem const&, AppBrowserPage::MenuInput);
+    std::string filename(GameDev::ADBDriver::DirItem const&);
+    std::string filepath(GameDev::ADBDriver::DirItem const&, std::string const&);
 
 private:
     //

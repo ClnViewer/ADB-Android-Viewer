@@ -40,7 +40,7 @@ INT_PTR AdbMgrDialog::_OnWM_CLOSE(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
     (void) wParam;
     (void) lParam;
 
-        ::EndDialog(hWnd, _IsAdbStatus);
+        ::EndDialog(hWnd, m_IsAdbStatus);
   return 1;
 }
 

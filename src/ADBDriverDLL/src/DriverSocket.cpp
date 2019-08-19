@@ -31,10 +31,6 @@
 
 #include "DriverInternal.h"
 #include "DriverConst.h"
-#include "lz4/lz4.h"
-//#include "..\Dialog\AdbMgrDialog/AdbMgrDialog.h"
-
-#define BMZ_MAGIC 0x315a4d42
 
 namespace GameDev
 {
@@ -44,10 +40,60 @@ bool ADBDriver::AdbCheck()
     return m_net.Check();
 }
 
-#include "DriverSocket/DriverSocketMake.cpp"
-#include "DriverSocket/DriverSocketSend.cpp"
-#include "DriverSocket/DriverSocketReceive.cpp"
-#include "DriverSocket/DriverSocketRawCmd.cpp"
-#include "DriverSocket/DriverSocketCapture.cpp"
+//#include "DriverSocket/DriverSocketMake.cpp"
+//#include "DriverSocket/DriverSocketRawCmd.cpp"
+//#include "DriverSocket/DriverSocketCapture.cpp"
+
+template<typename T>
+bool DLL_EXPORT ADBDriver::AdbRawT(T cmd, T const & addtype, T & result, DriverConst::ClearType type)
+    {
+        SOCKET l_client = INVALID_SOCKET;
+        result.clear();
+
+        do
+        {
+            if ((l_client = m_net.Connect()) == INVALID_SOCKET)
+                break;
+
+            if (!m_net.SyncTargetSend(l_client, DeviceId.Get<std::wstring>()))
+                break;
+
+            cmd.insert(0, addtype.c_str());
+
+            if (!m_net.SyncStringReceive<T>(l_client, cmd, result))
+                break;
+
+            if (result.empty())
+                break;
+
+            switch (type)
+            {
+                case DriverConst::ClearType::CLEARTYPE_NONE:
+                    {
+                        break;
+                    }
+                case DriverConst::ClearType::CLEARTYPE_4:
+                    {
+                        if (result.length() >= 4)
+                            result.erase(0, 4);
+                        break;
+                    }
+                case DriverConst::ClearType::CLEARTYPE_8:
+                    {
+                        if (result.length() >= 8)
+                            result.erase(0, 8);
+                        break;
+                    }
+            }
+            m_net.Close(l_client);
+            return true;
+        }
+        while (0);
+
+        m_net.Close(l_client);
+        return false;
+    }
+    template DLL_EXPORT bool ADBDriver::AdbRawT<std::wstring>(std::wstring, std::wstring const &, std::wstring&, DriverConst::ClearType);
+    template DLL_EXPORT bool ADBDriver::AdbRawT<std::string> (std::string,  std::string  const &, std::string&,  DriverConst::ClearType);
 
 }

@@ -523,7 +523,7 @@ void AppMenuPopUp::show()
                         if (idx == l_acmdkey[i].cid)
                         {
                             AppConfig::instance().cnf_adb.SendSpecialKey(
-                                    GameDev::ADBDriver::KeysType::KEYS_ANDROID,
+                                    GameDev::DriverConst::KeysType::KEYS_ANDROID,
                                     l_acmdkey[i].key
                                 );
                             break;
@@ -539,7 +539,7 @@ void AppMenuPopUp::show()
                                 );
                     for (uint32_t i = 0; i < 2; i++)
                         AppConfig::instance().cnf_adb.SendSpecialKey(
-                                GameDev::ADBDriver::KeysType::KEYS_ANDROID,
+                                GameDev::DriverConst::KeysType::KEYS_ANDROID,
                                 key
                             );
 

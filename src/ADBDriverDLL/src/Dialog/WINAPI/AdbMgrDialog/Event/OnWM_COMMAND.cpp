@@ -30,6 +30,7 @@
  */
 
 #include "../AdbMgrDialogInternal.h"
+#include "../../ResStringDialog.h"
 
 namespace GameDev
 {
@@ -46,10 +47,12 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         {
         case ID_ADBSTART:
         {
-            _tfut = std::async(std::launch::async,
+            m_tfut = std::async(std::launch::async,
                     [=]()
                     {
-                        return _adb->AdbStart();
+                        AdbMgrDialog::FutureData data{};
+                        data.b = m_adb->AdbStart(data.s);
+                        return data;
                     }
                 );
             ::PostMessageA(hWnd, WM_COMMAND, (WPARAM)IDR_CMDEVENT, (LPARAM)ID_ADBSTART);
@@ -57,10 +60,12 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         }
         case ID_ADBSTOP:
         {
-            _tfut = std::async(std::launch::async,
+            m_tfut = std::async(std::launch::async,
                     [=]()
                     {
-                        return _adb->AdbStop();
+                        AdbMgrDialog::FutureData data{};
+                        data.b = m_adb->AdbStop(data.s);
+                        return data;
                     }
                 );
             ::PostMessageA(hWnd, WM_COMMAND, (WPARAM)IDR_CMDEVENT, (LPARAM)ID_ADBSTOP);
@@ -86,7 +91,7 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
             {
                 if (ws.length())
                 {
-                    _adb->SetAdbBin(ws);
+                    m_adb->AdbBin.Set<std::wstring>(ws);
                     ::SetDlgItemTextW(hWnd, DLG_ADBPATH, static_cast<LPCWSTR>(ws.c_str()));
                     ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(L""));
                 }
@@ -97,14 +102,14 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
         {
                 try
                 {
-                    std::wstring ws;
-                    std::future_status st = _tfut.wait_for(std::chrono::milliseconds(10));
+                    AdbMgrDialog::FutureData data{};
+                    std::future_status st = m_tfut.wait_for(std::chrono::milliseconds(10));
 
                     switch (st)
                     {
                         case std::future_status::ready:
                             {
-                                ws = _tfut.get();
+                                data = m_tfut.get();
                                 break;
                             }
                         case std::future_status::timeout:
@@ -114,45 +119,45 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                             }
                         case std::future_status::deferred:
                             {
-                                string_from_res<std::wstring> wres{};
-                                throw DriverExcept(wres.go(hmodule_get(), IDS_ERR1));
+                                ResStringDialog<std::wstring> wres;
+                                throw DriverExcept(wres.go(GameDev::gethmodule(), IDS_ERR1));
                             }
                         default:
                             {
-                                string_from_res<std::wstring> wres{};
-                                throw DriverExcept(wres.go(hmodule_get(), IDS_ERR2));
+                                ResStringDialog<std::wstring> wres;
+                                throw DriverExcept(wres.go(GameDev::gethmodule(), IDS_ERR2));
                             }
                     }
 
-                    if (ws.length())
-                        ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(ws.c_str()));
+                    if (!data.s.empty())
+                        ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(data.s.c_str()));
 
                     (void) ::InvalidateRgn(hWnd, NULL, TRUE);
 
                     switch (LOWORD(lParam))
                     {
-                        case ID_ADBSTART: { if (ws.length()) _IsAdbStatus = true; break;  }
-                        case ID_ADBSTOP:  { _IsAdbStatus = false; break; }
+                        case ID_ADBSTART: { m_IsAdbStatus =  data.b; break;  }
+                        case ID_ADBSTOP:  { m_IsAdbStatus = !data.b; break; }
                     }
                     return 1;
                 }
                 catch (const std::future_error & _ex)
                 {
-                    std::wstringstream wss;
+                    std::wstringstream ss;
 
                     if (_ex.code().value())
-                        wss << _ex.code().value() << L" : ";
+                        ss << _ex.code().value() << L" : ";
                     if (_ex.what())
-                        wss << _ex.what();
+                        ss << _ex.what();
 
-                    ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(wss.str().c_str()));
-                    _IsAdbStatus = false;
+                    ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(ss.str().c_str()));
+                    m_IsAdbStatus = false;
                     return 1;
                 }
                 catch (const GameDev::DriverExcept & _ex)
                 {
                     ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(_ex.Message()));
-                    _IsAdbStatus = false;
+                    m_IsAdbStatus = false;
                     return 1;
                 }
                 catch (const std::exception & _ex)
@@ -163,17 +168,17 @@ INT_PTR AdbMgrDialog::_OnWM_COMMAND(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
                         wss << _ex.what();
                         ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(wss.str().c_str()));
                     }
-                    _IsAdbStatus = false;
+                    m_IsAdbStatus = false;
                     return 1;
                 }
                 catch (...)
                 {
-                    string_from_res<std::wstring> wres{};
+                    ResStringDialog<std::wstring> wres;
                     ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(
-                                        wres.go(hmodule_get(), IDS_ERRA).c_str()
+                                        wres.go(GameDev::gethmodule(), IDS_ERRA).c_str()
                                         )
                                     );
-                    _IsAdbStatus = false;
+                    m_IsAdbStatus = false;
                     return 1;
                 }
                 break;

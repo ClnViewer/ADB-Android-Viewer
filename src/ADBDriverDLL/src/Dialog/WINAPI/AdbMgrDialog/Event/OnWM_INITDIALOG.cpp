@@ -30,6 +30,7 @@
  */
 
 #include "../AdbMgrDialogInternal.h"
+#include "../../ResStringDialog.h"
 
 namespace GameDev
 {
@@ -40,13 +41,19 @@ INT_PTR AdbMgrDialog::_OnWM_INITDIALOG(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     (void) wParam;
     (void) lParam;
 
-        ::SetDlgItemTextW(hWnd, DLG_ADBPATH, static_cast<LPCWSTR>(_adb->GetAdbBin()));
+        ::SetDlgItemTextW(
+            hWnd,
+            DLG_ADBPATH,
+            static_cast<LPCWSTR>(
+                m_adb->AdbBin.Get<const wchar_t*>()
+                )
+            );
 
-        if (::_waccess(_adb->GetAdbBin(), F_OK) < 0)
+        if (::_waccess(m_adb->AdbBin.Get<const wchar_t*>(), F_OK) < 0)
         {
-            string_from_res<std::wstring> wres{};
+            ResStringDialog<std::wstring> wres;
             ::SetDlgItemTextW(hWnd, DLG_ADBINFO, static_cast<LPCWSTR>(
-                                    wres.go(hmodule_get(), IDS_ERR3).c_str()
+                                    wres.go(GameDev::gethmodule(), IDS_ERR3).c_str()
                                 )
                             );
         }

@@ -1,9 +1,12 @@
 # depslib dependency file v1.0
-1558211386 source:c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\test\main.cpp
+1567189379 source:c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\test\main.cpp
 	"../../ADBViewer/src/loader.h"
 	"../src/ADBDriver.h"
+	<cstdio>
+	<sys/types.h>
+	<sys/stat.h>
 
-1558206252 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\loader.h
+1566169960 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\loader.h
 	<iostream>
 	<atomic>
 	<memory>
@@ -15,24 +18,36 @@
 	<thread>
 	<functional>
 	<sstream>
+	<fstream>
 	<future>
+	<valarray>
+	<cstdio>
 	<winsock2.h>
 	<windows.h>
 	<commctrl.h>
 	<time.h>
 	<io.h>
 	"version.h"
+	"exchndl.h"
 
-1557865835 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\version.h
+1566747061 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\version.h
 
-1558211203 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\adbdriver.h
+1567191065 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\adbdriver.h
+	"DriverConst.h"
 	"DriverExcept.h"
 	"DriverAsync.h"
 	"DriverNet.h"
+	"Utils/extMultiString.h"
 
-1558133844 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverasync.h
+1566507762 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverasync.h
 
-1558032153 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\drivernet.h
+1567121740 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\drivernet.h
 
 1558207250 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverexcept.h
+
+1559340809 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\exchndl.h
+
+1567129167 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverconst.h
+
+1566844300 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\utils\extmultistring.h
 

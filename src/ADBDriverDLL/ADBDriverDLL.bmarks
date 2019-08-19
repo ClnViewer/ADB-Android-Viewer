@@ -1,48 +1,107 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="src\ADBDriver.h" open="1" top="0" tabpos="1">
-		<Cursor position="1890" topLine="89" />
-		<BrowseMarks positions="1983" />
-		<Book_Marks positions="" />
+	<File name="src\DriverSocketCapture.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7803" topLine="213" />
 	</File>
-	<File name="src\DriverDirectory.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="2939" topLine="78" />
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_COMMAND.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1921" topLine="30" />
+		<BrowseMarks positions="6960" />
 	</File>
-	<File name="src\DriverFile.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="3099" topLine="89" />
+	<File name="src\DriverSocketDevice.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7924" topLine="259" />
 	</File>
-	<File name="src\DriverInput.cpp" open="0" top="0" tabpos="14">
-		<Cursor position="5538" topLine="185" />
-		<BrowseMarks positions="4094" />
+	<File name="src\DriverSocket.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="2990" topLine="70" />
+		<BrowseMarks positions="2146,2259,2379" />
 	</File>
-	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1">
-		<Cursor position="1990" topLine="77" />
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3352" topLine="0" />
 	</File>
-	<File name="src\DriverConst.h" open="0" top="0" tabpos="12">
-		<Cursor position="2628" topLine="32" />
-		<BrowseMarks positions="1072" />
+	<File name="src\DriverSocketFSDir.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="22155" topLine="287" />
+		<BrowseMarks positions="11641,12803,13539,15677,15732,19878" />
+	</File>
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2269" topLine="35" />
+	</File>
+	<File name="src\Driver.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1452" topLine="27" />
+	</File>
+	<File name="src\Dialog\WINAPI\AdbListDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1531" topLine="23" />
+	</File>
+	<File name="src\Dialog\WINAPI\StyleDialog.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="119" />
+	</File>
+	<File name="src\Dialog\WINAPI\AdbListDialog\AdbListDialog.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="3133" topLine="71" />
+	</File>
+	<File name="src\DriverAsync.h" open="0" top="0" tabpos="0">
+		<Cursor position="35" topLine="0" />
+	</File>
+	<File name="src\DriverSocketFSFile.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="2881" topLine="176" />
+		<BrowseMarks positions="2696" />
+	</File>
+	<File name="src\ADBDriver.h" open="0" top="0" tabpos="1">
+		<Cursor position="1875" topLine="60" />
+		<BrowseMarks positions="1320,4427,4788" />
+	</File>
+	<File name="src\DriverSocketInput.cpp" open="0" top="0" tabpos="6">
+		<Cursor position="8726" topLine="244" />
+		<BrowseMarks positions="2384,2918,4259,5676" />
+	</File>
+	<File name="src\Utils\extMultiString.cpp" open="0" top="0" tabpos="2">
+		<Cursor position="1737" topLine="26" />
+	</File>
+	<File name="src\DriverDirItem.cpp" open="0" top="0" tabpos="8">
+		<Cursor position="2076" topLine="36" />
+		<BrowseMarks positions="2481" />
+	</File>
+	<File name="src\Dialog\WINAPI\ResStringDialog.h" open="0" top="0" tabpos="0">
+		<Cursor position="1192" topLine="22" />
+		<BrowseMarks positions="196,440" />
+	</File>
+	<File name="src\DriverNet.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1897" topLine="102" />
+	</File>
+	<File name="src\DriverNetSync.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="10850" topLine="315" />
+		<BrowseMarks positions="4630,4699,4699,4699" />
+		<Book_Marks positions="13760" />
+	</File>
+	<File name="src\DriverAsync.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2783" topLine="48" />
+	</File>
+	<File name="src\DriverConst.h" open="0" top="0" tabpos="7">
+		<Cursor position="1167" topLine="29" />
+		<BrowseMarks positions="1433,2218,2505" />
 		<Book_Marks positions="1155" />
 	</File>
-	<File name="src\DriverInternal.h" open="0" top="0" tabpos="4">
-		<Cursor position="1140" topLine="63" />
-		<BrowseMarks positions="1921" />
+	<File name="src\Utils\extMultiString.h" open="0" top="0" tabpos="3">
+		<Cursor position="333" topLine="0" />
+		<BrowseMarks positions="322" />
 	</File>
-	<File name="src\DriverDevice.cpp" open="0" top="0" tabpos="3">
-		<Cursor position="5302" topLine="26" />
+	<File name="src\DriverProcess.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="2808" topLine="81" />
+		<BrowseMarks positions="5666,5666,6018" />
 	</File>
-	<File name="src\DriverDirItem.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="2049" topLine="32" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.h" open="0" top="0" tabpos="0">
+		<Cursor position="186" topLine="0" />
 	</File>
-	<File name="src\DriverSocket\DriverSocketCapture.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4944" topLine="204" />
+	<File name="src\Utils\extStringUtils.h" open="0" top="0" tabpos="0">
+		<Cursor position="3166" topLine="0" />
 	</File>
-	<File name="src\DriverSocket\DriverSocketRawCmd.cpp" open="0" top="0" tabpos="13">
-		<Cursor position="1479" topLine="8" />
+	<File name="src\DriverInternal.h" open="0" top="0" tabpos="2">
+		<Cursor position="1017" topLine="41" />
+		<BrowseMarks positions="951,1524" />
 	</File>
-	<File name="src\DriverSocket\DriverSocketSend.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="4558" topLine="26" />
+	<File name="src\DriverNet.h" open="0" top="0" tabpos="5">
+		<Cursor position="1169" topLine="59" />
+		<BrowseMarks positions="905,2017,2625,2806" />
+	</File>
+	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1">
+		<Cursor position="2085" topLine="84" />
 	</File>
 </BrowseTracker_layout_file>

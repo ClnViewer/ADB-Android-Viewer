@@ -239,7 +239,7 @@ __LUA_FUNC_BODY(adbKey)
                 break;
 
             m_adbcmd.load()->key(
-                GameDev::ADBDriver::KeysType::KEYS_ANDROID,
+                GameDev::DriverConst::KeysType::KEYS_ANDROID,
                 static_cast<int32_t>(lua_tointeger(m_lua, -1))
             );
         }

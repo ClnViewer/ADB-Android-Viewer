@@ -184,14 +184,14 @@ void AppBrowserList::clickselectfile(GameDev::ADBDriver::DirItem const & di, int
     {
         switch (di.type)
         {
-            case GameDev::ADBDriver::FileType::FILETYPE_DIR:
-            case GameDev::ADBDriver::FileType::FILETYPE_ROOT:
-            case GameDev::ADBDriver::FileType::FILETYPE_BACK:
+            case GameDev::DriverConst::FileType::FILETYPE_DIR:
+            case GameDev::DriverConst::FileType::FILETYPE_ROOT:
+            case GameDev::DriverConst::FileType::FILETYPE_BACK:
                 {
                     guiBase::PushEvent(id);
                     break;
                 }
-            case GameDev::ADBDriver::FileType::FILETYPE_FILE:
+            case GameDev::DriverConst::FileType::FILETYPE_FILE:
                 {
                     /// Todo: menu
                     break;

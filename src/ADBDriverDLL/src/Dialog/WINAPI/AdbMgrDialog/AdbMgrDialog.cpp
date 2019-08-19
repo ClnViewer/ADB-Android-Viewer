@@ -85,14 +85,14 @@ INT_PTR AdbMgrDialog::Show(GameDev::ADBDriver *padb)
 
 INT_PTR AdbMgrDialog::Show(GameDev::ADBDriver & adb)
 {
-    _adb = &adb;
+    m_adb = &adb;
 
-    if (!_hinst)
-        _hinst = hmodule_get();
+    if (!m_hinst)
+        m_hinst = GameDev::gethmodule();
 
     return DialogBoxParamW(
-               _hinst,
-               MAKEINTRESOURCEW(_rid),
+               m_hinst,
+               MAKEINTRESOURCEW(m_rid),
                NULL,
                &AdbMgrDialog::DialogRedirect,
                reinterpret_cast<LPARAM>(this)
@@ -100,23 +100,23 @@ INT_PTR AdbMgrDialog::Show(GameDev::ADBDriver & adb)
 }
 
 AdbMgrDialog::AdbMgrDialog(DWORD rid)
-    : _hwnd(nullptr), _hinst(nullptr), _rid(rid),
-      _IsFuture(false), _IsAdbStatus(false), _adb(nullptr) {}
+    : m_hwnd(nullptr), m_hinst(nullptr), m_rid(rid),
+      m_IsFuture(false), m_IsAdbStatus(false), m_adb(nullptr) {}
 
 AdbMgrDialog::AdbMgrDialog(HINSTANCE hinst, DWORD rid)
-    : _hwnd(nullptr), _hinst(hinst), _rid(rid),
-      _IsFuture(false), _IsAdbStatus(false), _adb(nullptr) {}
+    : m_hwnd(nullptr), m_hinst(hinst), m_rid(rid),
+      m_IsFuture(false), m_IsAdbStatus(false), m_adb(nullptr) {}
 
 AdbMgrDialog::AdbMgrDialog(HINSTANCE hinst, DWORD rid, COLORREF creft, COLORREF crefb)
-    : _hwnd(nullptr), _hinst(hinst), _rid(rid),
-      _IsFuture(false), _IsAdbStatus(false), _adb(nullptr)
+    : m_hwnd(nullptr), m_hinst(hinst), m_rid(rid),
+      m_IsFuture(false), m_IsAdbStatus(false), m_adb(nullptr)
     {
-        _style.Set(creft, crefb);
+        m_style.Set(creft, crefb);
     }
 
 AdbMgrDialog::~AdbMgrDialog()
 {
-    _style.~StyleDialog();
+    m_style.~StyleDialog();
 }
 
 }

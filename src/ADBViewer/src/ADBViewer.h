@@ -27,8 +27,8 @@
 #define ID_CMD_POP_MENU14 20194 // Language: CN
 
 #define ID_CMD_POP_MENU15 20195 // Bender screen Off/On
-#define ID_CMD_POP_MENU16 20196 // Display orientation - landscape 
-#define ID_CMD_POP_MENU17 20197 // Display orientation - mirror 
+#define ID_CMD_POP_MENU16 20196 // Display orientation - landscape
+#define ID_CMD_POP_MENU17 20197 // Display orientation - mirror
 #define ID_CMD_POP_MENU18 20198 // Display - 1:1
 #define ID_CMD_POP_MENU19 20199 // Display - 1:2
 #define ID_CMD_POP_MENU20 20200 // Display - 1:3 (current status disabled)
@@ -114,6 +114,7 @@ using Resources::ResManager;
 
 #  include "../../ADBDriverDLL/src/ADBDriver.h"
 using GameDev::ADBDriver;
+using GameDev::DriverConst;
 
 #  include "App/AppTimer.h"
 #  include "App/AppConfig.h"

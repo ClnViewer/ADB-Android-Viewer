@@ -47,6 +47,7 @@
 			<Add option="-Wall" />
 			<Add option="-Wno-unknown-pragmas" />
 			<Add option="-D_BUILD_DLL=1" />
+			<Add option="-D_BUILD_WARNING_0=1" />
 		</Compiler>
 		<Linker>
 			<Add option="-static-libstdc++" />
@@ -89,48 +90,32 @@
 		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_DRAWITEM.cpp" />
 		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_INITDIALOG.cpp" />
 		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_NCHITTEST.cpp" />
+		<Unit filename="src/Dialog/WINAPI/ResStringDialog.h" />
 		<Unit filename="src/Dialog/WINAPI/StyleDialog.cpp" />
 		<Unit filename="src/Dialog/WINAPI/StyleDialog.h" />
 		<Unit filename="src/Dialog/WINAPI/StyleDialog.rc">
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="src/Driver.cpp" />
+		<Unit filename="src/DriverAsync.cpp" />
 		<Unit filename="src/DriverAsync.h" />
 		<Unit filename="src/DriverConst.h" />
-		<Unit filename="src/DriverDevice.cpp" />
 		<Unit filename="src/DriverDirItem.cpp" />
-		<Unit filename="src/DriverDirectory.cpp" />
 		<Unit filename="src/DriverExcept.h" />
-		<Unit filename="src/DriverFile.cpp" />
-		<Unit filename="src/DriverInput.cpp" />
 		<Unit filename="src/DriverInternal.h" />
-		<Unit filename="src/DriverKey.h" />
 		<Unit filename="src/DriverNet.cpp" />
 		<Unit filename="src/DriverNet.h" />
+		<Unit filename="src/DriverNetSync.cpp" />
 		<Unit filename="src/DriverProcess.cpp" />
 		<Unit filename="src/DriverSocket.cpp" />
-		<Unit filename="src/DriverSocket/DriverSocketCapture.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/DriverSocket/DriverSocketMake.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/DriverSocket/DriverSocketRawCmd.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/DriverSocket/DriverSocketReceive.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/DriverSocket/DriverSocketSend.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Utils/stdStringUtils.cpp" />
-		<Unit filename="src/Utils/stdStringUtils.h" />
+		<Unit filename="src/DriverSocketCapture.cpp" />
+		<Unit filename="src/DriverSocketDevice.cpp" />
+		<Unit filename="src/DriverSocketFSDir.cpp" />
+		<Unit filename="src/DriverSocketFSFile.cpp" />
+		<Unit filename="src/DriverSocketInput.cpp" />
+		<Unit filename="src/Utils/extMultiString.cpp" />
+		<Unit filename="src/Utils/extMultiString.h" />
+		<Unit filename="src/Utils/extStringUtils.h" />
 		<Unit filename="src/lz4/lz4.c">
 			<Option compilerVar="CC" />
 			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c17 $options $includes -c $file -o $object" />

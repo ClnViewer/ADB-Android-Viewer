@@ -8,9 +8,9 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
 
     switch (m_drawitems[src->sel].type)
     {
-        case GameDev::ADBDriver::FileType::FILETYPE_DIR:
-        case GameDev::ADBDriver::FileType::FILETYPE_BACK:
-        case GameDev::ADBDriver::FileType::FILETYPE_ROOT:
+        case GameDev::DriverConst::FileType::FILETYPE_DIR:
+        case GameDev::DriverConst::FileType::FILETYPE_BACK:
+        case GameDev::DriverConst::FileType::FILETYPE_ROOT:
             {
                 int32_t sel;
                 switch (m_page->mikey)
@@ -29,8 +29,8 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                 clickselectfile(m_drawitems[src->sel], sel);
                 break;
             }
-        case GameDev::ADBDriver::FileType::FILETYPE_FILE:
-        case GameDev::ADBDriver::FileType::FILETYPE_SYMLINK:
+        case GameDev::DriverConst::FileType::FILETYPE_FILE:
+        case GameDev::DriverConst::FileType::FILETYPE_SYMLINK:
             {
                 bool l_isaction = false;
                 int32_t l_sel = popupmenu_file(
@@ -52,10 +52,10 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                         if (AppConfig::instance().cnf_browser_dir_device.empty())
                                             break;
 
-                                        l_isaction = AppConfig::instance().cnf_adb.SendFile(
+                                        l_isaction = AppConfig::instance().cnf_adb.FileSend(
                                                         m_drawitems[src->sel].cmds,
                                                         AppConfig::instance().cnf_browser_dir_device,
-                                                        GameDev::ADBDriver::FilePermissionType::PERM_RWRWRW
+                                                        GameDev::DriverConst::FilePermissionType::PERM_RWRWRW
                                                 );
 
                                         if ((l_sel == ID_CMD_POP_MENU260) && (l_isaction))
@@ -96,6 +96,14 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                     {
                                         if (AppConfig::instance().cnf_browser_dir_local.empty())
                                             break;
+
+                                        l_isaction = AppConfig::instance().cnf_adb.FileReceive(
+                                                m_drawitems[src->sel].cmds,
+                                                m_parser.filepath(
+                                                    m_drawitems[src->sel],
+                                                    AppConfig::instance().cnf_browser_dir_local
+                                                )
+                                            );
                                         l_isaction = false;
                                         break;
                                     }
@@ -157,37 +165,37 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                             if (m_page->mikey != AppBrowserPage::MenuInput::MENUINPUT_ANDROID)
                                 break;
 
-                            GameDev::ADBDriver::FilePermissionType fp;
+                            GameDev::DriverConst::FilePermissionType fp;
 
                             switch (l_sel)
                             {
                                 case ID_CMD_POP_MENU265:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RW;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RW;
                                     break;
                                 case ID_CMD_POP_MENU266:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RWX;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RWX;
                                     break;
                                 case ID_CMD_POP_MENU267:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RWRW;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RWRW;
                                     break;
                                 case ID_CMD_POP_MENU268:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RWXRWX;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RWXRWX;
                                     break;
                                 case ID_CMD_POP_MENU269:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RWRWRW;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RWRWRW;
                                     break;
                                 case ID_CMD_POP_MENU270:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_RWXRWXRWX;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_RWXRWXRWX;
                                     break;
                                 default:
-                                    fp = GameDev::ADBDriver::FilePermissionType::PERM_NONE;
+                                    fp = GameDev::DriverConst::FilePermissionType::PERM_NONE;
                                     break;
                             }
-                            if (fp == GameDev::ADBDriver::FilePermissionType::PERM_NONE)
+                            if (fp == GameDev::DriverConst::FilePermissionType::PERM_NONE)
                                 break;
 
                             std::string rs;
-                            l_isaction = AppConfig::instance().cnf_adb.ChmodFile(
+                            l_isaction = AppConfig::instance().cnf_adb.FileChmod(
                                     m_drawitems[src->sel].cmds,
                                     fp,
                                     rs
@@ -203,7 +211,7 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                     ss << ResManager::stringload(
                                             ResManager::IndexStringResource::RES_STR_BROWSER_FILE_PERM_OK,
                                             AppConfig::instance().cnf_lang
-                                        ) << AppConfig::instance().cnf_adb.PermissionFile(fp) << " : ";
+                                        ) << AppConfig::instance().cnf_adb.FilePermission(fp) << " : ";
                                 else
                                     ss << ResManager::stringload(
                                             ResManager::IndexStringResource::RES_STR_BROWSER_FILE_PERM_ERROR,

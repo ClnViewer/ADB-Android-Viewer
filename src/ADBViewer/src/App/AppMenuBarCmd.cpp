@@ -55,7 +55,7 @@ int32_t AppMenuBar::mb_cmd_START(SDL_Event *ev)
             );
             return 0;
         }
-        if (!AppConfig::instance().cnf_adb.IsDeviceID())
+        if (!AppConfig::instance().cnf_adb.DeviceId.Is())
             AppConfig::instance().cnf_adb.GetDeviceListUI();
 
         m_app->m_appmsgbar.PrintInfo(

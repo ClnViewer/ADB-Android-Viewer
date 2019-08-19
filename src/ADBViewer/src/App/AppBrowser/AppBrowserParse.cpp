@@ -46,7 +46,7 @@ static std::string l_FileDescription(fs::path const & file)
         {
             std::uintmax_t sz = fs::file_size(file);
             if (sz != static_cast<uintmax_t>(-1))
-                ss << " [" << AppConfig::instance().cnf_adb.SizeFile(sz).c_str() << "]";
+                ss << " [" << AppConfig::instance().cnf_adb.FileSize(sz).c_str() << "]";
 
 #           if defined(OS_WIN)
             /// not work!
@@ -83,19 +83,19 @@ static std::string l_DirectoryDescription(fs::path const & dir)
             if (inf.capacity == static_cast<uintmax_t>(-1))
                 ss << "-/";
             else
-                ss << AppConfig::instance().cnf_adb.SizeFile(inf.capacity).c_str() << "/";
+                ss << AppConfig::instance().cnf_adb.FileSize(inf.capacity).c_str() << "/";
 
             /// used
             if ((inf.capacity == static_cast<uintmax_t>(-1)) || (inf.available == static_cast<uintmax_t>(-1)))
                 ss << "-/";
             else
-                ss << AppConfig::instance().cnf_adb.SizeFile(inf.capacity - inf.available).c_str() << "/";
+                ss << AppConfig::instance().cnf_adb.FileSize(inf.capacity - inf.available).c_str() << "/";
 
             /// free
             if (inf.available == static_cast<uintmax_t>(-1))
                 ss << "-";
             else
-                ss << AppConfig::instance().cnf_adb.SizeFile(inf.available).c_str();
+                ss << AppConfig::instance().cnf_adb.FileSize(inf.available).c_str();
 
             ss << "]";
         }
@@ -114,9 +114,9 @@ std::string AppBrowserParse::basedir(GameDev::ADBDriver::DirItem const & di, App
 
             switch (di.type)
             {
-                case GameDev::ADBDriver::FileType::FILETYPE_DIR:
-                case GameDev::ADBDriver::FileType::FILETYPE_ROOT:
-                case GameDev::ADBDriver::FileType::FILETYPE_BACK:
+                case GameDev::DriverConst::FileType::FILETYPE_DIR:
+                case GameDev::DriverConst::FileType::FILETYPE_ROOT:
+                case GameDev::DriverConst::FileType::FILETYPE_BACK:
                     {
                         switch (mi)
                         {
@@ -137,8 +137,8 @@ std::string AppBrowserParse::basedir(GameDev::ADBDriver::DirItem const & di, App
                         }
                         break;
                     }
-                case GameDev::ADBDriver::FileType::FILETYPE_FILE:
-                case GameDev::ADBDriver::FileType::FILETYPE_SYMLINK:
+                case GameDev::DriverConst::FileType::FILETYPE_FILE:
+                case GameDev::DriverConst::FileType::FILETYPE_SYMLINK:
                     {
                         switch (mi)
                         {
@@ -166,6 +166,35 @@ std::string AppBrowserParse::basedir(GameDev::ADBDriver::DirItem const & di, App
         while (0);
 
         return "/";
+    }
+
+std::string AppBrowserParse::filename(GameDev::ADBDriver::DirItem const & di)
+    {
+        do
+        {
+            if (di.cmds.empty())
+                break;
+
+            if ((di.type != GameDev::DriverConst::FileType::FILETYPE_FILE) &&
+                (di.type != GameDev::DriverConst::FileType::FILETYPE_SYMLINK))
+                break;
+
+            fs::path l_path{ di.cmds };
+            return l_path.filename().generic_string();
+        }
+        while (0);
+        return std::string();
+    }
+
+std::string AppBrowserParse::filepath(GameDev::ADBDriver::DirItem const & di, std::string const & outdir)
+    {
+        std::string fname = filename(di);
+        if (fname.empty())
+            return fname;
+
+        fs::path l_path{ outdir };
+        l_path /= fname.c_str();
+        return l_path.generic_string();
     }
 
 bool AppBrowserParse::apk_name(std::string const & s, GameDev::ADBDriver::DirItem & di)
@@ -264,7 +293,7 @@ bool AppBrowserParse::dir_list_local(std::string const & s, std::vector<GameDev:
                         l_root.root_path().generic_string(),
                         l_root.root_path().generic_string(),
                         l_DirectoryDescription(l_root),
-                        GameDev::ADBDriver::FileType::FILETYPE_ROOT,
+                        GameDev::DriverConst::FileType::FILETYPE_ROOT,
                         { 255, 255, 255, 0 }
                 );
                 vdi.push_back(di0);
@@ -273,7 +302,7 @@ bool AppBrowserParse::dir_list_local(std::string const & s, std::vector<GameDev:
                         "..",
                         l_root.parent_path().generic_string(),
                         "",
-                        GameDev::ADBDriver::FileType::FILETYPE_BACK,
+                        GameDev::DriverConst::FileType::FILETYPE_BACK,
                         { 255, 228, 43, 0 }
                 );
                 vdi.push_back(di1);
@@ -311,7 +340,7 @@ bool AppBrowserParse::dir_list_local(std::string const & s, std::vector<GameDev:
                             p.filename().generic_string(),
                             p.generic_string(),
                             p.generic_string(),
-                            GameDev::ADBDriver::FileType::FILETYPE_DIR,
+                            GameDev::DriverConst::FileType::FILETYPE_DIR,
                             { 133, 175, 33, 0 }
                     );
                     vdi.push_back(di);
@@ -338,7 +367,7 @@ bool AppBrowserParse::dir_list_local(std::string const & s, std::vector<GameDev:
                             p.filename().generic_string(),
                             p.generic_string(),
                             l_FileDescription(p),
-                            GameDev::ADBDriver::FileType::FILETYPE_FILE,
+                            GameDev::DriverConst::FileType::FILETYPE_FILE,
                             { 20, 148, 20, 0 }
                             //{ 10, 64, 10, 0 }
                     );
@@ -378,7 +407,7 @@ bool AppBrowserParse::dir_list_device(
     std::vector<GameDev::ADBDriver::DirItem> & vdi)
     {
         std::string s;
-        bool ret = AppConfig::instance().cnf_adb.ListDir(root, vdi, s);
+        bool ret = AppConfig::instance().cnf_adb.DirList(root, vdi, s);
         if (!s.empty())
             AddMessageQueue(
                 s,

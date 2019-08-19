@@ -121,11 +121,11 @@ std::string AppTerminalPage::getprompt()
     {
         do
         {
-            if (!AppConfig::instance().cnf_adb.IsDeviceID())
+            if (!AppConfig::instance().cnf_adb.DeviceId.Is())
                 break;
 
             std::stringstream ss;
-            std::string sid = AppConfig::instance().cnf_adb.GetDeviceID<std::string>();
+            std::string sid = AppConfig::instance().cnf_adb.DeviceId.Get<std::string>();
             if (sid.empty())
                 break;
 

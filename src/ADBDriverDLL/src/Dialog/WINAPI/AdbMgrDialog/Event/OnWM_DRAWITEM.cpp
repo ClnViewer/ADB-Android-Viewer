@@ -55,14 +55,14 @@ INT_PTR AdbMgrDialog::_OnWM_DRAWITEM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
             {
                 (void) ::SetTextColor(
                             di->hDC,
-                            ((_style.IsDefaultStyle()) ?
-                                _style.RGBColorTxtButtonDefault() : _style.RGBColorBg()
+                            ((m_style.IsDefaultStyle()) ?
+                                m_style.RGBColorTxtButtonDefault() : m_style.RGBColorBg()
                              )
                         );
                 (void) ::SetBkColor(
                             di->hDC,
-                            ((_style.IsDefaultStyle()) ?
-                                _style.RGBColorBgButtonLightDefault() : _style.RGBColorTxt()
+                            ((m_style.IsDefaultStyle()) ?
+                                m_style.RGBColorBgButtonLightDefault() : m_style.RGBColorTxt()
                              )
                         );
             }
@@ -70,14 +70,14 @@ INT_PTR AdbMgrDialog::_OnWM_DRAWITEM(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM
             {
                 (void) ::SetTextColor(
                             di->hDC,
-                            ((_style.IsDefaultStyle()) ?
-                                _style.RGBColorTxtButtonDefault() : _style.RGBColorTxt()
+                            ((m_style.IsDefaultStyle()) ?
+                                m_style.RGBColorTxtButtonDefault() : m_style.RGBColorTxt()
                              )
                         );
                 (void) ::SetBkColor(
                             di->hDC,
-                            ((_style.IsDefaultStyle()) ?
-                                _style.RGBColorBgButtonDefault() : _style.RGBColorBg()
+                            ((m_style.IsDefaultStyle()) ?
+                                m_style.RGBColorBgButtonDefault() : m_style.RGBColorBg()
                              )
                         );
             }

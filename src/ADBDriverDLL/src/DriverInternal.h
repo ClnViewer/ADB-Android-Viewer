@@ -35,55 +35,33 @@
 #    include <iomanip>
 #    include <queue>
 #    include "../../ADBViewer/src/loader.h"
+#    include "Utils/extStringUtils.h"
 
 #    include "DriverExcept.h"
-#    include "Utils/stdStringUtils.h"
+#    include "DriverNet.h"
 #    include "ADBDriver.h"
 
 namespace GameDev
 {
 
-static inline bool endcheck(char c)
-{
-    return ((c == '\r') || (c == '\n'));
-}
-static inline bool endcheck(wchar_t c)
-{
-    return ((c == L'\r') || (c == L'\n'));
-}
-
-template<typename T>
-static inline void clearend(T & s)
+static inline HMODULE gethmodule()
     {
-        s.erase(
-            std::remove_if(
-                s.begin(),
-                s.end(),
-                [](auto c)
-                    {
-                        return endcheck(c);
-                    }
-            ),
-            s.end()
-        );
-    }
-
-template<typename T>
-static inline T filename(T const & s)
-    {
-        size_t pos;
-        T fname;
-
-        if constexpr (std::is_same<T, std::string>::value)
-            pos = s.find_last_of("/\\");
-        else if constexpr (std::is_same<T, std::wstring>::value)
-            pos = s.find_last_of(L"/\\");
-
-        if (pos == std::string::npos)
-            fname = s.c_str();
-        else
-            fname = s.substr((pos + 1), (s.length() - 1)).c_str();
-        return fname;
+#   if defined(OS_WIN)
+        HMODULE hmd;
+#       if defined(_BUILD_DLL)
+        if ((!GetModuleHandleEx(
+                GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                reinterpret_cast<LPCTSTR>(GameDev::gethmodule),
+                &hmd)
+        ) || (hmd == INVALID_HANDLE_VALUE))
+#       else
+        if ((hmd = GetModuleHandle(NULL)) == INVALID_HANDLE_VALUE)
+#       endif
+            return nullptr;
+        return hmd;
+#   else
+    return nullptr;
+#   endif
     }
 
 };

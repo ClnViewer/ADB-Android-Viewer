@@ -41,7 +41,7 @@ INT_PTR AdbMgrDialog::_OnWM_CTLCOLORDLG(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
     (void) wParam;
     (void) lParam;
 
-    return _style.ColorDialog();
+    return m_style.ColorDialog();
 }
 
 }

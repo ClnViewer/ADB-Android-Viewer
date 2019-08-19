@@ -83,7 +83,7 @@ INT_PTR AdbListDialog::Show(SelectedList & dict, int32_t colw, bool isreverse)
 INT_PTR AdbListDialog::Show(SelectedList & dict, int32_t colw)
 {
     if (!_hinst)
-        _hinst = hmodule_get();
+        _hinst = gethmodule();
 
     _dict = dict;
     _p.x = ((colw) ? colw : 100);

@@ -23,6 +23,16 @@
 
 namespace GameDev
 {
+    class DriverConst
+    {
+    public:
+        enum KeysType
+        {
+                KEYS_ANDROID,
+                KEYS_SDL,
+                KEYS_WINAPI
+        };
+    };
     class ADBDriver
     {
     public:

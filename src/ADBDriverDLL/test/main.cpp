@@ -32,6 +32,10 @@
 #include "../../ADBViewer/src/loader.h"
 #include "../src/ADBDriver.h"
 
+#include <cstdio>
+#include <sys/types.h>
+#include <sys/stat.h>
+
 using namespace std;
 
 int main()
@@ -53,73 +57,64 @@ int main()
 
     //m_adb.InitRemote();
     bool ret;
+    std::string sr;
+
+    /*
     ret = m_adb.GetDeviceSetupUI();
-    std::wcout << L"GetDeviceSetupUI: " << ret << std::endl;
+    std::cout << "GetDeviceSetupUI: " << ret << std::endl;
+    */
+
+    /*
     ret = m_adb.GetDeviceListUI();
-    std::wcout << L"GetDeviceListUI: " << ret << L" - " << m_adb.GetDeviceID<std::wstring>() << L" - " << m_adb.IsDeviceID() << std::endl;
+    std::cout << "GetDeviceListUI: " << ret << std::endl;
+    */
 
-    return 0;
-}
+    /*
+    ret = m_adb.GetDeviceListUI();
+    std::wstring wdid = m_adb.DeviceId.GetID<std::wstring>();
+    std::string  sdid = m_adb.DeviceId.GetID<std::string>();
+    std::wcout << L"GetDeviceListUI: " << ret;
+    std::wcout << L" - " << wdid.c_str();
+    std::wcout << L" - " << sdid.c_str();
+    std::wcout << L" -*- " << std::endl;
+    */
 
-static uint32_t __width_D_ = 640;
-static uint32_t __height_D_ = 400;
+    /*
+    std::cout << m_adb.GetDeviceInfo() << std::endl;
+    std::cout << m_adb.GetDriverInfo() << std::endl;
+    std::cout << m_adb.GetProperties(GameDev::DriverConst::DeviceInfoType::DI_CPU_LIST) << std::endl;
+    */
 
-struct _RGB {
-    uint8_t r_, g_, b_;
-};
+    /*
+    /// NOT print
+    //ret = m_adb.SendTextT<std::string>("и утф, текст! \"(тест)\"", true);
+    /// OK print
+    ret = m_adb.SendTextT<std::string>("Test, Send Text \"(option)\".", true);
+    std::cout << "Result (SendTextT): " << ret << std::endl;
+    if (ret) /// async thread wait
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+    */
 
-uint32_t getPad(uint32_t w)
+    /*
+    ret = m_adb.SendToShell("ls -l", sr, false, GameDev::DriverConst::ClearType::CLEARTYPE_NONE);
+    std::cout << "Result (ls -l): " << ret << std::endl;
+    std::cout << sr.c_str() << std::endl;
+    */
+
+    std::vector<GameDev::ADBDriver::DirItem> vdi;
+    ret = m_adb.DirList("/data/local/tmp", vdi, sr);
+    //ret = m_adb.DirList("/", vdi, sr);
+    std::cout << "Result (ListDir): " << ret << std::endl;
+
+    if (!sr.empty())
+        std::cout << "Message (ListDir): " << sr.c_str() << std::endl << std::endl;
+
+    for (auto & di : vdi)
     {
-        uint32_t pad = 0U;
-        while (((w + pad) % 4) != 0)
-            pad++;
-        return pad;
+        std::cout << di.s.c_str() << "\n\t: "
+            << di.desc.c_str() << "\n\t\t: "
+                << di.cmds.c_str() << "\n\t\t\t: "
+                    << di.type << " : " << di.pmode << std::endl;
     }
-
-uint32_t checkPos(uint32_t w, uint32_t h, uint32_t pad)
-    {
-        return ((((w * 3U) + pad) * h) - 3U);
-    }
-
-void getPixel(int x, int y, std::vector<uint8_t> const & buf)
-{
-    uint32_t pad = getPad(__width_D_);
-    uint32_t pos = ((((__width_D_ * 3) + pad) * y) + (x * 3));
-    if (pos > checkPos(__width_D_, __height_D_, pad))
-    {
-        printf("position overflow!!!\n");
-        return;
-    }
-    _RGB *rgb = (_RGB*)&buf[pos];
-    //std::cout << "position:" << pos << " r:"  << rgb->r_ << " g:" << rgb->g_ << " b:" << rgb->b_ << std::endl;
-    printf("position (%d/%d):%u\t - r:%u  \tg:%u\t b:%u\n", x, y, pos, rgb->r_, rgb->g_, rgb->b_);
-}
-
-int y_main()
-{
-    FILE *fp = fopen("..\\..\\template.raw", "rb");
-    if (!fp)
-    {
-        std::cout << "file not found" << std::endl;
-        return 1;
-    }
-
-    std::vector<uint8_t> buf(768000);
-    fread(&buf[0], 1, 768000, fp);
-    fclose(fp);
-
-    getPixel(0,0, buf);
-    getPixel(0,1, buf);
-    getPixel(0,10, buf);
-
-    getPixel(0,0, buf);
-    getPixel(22,0, buf);
-    getPixel(23,0, buf);
-    getPixel(24,0, buf);
-
-    getPixel(3,218, buf);
-    getPixel(8,218, buf);
-    getPixel(8,216, buf);
-
     return 0;
 }

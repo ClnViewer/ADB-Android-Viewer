@@ -60,7 +60,7 @@ bool AppInputText::runselect(bool ismod, int32_t ctrl)
         if (guiTextInputBox::isactive())
         {
             if (guiTextInputBox::isresult())
-                AppConfig::instance().cnf_adb.SendTextASCII(guiTextInputBox::getresult());
+                AppConfig::instance().cnf_adb.SendTextT<std::string>(guiTextInputBox::getresult());
 
             guiTextInputBox::end();
             guiBase::PushEvent(ID_CMD_POP_MENU102);

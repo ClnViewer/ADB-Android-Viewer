@@ -99,7 +99,6 @@ SOCKET DriverNet::Connect()
             break;
 
         struct sockaddr_in addr{};
-        //memset(&addr, 0, sizeof(addr));
         Init(&addr);
 
         if (connect(client, (struct sockaddr*)&addr, sizeof(addr)) != 0)
