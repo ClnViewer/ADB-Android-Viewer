@@ -1,15 +1,50 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
-	<ActiveTarget name="Debug" />
+	<ActiveTarget name="Release" />
+	<File name="src\DriverSocket.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2990" topLine="70" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="186" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DriverDirItem.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2076" topLine="36" />
+		</Cursor>
+	</File>
+	<File name="src\DriverNet.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1897" topLine="102" />
+		</Cursor>
+	</File>
+	<File name="src\Driver.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1452" topLine="27" />
+		</Cursor>
+	</File>
+	<File name="src\DriverAsync.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="35" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DriverProcess.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2808" topLine="81" />
+		</Cursor>
+	</File>
 	<File name="src\DriverSocketCapture.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="7803" topLine="213" />
 		</Cursor>
 	</File>
-	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_COMMAND.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\DriverConst.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="1921" topLine="30" />
+			<Cursor1 position="1167" topLine="49" />
 		</Cursor>
 	</File>
 	<File name="src\DriverSocketDevice.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -17,14 +52,54 @@
 			<Cursor1 position="7924" topLine="259" />
 		</Cursor>
 	</File>
-	<File name="src\DriverSocket.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\DriverNet.h" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2990" topLine="70" />
+			<Cursor1 position="1002" topLine="35" />
 		</Cursor>
 	</File>
-	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3352" topLine="0" />
+			<Cursor1 position="2085" topLine="84" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_COMMAND.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1921" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="src\Utils\extMultiString.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="333" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\ADBDriver.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1875" topLine="79" />
+		</Cursor>
+	</File>
+	<File name="src\Utils\extStringUtils.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3166" topLine="0" />
+		</Cursor>
+	</File>
+	<File name="src\DriverAsync.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2783" topLine="48" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\ResStringDialog.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1192" topLine="22" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2269" topLine="35" />
+		</Cursor>
+	</File>
+	<File name="src\DriverNetSync.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="12640" topLine="359" />
 		</Cursor>
 	</File>
 	<File name="src\DriverSocketFSDir.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -36,24 +111,9 @@
 			<Collapse line="182" />
 		</Folding>
 	</File>
-	<File name="src\Dialog\WINAPI\AdbMgrDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\DriverSocketFSFile.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2269" topLine="35" />
-		</Cursor>
-	</File>
-	<File name="src\Driver.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1452" topLine="27" />
-		</Cursor>
-	</File>
-	<File name="src\Dialog\WINAPI\AdbListDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1531" topLine="23" />
-		</Cursor>
-	</File>
-	<File name="src\Dialog\WINAPI\StyleDialog.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="119" />
+			<Cursor1 position="2881" topLine="176" />
 		</Cursor>
 	</File>
 	<File name="src\Dialog\WINAPI\AdbListDialog\AdbListDialog.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -61,24 +121,19 @@
 			<Cursor1 position="3133" topLine="71" />
 		</Cursor>
 	</File>
-	<File name="src\DriverAsync.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="35" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\DriverSocketFSFile.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2881" topLine="176" />
-		</Cursor>
-	</File>
-	<File name="src\ADBDriver.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1875" topLine="60" />
-		</Cursor>
-	</File>
 	<File name="src\DriverSocketInput.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="8726" topLine="244" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\StyleDialog.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="119" />
+		</Cursor>
+	</File>
+	<File name="src\Dialog\WINAPI\AdbListDialog\Event\OnWM_INITDIALOG.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1531" topLine="23" />
 		</Cursor>
 	</File>
 	<File name="src\Utils\extMultiString.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -86,69 +141,14 @@
 			<Cursor1 position="1737" topLine="26" />
 		</Cursor>
 	</File>
-	<File name="src\DriverDirItem.cpp" open="0" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2076" topLine="36" />
-		</Cursor>
-	</File>
-	<File name="src\Dialog\WINAPI\ResStringDialog.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1192" topLine="22" />
-		</Cursor>
-	</File>
-	<File name="src\DriverNet.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1897" topLine="102" />
-		</Cursor>
-	</File>
-	<File name="src\DriverNetSync.cpp" open="1" top="1" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="10850" topLine="315" />
-		</Cursor>
-	</File>
-	<File name="src\DriverAsync.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2783" topLine="48" />
-		</Cursor>
-	</File>
-	<File name="src\DriverConst.h" open="0" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1167" topLine="29" />
-		</Cursor>
-	</File>
-	<File name="src\Utils\extMultiString.h" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="333" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\DriverProcess.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2808" topLine="81" />
-		</Cursor>
-	</File>
-	<File name="src\Dialog\WINAPI\AdbMgrDialog\AdbMgrDialog.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="186" topLine="0" />
-		</Cursor>
-	</File>
-	<File name="src\Utils\extStringUtils.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="3166" topLine="0" />
+			<Cursor1 position="3352" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\DriverInternal.h" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1017" topLine="41" />
-		</Cursor>
-	</File>
-	<File name="src\DriverNet.h" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1169" topLine="59" />
-		</Cursor>
-	</File>
-	<File name="..\ADBViewer\src\loader.h" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2085" topLine="84" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

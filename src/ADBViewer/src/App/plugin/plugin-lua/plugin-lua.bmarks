@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Debug" />
+	<ActiveTarget name="Release" />
 	<File name="LuaObject\LuaObjectBind.h" open="0" top="0" tabpos="0">
 		<Cursor position="6149" topLine="229" />
 	</File>

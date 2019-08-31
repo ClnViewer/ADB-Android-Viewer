@@ -322,12 +322,15 @@ bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::str
                 {
                     case DriverNet::SyncTagType::SYNC_TAG_DATA:
                         {
-                            offset = sizeof(DriverNet::ADBSYNCDATA);
-                            asz    = static_cast<int32_t>(req.sz);
+                            offset  = sizeof(DriverNet::ADBSYNCDATA);
+                            asz     = static_cast<int32_t>(req.sz);
                             isbegin = false;
 
                             if (asz <= 0)
-                                break;
+                            {
+                                /// error is file empty
+                                rsz = -1;
+                            }
                             else if (asz < rsz)
                             {
                                 req = SyncDataFromBuff(buff + asz + offset);
@@ -341,7 +344,9 @@ bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::str
                         }
                     case DriverNet::SyncTagType::SYNC_TAG_DONE:
                         {
-                            isend = true;
+                            /// is file empty, no receive SYNC_TAG_DATA,
+                            /// receive immediately SYNC_TAG_DONE
+                            rsz = 0; isend = true;
                             break;
                         }
                     default:
@@ -362,7 +367,9 @@ bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::str
 
                 if ((!rsz) && (!isend))
                     continue;
-                else if (rsz)
+                else if (rsz < 0)
+                    break;
+                else if (rsz > 0)
                 {
                     ::fwrite(buff + offset, 1U, static_cast<size_t>(rsz), fp);
                     asz -= rsz;
