@@ -43,11 +43,15 @@
 
 #  if defined(OS_WIN)
 #    if (__GNUC__ >= 9)
-#      define OS_CPP_FILESYSTEM 1
+#      if __has_include(<filesystem>)
+#         define OS_CPP_FILESYSTEM 1
+#      endif
 #    endif
 #  else
 #    if (__GNUC__ >= 7)
-#      define OS_CPP_FILESYSTEM 1
+#      if __has_include(<filesystem>)
+#         define OS_CPP_FILESYSTEM 1
+#      endif
 #    endif
 #  endif
 

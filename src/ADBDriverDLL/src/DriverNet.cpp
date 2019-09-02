@@ -31,6 +31,16 @@
 
 #include "DriverInternal.h"
 #include "DriverConst.h"
+#include "Utils/extTraceFunction.h"
+#include <errno.h>
+
+#if !defined(SOCKET_READ_TIMEOUT_SEC)
+#  define SOCKET_READ_TIMEOUT_SEC 1000
+#endif
+
+#if !defined(SOCKET_READ_ATTEMPT)
+#  define SOCKET_READ_ATTEMPT 5
+#endif
 
 namespace GameDev
 {
@@ -44,6 +54,10 @@ DriverNet::DriverNet()
     int ret = WSAStartup(MAKEWORD(2,2), &wsaData);
     if (ret != 0)
         IsError = true;
+#   if (defined(_BUILD_TRACE) && (_BUILD_TRACE == 1))
+    trace_start();
+#   endif
+
 }
 
 DriverNet::~DriverNet()
@@ -61,7 +75,64 @@ bool DriverNet::GetInitError()
 
 bool DriverNet::GetNetError()
 {
-    return (WSAGetLastError());
+    return (::WSAGetLastError());
+}
+
+std::string DriverNet::GetNetError(int32_t line)
+{
+    LPWSTR pbuf = nullptr;
+    int32_t err = ::WSAGetLastError();
+
+    if (!err)
+    {
+#       if defined(_BUILD_WARNING_0)
+        return std::string(DriverConst::ls_errorDN0);
+#       else
+        return std::string();
+#       endif
+    }
+
+    ::FormatMessageW(
+        FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_ALLOCATE_BUFFER,
+        nullptr,
+        err,
+        MAKELANGID(LANG_ENGLISH, SUBLANG_DEFAULT),
+        (LPWSTR)&pbuf,
+        0,
+        nullptr
+    );
+
+    std::stringstream ss;
+    ss << "Error (" << line << "): ";
+
+    if (!pbuf)
+#       if defined(_BUILD_WARNING_0)
+        ss << DriverConst::ls_errorDN1;
+#       endif
+    else
+    {
+        ss << string_to_utf8(pbuf).c_str();
+        ::LocalFree(pbuf);
+    }
+    return ss.str();
+}
+
+bool DriverNet::GetNetBlock()
+{
+    return (::WSAGetLastError() == WSAEWOULDBLOCK);
+}
+
+bool DriverNet::GetNetTimeOut()
+{
+    return (::WSAGetLastError() == WSAETIMEDOUT);
+}
+
+bool DriverNet::SetNetTimeOut(SOCKET client, int32_t sec)
+{
+    if (!sec)
+        sec = SOCKET_READ_ATTEMPT;
+    uint32_t stm = (SOCKET_READ_TIMEOUT_SEC * sec);
+    return !(::setsockopt(client, SOL_SOCKET, SO_RCVTIMEO, (char*)&stm, sizeof(stm)));
 }
 
 void DriverNet::Init(struct sockaddr_in *addr)
@@ -77,14 +148,17 @@ bool DriverNet::Check()
     if ((client = Connect()) == INVALID_SOCKET)
         return false;
 
-    closesocket(client);
+    ::closesocket(client);
     return true;
 }
 
 int32_t DriverNet::Close(SOCKET client)
 {
     if (client != INVALID_SOCKET)
-        return closesocket(client);
+    {
+        ::shutdown(client, SD_BOTH);
+        return ::closesocket(client);
+    }
     return -1;
 }
 
@@ -95,13 +169,13 @@ SOCKET DriverNet::Connect()
     do
     {
 
-        if ((client = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+        if ((client = ::socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
             break;
 
         struct sockaddr_in addr{};
         Init(&addr);
 
-        if (connect(client, (struct sockaddr*)&addr, sizeof(addr)) != 0)
+        if (::connect(client, (struct sockaddr*)&addr, sizeof(addr)) != 0)
             break;
 
         return client;
@@ -120,11 +194,18 @@ DriverNet::DriverNet()
     : IsError(false), IsDesposed(false) {}
 DriverNet::~DriverNet() {}
 
-bool    DriverNet::Check() {}
-bool    DriverNet::GetNetError() { return false; }
-void    DriverNet::Init(struct sockaddr_in*) {}
-int32_t DriverNet::Connect() { return -1; }
-int32_t DriverNet::Close(SOCKET) {  return -1; }
+std::string DriverNet::GetNetError(int32_t) { return std::string(); }
+bool        DriverNet::GetNetError() { return false; }
+bool        DriverNet::GetNetTimeOut() { return false; }
+bool        DriverNet::Check() {}
+void        DriverNet::Init(struct sockaddr_in*) {}
+int32_t     DriverNet::Connect() { return -1; }
+int32_t     DriverNet::Close(SOCKET) {  return -1; }
+
+bool        DriverNet::GetNetBlock()
+{
+    return ((errno == EAGAIN) || (errno == EWOULDBLOCK));
+}
 
 #endif
 

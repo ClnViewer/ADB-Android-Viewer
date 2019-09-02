@@ -55,7 +55,7 @@ std::string ADBDriver::GetProperties(DriverConst::DeviceInfoType t)
 {
     std::string result;
     std::stringstream ss;
-    ss << "getprop " << DriverConst::ls_arrayPropertis[t];
+    ss << "getprop " << DriverConst::ls_arrayPropertis[enumtoint(t)];
 
     if (AdbRawT<std::string>(ss.str(), DriverConst::ls_cmd_shell, result, DriverConst::ClearType::CLEARTYPE_NONE))
     {

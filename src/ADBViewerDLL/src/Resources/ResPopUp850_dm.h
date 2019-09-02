@@ -59,7 +59,7 @@ static inline const wchar_t *popup_strings_dm[] = {
     /* 56 */ L"L”schen",
     /* 57 */ L"In die Zwischenablage kopieren",
     /* 58 */ L"APK deinstallieren",
-    /* 59 */ L"File permission",
+    /* 59 */ L"Dateiberechtigung",
     /* 60 */ L"rw- --- ---",
     /* 61 */ L"rwx --- ---",
     /* 62 */ L"rw- rw- ---",

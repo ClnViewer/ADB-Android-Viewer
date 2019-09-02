@@ -169,6 +169,12 @@ bool ADBDriver::FileSend(std::string const & src, std::string const & dst, Drive
 
 bool ADBDriver::FileReceive(std::string const & src, std::string const & dst, bool isnotoverwrite)
     {
+        std::string sr;
+        return FileReceive(src, dst, sr, isnotoverwrite);
+    }
+
+bool ADBDriver::FileReceive(std::string const & src, std::string const & dst, std::string & rs, bool isnotoverwrite)
+    {
         do
         {
             if ((src.empty()) || (dst.empty()))
@@ -188,7 +194,7 @@ bool ADBDriver::FileReceive(std::string const & src, std::string const & dst, bo
                 if (!m_net.SyncTargetSend(l_client, DeviceId.Get<std::wstring>()))
                     break;
 
-                bool l_ret = m_net.SyncFileReceive(l_client, src, dst);
+                bool l_ret = m_net.SyncFileReceive(l_client, src, dst, rs);
                 m_net.Close(l_client);
                 return l_ret;
             }
@@ -218,5 +224,20 @@ bool ADBDriver::FileChmod(std::string const & dst, DriverConst::FilePermissionTy
         return ret;
     }
 
+bool ADBDriver::FileDelete(std::string const & dst, std::string & rs)
+    {
+        std::stringstream ss;
+        ss << DriverConst::ls_delete_file;
+        ss << dst.c_str();
+        bool ret = AdbRawT<std::string>(
+                    ss.str(),
+                    DriverConst::ls_cmd_shell,
+                    rs,
+                    DriverConst::ClearType::CLEARTYPE_NONE
+                );
+        if (!rs.empty())
+            string_clear_end(rs);
+        return ret;
+    }
 };
 

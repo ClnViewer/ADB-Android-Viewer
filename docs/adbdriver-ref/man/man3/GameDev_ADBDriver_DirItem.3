@@ -1,0 +1,74 @@
+.TH "GameDev::ADBDriver::DirItem" 3 "Mon Sep 9 2019" "ADBDriverDLL" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GameDev::ADBDriver::DirItem
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDirItem\fP (void *, void *)"
+.br
+.ti -1c
+.RI "\fBDirItem\fP (std::string const &, void *, void *)"
+.br
+.ti -1c
+.RI "\fBDirItem\fP (std::string const &, std::string const &, std::string const &, DriverConst::FileType, \fBADBDriver::DirItemColor\fP const &)"
+.br
+.ti -1c
+.RI "void \fBPermission\fP (uint32_t)"
+.br
+.ti -1c
+.RI "std::string \fBPermission\fP ()"
+.br
+.ti -1c
+.RI "void \fBType\fP (uint32_t)"
+.br
+.ti -1c
+.RI "DriverConst::FileType \fBType\fP ()"
+.br
+.ti -1c
+.RI "void \fBDescription\fP (std::string const &, std::string const &, std::string const &, \fBDirItemColor\fP const &)"
+.br
+.ti -1c
+.RI "template<typename T > const T * \fBColorText\fP () const"
+.br
+.ti -1c
+.RI "template<typename T > const T * \fBColorBg\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "std::string \fBs\fP"
+.br
+.ti -1c
+.RI "std::string \fBcmds\fP"
+.br
+.ti -1c
+.RI "std::string \fBdesc\fP"
+.br
+.ti -1c
+.RI "DriverConst::FileType \fBtype\fP"
+.br
+.ti -1c
+.RI "\fBDirItemColor\fP \fBctxt\fP"
+.br
+.ti -1c
+.RI "\fBDirItemColor\fP \fBcbg\fP"
+.br
+.ti -1c
+.RI "uint8_t \fBpermission\fP [3]"
+.br
+.ti -1c
+.RI "uint32_t \fBpmode\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ADBDriverDLL from the source code\&.

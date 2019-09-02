@@ -59,7 +59,7 @@ static inline const char *popup_strings_dm[] = {
     /* 56 */ "Löschen",
     /* 57 */ "In die Zwischenablage kopieren",
     /* 58 */ "APK deinstallieren",
-    /* 59 */ "File permission",
+    /* 59 */ "Dateiberechtigung",
     /* 60 */ "rw- --- ---",
     /* 61 */ "rwx --- ---",
     /* 62 */ "rw- rw- ---",

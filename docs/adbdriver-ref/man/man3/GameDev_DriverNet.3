@@ -1,0 +1,146 @@
+.TH "GameDev::DriverNet" 3 "Mon Sep 9 2019" "ADBDriverDLL" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GameDev::DriverNet
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef bool() \fBdir_list_cb\fP(GameDev::DriverNet::ADBSYNCDENT const &, std::string const &, void *)"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "struct \fB__attribute__\fP ((__packed__))"
+.br
+.ti -1c
+.RI "struct \fB__attribute__\fP ((__packed__))"
+.br
+.ti -1c
+.RI "struct \fB__attribute__\fP ((__packed__))"
+.br
+.ti -1c
+.RI "struct \fB__attribute__\fP ((__packed__))"
+.br
+.ti -1c
+.RI "\fBENUM_PRINTABLE\fP (SyncTagType, int32_t, SYNC_TAG_OKAY, SYNC_TAG_FAIL, SYNC_TAG_DONE, SYNC_TAG_SEND, SYNC_TAG_RECV, SYNC_TAG_DATA, SYNC_TAG_LIST, SYNC_TAG_DENT, SYNC_TAG_NONE, SYNC_TAG_BEGIN, SYNC_TAG_END, SYNC_TAG_WRITE, SYNC_TAG_ERROR, SYNC_TAG_CONTINUE)"
+.br
+.ti -1c
+.RI "\fBDriverNet\fP ()"
+.br
+.RI "TODO: "
+.ti -1c
+.RI "SOCKET \fBConnect\fP ()"
+.br
+.ti -1c
+.RI "int32_t \fBClose\fP (SOCKET)"
+.br
+.ti -1c
+.RI "bool \fBCheck\fP ()"
+.br
+.ti -1c
+.RI "void \fBInit\fP (struct sockaddr_in *)"
+.br
+.ti -1c
+.RI "bool \fBGetInitError\fP ()"
+.br
+.ti -1c
+.RI "template<typename T > DriverNet::SyncTagType \fBSyncDataType\fP (T const &)"
+.br
+.RI "Template\&. "
+.ti -1c
+.RI "template<typename T > bool \fBSyncCmdSend\fP (SOCKET, T const &, DriverNet::SyncTagType=DriverNet::SyncTagType::SYNC_TAG_OKAY)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBSyncStringReceive\fP (SOCKET, T const &, T &)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBSyncVectorReceive\fP (SOCKET, T const &, std::vector< uint8_t > &)"
+.br
+.ti -1c
+.RI "DriverNet::ADBSYNCDATA \fBSyncDataFromBuff\fP (char *)"
+.br
+.RI "Sync protocol\&. "
+.ti -1c
+.RI "DriverNet::ADBSYNCDATA \fBSyncDataFromBuff\fP (std::string const &)"
+.br
+.ti -1c
+.RI "DriverNet::ADBSYNCDATA \fBSyncDataFromBuff\fP (std::wstring const &)"
+.br
+.ti -1c
+.RI "DriverNet::ADBSYNCDATA \fBSyncDataMake\fP (DriverNet::SyncTagType, uint32_t)"
+.br
+.ti -1c
+.RI "bool \fBSyncDataSend\fP (SOCKET, std::string const &, DriverNet::SyncTagType)"
+.br
+.ti -1c
+.RI "bool \fBSyncDataSend\fP (SOCKET, const char *, int32_t, DriverNet::SyncTagType)"
+.br
+.ti -1c
+.RI "bool \fBSyncDataResponse\fP (SOCKET, DriverNet::SyncTagType)"
+.br
+.ti -1c
+.RI "bool \fBSyncDataResponse\fP (SOCKET, DriverNet::ADBSYNCDATA &, DriverNet::SyncTagType)"
+.br
+.ti -1c
+.RI "bool \fBSyncTargetSend\fP (SOCKET, std::wstring const &)"
+.br
+.ti -1c
+.RI "bool \fBSyncFileSend\fP (SOCKET, std::string const &, std::string const &)"
+.br
+.ti -1c
+.RI "bool \fBSyncFileReceive\fP (SOCKET, std::string const &, std::string const &, std::string &)"
+.br
+.ti -1c
+.RI "bool \fBSyncDirList\fP (SOCKET, std::string const &, void *, std::function< dir_list_cb >)"
+.br
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static bool \fBGetNetError\fP ()"
+.br
+.ti -1c
+.RI "static std::string \fBGetNetError\fP (int32_t)"
+.br
+.ti -1c
+.RI "static bool \fBGetNetBlock\fP ()"
+.br
+.ti -1c
+.RI "static bool \fBGetNetTimeOut\fP ()"
+.br
+.ti -1c
+.RI "static bool \fBSetNetTimeOut\fP (SOCKET, int32_t=0)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBSTREAMHEADER\fP"
+.br
+.ti -1c
+.RI "\fBADBSYNCPKT\fP"
+.br
+.ti -1c
+.RI "\fBADBSYNCDATA\fP"
+.br
+.ti -1c
+.RI "\fBADBSYNCDENT\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "bool GameDev::DriverNet::SyncDataResponse (SOCKET client, DriverNet::ADBSYNCDATA & req, DriverNet::SyncTagType type)"
+flush network errors 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ADBDriverDLL from the source code\&.

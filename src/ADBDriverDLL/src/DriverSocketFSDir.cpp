@@ -378,9 +378,9 @@ bool ADBDriver::DirList(
                 ADBDriver::DirItem di0(
                         fs_root.root_path().generic_string(),
                         fs_root.root_path().generic_string(),
-                        l_type_desc[DriverConst::FileType::FILETYPE_ROOT],
+                        l_type_desc[enumtoint(DriverConst::FileType::FILETYPE_ROOT)],
                         DriverConst::FileType::FILETYPE_ROOT,
-                        l_type_color[DriverConst::FileType::FILETYPE_ROOT]
+                        l_type_color[enumtoint(DriverConst::FileType::FILETYPE_ROOT)]
                 );
                 vdi.push_back(di0);
 
@@ -389,7 +389,7 @@ bool ADBDriver::DirList(
                         fs_root.parent_path().generic_string(),
                         fs_root.parent_path().generic_string(),
                         DriverConst::FileType::FILETYPE_BACK,
-                        l_type_color[DriverConst::FileType::FILETYPE_BACK]
+                        l_type_color[enumtoint(DriverConst::FileType::FILETYPE_BACK)]
                 );
                 vdi.push_back(di1);
             }
@@ -400,7 +400,7 @@ bool ADBDriver::DirList(
                         l_datalocaltmp_cmd,
                         l_datalocaltmp_desc,
                         DriverConst::FileType::FILETYPE_DIR,
-                        l_type_color[DriverConst::FileType::FILETYPE_DIR]
+                        l_type_color[enumtoint(DriverConst::FileType::FILETYPE_DIR)]
                 );
                 vdi.push_back(di0);
             }
@@ -434,8 +434,8 @@ bool ADBDriver::DirList(
                             bool isreadonly = ((!di.permission[1]) && (!di.permission[2]));
                             ADBDriver::DirItemColor & l_txt_color =
                                 ((isreadonly) ?
-                                        l_type_color[DriverConst::FileType::FILETYPE_READONLY] :
-                                        l_type_color[di.type]
+                                        l_type_color[enumtoint(DriverConst::FileType::FILETYPE_READONLY)] :
+                                        l_type_color[enumtoint(di.type)]
                                     );
 
                             switch (di.type)
@@ -446,7 +446,7 @@ bool ADBDriver::DirList(
                                             fs_entry.generic_string(),
                                             "",
                                             ((isreadonly) ?
-                                                l_type_desc[DriverConst::FileType::FILETYPE_READONLY] :
+                                                l_type_desc[enumtoint(DriverConst::FileType::FILETYPE_READONLY)] :
                                                 di.Permission()
                                             ),
                                             l_txt_color
@@ -457,9 +457,9 @@ bool ADBDriver::DirList(
                                     {
                                         std::stringstream ss;
                                         ss << FileSize(dent.bsize);
-                                        ss << l_type_desc[di.type];
+                                        ss << l_type_desc[enumtoint(di.type)];
                                         if (isreadonly)
-                                            ss << l_type_desc[DriverConst::FileType::FILETYPE_READONLY] << "/";
+                                            ss << l_type_desc[enumtoint(DriverConst::FileType::FILETYPE_READONLY)] << "/";
                                         ss << di.Permission().c_str();
 
                                         di.Description(
@@ -473,9 +473,9 @@ bool ADBDriver::DirList(
                                 case DriverConst::FileType::FILETYPE_SYMLINK:
                                     {
                                         std::stringstream ss;
-                                        ss << l_type_desc[di.type];
+                                        ss << l_type_desc[enumtoint(di.type)];
                                         if (isreadonly)
-                                            ss << l_type_desc[DriverConst::FileType::FILETYPE_READONLY] << "/";
+                                            ss << l_type_desc[enumtoint(DriverConst::FileType::FILETYPE_READONLY)] << "/";
                                         ss << di.Permission().c_str();
 
                                         di.Description(
@@ -494,7 +494,7 @@ bool ADBDriver::DirList(
                                         di.Description(
                                             fs_entry.generic_string(),
                                             "",
-                                            l_type_desc[di.type],
+                                            l_type_desc[enumtoint(di.type)],
                                             l_txt_color
                                         );
                                         di.cmds.erase();

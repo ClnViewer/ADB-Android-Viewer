@@ -1,0 +1,46 @@
+.TH "GameDev::DriverExcept" 3 "Mon Sep 9 2019" "ADBDriverDLL" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GameDev::DriverExcept
+.SH SYNOPSIS
+.br
+.PP
+.PP
+Inherits runtime_error\&.
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBDriverExcept\fP (const std::wstring &_msg)"
+.br
+.ti -1c
+.RI "\fBDriverExcept\fP (DWORD _el, int _es, int _l)"
+.br
+.ti -1c
+.RI "\fBDriverExcept\fP (DWORD _es, int _l)"
+.br
+.ti -1c
+.RI "const wchar_t * \fBMessage\fP () const"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "DWORD \fBErrorLast\fP"
+.br
+.ti -1c
+.RI "int32_t \fBErrorSoket\fP"
+.br
+.ti -1c
+.RI "int32_t \fBLine\fP"
+.br
+.ti -1c
+.RI "std::wstring \fBMsg\fP"
+.br
+.in -1c
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ADBDriverDLL from the source code\&.

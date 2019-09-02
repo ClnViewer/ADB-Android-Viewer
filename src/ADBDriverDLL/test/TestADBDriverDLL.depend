@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1567189379 source:c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\test\main.cpp
+1568077214 source:c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\test\main.cpp
 	"../../ADBViewer/src/loader.h"
 	"../src/ADBDriver.h"
 	<cstdio>
@@ -30,9 +30,9 @@
 	"version.h"
 	"exchndl.h"
 
-1566747061 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\version.h
+1567192722 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\version.h
 
-1567191065 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\adbdriver.h
+1567470468 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\adbdriver.h
 	"DriverConst.h"
 	"DriverExcept.h"
 	"DriverAsync.h"
@@ -41,13 +41,17 @@
 
 1566507762 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverasync.h
 
-1567121740 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\drivernet.h
+1568249391 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\drivernet.h
+	"Utils/extEnumPrintable.h"
 
 1558207250 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverexcept.h
 
 1559340809 c:\__buildsource\__svn__\adbviewer\src\adbviewer\src\exchndl.h
 
-1567129167 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverconst.h
+1568052307 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\driverconst.h
+	"Utils/extEnumPrintable.h"
 
 1566844300 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\utils\extmultistring.h
+
+1568232775 c:\__buildsource\__svn__\adbviewer\src\adbdriverdll\src\utils\extenumprintable.h
 

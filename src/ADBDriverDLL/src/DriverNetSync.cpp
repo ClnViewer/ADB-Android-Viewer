@@ -31,6 +31,7 @@
 
 #include "DriverInternal.h"
 #include "DriverConst.h"
+#include "Utils/extTraceFunction.h"
 #include <errno.h>
 
 namespace GameDev
@@ -53,7 +54,7 @@ DriverNet::ADBSYNCDATA DriverNet::SyncDataMake(DriverNet::SyncTagType type, uint
     {
         DriverNet::ADBSYNCDATA data{};
         data.sz = sz;
-        ::memcpy(data.id, synctag[type], 4);
+        ::memcpy(data.id, synctag[static_cast<uint32_t>(type)], 4);
         return data;
     }
 
@@ -142,14 +143,16 @@ bool DriverNet::SyncTargetSend(SOCKET client, std::wstring const & target)
 template <typename T>
 DriverNet::SyncTagType DriverNet::SyncDataType(T const & data)
     {
+        tracer();
+
         for (uint32_t i = 0; (i < (__NELE(synctag) - 1U)); i++)
             if ((synctag[i][0] == data.id[0]) &&
                 (synctag[i][1] == data.id[1]) &&
                 (synctag[i][2] == data.id[2]) &&
                 (synctag[i][3] == data.id[3]))
-                return static_cast<DriverNet::SyncTagType>(i);
+                trace_return(static_cast<DriverNet::SyncTagType>(i));
 
-        return DriverNet::SyncTagType::SYNC_TAG_NONE;
+        trace_return(DriverNet::SyncTagType::SYNC_TAG_NONE);
     }
     template DriverNet::SyncTagType DriverNet::SyncDataType<DriverNet::ADBSYNCDATA>(DriverNet::ADBSYNCDATA const&);
     template DriverNet::SyncTagType DriverNet::SyncDataType<DriverNet::ADBSYNCDENT>(DriverNet::ADBSYNCDENT const&);
@@ -228,6 +231,9 @@ bool DriverNet::SyncFileSend(SOCKET client, std::string const & src, std::string
         {
             DriverNet::ADBSYNCDATA req;
 
+            if (!DriverNet::SetNetTimeOut(client, 100))
+                break;
+
             if (!SyncCmdSend<std::string>(client, DriverConst::ls_cmd_sunc))
                 break;
 
@@ -274,11 +280,13 @@ bool DriverNet::SyncFileSend(SOCKET client, std::string const & src, std::string
         return false;
     }
 
-bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::string const & dst)
+bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::string const & dst, std::string & rs)
     {
         do
         {
+            bool isend = false;
             DriverNet::ADBSYNCDATA req;
+            rs.clear();
 
             if (!SyncCmdSend<std::string>(client, DriverConst::ls_cmd_sunc))
                 break;
@@ -289,112 +297,89 @@ bool DriverNet::SyncFileReceive(SOCKET client, std::string const & src, std::str
                 (::send(client, src.data(), src.length(), 0) < static_cast<int32_t>(src.length())))
                 break;
 
-            bool    isbegin = true,
-                    isend   = false;
-            int32_t rsz     = 0,
-                    asz     = 0;
+            DriverNet::ADBSYNCPKT pkt{};
+            DriverNet::SyncTagType type = DriverNet::SyncTagType::SYNC_TAG_BEGIN;
 
-            auto dbuf = std::make_unique<char[]>(64000);
+            auto dbuf = std::make_unique<char[]>(65536);
             FILE __AUTO(__autofile) * fp = ::fopen(dst.c_str(), "wb");
             if (!fp)
                 break;
 
             do
             {
-                if ((rsz = ::recv(client, dbuf.get(), 64000, 0)) <= 0)
-                {
-                    if (rsz == SOCKET_ERROR)
-                    {
-                        if (!errno)
-                            break;
-                        return false;
-                    }
-                    else if (!rsz) /// detail test this!! (loop?)
-                        continue;
-                    break;
-                }
+                type = receiveData(client, dbuf, pkt);
+                trace_info("switch -> pkt.rsz = %d, pkt.asz = %d, case = %s",
+                    pkt.rsz, pkt.asz,
+                    enumtostring(type)
+                );
 
-                int32_t offset = 0;
-                char *buff = dbuf.get();
-                req = SyncDataFromBuff(buff);
-
-                switch (SyncDataType<DriverNet::ADBSYNCDATA>(req))
+                switch (type)
                 {
-                    case DriverNet::SyncTagType::SYNC_TAG_DATA:
+                    case DriverNet::SyncTagType::SYNC_TAG_CONTINUE:
                         {
-                            offset  = sizeof(DriverNet::ADBSYNCDATA);
-                            asz     = static_cast<int32_t>(req.sz);
-                            isbegin = false;
-
-                            if (asz <= 0)
-                            {
-                                /// error is file empty
-                                rsz = -1;
-                            }
-                            else if (asz < rsz)
-                            {
-                                req = SyncDataFromBuff(buff + asz + offset);
-                                if (SyncDataType<DriverNet::ADBSYNCDATA>(req) == DriverNet::SyncTagType::SYNC_TAG_DONE)
-                                    isend = true;
-                                rsz = asz;
-                            }
-                            else
-                                rsz -= offset;
+                            continue;
+                        }
+                    case DriverNet::SyncTagType::SYNC_TAG_ERROR:
+                        {
+                            rs = DriverNet::GetNetError(__LINE__);
+                            isend = true;
                             break;
                         }
-                    case DriverNet::SyncTagType::SYNC_TAG_DONE:
+                    case DriverNet::SyncTagType::SYNC_TAG_END:
                         {
-                            /// is file empty, no receive SYNC_TAG_DATA,
-                            /// receive immediately SYNC_TAG_DONE
-                            rsz = 0; isend = true;
+                            isend = true;
+                            break;
+                        }
+                    case DriverNet::SyncTagType::SYNC_TAG_OKAY:
+                        {
+                            type = trace_call(parseData, client, fp, pkt);
+                            trace_info("switch -> %s",
+                                enumtostring(type)
+                            );
+                            switch (type)
+                            {
+                                case DriverNet::SyncTagType::SYNC_TAG_CONTINUE:
+                                    {
+                                        continue;
+                                    }
+                                case DriverNet::SyncTagType::SYNC_TAG_ERROR:
+                                    {
+                                        isend = true;
+                                        break;
+                                    }
+                                case DriverNet::SyncTagType::SYNC_TAG_END:
+                                    {
+                                        isend = true;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        if (pkt.rsz >= 0)
+                                            pkt.rsz = -8;
+                                        isend = true;
+                                        break;
+                                    }
+                            }
                             break;
                         }
                     default:
                         {
-                            if (isbegin)
-                                return false;
-
-                            if (asz < rsz)
-                            {
-                                req = SyncDataFromBuff(buff + asz);
-                                if (SyncDataType<DriverNet::ADBSYNCDATA>(req) == DriverNet::SyncTagType::SYNC_TAG_DONE)
-                                    isend = true;
-                                rsz = asz;
-                            }
+                            trace_info(
+                                "warning: found understand tag -> %s [error]",
+                                enumtostring(type)
+                            );
                             break;
                         }
                 }
-
-                if ((!rsz) && (!isend))
-                    continue;
-                else if (rsz < 0)
-                    break;
-                else if (rsz > 0)
-                {
-                    ::fwrite(buff + offset, 1U, static_cast<size_t>(rsz), fp);
-                    asz -= rsz;
-                }
-                if ((isend) || (asz <= 0))
-                {
-                    rsz = 0; break;
-                }
-
-                req = SyncDataMake(DriverNet::SyncTagType::SYNC_TAG_OKAY, 0U);
-                if (::send(client, (const char*)&req, sizeof(req), 0) < static_cast<int32_t>(sizeof(req)))
-                    break;
             }
-            while ((rsz >= 0) && (asz > 0));
+            while (!isend);
 
-            if (asz)
+            if (!receiveErrors(pkt, rs))
                 break;
-
-            if (rsz < 0)
-                if (GetNetError())
-                    break;
-            return true;
+            trace_return(true);
         }
         while (0);
-        return false;
+        trace_return(false);
     }
 
 bool DriverNet::SyncDirList(
@@ -408,6 +393,9 @@ bool DriverNet::SyncDirList(
         do
         {
             DriverNet::ADBSYNCDATA req{};
+
+            if (!DriverNet::SetNetTimeOut(client, 100))
+                break;
 
             if (!SyncCmdSend<std::string>(client, DriverConst::ls_cmd_sunc))
                 break;

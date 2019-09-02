@@ -1,0 +1,150 @@
+.TH "stdext::TraceFunction" 3 "Mon Sep 9 2019" "ADBDriverDLL" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+stdext::TraceFunction
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBinit\fP (bool n=false, bool d=true)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (FILE *f, bool n=false, bool d=true)"
+.br
+.ti -1c
+.RI "void \fBinit\fP (std::string const &s, bool n=false, bool d=true)"
+.br
+.ti -1c
+.RI "void \fBtrace\fP (std::string const &f, std::string const &s, int32_t l, std::string const &p)"
+.br
+.RI "Enter function\&. "
+.ti -1c
+.RI "void \fBtrace\fP (std::string const &s)"
+.br
+.RI "Exit function\&. "
+.ti -1c
+.RI "template<typename T > void \fBtrace\fP (std::string const &s, int32_t l, T obj)"
+.br
+.RI "Return from function\&. "
+.ti -1c
+.RI "template<typename T > void \fBtrace_cb\fP (std::string const &s, int32_t l, T obj, std::function< std::string(T &)> fun)"
+.br
+.RI "Return from function using callback to print custom user object\&. "
+.ti -1c
+.RI "template<class\&.\&.\&. Args> void \fBargs\fP (std::string const &s, Args\&.\&.\&. a)"
+.br
+.RI "Print function arguments value\&. "
+.ti -1c
+.RI "void \fBtrace\fP (std::string const &s, int32_t l, const char *fmt,\&.\&.\&.)"
+.br
+.RI "Print user defined information, like as printf() "
+.in -1c
+.SS "Static Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "static \fBTraceFunction\fP & \fBinstance\fP ()"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "template<class\&.\&.\&. Args> void stdext::TraceFunction::args (std::string const & s, Args\&.\&.\&. a)\fC [inline]\fP"
+
+.PP
+Print function arguments value\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP function name 
+.br
+\fIl\fP file line 
+.br
+\fIfmt\fP string arguments format 
+.br
+\fI(\&.\&.\&.)\fP arguments list
+.RE
+.PP
+using macro trace_call(function name, function arguments) 
+.SS "void stdext::TraceFunction::trace (std::string const & f, std::string const & s, int32_t l, std::string const & p)\fC [inline]\fP"
+
+.PP
+Enter function\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIf\fP file name 
+.br
+\fIs\fP function name 
+.br
+\fIl\fP file line 
+.br
+\fIp\fP function signature string
+.RE
+.PP
+using from \fBstdext::TraceLogger()\fP constructor, or macro trace_enter(), warning, indent increase 
+.SS "void stdext::TraceFunction::trace (std::string const & s)\fC [inline]\fP"
+
+.PP
+Exit function\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP function name
+.RE
+.PP
+using from \fBstdext::TraceLogger()\fP destructor or macro trace_exit(), warning, indent decrease 
+.SS "template<typename T > void stdext::TraceFunction::trace (std::string const & s, int32_t l, T obj)\fC [inline]\fP"
+
+.PP
+Return from function\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP function name 
+.br
+\fIl\fP file line 
+.br
+\fIobj\fP function return (auto type)
+.RE
+.PP
+using macro trace_return(return value) return function object do have operator << ostream is print same\&. 
+.SS "void stdext::TraceFunction::trace (std::string const & s, int32_t l, const char * fmt,  \&.\&.\&.)\fC [inline]\fP"
+
+.PP
+Print user defined information, like as printf() 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP function name 
+.br
+\fIl\fP file line 
+.br
+\fIfmt\fP string arguments format 
+.br
+\fI(\&.\&.\&.)\fP arguments list
+.RE
+.PP
+using macro trace_info(format, arguments) 
+.SS "template<typename T > void stdext::TraceFunction::trace_cb (std::string const & s, int32_t l, T obj, std::function< std::string(T &)> fun)\fC [inline]\fP"
+
+.PP
+Return from function using callback to print custom user object\&. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs\fP function name 
+.br
+\fIl\fP file line 
+.br
+\fIfun\fP function ref
+.RE
+.PP
+using macro trace_return_cb(auto value, std::function<std::string(auto&)>) example: trace_return_cb(value, valueType, [](valueType & v) { return to_string(v); }); 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ADBDriverDLL from the source code\&.

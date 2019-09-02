@@ -49,3 +49,5 @@ src/license_header.template
 /src/ADBViewer/*.rpt
 /src/ADBViewer/doxygen
 /src/ADBViewerDLL/src/Resources/image/old
+/docs/adbdriver-ref/doxyfile
+/docs/adbdriver-ref/doxygen.log

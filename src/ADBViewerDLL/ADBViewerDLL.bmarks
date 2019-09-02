@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
-	<ActiveTarget name="Release" />
-	<File name="src\ResManager.h" open="0" top="0" tabpos="8">
-		<Cursor position="4148" topLine="115" />
-	</File>
-	<File name="src\ResManager.cpp" open="0" top="0" tabpos="7">
-		<Cursor position="2533" topLine="11" />
-	</File>
+	<ActiveTarget name="Debug" />
 </BrowseTracker_layout_file>

@@ -42,6 +42,7 @@ int main()
 {
     GameDev::ADBDriver m_adb;
 
+    /// GetProperties
     /*
     std::wstring response;
 
@@ -55,20 +56,26 @@ int main()
     std::wcout << L"GetProperties: " << response << std::endl;
     */
 
-    //m_adb.InitRemote();
+    /// InitRemote
+    /*
+    m_adb.InitRemote();
+    */
     bool ret;
     std::string sr;
 
+    /// GetDeviceSetupUI
     /*
     ret = m_adb.GetDeviceSetupUI();
     std::cout << "GetDeviceSetupUI: " << ret << std::endl;
     */
 
+    /// GetDeviceListUI
     /*
     ret = m_adb.GetDeviceListUI();
     std::cout << "GetDeviceListUI: " << ret << std::endl;
     */
 
+    /// GetDeviceListUI custom
     /*
     ret = m_adb.GetDeviceListUI();
     std::wstring wdid = m_adb.DeviceId.GetID<std::wstring>();
@@ -79,12 +86,14 @@ int main()
     std::wcout << L" -*- " << std::endl;
     */
 
+    /// GetDeviceInfo
     /*
     std::cout << m_adb.GetDeviceInfo() << std::endl;
     std::cout << m_adb.GetDriverInfo() << std::endl;
     std::cout << m_adb.GetProperties(GameDev::DriverConst::DeviceInfoType::DI_CPU_LIST) << std::endl;
     */
 
+    /// SendTextT
     /*
     /// NOT print
     //ret = m_adb.SendTextT<std::string>("и утф, текст! \"(тест)\"", true);
@@ -95,12 +104,15 @@ int main()
         std::this_thread::sleep_for(std::chrono::milliseconds(2000));
     */
 
+    /// SendToShell
     /*
     ret = m_adb.SendToShell("ls -l", sr, false, GameDev::DriverConst::ClearType::CLEARTYPE_NONE);
     std::cout << "Result (ls -l): " << ret << std::endl;
     std::cout << sr.c_str() << std::endl;
     */
 
+    /// ListDir
+    /*
     std::vector<GameDev::ADBDriver::DirItem> vdi;
     ret = m_adb.DirList("/data/local/tmp", vdi, sr);
     //ret = m_adb.DirList("/", vdi, sr);
@@ -116,5 +128,33 @@ int main()
                 << di.cmds.c_str() << "\n\t\t\t: "
                     << di.type << " : " << di.pmode << std::endl;
     }
+    */
+
+    /// FileReceive
+    static const char *filesArray[][2] =
+    {
+        {
+            "/data/local/tmp/aaaaaaaa.ddd",
+            "C:\\__GAMES__\\test\\aaaaaaaa.ddd"
+        },
+        {
+            "/data/local/tmp/aaaa.t2t",
+            "C:\\__GAMES__\\test\\aaaa.t2t"
+        },
+        {
+            "/data/local/tmp/OutBmp.bmp",
+            "C:\\__GAMES__\\test\\OutBmp.bmp"
+        }
+    };
+    for (uint32_t i = 0U; i < std::size(filesArray); i++)
+    {
+        ret = m_adb.FileReceive(filesArray[i][0], filesArray[i][1], sr);
+        std::cout << "Result (FileReceive): " << ret << " -> " << filesArray[i][1];
+        if (!sr.empty())
+            std::cout << " -> [" << sr.c_str() << "]";
+        std::cout << std::endl;
+        sr.clear();
+    }
+
     return 0;
 }

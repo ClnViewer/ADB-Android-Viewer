@@ -97,13 +97,56 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                         if (AppConfig::instance().cnf_browser_dir_local.empty())
                                             break;
 
+                                        std::string rs;
+                                        std::string fpath = m_parser.filepath(
+                                                                m_drawitems[src->sel],
+                                                                AppConfig::instance().cnf_browser_dir_local
+                                                            );
                                         l_isaction = AppConfig::instance().cnf_adb.FileReceive(
                                                 m_drawitems[src->sel].cmds,
-                                                m_parser.filepath(
-                                                    m_drawitems[src->sel],
-                                                    AppConfig::instance().cnf_browser_dir_local
-                                                )
+                                                fpath,
+                                                rs
                                             );
+
+                                        if (!l_isaction)
+                                        {
+                                            ss << ResManager::stringload(
+                                                    ResManager::IndexStringResource::RES_STR_BROWSER_FILE_SEND_ERROR,
+                                                    AppConfig::instance().cnf_lang
+                                                );
+                                            if (!rs.empty())
+                                                ss << rs.c_str();
+                                            else
+                                                ss << fpath.c_str();
+                                        }
+                                        else if ((l_sel == ID_CMD_POP_MENU260) && (l_isaction))
+                                        {
+                                            l_isaction = AppConfig::instance().cnf_adb.FileDelete(
+                                                            m_drawitems[src->sel].cmds,
+                                                            rs
+                                                        );
+                                            if (!l_isaction)
+                                            {
+                                                ss << ResManager::stringload(
+                                                    ResManager::IndexStringResource::RES_STR_BROWSER_FILE_DELETE_ERROR,
+                                                    AppConfig::instance().cnf_lang
+                                                );
+                                                if (!rs.empty())
+                                                    ss << rs.c_str();
+                                                else
+                                                    ss << m_drawitems[src->sel].cmds.c_str();
+                                            }
+                                        }
+                                        //
+                                        if (l_isaction)
+                                            ss << ResManager::stringload(
+                                                    ((l_sel == ID_CMD_POP_MENU260) ?
+                                                        ResManager::IndexStringResource::RES_STR_BROWSER_FILE_MOVE_OK :
+                                                        ResManager::IndexStringResource::RES_STR_BROWSER_FILE_COPY_OK
+                                                    ),
+                                                    AppConfig::instance().cnf_lang
+                                                ) << fpath.c_str();
+
                                         l_isaction = false;
                                         break;
                                     }
@@ -114,6 +157,8 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                         }
                     case ID_CMD_POP_MENU262: // Delete
                         {
+                            std::string rs;
+
                             switch (m_page->mikey)
                             {
                                 case AppBrowserPage::MenuInput::MENUINPUT_PC:
@@ -125,9 +170,13 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                     }
                                 case AppBrowserPage::MenuInput::MENUINPUT_ANDROID:
                                     {
-                                        l_isaction = m_parser.file_delete_device(
-                                                             m_drawitems[src->sel].cmds
-                                                     );
+                                        l_isaction = AppConfig::instance().cnf_adb.FileDelete(
+                                                        m_drawitems[src->sel].cmds,
+                                                        rs
+                                                    );
+
+                                        // TODO (clanc#1#15.09.2019): add check return null string
+                                        l_isaction = true;
                                         break;
                                     }
                                 default:
@@ -139,10 +188,14 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                         AppConfig::instance().cnf_lang
                                     );
                             else
+                            {
                                 ss << ResManager::stringload(
                                         ResManager::IndexStringResource::RES_STR_BROWSER_FILE_DELETE_ERROR,
                                         AppConfig::instance().cnf_lang
                                     );
+                                if (!rs.empty())
+                                    ss << " - " << rs.c_str();
+                            }
 
                             ss << m_drawitems[src->sel].cmds;
                             break;

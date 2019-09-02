@@ -1,0 +1,195 @@
+.TH "GameDev::ADBDriver" 3 "Mon Sep 9 2019" "ADBDriverDLL" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GameDev::ADBDriver
+.SH SYNOPSIS
+.br
+.PP
+.SS "Classes"
+
+.in +1c
+.ti -1c
+.RI "struct \fBDirItem\fP"
+.br
+.ti -1c
+.RI "struct \fBDirItemColor\fP"
+.br
+.ti -1c
+.RI "struct \fBSwipe_s\fP"
+.br
+.ti -1c
+.RI "struct \fBTap_s\fP"
+.br
+.in -1c
+.SS "Public Types"
+
+.in +1c
+.ti -1c
+.RI "typedef bool() \fBvideo_cb\fP(std::vector< uint8_t > &, uint32_t, uint32_t)"
+.br
+.in -1c
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBADBDriver\fP ()"
+.br
+.RI "Driver\&. "
+.ti -1c
+.RI "\fBADBDriver\fP (std::wstring &)"
+.br
+.ti -1c
+.RI "bool \fBAdbCheck\fP ()"
+.br
+.ti -1c
+.RI "bool \fBAdbStart\fP (std::wstring &)"
+.br
+.ti -1c
+.RI "bool \fBAdbStop\fP (std::wstring &)"
+.br
+.ti -1c
+.RI "bool \fBInitRemote\fP ()"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBManagerT\fP (T const &, T &)"
+.br
+.RI "Driver (Process) "
+.ti -1c
+.RI "template<typename T > bool \fBAdbRawT\fP (T, T const &, T &, DriverConst::ClearType=DriverConst::ClearType::CLEARTYPE_NONE)"
+.br
+.RI "Driver(Socket) "
+.ti -1c
+.RI "void \fBClick\fP (\fBADBDriver::Tap_s\fP *)"
+.br
+.RI "Driver(Socket) Input\&. "
+.ti -1c
+.RI "void \fBClick\fP (\fBADBDriver::Swipe_s\fP *)"
+.br
+.ti -1c
+.RI "void \fBClickDbl\fP (\fBADBDriver::Tap_s\fP *)"
+.br
+.ti -1c
+.RI "void \fBSendSpecialKey\fP (DriverConst::KeysType, int32_t)"
+.br
+.ti -1c
+.RI "bool \fBSendToShell\fP (std::string const &, std::string &, bool=false, DriverConst::ClearType=DriverConst::ClearType::CLEARTYPE_NONE)"
+.br
+.ti -1c
+.RI "template<typename T > bool \fBSendTextT\fP (T const &, bool=false)"
+.br
+.ti -1c
+.RI "bool \fBDirList\fP (std::string const &, std::vector< \fBADBDriver::DirItem\fP > &, std::string &)"
+.br
+.RI "Driver(Socket) FS Directory\&. "
+.ti -1c
+.RI "bool \fBFileSend\fP (std::string const &, std::string const &, DriverConst::FilePermissionType)"
+.br
+.RI "Driver(Socket) FS File\&. "
+.ti -1c
+.RI "bool \fBFileReceive\fP (std::string const &, std::string const &, bool=false)"
+.br
+.ti -1c
+.RI "bool \fBFileReceive\fP (std::string const &, std::string const &, std::string &, bool=false)"
+.br
+.ti -1c
+.RI "bool \fBFileChmod\fP (std::string const &, DriverConst::FilePermissionType, std::string &)"
+.br
+.ti -1c
+.RI "std::string \fBFilePermission\fP (DriverConst::FilePermissionType)"
+.br
+.RI "FS file public method\&. "
+.ti -1c
+.RI "uint32_t \fBFilePermission\fP (std::string const &)"
+.br
+.ti -1c
+.RI "std::string \fBFileSize\fP (uintmax_t)"
+.br
+.ti -1c
+.RI "std::string \fBFileSize\fP (std::string const &)"
+.br
+.ti -1c
+.RI "bool \fBInstallApk\fP (std::string const &)"
+.br
+.RI "Driver(Socket) Device\&. "
+.ti -1c
+.RI "bool \fBUnInstallApk\fP (std::string const &, std::string &)"
+.br
+.ti -1c
+.RI "SelectedList \fBGetDeviceList\fP ()"
+.br
+.ti -1c
+.RI "bool \fBGetDeviceListUI\fP ()"
+.br
+.ti -1c
+.RI "bool \fBGetDeviceSetupUI\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBGetDeviceInfo\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBGetDriverInfo\fP ()"
+.br
+.ti -1c
+.RI "std::string \fBGetProperties\fP (DriverConst::DeviceInfoType)"
+.br
+.ti -1c
+.RI "uint32_t \fBGetDisplayWidth\fP () const"
+.br
+.RI "Driver(Socket) Capture\&. "
+.ti -1c
+.RI "uint32_t \fBGetDisplayHeight\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBGetDisplayType\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBGetDisplaySize\fP () const"
+.br
+.ti -1c
+.RI "uint32_t \fBGetDisplayMagic\fP () const"
+.br
+.ti -1c
+.RI "std::vector< uint8_t > \fBCapture\fP ()"
+.br
+.ti -1c
+.RI "std::vector< uint8_t > \fBCapture\fP (DriverConst::CapType, uint32_t, uint32_t)"
+.br
+.ti -1c
+.RI "bool \fBVideo\fP (uint32_t, uint32_t, std::function< video_cb >)"
+.br
+.ti -1c
+.RI "bool \fBVideo\fP (uint32_t, uint32_t, uint32_t, std::function< video_cb >)"
+.br
+.ti -1c
+.RI "template<typename T > bool DLL_EXPORT \fBSendTextT\fP (T const &s, bool isasciitext)"
+.br
+.ti -1c
+.RI "template<typename T > bool DLL_EXPORT \fBAdbRawT\fP (T cmd, T const &addtype, T &result, DriverConst::ClearType type)"
+.br
+.ti -1c
+.RI "template<typename T > bool DLL_EXPORT \fBManagerT\fP (T const &cmd, T &data)"
+.br
+.in -1c
+.SS "Public Attributes"
+
+.in +1c
+.ti -1c
+.RI "\fBstdext::MultiString\fP \fBAdbBin\fP"
+.br
+.ti -1c
+.RI "\fBstdext::MultiString\fP \fBDeviceId\fP"
+.br
+.in -1c
+.SH "Member Function Documentation"
+.PP 
+.SS "bool GameDev::ADBDriver::FileReceive (std::string const & src, std::string const & dst, std::string & rs, bool isnotoverwrite = \fCfalse\fP)"
+file already exist 
+.SS "bool GameDev::ADBDriver::GetDeviceListUI ()"
+ADB start/stop DIALOG
+.PP
+ADB select active device DIALOG 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for ADBDriverDLL from the source code\&.

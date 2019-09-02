@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "Utils/extEnumPrintable.h"
+
 namespace GameDev
 {
 
@@ -8,30 +10,23 @@ class DriverConst
 {
     public:
 
-        enum DeviceInfoType
-        {
+        ENUM_PRINTABLE(DeviceInfoType, int32_t,
                 DI_CPU_LIST,
                 DI_VERSION_SDK,
                 DI_VERSION_RELEASE
-        };
-
-        enum KeysType
-        {
+        );
+        ENUM_PRINTABLE(KeysType, int32_t,
                 KEYS_ANDROID,
                 KEYS_SDL,
                 KEYS_WINAPI
-        };
-
-        enum CapType
-        {
+        );
+        ENUM_PRINTABLE(CapType, int32_t,
                 CAP_RAW,
                 CAP_PNG,
                 CAP_ACAP_BMP,
                 CAP_ACAP_STREAM
-        };
-
-        enum FilePermissionType
-        {
+        );
+        ENUM_PRINTABLE(FilePermissionType, int32_t,
                 PERM_RW = 0,
                 PERM_RWX,
                 PERM_RWRW,
@@ -39,10 +34,8 @@ class DriverConst
                 PERM_RWRWRW,
                 PERM_RWXRWXRWX,
                 PERM_NONE
-        };
-
-        enum FileType
-        {
+        );
+        ENUM_PRINTABLE(FileType, int32_t,
                 FILETYPE_NONE = 0,
                 FILETYPE_DIR,
                 FILETYPE_FILE,
@@ -55,14 +48,12 @@ class DriverConst
                 FILETYPE_BACK,
                 FILETYPE_INFO,
                 FILETYPE_READONLY
-        };
-
-        enum ClearType
-        {
-                CLEARTYPE_NONE = 0,
+        );
+        ENUM_PRINTABLE(ClearType, int32_t,
+                CLEARTYPE_NONE,
                 CLEARTYPE_4,
                 CLEARTYPE_8
-        };
+        );
 
 #       if defined(_BUILD_DLL)
 
@@ -90,6 +81,7 @@ class DriverConst
         static inline const char    *ls_path_dir        = PATH1_;
 
         static inline const char    *ls_cmod_file       = "/system/bin/chmod ";
+        static inline const char    *ls_delete_file     = "rm -f ";
         static inline const char    *ls_apk_install     = "pm install -r /data/local/tmp/";
         static inline const char    *ls_apk_uninstall   = "pm uninstall";
         static inline const char    *ls_name_ascreencap = "ascreencap";
@@ -124,6 +116,7 @@ class DriverConst
 #       define E1_ "Path to 'adb.exe' not set.."
 #       define E2_ "Error: launch adb.exe"
 #       define E3_ "Error: set process pipe"
+
         static inline const wchar_t *lw_errorBin  = to_wchar_(E0_);
         static inline const char    *ls_errorBin  = E0_;
         static inline const wchar_t *lw_errorSet  = to_wchar_(E1_);
@@ -132,6 +125,38 @@ class DriverConst
         static inline const char    *ls_errorRun  = E2_;
         static inline const wchar_t *lw_errorPipe = to_wchar_(E3_);
         static inline const char    *ls_errorPipe = E3_;
+
+#       define SFR0_  "Ok: receive data complete"
+#       define SFR00_ "Error: receive data not complete, size wrong.."
+#       define SFR1_  "Error: socket read data.."
+#       define SFR2_  "Error: ADB device socket not response or bad address"
+#       define SFR3_  "Error: limit retry read socket attempt.."
+#       define SFR4_  "Error: socket from ADB device is disconnected.."
+#       define SFR5_  "Error: block size wrong.."
+#       define SFR6_  "Error: ADB packet header is wrong.."
+#       define SFR7_  "Error: ADB packet unexpected block size"
+#       define SFR8_  "Error: unknowns received tag"
+#       define SFR9_  "Error: ADB protocol block size wrong.."
+#       define SFR10_ "Error: write block size incomplete.."
+
+        static inline const char    *ls_errorSFR0  = SFR0_;
+        static inline const char    *ls_errorSFR00 = SFR00_;
+        static inline const char    *ls_errorSFR1  = SFR1_;
+        static inline const char    *ls_errorSFR2  = SFR2_;
+        static inline const char    *ls_errorSFR3  = SFR3_;
+        static inline const char    *ls_errorSFR4  = SFR4_;
+        static inline const char    *ls_errorSFR5  = SFR5_;
+        static inline const char    *ls_errorSFR6  = SFR6_;
+        static inline const char    *ls_errorSFR7  = SFR7_;
+        static inline const char    *ls_errorSFR8  = SFR8_;
+        static inline const char    *ls_errorSFR9  = SFR9_;
+        static inline const char    *ls_errorSFR10 = SFR10_;
+
+#       define DN0_  "Ok, no errors"
+#       define DN1_  "Error: get message"
+
+        static inline const char    *ls_errorDN0  = DN0_;
+        static inline const char    *ls_errorDN1  = DN1_;
 #       endif
 
 #       if defined(_BUILD_WARNING_1)

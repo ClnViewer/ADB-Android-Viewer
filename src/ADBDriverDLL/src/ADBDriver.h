@@ -134,6 +134,8 @@ public:
     /// Driver(Socket) FS File
     bool         FileSend(std::string const&, std::string const&, DriverConst::FilePermissionType);
     bool         FileReceive(std::string const&, std::string const&, bool = false);
+    bool         FileReceive(std::string const&, std::string const&, std::string&, bool = false);
+    bool         FileDelete(std::string const&, std::string&);
     bool         FileChmod(std::string const&, DriverConst::FilePermissionType, std::string&);
     std::string  FilePermission(DriverConst::FilePermissionType);
     uint32_t     FilePermission(std::string const&);
