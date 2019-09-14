@@ -217,7 +217,7 @@ bool ADBDriver::FileChmod(std::string const & dst, DriverConst::FilePermissionTy
                     ss.str(),
                     DriverConst::ls_cmd_shell,
                     rs,
-                    DriverConst::ClearType::CLEARTYPE_NONE
+                    DriverConst::ClearType::CLEARTYPE_NONE_RETURN_EMPTY
                 );
         if (!rs.empty())
             string_clear_end(rs);
@@ -233,7 +233,7 @@ bool ADBDriver::FileDelete(std::string const & dst, std::string & rs)
                     ss.str(),
                     DriverConst::ls_cmd_shell,
                     rs,
-                    DriverConst::ClearType::CLEARTYPE_NONE
+                    DriverConst::ClearType::CLEARTYPE_NONE_RETURN_EMPTY
                 );
         if (!rs.empty())
             string_clear_end(rs);

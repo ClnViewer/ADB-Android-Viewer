@@ -40,10 +40,6 @@ bool ADBDriver::AdbCheck()
     return m_net.Check();
 }
 
-//#include "DriverSocket/DriverSocketMake.cpp"
-//#include "DriverSocket/DriverSocketRawCmd.cpp"
-//#include "DriverSocket/DriverSocketCapture.cpp"
-
 template<typename T>
 bool DLL_EXPORT ADBDriver::AdbRawT(T cmd, T const & addtype, T & result, DriverConst::ClearType type)
     {
@@ -63,12 +59,14 @@ bool DLL_EXPORT ADBDriver::AdbRawT(T cmd, T const & addtype, T & result, DriverC
             if (!m_net.SyncStringReceive<T>(l_client, cmd, result))
                 break;
 
-            if (result.empty())
-                break;
+            if (type != DriverConst::ClearType::CLEARTYPE_NONE_RETURN_EMPTY)
+                if (result.empty())
+                    break;
 
             switch (type)
             {
                 case DriverConst::ClearType::CLEARTYPE_NONE:
+                case DriverConst::ClearType::CLEARTYPE_NONE_RETURN_EMPTY:
                     {
                         break;
                     }

@@ -51,6 +51,7 @@ class DriverConst
         );
         ENUM_PRINTABLE(ClearType, int32_t,
                 CLEARTYPE_NONE,
+                CLEARTYPE_NONE_RETURN_EMPTY,
                 CLEARTYPE_4,
                 CLEARTYPE_8
         );

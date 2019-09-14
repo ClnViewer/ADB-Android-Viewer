@@ -174,9 +174,6 @@ case AppBrowserPage::MenuKey::MENUKEY_FILE:
                                                         m_drawitems[src->sel].cmds,
                                                         rs
                                                     );
-
-                                        // TODO (clanc#1#15.09.2019): add check return null string
-                                        l_isaction = true;
                                         break;
                                     }
                                 default:
