@@ -207,6 +207,7 @@ namespace Resources
                 RES_STR_POPUP_63,
                 RES_STR_POPUP_64,
                 RES_STR_POPUP_65,
+                RES_STR_POPUP_66,
                 RES_STR_POPUP_NONE
             };
 

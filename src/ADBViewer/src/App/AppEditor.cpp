@@ -35,6 +35,7 @@
 static inline const LPCSTR l_openLuaFilter = "Lua script files (*.lua)\0*.lua\0";
 static inline const LPCSTR l_openLuaExt = "lua";
 static inline const LPCSTR l_openCurDir = ".\\";
+static inline const char   l_savePath[] = ".\\plugins\\plugin-lua.lua";
 
 AppEditor::AppEditor()
     : ppixel{}, scrtype(SCR_CHECK_AND_CLICK),
@@ -127,6 +128,13 @@ void AppEditor::stop()
         m_enable = false;
         m_target = false;
 
+        m_icon_record.Off();
+        m_app->m_appmsgbar.clean();
+        guiBase::PushEvent(ID_CMD_POP_MENU102);
+    }
+
+void AppEditor::savetofile()
+    {
         std::string fname(
             ResManager::stringload(
                 ResManager::IndexStringResource::RES_STR_LUAFILENAME,
@@ -134,23 +142,37 @@ void AppEditor::stop()
             )
         );
 
-        do
-        {
-            if (!AppSysDialog::savefile(
-                                guiBase::GetGui<SDL_Window>(),
-                                fname,
-                                l_openLuaFilter,
-                                l_openLuaExt,
-                                l_openCurDir
-                        ))
-                break;
-            write_script(fname);
-        }
-        while (0);
+        if (!AppSysDialog::savefile(
+                    guiBase::GetGui<SDL_Window>(),
+                    fname,
+                    l_openLuaFilter,
+                    l_openLuaExt,
+                    l_openCurDir
+                ))
+                return;
 
-        m_icon_record.Off();
-        m_app->m_appmsgbar.clean();
-        guiBase::PushEvent(ID_CMD_POP_MENU102);
+        if (fname.empty())
+            return;
+
+        std::string data = getscript();
+        if (data.empty())
+            return;
+
+        FILE __AUTO(__autofile) *fp = fopen(fname.c_str(), "wt");
+        if (!fp)
+            return;
+        fwrite(data.c_str(), 1, data.length(), fp);
+
+        while (0);
+    }
+
+void AppEditor::openedit()
+    {
+        std::string data = getscript();
+        if (data.empty())
+            return;
+
+        (void) RunEdit(l_savePath, data, true, nullptr);
     }
 
 void AppEditor::run()
@@ -344,11 +366,8 @@ bool AppEditor::foundpos(std::vector<AppEditor::_PIXELS> & v, AppEditor::_PIXELS
         return true;
     }
 
-void AppEditor::write_script(std::string const & fname)
+std::string AppEditor::getscript()
     {
-        if (fname.empty())
-            return;
-
         SDL_Rect *r = m_app->m_appvideo.guiBase::GetGui<SDL_Rect>();
         int32_t sc = static_cast<int32_t>(AppConfig::instance().cnf_disp_ratio);
         std::time_t tnow = std::time(NULL);
@@ -426,10 +445,7 @@ void AppEditor::write_script(std::string const & fname)
         if (m_pixels.size())
             m_pixels.clear();
 
-        FILE __AUTO(__autofile) *fp = fopen(fname.c_str(), "wt");
-        if (!fp)
-            return;
-        fwrite(ss.str().c_str(), 1, ss.str().length(), fp);
+        return ss.str();
     }
 
 bool AppEditor::uevent(SDL_Event *ev, const void *instance)
@@ -447,11 +463,25 @@ bool AppEditor::uevent(SDL_Event *ev, const void *instance)
                 {
                     /// (trigger)
                     if (ape->isenabled())
+                    {
                         /// stop and write LUA script
                         ape->stop();
+                        ape->savetofile();
+                    }
                     else
                         /// start edit pixels 5x5 for check && identify
                         ape->run();
+                    return true;
+                }
+            case ID_CMD_POP_MENU66:
+                {
+                    /// (trigger)
+                    if (ape->isenabled())
+                    {
+                        /// stop and open LUA script from editor
+                        ape->stop();
+                        ape->openedit();
+                    }
                     return true;
                 }
             case ID_CMD_POP_MENU7:

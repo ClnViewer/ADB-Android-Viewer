@@ -66,5 +66,6 @@ static inline const char *popup_strings_cn[] = {
     /* 63 */ "rwx rwx ---",
     /* 64 */ "rw- rw- rw-",
     /* 65 */ "rwx rwx rwx",
+    /* 66 */ "在编辑器中打开",
     nullptr
 };

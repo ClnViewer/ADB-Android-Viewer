@@ -3,10 +3,13 @@
 	<Workspace title="Рабочее пространство ADB Viewer">
 		<Project filename="ADBDriverPackDLL/ADBDriverPackDLL.cbp" />
 		<Project filename="ADBDriverDLL/ADBDriverDLL.cbp" />
+		<Project filename="ADBSCEditDLL/ADBSCEditDll.cbp" />
 		<Project filename="ADBViewerDLL/ADBViewerDLL.cbp" />
 		<Project filename="ADBViewer/src/App/plugin/plugin-lua/plugin-lua.cbp" />
 		<Project filename="ADBViewer/src/App/plugin/plugin-template/plugin-template.cbp" />
+		<Project filename="ADBSCEditDLL/ADBSCEdit/ADBSCEdit.cbp" />
 		<Project filename="ADBViewer/ADBViewer.cbp" />
 		<Project filename="ADBDriverDLL/test/TestADBDriverDLL.cbp" />
+		<Project filename="ADBSCEditDLL/test/TestADBSCEditDLL.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

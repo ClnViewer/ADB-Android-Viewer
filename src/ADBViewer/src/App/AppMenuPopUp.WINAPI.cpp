@@ -154,6 +154,7 @@ void AppMenuPopUp::show()
             MENU_ITEM_ADD(ID_CMD_POP_MENU7, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_11, l_hScrMenu);
             ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
             MENU_ITEM_ADD(ID_CMD_POP_MENU6, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_8, l_hScrMenu);
+            MENU_ITEM_ADD(ID_CMD_POP_MENU66, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_66, l_hScrMenu);
             ::AppendMenuW(l_hScrMenu,  MF_SEPARATOR, 0, NULL);
             MENU_ADD(l_hScrTypeMenu, ResManager::IndexStringPopUpMenu::RES_STR_POPUP_13, l_hScrMenu);
 
@@ -549,6 +550,11 @@ void AppMenuPopUp::show()
             case ID_CMD_POP_MENU52:
                 {
                     cmdEvent.user.code = ID_CMD_POP_MENU52;
+                    break;
+                }
+            case ID_CMD_POP_MENU66:
+                {
+                    cmdEvent.user.code = ID_CMD_POP_MENU66;
                     break;
                 }
             case ID_CMD_POP_MENU100:

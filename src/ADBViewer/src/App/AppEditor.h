@@ -48,14 +48,16 @@ private:
     std::atomic<bool>               m_target;
     std::vector<AppEditor::_PIXELS> m_pixels;
     std::vector<AppEditor::_PIXELS> m_ptarget;
-    const AppEditor::_RGB           m_redrgb = { 255, 0, 0 };
-    const AppEditor::_RGB           m_bluergb = { 0, 0, 255 };
+    const AppEditor::_RGB           m_redrgb   = { 255, 0, 0 };
+    const AppEditor::_RGB           m_bluergb  = { 0, 0, 255 };
     const AppEditor::_RGB           m_greenrgb = { 0, 255, 0 };
 
     //
-    int32_t getpad(uint32_t);
-    int32_t getpos(int32_t, int32_t, uint32_t, uint32_t);
-    int32_t checkpos(uint32_t, uint32_t, int32_t);
-    bool    foundpos(std::vector<AppEditor::_PIXELS>&, AppEditor::_PIXELS&);
-    void    write_script(std::string const&);
+    int32_t     getpad(uint32_t);
+    int32_t     getpos(int32_t, int32_t, uint32_t, uint32_t);
+    int32_t     checkpos(uint32_t, uint32_t, int32_t);
+    bool        foundpos(std::vector<AppEditor::_PIXELS>&, AppEditor::_PIXELS&);
+    void        savetofile();
+    void        openedit();
+    std::string getscript();
 };

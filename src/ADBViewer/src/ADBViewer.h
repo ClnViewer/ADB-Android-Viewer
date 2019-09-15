@@ -20,6 +20,7 @@
 #define ID_CMD_POP_MENU8 20188  // Editor LUA script - add endpoint action
 #define ID_CMD_POP_MENU9 20189  // Editor LUA script - Type: SCR_CHECK_AND_CLICK
 #define ID_CMD_POP_MENU10 20190 // Editor LUA script - Type:SCR_CLICK_ONLY
+#define ID_CMD_POP_MENU66 20510 // Editor LUA script - Open in editor
 
 #define ID_CMD_POP_MENU11 20191 // Language: RU
 #define ID_CMD_POP_MENU12 20192 // Language: EN
@@ -113,6 +114,7 @@ enum MgrType
 using Resources::ResManager;
 
 #  include "../../ADBDriverDLL/src/ADBDriver.h"
+#  include "../../ADBSCEditDLL/src/SCEditDll.h"
 using GameDev::ADBDriver;
 using GameDev::DriverConst;
 

@@ -26,6 +26,9 @@
     ((A != B) && ((std::max(A,B) - 1) != std::min(A,B)))
 
 #include "../plugin-lua-utils.h"
+#include <ctime>
+#include <sstream>
+#include <iomanip>
 
 struct _RGB {
     uint8_t r, g, b;
@@ -38,6 +41,7 @@ typedef struct
 
 } LuaFunReg_s;
 
+__LUA_FUNC_STATIC(checkTime)
 __LUA_FUNC_STATIC(checkPixelsByPos)
 __LUA_FUNC_STATIC(checkPixelsByCord)
 __LUA_FUNC_STATIC(adbClick)
@@ -53,6 +57,7 @@ __LUA_FUNC_STATIC(screenGet)
 
 static LuaFunReg_s l_func[] =
 {
+    __LUA_FUNC_TABLE(checkTime),
     __LUA_FUNC_TABLE(checkPixelsByPos),
     __LUA_FUNC_TABLE(checkPixelsByCord),
     __LUA_FUNC_TABLE(adbClick),
@@ -67,6 +72,73 @@ static LuaFunReg_s l_func[] =
     __LUA_FUNC_TABLE(screenGet)
 };
 
+
+static bool f_stringToTime(std::string const & s, std::tm & tms)
+    {
+        if (s.empty())
+            return false;
+
+        std::istringstream ss(s.c_str());
+        ss >> std::get_time(&tms, "%H:%M:%S");
+        if (ss.fail())
+            return false;
+        return true;
+    }
+
+__LUA_FUNC_BODY(checkTime)
+    {
+        int32_t ret = 0;
+
+        do
+        {
+            lua_pop(m_lua, 1);
+            std::tm tms{}, tme{};
+
+            if (
+                (!lua_isstring (m_lua, -2)) ||
+                (!lua_isstring (m_lua, -1))
+                )
+                { ret = -1; break; }
+
+            if (
+                (!f_stringToTime(lua_tostring(m_lua, -2), tme)) ||
+                (!f_stringToTime(lua_tostring(m_lua, -1), tms))
+                )
+                { ret = -1; break; }
+
+            std::time_t t = std::time(nullptr);
+            std::tm *tml = std::localtime(&t);
+
+            if (!tml)
+                { ret = -1; break; }
+
+            if ((*tml).tm_hour < tms.tm_hour)
+                break;
+
+            if ((tms.tm_min) && ((*tml).tm_min < tms.tm_min))
+                break;
+
+            if ((tms.tm_sec) && ((*tml).tm_sec < tms.tm_sec))
+                break;
+
+            //
+
+            if ((*tml).tm_hour >= tme.tm_hour)
+                break;
+
+            if ((tme.tm_min) && ((*tml).tm_min >= tme.tm_min))
+                break;
+
+            if ((tme.tm_sec) && ((*tml).tm_sec >= tme.tm_sec))
+                break;
+
+            ret = 1;
+        }
+        while (0);
+
+        lua_pushinteger(m_lua, ret);
+        return 1;
+    }
 
 __LUA_FUNC_BODY(checkPixelsByPos)
     {
@@ -361,4 +433,3 @@ __LUA_FUNC_BODY(screenGet)
         lua_pushnil(m_lua);
         return 0;
     }
-

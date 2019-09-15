@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_workspace_file>
+	<Workspace title="SC Editor Dll">
+		<Project filename="ADBSCEditDll.cbp" />
+		<Project filename="ADBSCEdit/ADBSCEdit.cbp" />
+		<Project filename="test/TestADBSCEditDLL.cbp" />
+	</Workspace>
+</CodeBlocks_workspace_file>

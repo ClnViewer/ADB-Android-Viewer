@@ -12,10 +12,15 @@
 				<Option type="0" />
 				<Option compiler="gcc" />
 				<Compiler>
-					<Add option="-g" />
+					<Add option="-g3" />
+					<Add option="-D_DEBUG=1" />
+					<Add directory="../../../../__LIB__/DrMingw/include" />
 				</Compiler>
 				<Linker>
+					<Add option="-lexchndl" />
+					<Add option="-lmgwhelp" />
 					<Add option="-L../bin/Debug" />
+					<Add directory="../../../../__LIB__/DrMingw/lib" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -61,6 +66,7 @@
 			<Add option="-ldxguid" />
 			<Add option="-lADBViewer" />
 			<Add option="-lADBDriver" />
+			<Add option="-lADBSCEdit" />
 			<Add directory="C:/__BuildSource/__LIB__/SDL2/lib" />
 		</Linker>
 		<Unit filename="../ADBDriverDLL/src/ADBDriver.h" />

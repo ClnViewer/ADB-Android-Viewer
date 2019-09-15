@@ -58,6 +58,8 @@ class LuaObject
         int32_t screenGetCord();      /// return (w, h)
         int32_t screenGetFb();        /// return (vector FB)
 
+        int32_t checkTime();          /// return (0/1/-1), input (time string start, time string end)
+
         /// Get methods
 
         template<typename T>

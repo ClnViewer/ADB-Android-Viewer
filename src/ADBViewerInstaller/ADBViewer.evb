@@ -203,6 +203,30 @@
             <PassCommandLine>False</PassCommandLine>
             <HideFromDialogs>0</HideFromDialogs>
           </File>
+          <File>
+            <Type>2</Type>
+            <Name>ADBSCEdit.dll</Name>
+            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\ADBSCEdit.dll</File>
+            <ActiveX>False</ActiveX>
+            <ActiveXInstall>False</ActiveXInstall>
+            <Action>0</Action>
+            <OverwriteDateTime>False</OverwriteDateTime>
+            <OverwriteAttributes>False</OverwriteAttributes>
+            <PassCommandLine>False</PassCommandLine>
+            <HideFromDialogs>0</HideFromDialogs>
+          </File>
+          <File>
+            <Type>2</Type>
+            <Name>ADBSCEdit.exe</Name>
+            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\ADBSCEdit.exe</File>
+            <ActiveX>False</ActiveX>
+            <ActiveXInstall>False</ActiveXInstall>
+            <Action>0</Action>
+            <OverwriteDateTime>False</OverwriteDateTime>
+            <OverwriteAttributes>False</OverwriteAttributes>
+            <PassCommandLine>False</PassCommandLine>
+            <HideFromDialogs>0</HideFromDialogs>
+          </File>
         </Files>
       </File>
     </Files>

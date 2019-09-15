@@ -66,5 +66,6 @@ static inline const char *popup_strings_en[] = {
     /* 63 */ "rwx rwx ---",
     /* 64 */ "rw- rw- rw-",
     /* 65 */ "rwx rwx rwx",
+    /* 66 */ "Open in editor",
     nullptr
 };

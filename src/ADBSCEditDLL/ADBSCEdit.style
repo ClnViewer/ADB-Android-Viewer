@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<SCEdit>
+	<Style>
+		<Option name="TEXTS"   value="202020" />
+		<Option name="BG"      value="f5f5f5" />
+		<Option name="CARET"   value="303030" />
+		<Option name="SYNTAX"  value="275826" />
+		<Option name="STRING"  value="018400" />
+		<Option name="CHARS"   value="bb6101" />
+		<Option name="NUMBERS" value="fa782a" />
+		<Option name="COMMENT" value="a4a4a4" />
+		<Option name="IDENT"   value="202020" />
+		<Option name="LABEL"   value="fbfbfb" />
+		<Option name="PREPROC" value="ff0000" />
+		<Option name="INDENT"  value="64ab1f" />
+		<Option name="FOLDER"  value="808080" />
+		<Option name="ACTIVELINE" value="ededed" />
+		<Option name="FINDIND" value="008601" />
+		<Option name="WORD1"   value="0f58c5" />
+		<Option name="WORD2"   value="166ef2" />
+		<Option name="WORD3"   value="53a800" />
+		<Option name="WORD4"   value="550656" />
+		<Option name="WORD5"   value="c232c4" />
+		<Option name="WORD6"   value="c000c0" />
+		<Option name="WORD7"   value="800080" />
+	</Style>
+</SCEdit>

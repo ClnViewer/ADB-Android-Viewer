@@ -1,0 +1,47 @@
+
+#include "../../../ADBViewer/src/version.h"
+#define _TOSTR(a) #a
+#define __TOSTR(a) _TOSTR(a)  
+#define IDI_ICON 1001
+
+LANGUAGE 0x19, 0x01
+IDI_ICON ICON ".\\ADBSCEdit.ico"
+
+LANGUAGE 0x19, 0x01
+1 RT_MANIFEST ".\\ADBSCEdit.exe.manifest"
+
+LANGUAGE 0x19, 0x01
+1 VERSIONINFO
+    FILEVERSION     AVIEW_RC_FILEVERSION
+    PRODUCTVERSION  AVIEW_RC_FILEVERSION
+    FILEOS          0x4
+    FILETYPE        0x2
+    FILESUBTYPE     0x0
+    FILEFLAGSMASK   0x2
+    FILEFLAGS       0x2
+{
+BLOCK "StringFileInfo"
+{
+	BLOCK "040904b0"
+	{
+		VALUE "CompanyName", "PS https://github.com/ClnViewer/ADB-Android-Viewer"
+		VALUE "FileDescription", "ADBSCEdit - Android Viewer part, GUI ADB script editing tools"
+		VALUE "FileVersion", AVIEW_FULLVERSION_STRING
+		VALUE "InternalName", "ADB Script Editor"
+		VALUE "LegalCopyright", "Copyright PS 2016-2019. This is freeware."
+		VALUE "ProductName", "ADBViewer ("  __TOSTR(AVIEW_REVISION) ") [" __TOSTR(AVIEW_BUILDS_COUNT) "][" __TOSTR(AVIEW_BUILD_HISTORY) "]"
+		VALUE "OriginalFilename", "ADBSCEdit.exe"
+		VALUE "ProductVersion", AVIEW_FULLVERSION_STRING
+		VALUE "CompanyShortName", "PS"
+		VALUE "ProductShortName", "SCEdit"
+		VALUE "LastChange", AVIEW_YEAR " " AVIEW_MONTH " " AVIEW_DATE
+		VALUE "Official Build", "0"
+	}
+}
+
+BLOCK "VarFileInfo"
+{
+	VALUE "Translation", 0x0419, 1251
+}
+
+}
