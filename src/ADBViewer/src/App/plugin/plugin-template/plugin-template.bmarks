@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
+	<File name="plugin-template.h" open="0" top="0" tabpos="0">
+		<Cursor position="82" topLine="0" />
+	</File>
+	<File name="plugin-template.cpp" open="0" top="0" tabpos="1">
+		<Cursor position="2260" topLine="38" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
 </BrowseTracker_layout_file>

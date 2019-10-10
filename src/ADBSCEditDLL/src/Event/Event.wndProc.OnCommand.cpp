@@ -10,11 +10,17 @@
     case A:                \
     case B: { C; break; }
 
+#define _CMD_BUILD_RANGE(A,B,C) \
+    case A ... B: { C; break; }
+
 namespace Editor
 {
     void SCEdit::_OnCommand(HWND hwnd, UINT, WPARAM wParam, LPARAM lParam)
     {
         int32_t id = LOWORD(wParam);
+
+#       pragma GCC diagnostic push
+#       pragma GCC diagnostic ignored "-Wpedantic"
         switch (id)
         {
 #           include "Command/cmd_MAIN_EXIT.cxx"
@@ -28,6 +34,7 @@ namespace Editor
 #           include "Command/cmd_EDIT_CUT.cxx"
 #           include "Command/cmd_EDIT_DELETE.cxx"
 #           include "Command/cmd_EDIT_SELECTALL.cxx"
+#           include "Command/cmd_EDIT_PASTE_CODE.cxx"
 #           include "Command/cmd_EDIT_SHOW_NAVIGATE.cxx"
 #           include "Command/cmd_EDIT_SHOW_ENDLINE.cxx"
 #           include "Command/cmd_EDIT_SHOW_INDENTG.cxx"
@@ -51,5 +58,6 @@ namespace Editor
 
             default: break;
         }
+#       pragma GCC diagnostic pop
     }
 };

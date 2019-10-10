@@ -12,6 +12,14 @@
         setannotation(g_scedit_help, 0);
     }
 
+    void EditBox::textinsert(std::string const &s)
+    {
+        if (s.empty())
+            return;
+
+        cmd(SCI_INSERTTEXT,  cmd(SCI_GETCURRENTPOS), reinterpret_cast<LPARAM>(s.c_str()));
+    }
+
     void EditBox::setannotation(EditBox::AnnotateData *ad_)
     {
         if (!ad_)

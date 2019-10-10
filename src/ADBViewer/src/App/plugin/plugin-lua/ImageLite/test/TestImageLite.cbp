@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+    <FileVersion major="1" minor="6" />
+    <Project>
+        <Option title="TestImageLite" />
+        <Option pch_mode="2" />
+        <Option compiler="gcc" />
+        <Build>
+            <Target title="Debug">
+                <Option output="../../../../../../../bin/Debug/TestImageLite" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../../../../../../obj/Debug/" />
+                <Option type="1" />
+                <Option compiler="gcc" />
+                <Compiler>
+                    <Add option="-g" />
+                </Compiler>
+                <Linker>
+                    <Add option="-lImageLite" />
+                    <Add directory="../../../../../../../bin/Debug" />
+                </Linker>
+            </Target>
+            <Target title="Release">
+                <Option output="../../../../../../../bin/Release/TestImageLite" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../../../../../../obj/Release/" />
+                <Option type="1" />
+                <Option compiler="gcc" />
+                <Compiler>
+                    <Add option="-O2" />
+                </Compiler>
+                <Linker>
+                    <Add option="-s" />
+                    <Add option="-lImageLite" />
+                    <Add directory="../../../../../../../bin/Release" />
+                </Linker>
+            </Target>
+            <Target title="Static Debug">
+                <Option output="../../../../../../../bin/Debug/TestImageLiteStatic" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../../../../../../obj/Debug/" />
+                <Option type="1" />
+                <Option compiler="gcc" />
+                <Option use_console_runner="0" />
+                <Compiler>
+                    <Add option="-g" />
+                </Compiler>
+                <Linker>
+                    <Add option="-L../../../../../../../bin/Debug" />
+                    <Add option="-Wl,--start-group" />
+                    <Add option="-lgomp" />
+                    <Add option="-lgdi32" />
+                    <Add option="-lgdiplus" />
+                    <Add option="-lcomctl32" />
+                    <Add option="-lcomdlg32" />
+                    <Add option="-lImageLite-static" />
+                    <Add option="-Wl,--end-group" />
+                </Linker>
+            </Target>
+            <Target title="Static Release">
+                <Option output="../../../../../../../bin/Release/TestImageLiteStatic" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../../../../../../obj/Release/" />
+                <Option type="1" />
+                <Option compiler="gcc" />
+                <Option use_console_runner="0" />
+                <Compiler>
+                    <Add option="-O2" />
+                    <Add option="-flto" />
+                    <Add option="-static" />
+                    <Add option="-static-libgcc" />
+                    <Add option="-static-libstdc++" />
+                </Compiler>
+                <Linker>
+                    <Add option="-s" />
+                    <Add option="-L../../../../../../../bin/Release" />
+                    <Add option="-Wl,--start-group" />
+                    <Add option="-lgomp" />
+                    <Add option="-lgdi32" />
+                    <Add option="-lgdiplus" />
+                    <Add option="-lcomctl32" />
+                    <Add option="-lcomdlg32" />
+                    <Add option="-lImageLite-static" />
+                    <Add option="-Wl,--end-group" />
+                </Linker>
+            </Target>
+        </Build>
+        <Compiler>
+            <Add option="-std=c++17" />
+            <Add option="-Wall" />
+            <Add option="-fopenmp" />
+            <Add option="-fexceptions" />
+            <Add option="-Wno-unknown-pragmas" />
+            <Add directory="../" />
+        </Compiler>
+        <Linker>
+            <Add option="-luser32" />
+            <Add option="-lkernel32" />
+        </Linker>
+        <ExtraCommands>
+            <Add after="clean.cmd" />
+        </ExtraCommands>
+        <Unit filename="../ImageLite.h" />
+        <Unit filename="../ImageLiteDraw.h" />
+        <Unit filename="../ImageLiteDraw.rc">
+            <Option compilerVar="WINDRES" />
+        </Unit>
+        <Unit filename="../ImageLiteFormater.h" />
+        <Unit filename="../ImageLiteRGBbuffer.h" />
+        <Unit filename="TestImageLite.cpp" />
+        <Extensions>
+            <code_completion />
+            <envvars />
+            <debugger />
+            <lib_finder disable_auto="1" />
+        </Extensions>
+    </Project>
+</CodeBlocks_project_file>

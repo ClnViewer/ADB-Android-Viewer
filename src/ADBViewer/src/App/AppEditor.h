@@ -59,5 +59,6 @@ private:
     bool        foundpos(std::vector<AppEditor::_PIXELS>&, AppEditor::_PIXELS&);
     void        savetofile();
     void        openedit();
+    void        loadedit();
     std::string getscript();
 };

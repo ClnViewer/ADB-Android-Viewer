@@ -1,288 +1,405 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="6" />
-	<Project>
-		<Option title="ADB SC Edit Dll" />
-		<Option pch_mode="2" />
-		<Option compiler="gcc" />
-		<Build>
-			<Target title="Debug">
-				<Option output="../bin/Debug/ADBSCEdit" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../obj/Debug/" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option parameters="aaa" />
-				<Option host_application="../bin/Debug/TestADBSCEditDLL.exe" />
-				<Option run_host_application_in_terminal="0" />
-				<Option createDefFile="1" />
-				<Compiler>
-					<Add option="-g3" />
-					<Add option="-D_BUILD_TRACE=0" />
-				</Compiler>
-				<Linker>
-					<Add option="-L../bin/Debug" />
-				</Linker>
-			</Target>
-			<Target title="Release">
-				<Option output="../bin/Release/ADBSCEdit" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../obj/Release/" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option host_application="../bin/Release/TestADBSCEditDLL.exe" />
-				<Option run_host_application_in_terminal="0" />
-				<Option createDefFile="1" />
-				<Compiler>
-					<Add option="-O2" />
-					<Add option="-D_BUILD_TRACE=0" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add option="-L../bin/Release" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="upx -9 ../bin/Release/ADBSCEdit.dll" />
-				</ExtraCommands>
-			</Target>
-		</Build>
-		<Compiler>
-			<Add option="-std=c++17" />
-			<Add option="-Wextra" />
-			<Add option="-Wall" />
-			<Add option="-Wno-unknown-pragmas" />
-			<Add option="-D_BUILD_DLL=1" />
-			<Add directory="src" />
-			<Add directory="../ADBViewer/src/App/plugin/plugin-lua/LuaObject" />
-			<Add directory="../../../../__LIB__/LUA/include" />
-			<Add directory="../../../../__LIB__/Scintilla/v420/include" />
-		</Compiler>
-		<Linker>
-			<Add option="-static-libstdc++" />
-			<Add option="-static-libgcc" />
-			<Add option="-lmingw32" />
-			<Add option="-Wl,--start-group" />
-			<Add option="-lcomctl32" />
-			<Add option="-lcomdlg32" />
-			<Add option="-lwtsapi32" />
-			<Add option="-lws2_32" />
-			<Add option="-luser32" />
-			<Add option="-lgdi32" />
-			<Add option="-limm32" />
-			<Add option="-lole32" />
-			<Add option="-loleaut32" />
-			<Add option="-lmsimg32" />
-			<Add option="-luuid" />
-			<Add option="-lm" />
-			<Add option="-llua53" />
-			<Add option="-lscintilla" />
-			<Add option="-Wl,--end-group" />
-			<Add directory="C:/__BuildSource/__LIB__/LUA/lib/static" />
-			<Add directory="C:/__BuildSource/__LIB__/Scintilla/v420/bin" />
-		</Linker>
-		<Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaObject/LuaPluginFunction.h" />
-		<Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaObject/LuaPluginMacro.h" />
-		<Unit filename="src/EditBox.Navigate.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/EditBox.Notify.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/EditBox.Service.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/EditBox.cpp" />
-		<Unit filename="src/EditBox.h" />
-		<Unit filename="src/EditBoxConstant.h" />
-		<Unit filename="src/EditBoxFile.cpp" />
-		<Unit filename="src/EditBoxStyle.cpp" />
-		<Unit filename="src/EditBoxStyle.h" />
-		<Unit filename="src/EditBoxStyleBase.h" />
-		<Unit filename="src/Event/Command/cmd_BTN_SCRUN_START.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_BTN_SCRUN_STOP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_COPY.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_CUT.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_DELETE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_PASTE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_REDO.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SELECTALL.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_ANNOTATION.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_DBGLINE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_ENDLINE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_HELP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_INDENTG.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_SHOW_NAVIGATE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_EDIT_UNDO.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_FILE_NEW.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_FILE_OPEN.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_FILE_SAVE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGBREAK.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGCYCLE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGDUMP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGMODE.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGNEXT.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_DBGSTEP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_EXIT.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_EXTDBGV.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_SHOW_VERSION.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_MAIN_WINTOP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_REBAR_FIND_TEXT.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_SCRUN_START.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Command/cmd_SCRUN_STOP.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
-		<Unit filename="src/Event/Event.wndProc.OnClose.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnCommand.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnCreate.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnMove.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnNCHitTest.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnNotify.cpp" />
-		<Unit filename="src/Event/Event.wndProc.OnSize.cpp" />
-		<Unit filename="src/HelperMap.h" />
-		<Unit filename="src/InfoBox.cpp" />
-		<Unit filename="src/InfoBox.h" />
-		<Unit filename="src/LoadDll.h" />
-		<Unit filename="src/LuaEngine.Bind.cpp" />
-		<Unit filename="src/LuaEngine.String.h" />
-		<Unit filename="src/LuaEngine.cpp" />
-		<Unit filename="src/LuaEngine.h" />
-		<Unit filename="src/MenuBar.cpp" />
-		<Unit filename="src/MenuBar.h" />
-		<Unit filename="src/ReBar.cpp" />
-		<Unit filename="src/ReBar.h" />
-		<Unit filename="src/SCEdit.Window.cpp" />
-		<Unit filename="src/SCEdit.cpp" />
-		<Unit filename="src/SCEdit.h" />
-		<Unit filename="src/SCEdit.wndProc.cpp" />
-		<Unit filename="src/SCEditConfig.cpp" />
-		<Unit filename="src/SCEditConfig.h" />
-		<Unit filename="src/SCEditDll.cpp" />
-		<Unit filename="src/SCEditDll.h" />
-		<Unit filename="src/SCEditDll.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
-		<Unit filename="src/SCEditInternal.h" />
-		<Unit filename="src/SCEditPrintBox.cpp" />
-		<Unit filename="src/SCEditPrintBox.h" />
-		<Unit filename="src/SearchBar.cpp" />
-		<Unit filename="src/SearchBar.h" />
-		<Unit filename="src/ToolBar.cpp" />
-		<Unit filename="src/ToolBar.h" />
-		<Unit filename="src/ToolBarItems.h" />
-		<Unit filename="src/WindowBase.cpp" />
-		<Unit filename="src/WindowBase.h" />
-		<Unit filename="src/WindowDock.cpp" />
-		<Unit filename="src/WindowDock.h" />
-		<Unit filename="src/extern/tinyxml2.cpp" />
-		<Unit filename="src/extern/tinyxml2.h" />
-		<Unit filename="src/extern/tixml2cx.h" />
-		<Unit filename="src/extern/tixml2ex.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-			<lib_finder disable_auto="1" />
-			<DoxyBlocks>
-				<comment_style block="0" line="0" />
-				<doxyfile_project output_directory="../../docs/adbscedit-ref" />
-				<doxyfile_build />
-				<doxyfile_warnings />
-				<doxyfile_output html="0" html_help="0" man="1" />
-				<doxyfile_dot />
-				<general />
-			</DoxyBlocks>
-		</Extensions>
-	</Project>
+    <FileVersion major="1" minor="6" />
+    <Project>
+        <Option title="ADB SC Edit Dll" />
+        <Option pch_mode="2" />
+        <Option compiler="gcc" />
+        <Build>
+            <Target title="Debug">
+                <Option output="../bin/Debug/ADBSCEdit" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../obj/Debug/" />
+                <Option type="3" />
+                <Option compiler="gcc" />
+                <Option parameters="aaa" />
+                <Option host_application="../bin/Debug/TestADBSCEditDLL.exe" />
+                <Option run_host_application_in_terminal="0" />
+                <Option createDefFile="1" />
+                <Compiler>
+                    <Add option="-g3" />
+                    <Add option="-D_BUILD_TRACE=0" />
+                    <Add option="-D_DEBUG" />
+                </Compiler>
+                <Linker>
+                    <Add option="-L../bin/Debug" />
+                </Linker>
+            </Target>
+            <Target title="Release">
+                <Option output="../bin/Release/ADBSCEdit" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../obj/Release/" />
+                <Option type="3" />
+                <Option compiler="gcc" />
+                <Option host_application="../bin/Release/TestADBSCEditDLL.exe" />
+                <Option run_host_application_in_terminal="0" />
+                <Option createDefFile="1" />
+                <Compiler>
+                    <Add option="-O2" />
+                    <Add option="-flto" />
+                    <Add option="-static" />
+                    <Add option="-static-libgcc" />
+                    <Add option="-static-libstdc++" />
+                    <Add option="-D_BUILD_TRACE=0" />
+                </Compiler>
+                <Linker>
+                    <Add option="-s" />
+                    <Add option="-L../bin/Release" />
+                </Linker>
+                <ExtraCommands>
+                    <Add after="upx -9 ../bin/Release/ADBSCEdit.dll" />
+                </ExtraCommands>
+            </Target>
+        </Build>
+        <Compiler>
+            <Add option="-std=c++17" />
+            <Add option="-Wall" />
+            <Add option="-Wextra" />
+            <Add option="-fexceptions" />
+            <Add option="-Wno-unknown-pragmas" />
+            <Add option="-D_BUILD_DLL=1" />
+            <Add option="-D_BUILD_LUA_EDITOR=1" />
+            <Add directory="src" />
+            <Add directory="../ADBViewer/src/extern" />
+            <Add directory="../../../../__LIB__/LUA/include" />
+            <Add directory="../../../../__LIB__/Scintilla/v420/include" />
+            <Add directory="../ADBViewer/src/App/plugin/plugin-lua/ImageLite" />
+            <Add directory="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine" />
+        </Compiler>
+        <Linker>
+            <Add option="-Wl,--start-group" />
+            <Add option="-lcomctl32" />
+            <Add option="-lcomdlg32" />
+            <Add option="-lwtsapi32" />
+            <Add option="-lws2_32" />
+            <Add option="-luser32" />
+            <Add option="-limm32" />
+            <Add option="-lole32" />
+            <Add option="-loleaut32" />
+            <Add option="-lmsimg32" />
+            <Add option="-lkernel32" />
+            <Add option="-lgdi32" />
+            <Add option="-lgdiplus" />
+            <Add option="-luuid" />
+            <Add option="-lm" />
+            <Add option="-lgomp" />
+            <Add option="-llua53" />
+            <Add option="-lscintilla" />
+            <Add option="-Wl,--end-group" />
+            <Add directory="C:/__BuildSource/__LIB__/LUA/lib/static" />
+            <Add directory="C:/__BuildSource/__LIB__/Scintilla/v420/bin" />
+        </Linker>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLite.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteDraw.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteDraw.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteFormater.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteFormater.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteRGBbuffer.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/ImageLite/ImageLiteRGBbuffer.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_adbClick.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_adbKey.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_adbSwipe.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_adbText.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_checkPixelByCord.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_checkPixelByPos.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_checkPixelsByCord.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_checkPixelsByPos.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_checkTime.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_function.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_function_static.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageCompare.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageCompareRegion.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageDefault.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageGetPosition.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageSave.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageShow.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_imageTableShow.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_screenGet.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_screenGetCord.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_stateGet.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_stateSet.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaBind/lua_stateSleep.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaEngineEditor.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaEngineEditor.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaEngineEditorString.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaLintEditor.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaLintEditor.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaMacro.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaMacroEditor.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaObject.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaObject.h" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaObjectImage.cpp" />
+        <Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaPluginFunction.h" />
+        <Unit filename="../ADBViewer/src/extern/lodepng.cpp" />
+        <Unit filename="../ADBViewer/src/extern/lodepng.h" />
+        <Unit filename="src/EditBox.Navigate.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/EditBox.Notify.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/EditBox.Service.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/EditBox.cpp" />
+        <Unit filename="src/EditBox.h" />
+        <Unit filename="src/EditBoxConstant.h" />
+        <Unit filename="src/EditBoxFile.cpp" />
+        <Unit filename="src/EditBoxStyle.cpp" />
+        <Unit filename="src/EditBoxStyle.h" />
+        <Unit filename="src/EditBoxStyleBase.h" />
+        <Unit filename="src/Event/Command/cmd_BTN_SCRUN_START.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_BTN_SCRUN_STOP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_COPY.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_CUT.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_DELETE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_PASTE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_PASTE_CODE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_REDO.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SELECTALL.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_ANNOTATION.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_DBGLINE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_ENDLINE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_HELP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_INDENTG.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_SHOW_NAVIGATE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_EDIT_UNDO.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_FILE_NEW.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_FILE_OPEN.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_FILE_SAVE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGBREAK.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGCYCLE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGDUMP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGMODE.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGNEXT.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_DBGSTEP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_EXIT.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_EXTDBGV.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_SHOW_VERSION.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_MAIN_WINTOP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_REBAR_FIND_TEXT.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_SCRUN_START.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Command/cmd_SCRUN_STOP.cxx">
+            <Option compile="0" />
+            <Option link="0" />
+        </Unit>
+        <Unit filename="src/Event/Event.wndProc.OnClose.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnCommand.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnCreate.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnMove.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnNCHitTest.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnNotify.cpp" />
+        <Unit filename="src/Event/Event.wndProc.OnSize.cpp" />
+        <Unit filename="src/HelperMap.h" />
+        <Unit filename="src/InfoBox.cpp" />
+        <Unit filename="src/InfoBox.h" />
+        <Unit filename="src/LoadDll.h" />
+        <Unit filename="src/MenuBar.cpp" />
+        <Unit filename="src/MenuBar.h" />
+        <Unit filename="src/ReBar.cpp" />
+        <Unit filename="src/ReBar.h" />
+        <Unit filename="src/SCEdit.Window.cpp" />
+        <Unit filename="src/SCEdit.cpp" />
+        <Unit filename="src/SCEdit.h" />
+        <Unit filename="src/SCEdit.wndProc.cpp" />
+        <Unit filename="src/SCEditConfig.cpp" />
+        <Unit filename="src/SCEditConfig.h" />
+        <Unit filename="src/SCEditDll.cpp" />
+        <Unit filename="src/SCEditDll.h" />
+        <Unit filename="src/SCEditDll.rc">
+            <Option compilerVar="WINDRES" />
+        </Unit>
+        <Unit filename="src/SCEditInternal.h" />
+        <Unit filename="src/SCEditPrintBox.cpp" />
+        <Unit filename="src/SCEditPrintBox.h" />
+        <Unit filename="src/SearchBar.cpp" />
+        <Unit filename="src/SearchBar.h" />
+        <Unit filename="src/ToolBar.cpp" />
+        <Unit filename="src/ToolBar.h" />
+        <Unit filename="src/ToolBarItems.h" />
+        <Unit filename="src/WindowBase.cpp" />
+        <Unit filename="src/WindowBase.h" />
+        <Unit filename="src/WindowDock.cpp" />
+        <Unit filename="src/WindowDock.h" />
+        <Unit filename="src/extern/tinyxml2.cpp" />
+        <Unit filename="src/extern/tinyxml2.h" />
+        <Unit filename="src/extern/tixml2cx.h" />
+        <Unit filename="src/extern/tixml2ex.h" />
+        <Extensions>
+            <code_completion />
+            <envvars />
+            <debugger />
+            <lib_finder disable_auto="1" />
+            <DoxyBlocks>
+                <comment_style block="0" line="0" />
+                <doxyfile_project output_directory="../../docs/adbscedit-ref" />
+                <doxyfile_build />
+                <doxyfile_warnings />
+                <doxyfile_output html="0" html_help="0" man="1" />
+                <doxyfile_dot />
+                <general />
+            </DoxyBlocks>
+        </Extensions>
+    </Project>
 </CodeBlocks_project_file>

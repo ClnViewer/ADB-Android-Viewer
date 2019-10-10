@@ -2,95 +2,177 @@
 #define RGB_DESC_ "R,G,B - RGB color format numeric definition, value 0-255"
 
 LFUN__(
-	_FIRST,
-	checkTime,
-	"[bool] LuaObject:checkTime(string time_start, string time_end)\r\ntime start, time_end - string format:\r\n\"HH:mm:ss\" or \"HH:mm\" or \"HH\"",
-	INPUT_STRING_2,
-	RETURN_NUMBER
+    _FIRST,
+    checkTime,
+    "[bool] LuaObject:checkTime(string time_start, string time_end)\r\n" \
+    "time start, time_end - string format:\r\n\"HH:mm:ss\" or \"HH:mm\" or \"HH\"\r\n" \
+    "return: -1 is error, 0 is not time period and 1 is period active",
+    INPUT_STRING_2,
+    RETURN_NUMBER,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	checkPixelsByPos,
-	"[bool] LuaObject:checkPixelsByPos(int position, int R, int G, int B)\r\nposition - screen buffer position,\r\n" RGB_DESC_,
-	INPUT_NUMBER_4,
-	RETURN_BOOL
+    _NEXT,
+    checkPixelsByPos,
+    "[bool] LuaObject:checkPixelsByPos(int position, int R, int G, int B)\r\n" \
+    "[bool] LuaObject:checkPixelsByPos(int position, { int R, int G, int B })\r\n" \
+    "position - screen buffer position,\r\n" RGB_DESC_,
+    INPUT_NUMBER_4_OR_NUMBER_1_TABLE,
+    RETURN_BOOL,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	checkPixelsByCord,
-	"[bool] LuaObject:checkPixelsByCord(int width, int heigth, int R, int G, int B)\r\nwidth, heigth - Android screen x,y position,\r\n" RGB_DESC_,
-	INPUT_NUMBER_5,
-	RETURN_BOOL
+    _NEXT,
+    checkPixelsByCord,
+    "[bool] LuaObject:checkPixelsByCord(int width, int heigth, int R, int G, int B)\r\n" \
+    "[bool] LuaObject:checkPixelsByCord(int width, int heigth, { int R, int G, int B })\r\n" \
+    "width, heigth - Android screen x,y position,\r\n" RGB_DESC_,
+    INPUT_NUMBER_5_OR_NUMBER_2_TABLE,
+    RETURN_BOOL,
+    LFEXT_BYNAME
+)
+
+LFUN__(
+    _NEXT,
+    imageDefault,
+    "[void] LuaObject:imageDefault(string filename)\r\n" \
+    "set default bmp, png image as Android frame buffer\r\n" \
+    "! development only",
+    INPUT_STRING,
+    RETURN_STRING,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	adbClick,
-	"[void] LuaObject:adbClick(int x, int y)\r\nclick to Android screen x, y position",
-	INPUT_NUMBER_2,
-	RETURN_NONE
+    _NEXT,
+    imageShow,
+    "[void] LuaObject:imageShow(string filename)\r\n" \
+    "show user defined bmp, png image\r\n" \
+    "! development only",
+    INPUT_STRING,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	adbSwipe,
-	"[void] LuaObject:adbSwipe(int start_x, int start_y, int end_x, int end_y, int duration)\r\nswipe Android screen from start_x, start_y position - to end_x, end_y position,\r\nduration - is milliseconds value",
-	INPUT_NUMBER_5,
-	RETURN_NONE
+    _NEXT,
+    imageTableShow,
+    "[void] LuaObject:imageTableShow({ Lua image object table })\r\n" \
+    "show LuaImage object table, see example saved from internal viewer\r\n" \
+    "! development only",
+    INPUT_TABLE,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	adbKey,
-	"[void] LuaObject:adbKey(int key)\r\nkey - ANDROID key type",
-	INPUT_NUMBER,
-	RETURN_NONE
+    _NEXT,
+    imageCompare,
+    "[double] LuaObject:imageCompare(string filename)\r\n" \
+    "compare default screen to user defined bmp, png image",
+    INPUT_STRING,
+    RETURN_DOUBLE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	adbText,
-	"[void] LuaObject:adbText(string text)\r\ntext - string only ASCII character in utf8 format",
-	INPUT_STRING,
-	RETURN_NONE
+    _NEXT,
+    imageCompareRegion,
+    "[double] LuaObject:imageCompareRegion(string filename, int x, int y, int width, int heigth)\r\n" \
+    "compare default screen to user defined bmp, png image, witch region rectangle",
+    INPUT_STRING_1_NUMBER_4,
+    RETURN_DOUBLE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	stateSet,
-	"[void] LuaObject:stateSet(int state)\r\nstate - cycle iteration number set",
-	INPUT_NUMBER,
-	RETURN_NONE
+    _NEXT,
+    imageGetPosition,
+    "[int] LuaObject:imageGetPosition(int x, int y)\r\n" \
+    "get default screen buffer position from x, y",
+    INPUT_NUMBER_2,
+    RETURN_NUMBER,
+    LFEXT_BYNAME
+)
+
+LFUN__(
+    _NEXT,
+    adbClick,
+    "[void] LuaObject:adbClick(int x, int y)\r\n" \
+    "click to Android screen x, y position",
+    INPUT_NUMBER_2,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	stateGet,
-	"(int) LuaObject:stateGet()\r\nreturn state - curent cycle iteration",
-	INPUT_NONE,
-	RETURN_NUMBER
+    _NEXT,
+    adbSwipe,
+    "[void] LuaObject:adbSwipe(int start_x, int start_y, int end_x, int end_y, int duration)\r\n" \
+    "swipe Android screen from start_x, start_y position - to end_x, end_y position,\r\n" \
+    "duration - is milliseconds value",
+    INPUT_NUMBER_5,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	stateSleep,
-	"[void] LuaObject:stateSleep(int second)\r\nsecond - time sleep in seconds",
-	INPUT_NUMBER,
-	RETURN_NONE
+    _NEXT,
+    adbKey,
+    "[void] LuaObject:adbKey(int key)\r\n" \
+    "key - ANDROID key type",
+    INPUT_NUMBER,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	screenGetCord,
-	"[{ int x, int y }] LuaObject:screenGetByCord(int position)\r\nreturn x,y coordinates from given position",
-	INPUT_NUMBER,
-	RETURN_NUMBER_2
+    _NEXT,
+    adbText,
+    "[void] LuaObject:adbText(string text)\r\n" \
+    "text - string only ASCII character in utf8 format",
+    INPUT_STRING,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_NEXT,
-	screenGetFb,
-	"[table {}] LuaObject:screenGetFb()\r\nreturn full frame buffer data",
-	INPUT_NONE,
-	RETURN_OBJECT
+    _NEXT,
+    stateSet,
+    "[void] LuaObject:stateSet(int state)\r\n" \
+    "state - cycle iteration number set",
+    INPUT_NUMBER,
+    RETURN_NONE,
+    LFEXT_BYNAME
 )
 LFUN__(
-	_END,
-	screenGet,
-	"[{ int x, int y }, table {}] LuaObject:screenGet()\r\nreturn x,y screen resolution and full frame buffer data",
-	INPUT_NONE,
-	RETURN_NUMBER_2_OBJECT
+    _NEXT,
+    stateGet,
+    "[int] LuaObject:stateGet()\r\n" \
+    "return state - curent cycle iteration",
+    INPUT_NONE,
+    RETURN_NUMBER,
+    LFEXT_BYNAME
+)
+LFUN__(
+    _NEXT,
+    stateSleep,
+    "[void] LuaObject:stateSleep(int second)\r\n" \
+    "second - time sleep in seconds",
+    INPUT_NUMBER,
+    RETURN_NONE,
+    LFEXT_BYNAME
+)
+
+LFUN__(
+    _NEXT,
+    screenGetCord,
+    "[{table}] LuaObject:screenGetRegion(int x, int y, int w, int h)\r\n" \
+    "[{table}] LuaObject:screenGetRegion({int x, int y, int w, int h})\r\n" \
+    "return region from frame buffer data, LuaImage type",
+    INPUT_NUMBER_4_OR_NUMBER_1_TABLE,
+    RETURN_TABLE,
+    LFEXT_NONE
+)
+LFUN__(
+    _NEXT,
+    screenGet,
+    "[{table}] LuaObject:screenGet()\r\n" \
+    "return full frame buffer data, LuaImage type",
+    INPUT_NONE,
+    RETURN_TABLE,
+    LFEXT_NONE
 )
 
 #undef STR_

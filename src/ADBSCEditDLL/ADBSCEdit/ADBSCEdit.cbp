@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="6" />
-	<Project>
-		<Option title="ADBSCEdit" />
-		<Option pch_mode="2" />
-		<Option compiler="gcc" />
-		<Build>
-			<Target title="Debug">
-				<Option output="../../bin/Debug/ADBSCEdit" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../../obj/Debug/" />
-				<Option type="0" />
-				<Option compiler="gcc" />
-				<Option parameters="C:\__BuildSource\__SVN__\ADBViewer\src\bin\Debug\plugins\plugin-lua.lua C:\__BuildSource\test.file" />
-				<Compiler>
-					<Add option="-g3" />
-					<Add option="-D_DEBUG=1" />
-					<Add directory="../../../../../__LIB__/DrMingw/include" />
-				</Compiler>
-				<Linker>
-					<Add option="-lexchndl" />
-					<Add option="-lmgwhelp" />
-					<Add directory="../../bin/Debug" />
-					<Add directory="../../../../../__LIB__/DrMingw/lib" />
-				</Linker>
-			</Target>
-			<Target title="Release">
-				<Option output="../../bin/Release/ADBSCEdit" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../../obj/Release/" />
-				<Option type="0" />
-				<Option compiler="gcc" />
-				<Option parameters="C:\__BuildSource\__SVN__\ADBViewer\src\bin\Debug\plugins\plugin-lua.lua" />
-				<Compiler>
-					<Add option="-O2" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add directory="../../bin/Release" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="upx -9 ../../bin/Release/ADBSCEdit.exe" />
-				</ExtraCommands>
-			</Target>
-		</Build>
-		<Compiler>
-			<Add option="-Wall" />
-			<Add option="-fexceptions" />
-			<Add option="-std=c++17" />
-		</Compiler>
-		<Linker>
-			<Add option="-static-libstdc++" />
-			<Add option="-static-libgcc" />
-			<Add option="-lmingw32" />
-			<Add option="-lADBSCEdit" />
-			<Add library="user32" />
-			<Add library="kernel32" />
-		</Linker>
-		<Unit filename="../src/SCEditDll.h" />
-		<Unit filename="src/ADBSCEdit.cpp" />
-		<Unit filename="src/ADBSCEdit.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
-	</Project>
+    <FileVersion major="1" minor="6" />
+    <Project>
+        <Option title="ADBSCEdit" />
+        <Option pch_mode="2" />
+        <Option compiler="gcc" />
+        <Build>
+            <Target title="Debug">
+                <Option output="../../bin/Debug/ADBSCEdit" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../obj/Debug/" />
+                <Option type="0" />
+                <Option compiler="gcc" />
+                <Option parameters="C:\__BuildSource\__SVN__\ADBViewer\src\bin\Debug\plugins\plugin-lua.lua C:\__BuildSource\test.file" />
+                <Compiler>
+                    <Add option="-g3" />
+                    <Add option="-D_DEBUG=1" />
+                    <Add directory="../../../../../__LIB__/DrMingw/include" />
+                </Compiler>
+                <Linker>
+                    <Add option="-lexchndl" />
+                    <Add option="-lmgwhelp" />
+                    <Add directory="../../bin/Debug" />
+                    <Add directory="../../../../../__LIB__/DrMingw/lib" />
+                </Linker>
+            </Target>
+            <Target title="Release">
+                <Option output="../../bin/Release/ADBSCEdit" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../../obj/Release/" />
+                <Option type="0" />
+                <Option compiler="gcc" />
+                <Option parameters="C:\__BuildSource\__SVN__\ADBViewer\src\bin\Debug\plugins\plugin-lua.lua" />
+                <Compiler>
+                    <Add option="-O2" />
+                    <Add option="-flto" />
+                    <Add option="-static" />
+                    <Add option="-static-libgcc" />
+                    <Add option="-static-libstdc++" />
+                </Compiler>
+                <Linker>
+                    <Add option="-s" />
+                    <Add directory="../../bin/Release" />
+                </Linker>
+                <ExtraCommands>
+                    <Add after="upx -9 ../../bin/Release/ADBSCEdit.exe" />
+                </ExtraCommands>
+            </Target>
+        </Build>
+        <Compiler>
+            <Add option="-std=c++17" />
+            <Add option="-Wall" />
+            <Add option="-Wextra" />
+            <Add option="-fexceptions" />
+            <Add option="-Wno-unknown-pragmas" />
+        </Compiler>
+        <Linker>
+            <Add library="user32" />
+            <Add library="kernel32" />
+            <Add option="-lADBSCEdit" />
+        </Linker>
+        <Unit filename="../src/SCEditDll.h" />
+        <Unit filename="src/ADBSCEdit.cpp" />
+        <Unit filename="src/ADBSCEdit.rc">
+            <Option compilerVar="WINDRES" />
+        </Unit>
+        <Extensions>
+            <code_completion />
+            <envvars />
+            <debugger />
+        </Extensions>
+    </Project>
 </CodeBlocks_project_file>

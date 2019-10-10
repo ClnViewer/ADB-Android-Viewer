@@ -41,7 +41,15 @@ namespace Editor
         do
         {
             if (!(hbmp = ::LoadBitmap(hinst_, MAKEINTRESOURCE(ID_REBAR_BITMAP))))
-                break;
+            {
+                HMODULE hmd;
+                if ((::GetModuleHandleEx(
+                        GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+                        reinterpret_cast<LPCTSTR>(RunEdit),
+                        &hmd)) && (hmd != INVALID_HANDLE_VALUE))
+                    if (!(hbmp = ::LoadBitmap(hmd, MAKEINTRESOURCE(ID_REBAR_BITMAP))))
+                        break;
+            }
 
             BITMAP bmp{};
             if (!::GetObject(hbmp, sizeof(bmp), &bmp))

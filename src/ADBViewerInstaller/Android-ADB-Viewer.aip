@@ -13,10 +13,10 @@
     <ROW Property="ARPURLUPDATEINFO" Value="https://github.com/ClnViewer/ADB-Android-Viewer/releases"/>
     <ROW Property="CTRLS" Value="2"/>
     <ROW Property="Manufacturer" Value="PS"/>
-    <ROW Property="ProductCode" Value="1033:{7262FBD1-CADC-4F7C-A4BD-FB9E3095F2B2} " Type="16"/>
+    <ROW Property="ProductCode" Value="1033:{7A102CA3-93BB-4F34-9AC2-1049D18D864D} " Type="16"/>
     <ROW Property="ProductLanguage" Value="1033"/>
     <ROW Property="ProductName" Value="ADBViewer"/>
-    <ROW Property="ProductVersion" Value="0.0.2.18" Type="32" TargetFile="ADBViewer.exe"/>
+    <ROW Property="ProductVersion" Value="0.0.5.35" Type="32" TargetFile="ADBViewer.exe"/>
     <ROW Property="RUNAPPLICATION" Value="1" Type="4"/>
     <ROW Property="SecureCustomProperties" Value="OLDPRODUCTS;AI_NEWERPRODUCTFOUND"/>
     <ROW Property="UpgradeCode" Value="{2249214A-A9CD-4EF8-8AD5-073A2A54954F}"/>
@@ -81,6 +81,8 @@
     <ROW File="AdbWinUsbApi.dll" Component_="AdbWinUsbApi.dll" FileName="ADBWIN~2.DLL|AdbWinUsbApi.dll" Attributes="0" SourcePath="..\bin\Release\adbbin\AdbWinUsbApi.dll" SelfReg="false"/>
     <ROW File="ADBSCEdit.dll" Component_="ADBSCEdit.dll" FileName="ADBSCE~1.DLL|ADBSCEdit.dll" Attributes="0" SourcePath="..\bin\Release\ADBSCEdit.dll" SelfReg="false"/>
     <ROW File="ADBSCEdit.exe" Component_="ADBSCEdit.exe" FileName="ADBSCE~1.EXE|ADBSCEdit.exe" Attributes="0" SourcePath="..\bin\Release\ADBSCEdit.exe" SelfReg="false" DigSign="true"/>
+    <ROW File="ADBSCEdit.style" Component_="ADBViewer.ini" FileName="ADBSCE~1.STY|ADBSCEdit.style" Attributes="0" SourcePath="..\bin\Release\ADBSCEdit.style" SelfReg="false"/>
+    <ROW File="sceditdefault.png" Component_="ADBViewer.ini" FileName="SCEDIT~1.PNG|scedit-default.png" Attributes="0" SourcePath="..\bin\Release\scedit-default.png" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>

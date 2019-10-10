@@ -1,23 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="plugin-stub.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="6" />
-	</File>
 	<File name="LuaObject\LuaObject.h" open="0" top="0" tabpos="1">
 		<Cursor position="1454" topLine="42" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
 	</File>
 	<File name="LuaObject\LuaObjectBind.h" open="0" top="0" tabpos="2">
 		<Cursor position="2630" topLine="104" />
-		<BrowseMarks positions="" />
-		<Book_Marks positions="" />
-	</File>
-	<File name="LuaObject\LuaObject.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="7771" topLine="258" />
 	</File>
 	<File name="plugin-lua.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="16" />
+	</File>
+	<File name="plugin-stub.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="0" topLine="6" />
+	</File>
+	<File name="LuaObject\LuaObject.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="7771" topLine="258" />
 	</File>
 </BrowseTracker_layout_file>

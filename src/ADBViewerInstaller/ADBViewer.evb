@@ -217,11 +217,35 @@
           </File>
           <File>
             <Type>2</Type>
-            <Name>ADBSCEdit.exe</Name>
-            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\ADBSCEdit.exe</File>
+            <Name>scedit-default.png</Name>
+            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\scedit-default.png</File>
             <ActiveX>False</ActiveX>
             <ActiveXInstall>False</ActiveXInstall>
-            <Action>0</Action>
+            <Action>3</Action>
+            <OverwriteDateTime>False</OverwriteDateTime>
+            <OverwriteAttributes>False</OverwriteAttributes>
+            <PassCommandLine>False</PassCommandLine>
+            <HideFromDialogs>0</HideFromDialogs>
+          </File>
+          <File>
+            <Type>2</Type>
+            <Name>ADBSCEdit.style</Name>
+            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\ADBSCEdit.style</File>
+            <ActiveX>False</ActiveX>
+            <ActiveXInstall>False</ActiveXInstall>
+            <Action>2</Action>
+            <OverwriteDateTime>False</OverwriteDateTime>
+            <OverwriteAttributes>False</OverwriteAttributes>
+            <PassCommandLine>False</PassCommandLine>
+            <HideFromDialogs>0</HideFromDialogs>
+          </File>
+          <File>
+            <Type>2</Type>
+            <Name>ADBViewer.ini.default</Name>
+            <File>C:\__BuildSource\__SVN__\ADBViewer\src\bin\Release\ADBViewer.ini.default</File>
+            <ActiveX>False</ActiveX>
+            <ActiveXInstall>False</ActiveXInstall>
+            <Action>1</Action>
             <OverwriteDateTime>False</OverwriteDateTime>
             <OverwriteAttributes>False</OverwriteAttributes>
             <PassCommandLine>False</PassCommandLine>

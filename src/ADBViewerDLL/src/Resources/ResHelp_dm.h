@@ -32,6 +32,7 @@ static inline const char *help_strings_dm[] = {
     "! ADB unterstützt keinen Eingabetext in der Landessprache !",
     "! ADB not support input text in national language !",
     "Skript schließen und speichern",
+    "Skript konnte nicht im editor geöffnet werden, datei fehlt?",
     "Terminal schließen",
     "Terminalfenster zu klein zum anzeigen des befehls",
     "Das Browserfenster ist zu klein, um einen Befehl anzuzeigen.",

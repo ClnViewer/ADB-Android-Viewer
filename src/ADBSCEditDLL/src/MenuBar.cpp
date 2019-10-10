@@ -21,7 +21,7 @@ namespace Editor
                 hwnd_,
                 hinst_,
                 rc,
-                WS_OVERLAPPED | WS_CLIPCHILDREN | WS_BORDER | WS_VISIBLE,
+                WS_OVERLAPPED | WS_CLIPCHILDREN | WS_BORDER,
                 SCEdit::getMenuClassName(),
                 ""
             ))

@@ -23,6 +23,7 @@ namespace Editor
             static Config& instance();
             //
             HWND              gethandle();
+            HINSTANCE         gethinstance();
             Editor::EditBox * geteditbox();
             HFONT             getfont();
             std::string       getfontname();

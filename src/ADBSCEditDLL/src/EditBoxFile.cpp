@@ -11,7 +11,7 @@ namespace Editor
                 DWORD flags_
             )
     {
-        sfn_->lStructSize = sizeof(OPENFILENAMEW);
+        sfn_->lStructSize = sizeof(OPENFILENAMEA);
         sfn_->Flags = OFN_EXPLORER | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | flags_;
         sfn_->lpstrFilter = static_cast<LPCSTR>("Lua script files (*.lua)\0*.lua\0");
         sfn_->lpstrDefExt = static_cast<LPCSTR>("lua");

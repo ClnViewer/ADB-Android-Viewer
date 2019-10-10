@@ -44,8 +44,6 @@
 // #  include <iostream>
 #endif
 
-#include "LuaObject.h"
-#include "LuaObjectBind.h"
 
 LuaObject::LuaObject()
     : m_lua(nullptr), m_watch(0), m_laststate(0.0),

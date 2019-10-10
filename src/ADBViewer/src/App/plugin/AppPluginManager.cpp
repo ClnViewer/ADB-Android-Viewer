@@ -33,7 +33,7 @@
 
 #if defined(OS_CPP_FILESYSTEM)
 #  if defined(_DEBUG)
-#    pragma message "compiled using std::filesystem c++17"
+//#    pragma message "compiled using std::filesystem c++17"
 #  endif
 #  include "IPluginLoader.FILESYSTEM.h"
 #else

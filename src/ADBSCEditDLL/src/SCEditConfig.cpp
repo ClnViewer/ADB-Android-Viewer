@@ -77,6 +77,11 @@ namespace Editor
         return m_hwnd;
     }
 
+    HINSTANCE Config::gethinstance()
+    {
+        return m_hinst;
+    }
+
     std::string Config::getfontname()
     {
         return l_cnf_font;

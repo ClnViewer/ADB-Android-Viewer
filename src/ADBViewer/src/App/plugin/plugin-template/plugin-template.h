@@ -10,7 +10,8 @@ namespace Plugins
 	class PluginTemplate : public AppIPlugin
 	{
     private:
-        bool m_test_swap_click;
+        bool     m_test_swap_click = false;
+        uint32_t m_test_count      = 0U;
 
 	public:
 		PluginTemplate(const char*, const void*);

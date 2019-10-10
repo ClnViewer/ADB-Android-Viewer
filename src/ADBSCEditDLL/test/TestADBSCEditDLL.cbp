@@ -30,22 +30,28 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-flto" />
+					<Add option="-static" />
+					<Add option="-static-libgcc" />
+					<Add option="-static-libstdc++" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
 					<Add directory="../../bin/Release" />
 				</Linker>
+				<ExtraCommands>
+					<Add after="upx -9 ../../bin/Release/TestADBSCEditDLL.exe" />
+				</ExtraCommands>
 			</Target>
 		</Build>
 		<Compiler>
-			<Add option="-Wall" />
-			<Add option="-fexceptions" />
 			<Add option="-std=c++17" />
+			<Add option="-Wall" />
+			<Add option="-Wextra" />
+			<Add option="-fexceptions" />
+			<Add option="-Wno-unknown-pragmas" />
 		</Compiler>
 		<Linker>
-			<Add option="-static-libstdc++" />
-			<Add option="-static-libgcc" />
-			<Add option="-lmingw32" />
 			<Add option="-lADBSCEdit" />
 			<Add library="user32" />
 			<Add library="kernel32" />

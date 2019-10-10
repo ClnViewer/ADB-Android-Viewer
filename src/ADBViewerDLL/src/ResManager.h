@@ -114,6 +114,7 @@ namespace Resources
                 RES_STR_ADB_LANG_NOT_SUPPORT,
                 RES_STR_ADB_LANG_NOT_SUPPORT_ENG,
                 RES_STR_SCRIPTEDIT_END,
+                RES_STR_SCRIPTEDIT_NOTRUN,
                 RES_STR_CLOSE_TERM,
                 RES_STR_SMALL_TERM,
                 RES_STR_SMALL_BROWSER,
@@ -208,6 +209,7 @@ namespace Resources
                 RES_STR_POPUP_64,
                 RES_STR_POPUP_65,
                 RES_STR_POPUP_66,
+                RES_STR_POPUP_67,
                 RES_STR_POPUP_NONE
             };
 

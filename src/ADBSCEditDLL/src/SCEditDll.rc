@@ -4,7 +4,8 @@
 #define __TOSTR(a) _TOSTR(a)
 
 1 RT_MANIFEST "..\\ADBSCEditDll.manifest"
-ID_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
+ID_MAIN_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
+ID_VIEWER_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
 
 ID_REBAR_BITMAP BITMAP "Resources\\ADBSCEditRebar.bmp"
 ID_TOOLBAR_BITMAP BITMAP "Resources\\ADBSCEditToolBar.bmp"
@@ -35,58 +36,81 @@ BEGIN
     VK_F3,          IDM_MAIN_EXTDBGV,        VIRTKEY
     VK_F4,          IDM_MAIN_DBGCYCLE,       VIRTKEY
     VK_F5,          IDM_MAIN_DBGSTEP,        VIRTKEY
-    VK_F6,          IDM_MAIN_DBGNEXT,        VIRTKEY
-    VK_F7,          IDM_MAIN_DBGDUMP,        VIRTKEY
+    VK_F6,          IDM_MAIN_DBGDUMP,        VIRTKEY
+    VK_F7,          IDM_MAIN_DBGNEXT,        VIRTKEY
     VK_F8,          IDM_MAIN_DBGBREAK,       VIRTKEY
 END
 
 ID_REBAR_MENU MENU DISCARDABLE
 BEGIN
-	POPUP "Main"
-	BEGIN
-		MENUITEM "Open script",         IDM_FILE_OPEN
-		MENUITEM "Save script",         IDM_FILE_SAVE
-		MENUITEM "Save script as ..",   IDM_FILE_SAVEAS
-		MENUITEM "Load default script", IDM_FILE_NEW
-		MENUITEM SEPARATOR
-		MENUITEM "Exit",                IDM_MAIN_EXIT
-	END
-	POPUP "Edit"
-	BEGIN
-		MENUITEM "Undo",                IDM_EDIT_UNDO
-		MENUITEM "Redo",                IDM_EDIT_REDO
-		MENUITEM SEPARATOR
-		MENUITEM "Cut",                 IDM_EDIT_CUT
-		MENUITEM "Copy",                IDM_EDIT_COPY
-		MENUITEM "Paste",               IDM_EDIT_PASTE
-		MENUITEM "Select all",          IDM_EDIT_SELECTALL
-	END
-	POPUP "View"
-	BEGIN
-		MENUITEM "Show indent",         IDM_EDIT_SHOW_INDENTG, CHECKED 
-		MENUITEM "Show end line",       IDM_EDIT_SHOW_ENDLINE
-		MENUITEM SEPARATOR
-		MENUITEM "Always top window",   IDM_MAIN_WINTOP
-	END
-	POPUP "Debug"
-	BEGIN
-		MENUITEM "Start check",         IDM_SCRUN_TEST
-		MENUITEM "Start debug",         IDM_SCRUN_START
-		MENUITEM "Stop",                IDM_SCRUN_STOP,    GRAYED
-		MENUITEM SEPARATOR
-		MENUITEM "Cycle mode (ALT-C)",  IDM_MAIN_DBGCYCLE, CHECKED
-		MENUITEM "Step by step mode (ALT-S)", IDM_MAIN_DBGSTEP
-		MENUITEM SEPARATOR
-		MENUITEM "Using DebugView (ALT-V)",   IDM_MAIN_EXTDBGV
-		MENUITEM SEPARATOR
-		MENUITEM "Stack dump (ALT-D)",  IDM_MAIN_DBGDUMP,  GRAYED
-		MENUITEM "Next line  (ALT-N)",  IDM_MAIN_DBGNEXT,  GRAYED
-	END
-	POPUP "Info"
-	BEGIN
-		MENUITEM "Help",                IDM_EDIT_SHOW_HELP
-		MENUITEM "Version",             IDM_MAIN_SHOW_VERSION
-	END
+    POPUP "Main"
+    BEGIN
+        MENUITEM "Open script",         IDM_FILE_OPEN
+        MENUITEM "Save script",         IDM_FILE_SAVE
+        MENUITEM "Save script as ..",   IDM_FILE_SAVEAS
+        MENUITEM SEPARATOR
+        MENUITEM "Load default script", IDM_FILE_NEW
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                IDM_MAIN_EXIT
+    END
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Undo",                IDM_EDIT_UNDO
+        MENUITEM "Redo",                IDM_EDIT_REDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cut",                 IDM_EDIT_CUT
+        MENUITEM "Copy",                IDM_EDIT_COPY
+        MENUITEM "Paste",               IDM_EDIT_PASTE
+        MENUITEM "Select all",          IDM_EDIT_SELECTALL
+        MENUITEM SEPARATOR
+        POPUP "Insert Lua code .."
+        BEGIN
+            MENUITEM "Main function (Click)",     IDM_EDIT_PASTE_CODE_0
+            MENUITEM "Main function (Check -> Click)", IDM_EDIT_PASTE_CODE_1
+            MENUITEM "Set default test image",    IDM_EDIT_PASTE_CODE_12
+            MENUITEM SEPARATOR
+            MENUITEM "Compare image",             IDM_EDIT_PASTE_CODE_2
+            MENUITEM "Compare image region",      IDM_EDIT_PASTE_CODE_3
+            MENUITEM SEPARATOR
+            MENUITEM "Check pixel  by position",  IDM_EDIT_PASTE_CODE_8
+            MENUITEM "Check pixel  by coordinate",IDM_EDIT_PASTE_CODE_9
+            MENUITEM "Check pixels by position",  IDM_EDIT_PASTE_CODE_10
+            MENUITEM "Check pixels by coordinate",IDM_EDIT_PASTE_CODE_11
+            MENUITEM SEPARATOR
+            MENUITEM "Get screen",                IDM_EDIT_PASTE_CODE_4
+            MENUITEM "Get screen region",         IDM_EDIT_PASTE_CODE_5
+            MENUITEM "Iterate image",             IDM_EDIT_PASTE_CODE_6
+            MENUITEM "Save image by count",       IDM_EDIT_PASTE_CODE_7
+            MENUITEM SEPARATOR
+            MENUITEM "LuaImage format example",   IDM_EDIT_PASTE_CODE_13
+        END
+    END
+    POPUP "View"
+    BEGIN
+        MENUITEM "Show indent",         IDM_EDIT_SHOW_INDENTG, CHECKED
+        MENUITEM "Show end line",       IDM_EDIT_SHOW_ENDLINE
+        MENUITEM SEPARATOR
+        MENUITEM "Always top window",   IDM_MAIN_WINTOP
+    END
+    POPUP "Debug"
+    BEGIN
+        MENUITEM "Start check",         IDM_SCRUN_TEST
+        MENUITEM "Start debug",         IDM_SCRUN_START
+        MENUITEM "Stop",                IDM_SCRUN_STOP,    GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "Cycle mode (ALT-C)",  IDM_MAIN_DBGCYCLE, CHECKED
+        MENUITEM "Step by step mode (ALT-S)", IDM_MAIN_DBGSTEP
+        MENUITEM SEPARATOR
+        MENUITEM "Using DebugView (ALT-V)",   IDM_MAIN_EXTDBGV
+        MENUITEM SEPARATOR
+        MENUITEM "Stack dump (ALT-D)",  IDM_MAIN_DBGDUMP,  GRAYED
+        MENUITEM "Next line  (ALT-N)",  IDM_MAIN_DBGNEXT,  GRAYED
+    END
+    POPUP "Info"
+    BEGIN
+        MENUITEM "Help",                IDM_EDIT_SHOW_HELP
+        MENUITEM "Version",             IDM_MAIN_SHOW_VERSION
+    END
 END
 
 1 VERSIONINFO
@@ -100,24 +124,24 @@ END
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
-	BLOCK "040904b0"
+    BLOCK "040904b0"
         BEGIN
-		VALUE "CompanyName", "PS https://github.com/ClnViewer/ADB-Android-Viewer"
-		VALUE "FileDescription", "ADB Viewer script editor"
-		VALUE "FileVersion", AVIEW_FULLVERSION_STRING
-		VALUE "InternalName", "ADBSCEdit"
-		VALUE "LegalCopyright", "Copyright PS 2016-2019. This is freeware."
-		VALUE "ProductName", "ADBDriver ("  __TOSTR(AVIEW_REVISION) ") [" __TOSTR(AVIEW_BUILDS_COUNT) "][" __TOSTR(AVIEW_BUILD_HISTORY) "]"
-		VALUE "OriginalFilename", "ADBSCEdit.dll"
-		VALUE "ProductVersion", AVIEW_FULLVERSION_STRING
-		VALUE "CompanyShortName", "PS"
-		VALUE "ProductShortName", "ADBSCEdit"
-		VALUE "LastChange", AVIEW_YEAR " " AVIEW_MONTH " " AVIEW_DATE
-		VALUE "Official Build", "0"
-	END
+        VALUE "CompanyName", "PS https://github.com/ClnViewer/ADB-Android-Viewer"
+        VALUE "FileDescription", "ADB Viewer script editor"
+        VALUE "FileVersion", AVIEW_FULLVERSION_STRING
+        VALUE "InternalName", "ADBSCEdit"
+        VALUE "LegalCopyright", "Copyright PS 2016-2019. This is freeware."
+        VALUE "ProductName", "ADBDriver ("  __TOSTR(AVIEW_REVISION) ") [" __TOSTR(AVIEW_BUILDS_COUNT) "][" __TOSTR(AVIEW_BUILD_HISTORY) "]"
+        VALUE "OriginalFilename", "ADBSCEdit.dll"
+        VALUE "ProductVersion", AVIEW_FULLVERSION_STRING
+        VALUE "CompanyShortName", "PS"
+        VALUE "ProductShortName", "ADBSCEdit"
+        VALUE "LastChange", AVIEW_YEAR " " AVIEW_MONTH " " AVIEW_DATE
+        VALUE "Official Build", "0"
+    END
   END
   BLOCK "VarFileInfo"
   BEGIN
-	VALUE "Translation", 0x0419, 1251
+    VALUE "Translation", 0x0419, 1251
   END
 END

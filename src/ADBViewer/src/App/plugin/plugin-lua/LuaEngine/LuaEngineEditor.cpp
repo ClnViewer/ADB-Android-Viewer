@@ -1,9 +1,12 @@
 
-#include "SCEditInternal.h"
-#include "LuaEngine.String.h"
+#include <SCEditInternal.h>
+#include <lua.hpp>
 #include <iomanip>
 #include <ctime>
-#include <lua.hpp>
+
+#include "LuaLintEditor.h"
+#include "LuaObject.h"
+#include "LuaEngineEditorString.h"
 
 namespace Editor
 {
@@ -14,6 +17,11 @@ namespace Editor
     LuaEngine::LuaEngine()
     {
         initbase_();
+        m_imgdraw.init(
+            Config::instance().gethinstance(),
+            Config::instance().gethandle()
+        );
+        m_imgdefault_name = "scedit-default.png";
     }
 
     LuaEngine::~LuaEngine()
@@ -31,6 +39,8 @@ namespace Editor
 
     LuaEngine * LuaEngine::instance(lua_State *L)
     {
+        return LuaObject::getclass<Editor::LuaEngine>(L, "LuaObject");
+        /*
         lua_getglobal(L, "LuaObject");
         if (!lua_istable(L, -1))
             return nullptr;
@@ -44,6 +54,7 @@ namespace Editor
         LuaEngine *p = (LuaEngine*)lua_touserdata(L, -1);
         lua_pop(L, 1);
         return p;
+        */
     }
 
     bool LuaEngine::getdbgbreak() const
@@ -55,7 +66,7 @@ namespace Editor
     {
         m_isdbgbreak = b;
         if (b)
-            DebugPrintOk(g_debug_str_0);
+            LuaLint::print(g_debug_str_0, LuaLint::ColorPrint::DebugOk);
     }
 
     bool LuaEngine::getdbgstep() const
@@ -67,14 +78,14 @@ namespace Editor
     {
         if (!getdbgbreak())
         {
-            DebugPrintError(g_debug_str_22);
+            LuaLint::print(g_debug_str_22, LuaLint::ColorPrint::DebugError);
             return;
         }
         m_isdbgstep = b;
         if (b)
-            DebugPrintOk(g_debug_str_1);
+            LuaLint::print(g_debug_str_1, LuaLint::ColorPrint::DebugOk);
         else
-            DebugPrintOk(g_debug_str_2);
+            LuaLint::print(g_debug_str_2, LuaLint::ColorPrint::DebugOk);
     }
 
     bool LuaEngine::getdbgcontinue() const
@@ -147,59 +158,77 @@ namespace Editor
 
     bool LuaEngine::stop()
     {
+        if (m_imgdraw.isactive())
+            m_imgdraw.close();
+
         return runchek_(false);
+    }
+
+    bool  LuaEngine::loadimagedefault()
+    {
+        std::string s;
+        return loadimagedefault(s);
+    }
+
+    bool  LuaEngine::loadimagedefault(std::string & s)
+    {
+        try
+        {
+            if (!m_imgdefault.empty())
+                return true;
+
+            m_imgdefault.load(
+                    ((s.empty()) ? m_imgdefault_name : s),
+                    ImageLite::ImageType::IT_PNG
+                );
+            if (!s.empty())
+                m_imgdefault_name = s;
+            s = "";
+            return true;
+        }
+        catch (std::exception const & ex_)
+        {
+            s = ex_.what();
+            return false;
+        }
+        catch (...)
+        {
+            s.assign(__FUNCTION__);
+            return false;
+        }
     }
 
     //
     // Private
     //
+    static std::atomic<bool> l_ispanic = false;
+
+    static int32_t f_atpanic_(lua_State*)
+    {
+        LuaLint::print(g_debug_str_23, LuaLint::ColorPrint::DebugError);
+        l_ispanic = true;
+        return 1;
+    }
 
     bool LuaEngine::init_()
     {
         close_();
 
-        if (!(m_lua = luaL_newstate()))
+        if (!LuaObject::init_(
+                &m_lua,
+                "LuaObject",
+                m_fun_redefine,
+                m_fun_object,
+                (m_fun_object_sz + 1),
+                static_cast<void*>(this)
+            ))
             return false;
-
-        luaL_checkversion(m_lua);
-        luaL_openlibs(m_lua);
-        {
-            lua_getglobal(m_lua, "_G");
-            luaL_setfuncs(m_lua, m_fun_redefine, 0);
-            lua_pop(m_lua, 1);
-        }
-        //
-        {
-            lua_createtable(m_lua, 0, m_fun_object_sz + 1);
-            //
-            lua_pushlightuserdata(m_lua, this);
-            lua_setfield(m_lua, -2, "_self");
-            //
-            luaL_setfuncs(m_lua, m_fun_object, 0);
-            //
-            lua_setglobal(m_lua, "LuaObject");
-            lua_pop(m_lua, 1);
-        }
         return true;
-    }
-
-    void LuaEngine::clean_()
-    {
-        if (m_lua)
-            lua_pop(m_lua, lua_gettop(m_lua));
     }
 
     void LuaEngine::close_()
     {
-        if (m_lua)
-            lua_close(m_lua);
-        m_lua = nullptr;
-    }
-
-    static int f_atpanic_(lua_State*)
-    {
-        DebugPrintError("Lua panic!");
-        return 1;
+        LuaObject::close_(&m_lua);
     }
 
     bool LuaEngine::open_(std::string const & s)
@@ -215,21 +244,28 @@ namespace Editor
                 break;
 
             lua_sethook(m_lua, &LuaEngine::hook_cb, LUA_MASKCALL, 0);
-            if (lua_pcall(m_lua, 0, 0, 0))
-                break;
 
-            DebugPrintOk(g_debug_str_3);
+            int32_t err;
+            if ((err = lua_pcall(m_lua, 0, 0, 0)) != LUA_OK)
+            {
+                LuaLint::print_pcall_error(err);
+                std::string stb = LuaObject::trace_(m_lua);
+                if (!stb.empty())
+                    LuaLint::print(stb, LuaLint::ColorPrint::DebugTraceStack);
+                break;
+            }
+            LuaLint::print(g_debug_str_3, LuaLint::ColorPrint::DebugOk);
             return true;
         }
         while (0);
 
         if (m_lua)
         {
-            DebugPrintError(lua_tostring(m_lua, -1));
+            LuaLint::print(lua_tostring(m_lua, -1), LuaLint::ColorPrint::DebugError);
             close_();
         }
         else
-            DebugPrintError(g_debug_str_4);
+            LuaLint::print(g_debug_str_4, LuaLint::ColorPrint::DebugError);
 
         return false;
     }
@@ -238,7 +274,7 @@ namespace Editor
     {
         std::stringstream ss;
         ss << "[ " << cnt << " ] - " << s.c_str();
-        DebugPrintTraceC(ss.str());
+        LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceC);
     }
 
     void LuaEngine::runscriptend_()
@@ -292,35 +328,46 @@ namespace Editor
         {
             if (!m_isdbgbreak)
             {
-                LocalPrintError(g_debug_str_5);
-                return false;
+                if (l_ispanic)
+                {
+                    runchek_(false);
+                    LuaLint::print(g_debug_str_24, LuaLint::ColorPrint::LocalError);
+                }
+                else
+                {
+                    LuaLint::print(g_debug_str_5, LuaLint::ColorPrint::LocalError);
+                    return false;
+                }
             }
             if (m_task.joinable())
             {
                 m_task.join();
-                DebugPrintOk(g_debug_str_6);
+                LuaLint::print(g_debug_str_6, LuaLint::ColorPrint::DebugOk);
             }
             if (m_lua)
             {
-                DebugPrintOk(g_debug_str_7);
+                LuaLint::print(g_debug_str_7, LuaLint::ColorPrint::DebugOk);
                 close_();
             }
+            l_ispanic = false;
             return true;
         }
         else
         {
             if (m_isdbgbreak)
             {
-                DebugPrintError(g_debug_str_8);
+                LuaLint::print(g_debug_str_8, LuaLint::ColorPrint::DebugError);
                 return false;
             }
             if (m_task.joinable())
             {
                 runscriptend_();
+                l_ispanic    = false;
                 m_isdbgbreak = true;
                 m_isdbgstep  = false;
                 m_isdbgdump  = false;
-                DebugPrintOk(g_debug_str_9);
+                m_savecount  = 0;
+                LuaLint::print(g_debug_str_9, LuaLint::ColorPrint::DebugOk);
             }
             return true;
         }
@@ -336,7 +383,7 @@ namespace Editor
                 return false;
 
         setdbgbreak(false);
-        DebugPrintHelp(g_debug_help);
+        LuaLint::print(g_debug_help, LuaLint::ColorPrint::DebugHelp);
         SendMessageA(
             Config::instance().gethandle(),
             WM_COMMAND,
@@ -351,8 +398,9 @@ namespace Editor
                 int32_t cnt = 0;
                 m_laststate = 0;
 
-                DebugPrintOk(g_debug_str_10);
+                LuaLint::print(g_debug_str_10, LuaLint::ColorPrint::DebugOk);
                 lua_sethook(m_lua, &LuaEngine::hook_cb, LUA_MASKCALL | LUA_MASKLINE, 0);
+                lua_pushcfunction(m_lua, &LuaObject::trace<&LuaLint::print>);
 
                 do
                 {
@@ -361,16 +409,30 @@ namespace Editor
                     else
                         countprint_(++cnt, g_debug_str_12);
                     //
-                    if (!getfun_("main"))
+                    if (!LuaObject::getfunction_(m_lua, "main"))
                     {
                         countprint_(cnt, g_debug_str_13);
                         break;
                     }
                     if (getdbgbreak())
                         break;
+
                     // push main() arguments
                     lua_pushinteger(m_lua, cnt);
-                    lua_pcall(m_lua, 1, 1, 0);
+
+                    int32_t err;
+                    if ((err = lua_pcall(m_lua, 1, 1, 0)) != LUA_OK)
+                    {
+                        if ((!getdbgbreak())  ||
+                            (err != LUA_ERRRUN))
+                        {
+                            LuaLint::print_pcall_error(err);
+                            std::string stb = LuaObject::trace_(m_lua);
+                            if (!stb.empty())
+                                countprint_(cnt, stb);
+                        }
+                        break;
+                    }
                     //
                     if (getdbgbreak())
                         break;
@@ -383,7 +445,7 @@ namespace Editor
 
                         std::stringstream ss;
                         ss << g_debug_str_16 << m_laststate.load();
-                        DebugPrintTraceC(ss.str());
+                        LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceC);
                     }
                     //
                     if (getdbgbreak())
@@ -416,6 +478,7 @@ namespace Editor
 
                 countprint_(cnt, g_debug_str_18);
                 runscriptend_();
+                setdbgbreak(true);
                 return;
             }
         };
@@ -438,7 +501,7 @@ namespace Editor
             if (!open_(s))
                 break;
 
-            if (!getfun_("main"))
+            if (!LuaObject::getfunction_(m_lua, "main"))
             {
                 LocalPrintError(g_debug_str_13);
                 break;
@@ -449,19 +512,6 @@ namespace Editor
 
         close_();
         return false;
-    }
-
-    //
-    // LUA utilities method
-    //
-
-    bool LuaEngine::getfun_(std::string const & s)
-    {
-        if ((s.empty()) || (!ready()))
-            return false;
-
-        lua_getglobal(m_lua, s.c_str());
-        return lua_isfunction(m_lua, -1);
     }
 
     //
@@ -626,7 +676,7 @@ namespace Editor
                     ss << " -> " << ldb_->name;
                     if (ldb_->linedefined > 0)
                         ss << ":" << (ldb_->linedefined + 1);
-                    COLORREFBox(ss.str(), RGB(128,0,128));
+                    LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceStack);
                     break;
                 }
                 default:
@@ -636,11 +686,11 @@ namespace Editor
         }
         catch(std::exception const & ex_)
         {
-            DebugPrintError(ex_.what());
+            LuaLint::print(ex_.what(), LuaLint::ColorPrint::DebugError);
         }
         catch (...)
         {
-            DebugPrintError(g_debug_str_21);
+            LuaLint::print(g_debug_str_21, LuaLint::ColorPrint::DebugError);
         }
     }
 };

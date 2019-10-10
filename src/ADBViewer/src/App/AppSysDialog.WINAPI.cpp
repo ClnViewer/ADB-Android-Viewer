@@ -134,7 +134,7 @@ void AppSysDialog::cliptextset(SDL_Window *win, std::string const & s)
             HGLOBAL hmem = ::GlobalAlloc(GMEM_MOVEABLE, (s.length() + 1));
             if (!hmem)
                 break;
-            ::memcpy(::GlobalLock(hmem), s.c_str(), s.length());
+            ::memcpy(::GlobalLock(hmem), s.data(), s.length());
             ::GlobalUnlock(hmem);
 
             ::EmptyClipboard();

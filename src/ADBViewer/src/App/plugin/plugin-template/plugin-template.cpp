@@ -61,17 +61,22 @@ namespace Plugins
             t = { 412, 416 };
 
         m_adbcmd->click(&t);
-        m_test_swap_click = !m_test_swap_click;
+        m_test_swap_click = !(m_test_swap_click);
 
-        /*
-        FILE *fp = fopen(m_name.c_str(), "wb");
-        if (fp)
+        //
+#       if 0
         {
-            fwrite(&v[0], 1U, v.size(), fp);
-            fclose(fp);
+            std::stringstream ss;
+            ss << m_name.c_str() << "_" << m_test_count << "_image.raw";
+            FILE *fp = fopen(ss.str().c_str(), "wb");
+            if (fp)
+            {
+                fwrite(&v[0], 1U, v.size(), fp);
+                fclose(fp);
+            }
         }
-        */
-
+#       endif
+        //
         m_isready = true;
     }
 }

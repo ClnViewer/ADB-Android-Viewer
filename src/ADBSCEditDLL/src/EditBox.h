@@ -53,6 +53,7 @@ namespace Editor
             LRESULT                 navigate();
             void                    notify(void*);
             void                    findtext(std::string const&);
+            void                    textinsert(std::string const&);
             void                    setdebugline(int32_t);
             void                    showhelp();
             void                    setannotation(std::string const&, int32_t);

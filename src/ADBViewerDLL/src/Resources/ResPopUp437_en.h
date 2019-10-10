@@ -67,5 +67,6 @@ static inline const wchar_t *popup_strings_en[] = {
     /* 64 */ L"rw- rw- rw-",
     /* 65 */ L"rwx rwx rwx",
     /* 66 */ L"Open in editor",
+    /* 67 */ L"Open current script in editor",
     nullptr
 };

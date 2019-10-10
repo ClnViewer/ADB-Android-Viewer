@@ -24,7 +24,7 @@ namespace Editor
         if (hicon)
             wndc.hIcon = hicon;
         else
-            wndc.hIcon = ::LoadIconA(m_hinst, MAKEINTRESOURCE(ID_ICON));
+            wndc.hIcon = ::LoadIconA(m_hinst, MAKEINTRESOURCE(ID_MAIN_ICON));
 
         do
         {

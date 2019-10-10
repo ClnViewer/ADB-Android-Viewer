@@ -172,7 +172,28 @@ void AppEditor::openedit()
         if (data.empty())
             return;
 
-        (void) RunEdit(l_savePath, data, true, nullptr);
+        if (!RunEdit(l_savePath, data, false, nullptr))
+            AddMessageQueue(
+                ResManager::stringload(
+                    ResManager::IndexStringResource::RES_STR_SCRIPTEDIT_NOTRUN,
+                    AppConfig::instance().cnf_lang
+                ),
+                5U,
+                -1
+            );
+    }
+
+void AppEditor::loadedit()
+    {
+        if (!RunEditOpen(l_savePath, false, nullptr))
+            AddMessageQueue(
+                ResManager::stringload(
+                    ResManager::IndexStringResource::RES_STR_SCRIPTEDIT_NOTRUN,
+                    AppConfig::instance().cnf_lang
+                ),
+                5U,
+                -1
+            );
     }
 
 void AppEditor::run()
@@ -482,6 +503,12 @@ bool AppEditor::uevent(SDL_Event *ev, const void *instance)
                         ape->stop();
                         ape->openedit();
                     }
+                    return true;
+                }
+            case ID_CMD_POP_MENU67:
+                {
+                    /// open default LUA script from editor
+                    ape->loadedit();
                     return true;
                 }
             case ID_CMD_POP_MENU7:

@@ -1,145 +1,147 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-	<FileVersion major="1" minor="6" />
-	<Project>
-		<Option title="ADB Driver DLL" />
-		<Option pch_mode="2" />
-		<Option compiler="gcc" />
-		<Build>
-			<Target title="Debug">
-				<Option output="../bin/Debug/ADBDriver" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../obj/Debug/" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option createDefFile="1" />
-				<Compiler>
-					<Add option="-g" />
-					<Add option="-D_BUILD_TRACE=0" />
-					<Add directory="src" />
-				</Compiler>
-				<Linker>
-					<Add option="-lADBDriverPack" />
-					<Add option="-L../bin/Debug" />
-				</Linker>
-			</Target>
-			<Target title="Release">
-				<Option output="../bin/Release/ADBDriver" prefix_auto="1" extension_auto="1" />
-				<Option object_output="../obj/Release/" />
-				<Option type="3" />
-				<Option compiler="gcc" />
-				<Option createDefFile="1" />
-				<Compiler>
-					<Add option="-O2" />
-					<Add directory="src" />
-				</Compiler>
-				<Linker>
-					<Add option="-s" />
-					<Add option="-lADBDriverPack" />
-					<Add option="-L../bin/Release" />
-				</Linker>
-				<ExtraCommands>
-					<Add after="upx -9 ../bin/Release/ADBDriver.dll" />
-				</ExtraCommands>
-			</Target>
-		</Build>
-		<Compiler>
-			<Add option="-std=c++17" />
-			<Add option="-Wextra" />
-			<Add option="-Wall" />
-			<Add option="-Wno-unknown-pragmas" />
-			<Add option="-D_BUILD_DLL=1" />
-			<Add option="-D_BUILD_WARNING_0=1" />
-		</Compiler>
-		<Linker>
-			<Add option="-static-libstdc++" />
-			<Add option="-static-libgcc" />
-			<Add option="-lmingw32" />
-			<Add option="-lcomctl32" />
-			<Add option="-lcomdlg32" />
-			<Add option="-lwtsapi32" />
-			<Add option="-lws2_32" />
-			<Add option="-luser32" />
-			<Add option="-lgdi32" />
-		</Linker>
-		<Unit filename="../ADBViewer/src/loader.h" />
-		<Unit filename="../ADBViewer/src/version.h" />
-		<Unit filename="src/ADBDriver.h" />
-		<Unit filename="src/ADBDriverDLL.cpp" />
-		<Unit filename="src/ADBDriverDLL.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.h" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialogInternal.h" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CHAR.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CLOSE.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_COMMAND.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CTLCOLORDLG.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CTLCOLORSTATIC.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_DRAWITEM.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_INITDIALOG.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_NCHITTEST.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_NOTIFY.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialog.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialog.h" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialogInternal.h" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CHAR.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CLOSE.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_COMMAND.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CTLCOLORDLG.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CTLCOLORSTATIC.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_DRAWITEM.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_INITDIALOG.cpp" />
-		<Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_NCHITTEST.cpp" />
-		<Unit filename="src/Dialog/WINAPI/ResStringDialog.h" />
-		<Unit filename="src/Dialog/WINAPI/StyleDialog.cpp" />
-		<Unit filename="src/Dialog/WINAPI/StyleDialog.h" />
-		<Unit filename="src/Dialog/WINAPI/StyleDialog.rc">
-			<Option compilerVar="WINDRES" />
-		</Unit>
-		<Unit filename="src/Driver.cpp" />
-		<Unit filename="src/DriverAsync.cpp" />
-		<Unit filename="src/DriverAsync.h" />
-		<Unit filename="src/DriverConst.h" />
-		<Unit filename="src/DriverDirItem.cpp" />
-		<Unit filename="src/DriverExcept.h" />
-		<Unit filename="src/DriverInternal.h" />
-		<Unit filename="src/DriverNet.cpp" />
-		<Unit filename="src/DriverNet.h" />
-		<Unit filename="src/DriverNetHelper.cpp" />
-		<Unit filename="src/DriverNetSync.cpp" />
-		<Unit filename="src/DriverNetSyncInternal.cpp" />
-		<Unit filename="src/DriverProcess.cpp" />
-		<Unit filename="src/DriverSocket.cpp" />
-		<Unit filename="src/DriverSocketCapture.cpp" />
-		<Unit filename="src/DriverSocketDevice.cpp" />
-		<Unit filename="src/DriverSocketFSDir.cpp" />
-		<Unit filename="src/DriverSocketFSFile.cpp" />
-		<Unit filename="src/DriverSocketInput.cpp" />
-		<Unit filename="src/Utils/extEnumPrintable.h" />
-		<Unit filename="src/Utils/extMultiString.cpp" />
-		<Unit filename="src/Utils/extMultiString.h" />
-		<Unit filename="src/Utils/extStringUtils.h" />
-		<Unit filename="src/Utils/extTraceFunction.h" />
-		<Unit filename="src/lz4/lz4.c">
-			<Option compilerVar="CC" />
-			<Option compiler="gcc" use="1" buildCommand="$compiler -std=c17 $options $includes -c $file -o $object" />
-		</Unit>
-		<Unit filename="src/lz4/lz4.h" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-			<lib_finder disable_auto="1" />
-			<DoxyBlocks>
-				<comment_style block="0" line="0" />
-				<doxyfile_project output_directory="../../docs/adbdriver-ref" />
-				<doxyfile_build />
-				<doxyfile_warnings />
-				<doxyfile_output html="0" html_help="1" man="1" />
-				<doxyfile_dot />
-				<general />
-			</DoxyBlocks>
-		</Extensions>
-	</Project>
+    <FileVersion major="1" minor="6" />
+    <Project>
+        <Option title="ADB Driver DLL" />
+        <Option pch_mode="2" />
+        <Option compiler="gcc" />
+        <Build>
+            <Target title="Debug">
+                <Option output="../bin/Debug/ADBDriver" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../obj/Debug/" />
+                <Option type="3" />
+                <Option compiler="gcc" />
+                <Option createDefFile="1" />
+                <Compiler>
+                    <Add option="-g" />
+                    <Add option="-D_BUILD_TRACE=0" />
+                    <Add directory="src" />
+                </Compiler>
+                <Linker>
+                    <Add option="-lADBDriverPack" />
+                    <Add option="-L../bin/Debug" />
+                </Linker>
+            </Target>
+            <Target title="Release">
+                <Option output="../bin/Release/ADBDriver" prefix_auto="1" extension_auto="1" />
+                <Option object_output="../obj/Release/" />
+                <Option type="3" />
+                <Option compiler="gcc" />
+                <Option createDefFile="1" />
+                <Compiler>
+                    <Add option="-O2" />
+                    <Add option="-flto" />
+                    <Add option="-static" />
+                    <Add option="-static-libgcc" />
+                    <Add option="-static-libstdc++" />
+                    <Add directory="src" />
+                </Compiler>
+                <Linker>
+                    <Add option="-s" />
+                    <Add option="-lADBDriverPack" />
+                    <Add option="-L../bin/Release" />
+                </Linker>
+                <ExtraCommands>
+                    <Add after="upx -9 ../bin/Release/ADBDriver.dll" />
+                </ExtraCommands>
+            </Target>
+        </Build>
+        <Compiler>
+            <Add option="-std=c++17" />
+            <Add option="-Wall" />
+            <Add option="-Wextra" />
+            <Add option="-fexceptions" />
+            <Add option="-Wno-unknown-pragmas" />
+            <Add option="-D_BUILD_DLL=1" />
+            <Add option="-D_BUILD_WARNING_0=1" />
+        </Compiler>
+        <Linker>
+            <Add option="-lcomctl32" />
+            <Add option="-lcomdlg32" />
+            <Add option="-lwtsapi32" />
+            <Add option="-lws2_32" />
+            <Add option="-luser32" />
+            <Add option="-lgdi32" />
+        </Linker>
+        <Unit filename="../ADBViewer/src/loader.h" />
+        <Unit filename="../ADBViewer/src/version.h" />
+        <Unit filename="src/ADBDriver.h" />
+        <Unit filename="src/ADBDriverDLL.cpp" />
+        <Unit filename="src/ADBDriverDLL.rc">
+            <Option compilerVar="WINDRES" />
+        </Unit>
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialog.h" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/AdbListDialogInternal.h" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CHAR.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CLOSE.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_COMMAND.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CTLCOLORDLG.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_CTLCOLORSTATIC.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_DRAWITEM.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_INITDIALOG.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_NCHITTEST.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbListDialog/Event/OnWM_NOTIFY.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialog.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialog.h" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/AdbMgrDialogInternal.h" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CHAR.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CLOSE.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_COMMAND.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CTLCOLORDLG.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_CTLCOLORSTATIC.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_DRAWITEM.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_INITDIALOG.cpp" />
+        <Unit filename="src/Dialog/WINAPI/AdbMgrDialog/Event/OnWM_NCHITTEST.cpp" />
+        <Unit filename="src/Dialog/WINAPI/ResStringDialog.h" />
+        <Unit filename="src/Dialog/WINAPI/StyleDialog.cpp" />
+        <Unit filename="src/Dialog/WINAPI/StyleDialog.h" />
+        <Unit filename="src/Dialog/WINAPI/StyleDialog.rc">
+            <Option compilerVar="WINDRES" />
+        </Unit>
+        <Unit filename="src/Driver.cpp" />
+        <Unit filename="src/DriverAsync.cpp" />
+        <Unit filename="src/DriverAsync.h" />
+        <Unit filename="src/DriverConst.h" />
+        <Unit filename="src/DriverDirItem.cpp" />
+        <Unit filename="src/DriverExcept.h" />
+        <Unit filename="src/DriverInternal.h" />
+        <Unit filename="src/DriverNet.cpp" />
+        <Unit filename="src/DriverNet.h" />
+        <Unit filename="src/DriverNetHelper.cpp" />
+        <Unit filename="src/DriverNetSync.cpp" />
+        <Unit filename="src/DriverNetSyncInternal.cpp" />
+        <Unit filename="src/DriverProcess.cpp" />
+        <Unit filename="src/DriverSocket.cpp" />
+        <Unit filename="src/DriverSocketCapture.cpp" />
+        <Unit filename="src/DriverSocketDevice.cpp" />
+        <Unit filename="src/DriverSocketFSDir.cpp" />
+        <Unit filename="src/DriverSocketFSFile.cpp" />
+        <Unit filename="src/DriverSocketInput.cpp" />
+        <Unit filename="src/Utils/extEnumPrintable.h" />
+        <Unit filename="src/Utils/extMultiString.cpp" />
+        <Unit filename="src/Utils/extMultiString.h" />
+        <Unit filename="src/Utils/extStringUtils.h" />
+        <Unit filename="src/Utils/extTraceFunction.h" />
+        <Unit filename="src/lz4/lz4.c">
+            <Option compilerVar="CC" />
+            <Option compiler="gcc" use="1" buildCommand="$compiler -std=c17 $options $includes -c $file -o $object" />
+        </Unit>
+        <Unit filename="src/lz4/lz4.h" />
+        <Extensions>
+            <code_completion />
+            <envvars />
+            <debugger />
+            <lib_finder disable_auto="1" />
+            <DoxyBlocks>
+                <comment_style block="0" line="0" />
+                <doxyfile_project output_directory="../../docs/adbdriver-ref" />
+                <doxyfile_build />
+                <doxyfile_warnings />
+                <doxyfile_output html="0" html_help="1" man="1" />
+                <doxyfile_dot />
+                <general />
+            </DoxyBlocks>
+        </Extensions>
+    </Project>
 </CodeBlocks_project_file>
