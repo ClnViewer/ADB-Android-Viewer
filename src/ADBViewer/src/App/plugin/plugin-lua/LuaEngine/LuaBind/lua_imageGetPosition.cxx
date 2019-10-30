@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(imageGetPosition,
+    __LUA_FUNC_STATIC_TEMPLATE(imageGetPosition,
 
         LINT_TRY__
         {

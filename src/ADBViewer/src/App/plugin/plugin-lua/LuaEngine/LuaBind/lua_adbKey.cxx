@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(adbKey,
+    __LUA_FUNC_STATIC_TEMPLATE(adbKey,
 
         __LUA_ALL_UNUSED(ret)
         __LUA_LINT_UNUSED(le)

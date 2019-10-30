@@ -94,12 +94,15 @@ namespace ImageLite
                 {
                     ImageLite::IRECT<int32_t> ir = get<ImageLite::IRECT<int32_t>>(border);
                     std::stringstream ss;
-                    ss << "  x:" << ir.x;
-                    ss << "  y:" << ir.y;
-                    if (ir.w)
-                        ss << "  w:" << ir.w;
-                    if (ir.h)
-                        ss << "  h:" << ir.h;
+                    print_stream_(ss, ir);
+                    return ss.str();
+                }
+                std::string print(ImageLite::ImageData & idata, int32_t border = 0)
+                {
+                    ImageLite::IRECT<int32_t> ir = get<ImageLite::IRECT<int32_t>>(border);
+                    std::stringstream ss;
+                    print_stream_(ss, ir);
+                    print_stream_(ss, ir, idata);
                     return ss.str();
                 }
                 RECT eraseregion()
@@ -111,6 +114,39 @@ namespace ImageLite
                         (r.x  + 25  + ((pb.x > r.w) ? pb.x : r.w)),
                         (r.y  + 25  + ((pb.y > r.h) ? pb.y : r.h))
                     };
+                }
+
+            private:
+
+                void print_stream_(
+                        std::stringstream & ss,
+                        ImageLite::IRECT<int32_t> & ir)
+                {
+                    ss << "  x:" << ir.x;
+                    ss << "  y:" << ir.y;
+                    if (ir.w)
+                        ss << "  w:" << ir.w;
+                    if (ir.h)
+                        ss << "  h:" << ir.h;
+                }
+                void print_stream_(
+                        std::stringstream & ss,
+                        ImageLite::IRECT<int32_t> & ir,
+                        ImageLite::ImageData & idata)
+                {
+                    uint32_t pos = (
+                        (ir.y * (
+                                 (idata.point.x * 3) +
+                                 (idata.point.x % 4)
+                                 )) + (ir.x * 3)
+                        );
+                    if ((pos + 2) >= idata.buffer.size())
+                        return;
+
+                    ss << "  |  RGB { ";
+                    ss << static_cast<int32_t>(idata.buffer[pos + 0]) << ", ";
+                    ss << static_cast<int32_t>(idata.buffer[pos + 1]) << ", ";
+                    ss << static_cast<int32_t>(idata.buffer[pos + 2]) << " }";
                 }
             };
 
@@ -139,7 +175,7 @@ namespace ImageLite
             HINSTANCE               m_hinst     = nullptr;
             HIMAGELIST              m_imgl      = nullptr;
             ULONG_PTR               m_idgdi     = 0;
-            ImageData               m_data[2]{};
+            ImageData               m_idata[2]{};
             ImageDrawSelect         m_select{};
             std::atomic<int32_t>    m_scale     = 1;
             std::atomic<int32_t>    m_index     = 0;
@@ -169,8 +205,4 @@ namespace ImageLite
     };
 };
 
-
-/// is set icon, define is you .rc file ->
-/// #define ID_VIEWER_ICON 65102
-/// ID_VIEWER_ICON ICON "my.ico"
 

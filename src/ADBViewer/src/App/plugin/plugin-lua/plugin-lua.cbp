@@ -1,71 +1,180 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_project_file>
-    <FileVersion major="1" minor="6" />
-    <Project>
-        <Option title="LUA script plugin" />
-        <Option pch_mode="2" />
-        <Option compiler="gcc" />
-        <Build>
-            <Target title="Debug">
-                <Option output="../../../../../bin/Debug/plugins/plugin-lua" prefix_auto="1" extension_auto="1" />
-                <Option object_output="../../../../../obj/Debug/" />
-                <Option type="3" />
-                <Option compiler="gcc" />
-                <Option createDefFile="1" />
-                <Compiler>
-                    <Add option="-g" />
-                </Compiler>
-            </Target>
-            <Target title="Release">
-                <Option output="../../../../../bin/Release/plugins/plugin-lua" prefix_auto="1" extension_auto="1" />
-                <Option object_output="../../../../../obj/Release/" />
-                <Option type="3" />
-                <Option compiler="gcc" />
-                <Option createDefFile="1" />
-                <Compiler>
-                    <Add option="-O2" />
-                    <Add option="-flto" />
-                    <Add option="-static" />
-                    <Add option="-static-libgcc" />
-                    <Add option="-static-libstdc++" />
-                </Compiler>
-                <Linker>
-                    <Add option="-s" />
-                </Linker>
-                <ExtraCommands>
-                    <Add after="upx -9 ..\..\..\..\..\bin\Release\plugins\plugin-lua.dll" />
-                </ExtraCommands>
-            </Target>
-        </Build>
-        <Compiler>
-            <Add option="-std=c++17" />
-            <Add option="-Wall" />
-            <Add option="-fexceptions" />
-            <Add option="-Wno-unknown-pragmas" />
-            <Add option="-D_BUILD_DLL=1" />
-            <Add directory="C:/__BuildSource/__LIB__/LUA/include" />
-        </Compiler>
-        <Linker>
-            <Add option="-luser32" />
-            <Add option="-lm" />
-            <Add option="-llua53" />
-            <Add directory="C:/__BuildSource/__LIB__/LUA/lib/static" />
-        </Linker>
-        <Unit filename="../AppIPlugin.h" />
-        <Unit filename="../plugin-base.h" />
-        <Unit filename="../plugin-stub.h" />
-        <Unit filename="LuaObject/LuaObject.cpp" />
-        <Unit filename="LuaObject/LuaObject.h" />
-        <Unit filename="LuaObject/LuaObjectBind.h" />
-        <Unit filename="plugin-lua-utils.h" />
-        <Unit filename="plugin-lua.cpp" />
-        <Unit filename="plugin-lua.h" />
-        <Unit filename="plugin-stub.cpp" />
-        <Extensions>
-            <code_completion />
-            <envvars />
-            <debugger />
-            <lib_finder disable_auto="1" />
-        </Extensions>
-    </Project>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LUA script plugin" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../../../../../bin/Debug/plugins/plugin-lua" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../../../../obj/Debug/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-D_DEBUG=1" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../../../../../bin/Release/plugins/plugin-lua" prefix_auto="1" extension_auto="1" />
+				<Option object_output="../../../../../obj/Release/" />
+				<Option type="3" />
+				<Option compiler="gcc" />
+				<Option createDefFile="1" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-flto" />
+					<Add option="-static" />
+					<Add option="-static-libgcc" />
+					<Add option="-static-libstdc++" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+				<ExtraCommands>
+					<Add after="upx -9 ..\..\..\..\..\bin\Release\plugins\plugin-lua.dll" />
+				</ExtraCommands>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-std=c++17" />
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add option="-Wno-unknown-pragmas" />
+			<Add option="-D_BUILD_DLL=1" />
+			<Add directory="ImageLite" />
+			<Add directory="LuaEngine" />
+			<Add directory="C:/__BuildSource/__LIB__/LUA/include" />
+			<Add directory="../../../extern" />
+		</Compiler>
+		<Linker>
+			<Add option="-luser32" />
+			<Add option="-lkernel32" />
+			<Add option="-lm" />
+			<Add option="-llua53" />
+			<Add directory="C:/__BuildSource/__LIB__/LUA/lib/static" />
+		</Linker>
+		<Unit filename="../../../extern/lodepng.cpp" />
+		<Unit filename="../../../extern/lodepng.h" />
+		<Unit filename="../AppIPlugin.h" />
+		<Unit filename="../plugin-base.h" />
+		<Unit filename="../plugin-stub.h" />
+		<Unit filename="ImageLite/ImageLite.h" />
+		<Unit filename="ImageLite/ImageLiteFormater.cpp" />
+		<Unit filename="ImageLite/ImageLiteFormater.h" />
+		<Unit filename="ImageLite/ImageLiteRGBbuffer.cpp" />
+		<Unit filename="ImageLite/ImageLiteRGBbuffer.h" />
+		<Unit filename="LuaEngine/LuaBind.cpp" />
+		<Unit filename="LuaEngine/LuaBind/lua_adbClick.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_adbKey.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_adbSwipe.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_adbText.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_checkPixelByCord.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_checkPixelByPos.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_checkPixelsByCord.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_checkPixelsByPos.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_checkTime.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_function.h" />
+		<Unit filename="LuaEngine/LuaBind/lua_function_static.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageCompare.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageCompareRegion.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageDefault.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageGetPosition.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageSave.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageShow.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_imageTableShow.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_screenGet.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_screenGetCord.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_stateGet.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_stateSet.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaBind/lua_stateSleep.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="LuaEngine/LuaEngine.Plugin.cpp" />
+		<Unit filename="LuaEngine/LuaEngine.Plugin.h" />
+		<Unit filename="LuaEngine/LuaLint.cpp" />
+		<Unit filename="LuaEngine/LuaLint.h" />
+		<Unit filename="LuaEngine/LuaMacro.Args.h" />
+		<Unit filename="LuaEngine/LuaMacro.Plugin.h" />
+		<Unit filename="LuaEngine/LuaMacro.h" />
+		<Unit filename="LuaEngine/LuaObject.cpp" />
+		<Unit filename="LuaEngine/LuaObject.h" />
+		<Unit filename="LuaEngine/LuaObjectImage.cpp" />
+		<Unit filename="LuaEngine/LuaPluginFunction.h" />
+		<Unit filename="plugin-lua.cpp" />
+		<Unit filename="plugin-lua.h" />
+		<Unit filename="plugin-stub.cpp" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
 </CodeBlocks_project_file>

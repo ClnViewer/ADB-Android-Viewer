@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(checkPixelsByPos,
+    __LUA_FUNC_STATIC_TEMPLATE(checkPixelsByPos,
 
         LINT_TRY__
         {

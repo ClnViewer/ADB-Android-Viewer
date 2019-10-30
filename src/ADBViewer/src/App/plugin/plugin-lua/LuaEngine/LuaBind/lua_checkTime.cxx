@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(checkTime,
+    __LUA_FUNC_STATIC_TEMPLATE(checkTime,
 
         __LUA_LINT_UNUSED(le)
         //

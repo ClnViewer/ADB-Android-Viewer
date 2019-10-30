@@ -11,15 +11,22 @@
 #  define DLL_EXPORT __declspec(dllimport)
 #endif
 
-#define __ATTR_UNUSED __attribute__ (( __unused__ ))
+#if !defined(__NELE)
+#  define __NELE(a) (sizeof(a) / sizeof(a[0]))
+#endif
+#if !defined(__ATTR_UNUSED)
+#  define __ATTR_UNUSED __attribute__ (( __unused__ ))
+#endif
 
 #ifdef __cplusplus
 
 # include <atomic>
 # include <string>
+# include <sstream>
 # include <vector>
 # include <functional>
 # include <cassert>
+# include <ctime>
 
 namespace GameDev
 {

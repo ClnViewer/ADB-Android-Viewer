@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(screenGetCord,
+    __LUA_FUNC_STATIC_TEMPLATE(screenGetCord,
 
         LINT_TRY__
         {

@@ -192,7 +192,7 @@ namespace ImageLite
         idx = (((idx < 1) || (idx > 2)) ? 0 : idx);
 
         if (idx)
-            return m_data[(idx - 1)].point.get<POINT, int32_t>();
+            return m_idata[(idx - 1)].point.get<POINT, int32_t>();
 
         // main window size, client rectangle (point)
         switch (m_index.load())
@@ -200,15 +200,15 @@ namespace ImageLite
             case 1:
                 {
                     return {
-                        m_data[0].point.x,
-                        m_data[0].point.y
+                        m_idata[0].point.x,
+                        m_idata[0].point.y
                     };
                 }
             case 2:
                 {
                     return {
-                        (std::max(m_data[0].point.x, m_data[1].point.x) / 2),
-                        ((m_data[0].point.y / 2) + (m_data[1].point.y / 2))
+                        (std::max(m_idata[0].point.x, m_idata[1].point.x) / 2),
+                        ((m_idata[0].point.y / 2) + (m_idata[1].point.y / 2))
                     };
                 }
             default:
@@ -313,7 +313,7 @@ namespace ImageLite
             if (i)
                 ss << "   | ";
             ss << "  image #" << (i + 1) << ": ";
-            ss << m_data[i].point.x << "x" << m_data[i].point.y;
+            ss << m_idata[i].point.x << "x" << m_idata[i].point.y;
         }
         if (!ss.str().empty())
             ::SendMessage(
@@ -483,7 +483,7 @@ namespace ImageLite
         {
             case 0:
                 {
-                    m_data[1] = {};
+                    m_idata[1] = {};
                     idx = 0; m_index = 1;
                     break;
                 }
@@ -506,7 +506,7 @@ namespace ImageLite
             if (b.empty())
                 return;
 
-            m_data[idx] = b.getbmp();
+            m_idata[idx] = b.getbmp();
 
             do
             {
@@ -550,8 +550,8 @@ namespace ImageLite
             m_thr.join();
 
         m_index   = 0;
-        m_data[0] = {};
-        m_data[1] = {};
+        m_idata[0] = {};
+        m_idata[1] = {};
         m_hwnd    = nullptr;
     }
 
@@ -749,8 +749,8 @@ namespace ImageLite
                                         case 1:
                                             {
                                                 drawimg1 = new Gdiplus::Bitmap(
-                                                    reinterpret_cast<BITMAPINFO*>(&m_data[0].header),
-                                                    &m_data[0].buffer[0]
+                                                    reinterpret_cast<BITMAPINFO*>(&m_idata[0].header),
+                                                    &m_idata[0].buffer[0]
                                                 );
                                                 Gdiplus::Rect rect1(
                                                     10,
@@ -764,12 +764,12 @@ namespace ImageLite
                                         case 2:
                                             {
                                                 drawimg1 = new Gdiplus::Bitmap(
-                                                    reinterpret_cast<BITMAPINFO*>(&m_data[0].header),
-                                                    &m_data[0].buffer[0]
+                                                    reinterpret_cast<BITMAPINFO*>(&m_idata[0].header),
+                                                    &m_idata[0].buffer[0]
                                                 );
                                                 drawimg2 = new Gdiplus::Bitmap(
-                                                    reinterpret_cast<BITMAPINFO*>(&m_data[1].header),
-                                                    &m_data[1].buffer[0]
+                                                    reinterpret_cast<BITMAPINFO*>(&m_idata[1].header),
+                                                    &m_idata[1].buffer[0]
                                                 );
                                                 auto x = (rc.right - BORDER_PADDING);
                                                 auto y = ((rc.bottom / 2) - (BORDER_PADDING / 2) - 2);
@@ -873,8 +873,12 @@ namespace ImageLite
                             sysmenu(IDM_SAVE_REGION, MENU_ENABLED);
 
                         if (m_select.active)
-                            statusbar(m_select.print(BORDER_PADDING / 2));
-
+                            statusbar(
+                                m_select.print(
+                                    m_idata[0],
+                                    (BORDER_PADDING / 2)
+                                )
+                            );
                         m_select.active = false;
                         return 0;
                     }
@@ -983,10 +987,10 @@ namespace ImageLite
                                             ir.w -= ir.x;
                                         if (ir.y < 0)
                                             ir.h -= ir.y;
-                                        if (m_data[0].point.x < ir.w)
-                                            ir.w = m_data[0].point.x;
-                                        if (m_data[0].point.y < (ir.y + ir.h))
-                                            ir.h -= ((ir.y + ir.h) - m_data[0].point.y);
+                                        if (m_idata[0].point.x < ir.w)
+                                            ir.w = m_idata[0].point.x;
+                                        if (m_idata[0].point.y < (ir.y + ir.h))
+                                            ir.h -= ((ir.y + ir.h) - m_idata[0].point.y);
                                         if ((ir.h <= 0) || (ir.w <= 0))
                                             break;
 
@@ -999,7 +1003,7 @@ namespace ImageLite
                                                     statusbar(s);
                                                 break;
                                             }
-                                            ImageLite::ImageRGBbuffer img(m_data[0], ir, BufferType::IBT_BGR_PAD);
+                                            ImageLite::ImageRGBbuffer img(m_idata[0], ir, BufferType::IBT_BGR_PAD);
                                             ImageLite::ImageType it = img.getimgtype(s);
                                             if (it == ImageLite::ImageType::IT_NONE)
                                                 break;
@@ -1066,7 +1070,7 @@ namespace ImageLite
                                                     statusbar(s);
                                                 break;
                                             }
-                                            ImageLite::ImageRGBbuffer img(m_data[0], BufferType::IBT_BGR_PAD);
+                                            ImageLite::ImageRGBbuffer img(m_idata[0], BufferType::IBT_BGR_PAD);
                                             ImageLite::ImageType it = img.getimgtype(s);
                                             if (it == ImageLite::ImageType::IT_NONE)
                                                 break;

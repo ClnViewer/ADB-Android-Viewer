@@ -1,6 +1,7 @@
 
 #include "SCEditInternal.h"
 #include "Scintilla.h"
+#include <LuaLint.h>
 #include <windowsx.h>
 
 #define _CMD_BUILD(A,B)   \
@@ -53,6 +54,7 @@ namespace Editor
 #           include "Command/cmd_MAIN_DBGNEXT.cxx"
 #           include "Command/cmd_MAIN_DBGBREAK.cxx"
 #           include "Command/cmd_MAIN_DBGDUMP.cxx"
+#           include "Command/cmd_MAIN_DBGMUTE.cxx"
 #           include "Command/cmd_MAIN_EXTDBGV.cxx"
 #           include "Command/cmd_MAIN_WINTOP.cxx"
 

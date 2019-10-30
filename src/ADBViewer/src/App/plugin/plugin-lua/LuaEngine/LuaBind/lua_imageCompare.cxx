@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(imageCompare,
+    __LUA_FUNC_STATIC_TEMPLATE(imageCompare,
 
         LINT_TRY__
         {

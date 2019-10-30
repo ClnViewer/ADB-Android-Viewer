@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(stateSleep,
+    __LUA_FUNC_STATIC_TEMPLATE(stateSleep,
 
         __LUA_LINT_UNUSED(ret);
         __LUA_IF_LINT(
@@ -31,7 +31,7 @@
 
             while (std::chrono::high_resolution_clock::now() < s_end)
             {
-                if (le->getdbgbreak())
+                if (le->getrunbreak())
                     return;
                 std::this_thread::yield();
                 std::this_thread::sleep_for(std::chrono::milliseconds(10));

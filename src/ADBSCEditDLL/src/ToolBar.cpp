@@ -268,6 +268,7 @@ namespace Editor
                 }
             case IDM_MAIN_WINTOP:
             case IDM_MAIN_EXTDBGV:
+            case IDM_MAIN_DBGMUTE:
             case IDM_EDIT_SHOW_ENDLINE:
             case IDM_EDIT_SHOW_INDENTG:
                 {

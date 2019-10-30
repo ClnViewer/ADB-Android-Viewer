@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(imageCompareRegion,
+    __LUA_FUNC_STATIC_TEMPLATE(imageCompareRegion,
 
         LINT_TRY__
         {

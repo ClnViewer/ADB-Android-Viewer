@@ -1,7 +1,7 @@
 
 #if defined(_BUILD_LUA_EDITOR)
 
-    __LUA_FUNC_EXT_TEMPLATE(imageDefault,
+    __LUA_FUNC_STATIC_TEMPLATE(imageDefault,
 
         LINT_TRY__
         {
@@ -45,10 +45,13 @@
         LINT_CATCH__
     )
 #else
-    __LUA_FUNC_EXT_TEMPLATE(imageDefault,
+    __LUA_FUNC_STATIC_TEMPLATE(imageDefault,
 
         __LUA_LINT_UNUSED(ret);
         __LUA_LINT_UNUSED(args);
+        __LUA_IF_LINT(
+            LuaLint::print_traceT(LuaLint::g_lint_str_32, functionname);
+        )
         break;
     )
 #endif

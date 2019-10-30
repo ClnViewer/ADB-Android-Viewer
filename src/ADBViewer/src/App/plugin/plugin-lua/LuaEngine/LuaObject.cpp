@@ -1,3 +1,4 @@
+
 #include <string>
 #include <array>
 #include <vector>
@@ -145,7 +146,6 @@ namespace LuaObject
                 if ((sz > 1) && (fun_object))
                     luaL_setfuncs(L, fun_object, 0);
                 lua_setglobal(L, s.c_str());
-                lua_pop(L, 1);
             }
             *lua = L;
             return true;

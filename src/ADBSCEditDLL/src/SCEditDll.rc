@@ -68,6 +68,7 @@ BEGIN
             MENUITEM "Main function (Click)",     IDM_EDIT_PASTE_CODE_0
             MENUITEM "Main function (Check -> Click)", IDM_EDIT_PASTE_CODE_1
             MENUITEM "Set default test image",    IDM_EDIT_PASTE_CODE_12
+            MENUITEM "Trace message On/Off",      IDM_EDIT_PASTE_CODE_13
             MENUITEM SEPARATOR
             MENUITEM "Compare image",             IDM_EDIT_PASTE_CODE_2
             MENUITEM "Compare image region",      IDM_EDIT_PASTE_CODE_3
@@ -82,7 +83,7 @@ BEGIN
             MENUITEM "Iterate image",             IDM_EDIT_PASTE_CODE_6
             MENUITEM "Save image by count",       IDM_EDIT_PASTE_CODE_7
             MENUITEM SEPARATOR
-            MENUITEM "LuaImage format example",   IDM_EDIT_PASTE_CODE_13
+            MENUITEM "LuaImage format example",   IDM_EDIT_PASTE_CODE_14
         END
     END
     POPUP "View"
@@ -105,6 +106,8 @@ BEGIN
         MENUITEM SEPARATOR
         MENUITEM "Stack dump (ALT-D)",  IDM_MAIN_DBGDUMP,  GRAYED
         MENUITEM "Next line  (ALT-N)",  IDM_MAIN_DBGNEXT,  GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "Mute verbose output", IDM_MAIN_DBGMUTE
     END
     POPUP "Info"
     BEGIN

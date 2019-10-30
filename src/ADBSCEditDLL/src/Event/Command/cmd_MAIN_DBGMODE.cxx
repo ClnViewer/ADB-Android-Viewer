@@ -1,6 +1,6 @@
 _CMD_BUILD(IDM_MAIN_DBGMODE,
 
-    if (!m_luae.getdbgbreak())
+    if (!m_luae.getrunbreak())
     {
         m_luae.setdbgdump(true);
         break;

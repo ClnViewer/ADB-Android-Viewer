@@ -211,6 +211,25 @@ LFUN__(
     LFEXT_BYNAME
 )
 
+LFUN__(
+    _NEXT,
+    traceOn,
+    "[void] LuaObject:traceOn()\r\n"                                                                           \
+    "enabled debug output trace, using DebugView or other software for show it",
+    INPUT_NONE,
+    RETURN_NONE,
+    LFEXT_BYNAME
+)
+LFUN__(
+    _END,
+    traceOff,
+    "[void] LuaObject:traceOff()\r\n"                                                                          \
+    "disabled debug output trace, see: traceOn()",
+    INPUT_NONE,
+    RETURN_NONE,
+    LFEXT_BYNAME
+)
+
 #undef STR_
 #undef RGB_DESC_
 #if defined(LFUN__)

@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(screenGet,
+    __LUA_FUNC_STATIC_TEMPLATE(screenGet,
 
         __LUA_ALL_UNUSED(args)
 

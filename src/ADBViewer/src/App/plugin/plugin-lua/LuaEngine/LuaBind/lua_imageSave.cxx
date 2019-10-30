@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(imageSave,
+    __LUA_FUNC_STATIC_TEMPLATE(imageSave,
 
         __LUA_ALL_UNUSED(ret)
 
@@ -48,9 +48,10 @@
                 break;
             }
             //
+            std::string spath = s;
+            //
             __LUA_IF_LINT(
                 LuaLint::print_traceT(LuaLint::g_lint_str_31, s);
-                std::string spath = s;
             )
             //
             le->m_savecount++;

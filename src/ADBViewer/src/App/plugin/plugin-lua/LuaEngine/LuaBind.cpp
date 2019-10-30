@@ -1,5 +1,9 @@
 
-#include "../../../../loader.h"
+#if defined(_BUILD_LUA_EDITOR)
+#  include "../../../../loader.h"
+#else
+#  include "../../plugin-base.h"
+#endif
 
 #include <algorithm>
 #include <iomanip>
@@ -16,19 +20,14 @@
 #if defined(_BUILD_LUA_EDITOR)
 #  define _BUILD_IMAGELITE_DRAW 1
 #endif
-#include <ImageLite.h>
+#include "../ImageLite/ImageLite.h"
 #include "LuaObject.h"
+#include "LuaLint.h"
 
 #if defined(_BUILD_LUA_EDITOR)
-#  include "LuaLintEditor.h"
+#  include "LuaEngine.Editor.h"
 #else
-#  include "LuaLintPlugin.h"
-#endif
-
-#if defined(_BUILD_LUA_EDITOR)
-#  include "LuaEngineEditor.h"
-#else
-#  include "LuaEnginePlugin.h"
+#  include "LuaEngine.Plugin.h"
 #endif
 
 namespace __LUA_BIND_CLASS()
@@ -90,7 +89,7 @@ namespace __LUA_BIND_CLASS()
 #   include "LuaBind/lua_function.h"
 
     //
-#   define LFUN__(S,A,H,I,O,F) __LUA_FUNC_CODE_BODY(A,I,O,H,F)
+#   define LFUN__(S,A,H,I,O,F) __LUA_FUNC_CLASS_TEMPLATE(A,I,O,H,F)
 #   include "LuaPluginFunction.h"
 
 };

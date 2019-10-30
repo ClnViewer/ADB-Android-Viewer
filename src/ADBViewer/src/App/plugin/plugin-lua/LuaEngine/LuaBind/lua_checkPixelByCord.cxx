@@ -1,5 +1,5 @@
 
-    __LUA_FUNC_EXT_TEMPLATE(checkPixelByCord,
+    __LUA_FUNC_STATIC_TEMPLATE(checkPixelByCord,
 
         LINT_TRY__
         {

@@ -55,6 +55,17 @@
         if (!le->m_imgdraw.isactive())
             le->m_imgdraw.show(s);
     }
+#   else
+    static void f_image_show(
+            int32_t,
+            LuaEngine*,
+            std::string const & s,
+            ImageLite::ImageRGBbuffer&,
+            ImageLite::ImageRGBbuffer&)
+    {
+        // plugin mode - print only
+        LuaLint::print(s);
+    }
 #   endif
 
     static bool f_image_comparable(

@@ -30,34 +30,55 @@
  */
 
 #include "plugin-lua.h"
+#include <string>
+#include <sstream>
 #include <chrono>
 #include <thread>
+
+#if defined(__WIN32__)
+#  include <io.h>
+#else
+#  include <stdio.h>
+#  include <stdlib.h>
+#  define _access access
+#endif
 
 namespace Plugins
 {
 
-#if defined(__WIN32__)
-  static inline const char *l_pluginPath = "\\plugins\\";
-#else
-  static inline const char *l_pluginPath = "/plugins/";
-# define MAX_PATH 1024
-#endif
-  static inline const char *l_pluginExt = ".lua";
+#   if defined(__WIN32__)
+    static inline const char *l_pluginPath = "\\plugins\\";
+#   else
+    static inline const char *l_pluginPath = "/plugins/";
+#   define MAX_PATH 1024
+#   endif
+    static inline const char *l_pluginExt0 = ".luac";
+    static inline const char *l_pluginExt1 = ".lua";
+
+    static bool f_check_path(std::string & s, std::string const & name, std::string const & ext)
+    {
+        s = name;
+        s.append(ext);
+        bool b = !(::_access(s.c_str(), F_OK) < 0);
+        if (!b)
+            s = "";
+        return b;
+    }
 
     PluginLua::PluginLua(const char *s, const void *vcb)
     {
         m_priority = 5;
         m_name.assign(s);
-        m_wcount = 0U;
+        m_scount = 0U;
 
         pathLuaScript();
 
-        if (!m_luaobj.open(m_script.c_str()))
+        if (!m_luae.load(m_script.c_str()))
             m_isready = false;
         else
         {
             m_isready = true;
-            m_luaobj.adbset(
+            m_luae.setadb(
                     (Plugins::PluginCallBack_s const*)vcb
                 );
         }
@@ -69,26 +90,29 @@ namespace Plugins
 
     void PluginLua::pathLuaScript()
     {
-        m_script.resize(MAX_PATH);
+        std::stringstream ss;
+        std::string       s;
+                          s.resize(MAX_PATH);
 
 #       if defined(__WIN32__)
-        if (::GetModuleFileName(NULL, m_script.data(), MAX_PATH))
+        if (::GetModuleFileName(NULL, s.data(), MAX_PATH))
 #       else
-        if (!::getcwd(m_script.data(), MAX_PATH))
+        if (!::getcwd(s.data(), MAX_PATH))
 #       endif
         {
-            size_t pos = m_script.find_last_of("/\\");
-            if (pos != std::string::npos)
-                m_script = m_script.substr(0, pos);
+            size_t pos;
+            if ((pos = s.find_last_of("/\\")) != std::string::npos)
+                ss << s.substr(0, pos);
             else
-                m_script = ".";
+                ss << ".";
         }
         else
-            m_script = ".";
+            ss << ".";
+        ss << l_pluginPath << m_name.c_str();
 
-        m_script.append(l_pluginPath);
-        m_script.append(m_name.c_str());
-        m_script.append(l_pluginExt);
+        if (!f_check_path(m_script, ss.str(), l_pluginExt0))
+            if (!f_check_path(m_script, ss.str(), l_pluginExt1))
+                m_script = "";
     }
 
     void PluginLua::go(std::vector<uint8_t> const & v, uint32_t w, uint32_t h)
@@ -96,53 +120,52 @@ namespace Plugins
         if (!m_isready)
             return;
 
-        if ((m_wcount % 10) == 0)
+        do
         {
-            m_wcount = 0U;
+            if ((m_scount % 10) == 0)
+            {
+                m_scount = 0U;
+                if (!m_luae.load())
+                    break;
+                if (!m_luae.getfunction("main"))
+                    break;
+                if (!m_luae.setfb(v, w, h))
+                    return;
 
-            if (!m_luaobj.load())
-                return;
-        }
+                ::lua_pushinteger(m_luae.instance(), m_sret.load());
+                if (::lua_pcall(m_luae.instance(), 1, 1, 0) != LUA_OK)
+                    break;
 
-        if (!m_luaobj.getfun("main"))
-        {
-            m_isready = false;
+                if (m_luae.getrunbreak())
+                    break;
+
+                if (!lua_isnil(m_luae.instance(), -1))
+                {
+                    m_sret = ::lua_tointeger(m_luae.instance(), -1);
+                    ::lua_pop(m_luae.instance(), 1);
+                }
+
+                // ? default wait 1 sec.
+                if (m_luae.m_sleep.load())
+                {
+                    auto t_start = std::chrono::high_resolution_clock::now();
+                    auto t_end = (t_start + std::chrono::seconds(m_luae.m_sleep.load()));
+
+                    while (std::chrono::high_resolution_clock::now() < t_end)
+                    {
+                        if ((!m_isready) || (m_luae.getrunbreak()))
+                            break;
+                        std::this_thread::yield();
+                        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+                    }
+                }
+            }
             return;
         }
+        while (0);
 
-        m_luaobj.point =
-        {
-            static_cast<int32_t>(w),
-            static_cast<int32_t>(h)
-        };
-        m_luaobj.fbset(&v);
-
-        lua_pushinteger(m_luaobj.instance(), m_luaobj.getstate());
-        lua_pcall(m_luaobj.instance(), 1, 1, 0);
-
-        if (!lua_isnil(m_luaobj.instance(), -1))
-        {
-            int lua_state = lua_tonumber(m_luaobj.instance(), -1);
-            (void) lua_state;
-            lua_pop(m_luaobj.instance(), 1);
-        }
-
-        if (m_luaobj.sleep)
-        {
-            auto s_start = std::chrono::high_resolution_clock::now();
-            auto s_end = (s_start + std::chrono::seconds(m_luaobj.sleep));
-            m_luaobj.sleep = 0U;
-
-            while (std::chrono::high_resolution_clock::now() < s_end)
-            {
-                if (!m_isready)
-                    break;
-                std::this_thread::yield();
-            }
-        }
-
-        m_luaobj.fbset(nullptr);
-        m_luaobj.point = { 0, 0 };
+        m_isready = false;
+        m_luae.close();
     }
 }
 

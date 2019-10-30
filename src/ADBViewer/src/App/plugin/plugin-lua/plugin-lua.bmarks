@@ -1,19 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <BrowseTracker_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="LuaObject\LuaObject.h" open="0" top="0" tabpos="1">
-		<Cursor position="1454" topLine="42" />
+	<File name="LuaEngine\LuaBind\lua_stateGet.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="42" topLine="0" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
 	</File>
-	<File name="LuaObject\LuaObjectBind.h" open="0" top="0" tabpos="2">
-		<Cursor position="2630" topLine="104" />
+	<File name="LuaEngine\LuaBind\lua_imageShow.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1611" topLine="36" />
 	</File>
-	<File name="plugin-lua.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="0" topLine="16" />
+	<File name="ImageLite\ImageLiteRGBbuffer.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="15263" topLine="484" />
+	</File>
+	<File name="LuaEngine\LuaEngine.Plugin.h" open="1" top="0" tabpos="2">
+		<Cursor position="2238" topLine="20" />
+		<BrowseMarks positions="" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="ImageLite\ImageLite.h" open="0" top="0" tabpos="0">
+		<Cursor position="2615" topLine="68" />
 	</File>
 	<File name="plugin-stub.cpp" open="0" top="0" tabpos="0">
 		<Cursor position="0" topLine="6" />
 	</File>
-	<File name="LuaObject\LuaObject.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="7771" topLine="258" />
+	<File name="plugin-lua.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="3955" topLine="122" />
+		<BrowseMarks positions="4368" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="LuaEngine\LuaLint.h" open="0" top="0" tabpos="2">
+		<Cursor position="4397" topLine="0" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_function_static.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1736" topLine="82" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_imageDefault.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1431" topLine="26" />
+	</File>
+	<File name="ImageLite\ImageLiteRGBbuffer.h" open="0" top="0" tabpos="0">
+		<Cursor position="187" topLine="7" />
+	</File>
+	<File name="LuaEngine\LuaObject.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="4142" topLine="120" />
+	</File>
+	<File name="LuaEngine\LuaBind.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="1007" topLine="40" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_imageSave.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1655" topLine="44" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_imageCompare.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="209" topLine="0" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_imageTableShow.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1730" topLine="34" />
+	</File>
+	<File name="LuaEngine\LuaMacro.Plugin.h" open="0" top="0" tabpos="0">
+		<Cursor position="2748" topLine="25" />
+	</File>
+	<File name="LuaEngine\LuaEngine.Plugin.cpp" open="1" top="1" tabpos="1">
+		<Cursor position="364" topLine="218" />
+		<BrowseMarks positions="1133" />
+		<Book_Marks positions="" />
+	</File>
+	<File name="LuaEngine\LuaBind\lua_adbClick.cxx" open="0" top="0" tabpos="0">
+		<Cursor position="1389" topLine="21" />
+	</File>
+	<File name="LuaEngine\LuaLint.cpp" open="0" top="0" tabpos="3">
+		<Cursor position="470" topLine="0" />
+	</File>
+	<File name="plugin-lua.h" open="1" top="0" tabpos="4">
+		<Cursor position="272" topLine="0" />
 	</File>
 </BrowseTracker_layout_file>

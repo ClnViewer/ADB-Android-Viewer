@@ -29,13 +29,14 @@
 #define IDM_MAIN_DBGBREAK                1014      // ALT-B
 #define IDM_MAIN_DBGDUMP                 1015      // ALT-D
 #define IDM_MAIN_DBGMODE                 1016      // button only
-#define IDM_MAIN_EXIT                    1017      // ALT-Q
-#define IDM_SCRUN_TEST                   1018      // button only
-#define IDM_SCRUN_START                  1019      // button only
-#define IDM_SCRUN_STOP                   1020      // button only
-#define IDM_BTN_SCRUN_START              1021      // event only
-#define IDM_BTN_SCRUN_STOP               1022      // event only
-#define IDM_REBAR_FIND_TEXT              1023      // event only
+#define IDM_MAIN_DBGMUTE                 1017      // menu only
+#define IDM_MAIN_EXIT                    1018      // ALT-Q
+#define IDM_SCRUN_TEST                   1019      // button only
+#define IDM_SCRUN_START                  1020      // button only
+#define IDM_SCRUN_STOP                   1021      // button only
+#define IDM_BTN_SCRUN_START              1022      // event only
+#define IDM_BTN_SCRUN_STOP               1023      // event only
+#define IDM_REBAR_FIND_TEXT              1024      // event only
 #define IDM_FILE_NEW                     40001     // CTRL-N
 #define IDM_FILE_OPEN                    40002     // CTRL-O
 #define IDM_FILE_SAVE                    40003     // CTRL-S, F2
@@ -68,6 +69,7 @@
 #define IDM_EDIT_PASTE_CODE_11           2021      // menu only
 #define IDM_EDIT_PASTE_CODE_12           2022      // menu only
 #define IDM_EDIT_PASTE_CODE_13           2023      // menu only
+#define IDM_EDIT_PASTE_CODE_14           2024      // menu only
 
 #define IDM_MAIN_SHOW_VERSION            2051
 #define IDM_MAIN_EXTDBGV                 2052      // ALT-V, F3
@@ -97,7 +99,7 @@
 
 #  define _BUILD_IMAGELITE_DRAW 1
 #  include <ImageLite.h>
-#  include <LuaEngineEditor.h>
+#  include <LuaEngine.Editor.h>
 
 #  include "WindowBase.h"
 #  include "WindowDock.h"
@@ -122,7 +124,7 @@ static inline const char g_scedit_default_skeleton[] =
     "\n\n"                                                                                                      \
     "function main(n)\n"                                                                                        \
     "    local x = LuaObject:stateGet()\n"                                                                      \
-    "    print(\"state = \", n, \":\", x)\n"                                                                    \
+    "    print(\"state = \", x, \", old return = \", n)\n"                                                      \
     "    \n"                                                                                                    \
     "    local default_object = {\n"                                                                            \
     "       width  = 38,\n"                                                                                     \
@@ -158,12 +160,12 @@ static inline const char g_scedit_default_skeleton[] =
     "    LuaObject:imageTableShow(default_img)\n"                                                               \
     "    \n"                                                                                                    \
     "    local pos = LuaObject:imageGetPosition(100, 200)\n"                                                    \
-    "    --* checkPixelByCord(x, y, R, G, B)\n"                                                                \
-    "    local b1  = LuaObject:checkPixelByCord(970, 400, 77, 182, 172)\n"                                     \
+    "    --* checkPixelByCord(x, y, R, G, B)\n"                                                                 \
+    "    local b1  = LuaObject:checkPixelByCord(970, 400, 77, 182, 172)\n"                                      \
     "    local b2 = false\n"                                                                                    \
     "    if pos ~= nil then\n"                                                                                  \
-    "        --* checkPixelByPos(position, R, G, B)\n"                                                         \
-    "        b2  = LuaObject:checkPixelByPos(pos, 204, 204, 204)\n"                                            \
+    "        --* checkPixelByPos(position, R, G, B)\n"                                                          \
+    "        b2  = LuaObject:checkPixelByPos(pos, 204, 204, 204)\n"                                             \
     "    end\n"                                                                                                 \
     "    -- compare image\n"                                                                                    \
     "    -- default screen test image is name \"scedit-default.png\"\n"                                         \
@@ -192,6 +194,7 @@ static inline const char g_scedit_default_skeleton[] =
     "    \n"                                                                                                    \
     "    x = x + 1\n"                                                                                           \
     "    LuaObject:stateSet(x)\n"                                                                               \
+    "    return n + 5\n"                                                                                        \
     "end\n\n"                                                                                                   \
     "return 0\n";
 #else
@@ -199,11 +202,10 @@ static inline const char g_scedit_default_skeleton[] =
     "-- skeleton.lua\n"                                                                                         \
     "-- Default ADB Viewer Lua script skeleton.\n"                                                              \
     "\n\n"                                                                                                      \
-    "function main(n)\n"                                                                                        \
-    "    local cstate = LuaObject:stateGet()\n"                                                                 \
-    "    if state ~= cstate then\n"                                                                             \
-    "        print(\"state = \", state, \":\", cstate)\n"                                                       \
-    "    end\n"                                                                                                 \
+    "function main(arg)\n"                                                                                      \
+    "    -- pass numeric value main(arg) from returned prevision call\n"                                        \
+    "    local state = LuaObject:stateGet()\n"                                                                  \
+    "    print(\"state = \", state, \", old return value = \", arg)\n"                                          \
     "    \n\n"                                                                                                  \
     "    -- logical code body\n"                                                                                \
     "    \n"                                                                                                    \
@@ -214,16 +216,29 @@ static inline const char g_scedit_default_skeleton[] =
     "    \n"                                                                                                    \
     "        -- see editor menu -> <Edit> -> <Insert Lua code> for more snippet example\n"                      \
     "    \n"                                                                                                    \
-    "            if state == 0 then LuaObject:adbClick(x,y)\n"                                                  \
-    "        elseif state == 1 then LuaObject:adbClick(x,y)\n"                                                  \
-    "        elseif state == 2 then LuaObject:adbClick(x,y)\n"                                                  \
+    "        -- example check numeric value main(arg)\n"                                                        \
+    "        if arg == -1 then\n"                                                                               \
+    "            LuaObject:stateSet(1)\n"                                                                       \
+    "            return 0\n"                                                                                    \
+    "        end\n"                                                                                             \
+    "    \n"                                                                                                    \
+    "        local x = 55\n"                                                                                    \
+    "        local y = 120\n"                                                                                   \
+    "    \n"                                                                                                    \
+    "            if state == 0 then LuaObject:adbClick(x + 10, y + 20)\n"                                       \
+    "        elseif state == 1 then LuaObject:adbClick(x + 15, y + 30)\n"                                       \
+    "        elseif state == 2 then LuaObject:adbClick(x + 20, y + 40)\n"                                       \
     "        -- etc ..\n"                                                                                       \
+    "        elseif state == 3 then arg = -1\n"                                                                 \
+    "        end\n"                                                                                             \
     "    \n"                                                                                                    \
     "    -- any code\n"                                                                                         \
     "    \n"                                                                                                    \
     "    state = state + 1\n"                                                                                   \
     "    LuaObject:stateSet(state)\n"                                                                           \
     "    LuaObject:stateSleep(10)\n"                                                                            \
+    "    -- save numeric value, returned as argument main(arg) from next call\n"                                \
+    "    return arg\n"                                                                                          \
     "end\n\n"                                                                                                   \
     "return 0\n";
 #endif
@@ -261,41 +276,41 @@ static inline const char g_scedit_help[] =
 static inline const char g_scedit_EDIT_PASTE_CODE_0[] =
     "\n\n"                                                                                                      \
     "-- main function template, 'Click' mode\n"                                                                 \
-    "function main(stateOld)\n"                                                                                 \
+    "function main(valueOld)\n"                                                                                 \
+    "    -- pass numeric value main(arg) from returned prevision call\n"                                        \
     "    local state = LuaObject:stateGet()\n"                                                                  \
-    "    -- good state value == (stateOld + 1)\n"                                                               \
-    "    if state ~= stateOld then\n"                                                                           \
-    "        print(\"state = \", state, \":\", stateOld)\n"                                                     \
-    "    end\n"                                                                                                 \
+    "    print(\"state = \", state, \", old return value = \", valueOld)\n"                                     \
     "    \n"                                                                                                    \
     "    -- code begin\n"                                                                                       \
     "    \n"                                                                                                    \
-    "        local tbl_click = {\n"                                                                                 \
-    "           {110,210},\n"                                                                                       \
-    "           {120,220},\n"                                                                                       \
-    "           {130,230}\n"                                                                                        \
-    "        }\n"                                                                                                   \
-    "            if stateOld == 0 then LuaObject:adbClick(tbl_click[1][1], tbl_click[1][2])\n"                  \
-    "        elseif stateOld == 1 then LuaObject:adbClick(tbl_click[2][1], tbl_click[2][2])\n"                  \
-    "        elseif stateOld == 2 then LuaObject:adbClick(tbl_click[3][1], tbl_click[3][2])\n"                  \
+    "        local tbl_click = {\n"                                                                             \
+    "           {110,210},\n"                                                                                   \
+    "           {120,220},\n"                                                                                   \
+    "           {130,230}\n"                                                                                    \
+    "        }\n"                                                                                               \
+    "            if state == 0 then LuaObject:adbClick(tbl_click[1][1], tbl_click[1][2])\n"                     \
+    "        elseif state == 1 then LuaObject:adbClick(tbl_click[2][1], tbl_click[2][2])\n"                     \
+    "        elseif state == 2 then LuaObject:adbClick(tbl_click[3][1], tbl_click[3][2])\n"                     \
     "        -- etc ..\n"                                                                                       \
+    "        end\n"                                                                                             \
     "    \n"                                                                                                    \
     "    -- code end\n\n"                                                                                       \
-    "    stateOld = stateOld + 1\n"                                                                             \
-    "    LuaObject:stateSet(stateOld)\n"                                                                        \
     "    LuaObject:stateSleep(5)\n"                                                                             \
+    "    \n"                                                                                                    \
+    "    state = state + 1\n"                                                                                   \
+    "    LuaObject:stateSet(state)\n"                                                                           \
+    "    -- save numeric value, returned as argument main(arg) from next call\n"                                \
+    "    return valueOld\n"                                                                                     \
     "end\n\n"                                                                                                   \
     "return 0\n";
 
 static inline const char g_scedit_EDIT_PASTE_CODE_1[] =
     "\n\n"                                                                                                      \
     "-- main function template, 'Check & Click' mode\n"                                                         \
-    "function main(stateOld)\n"                                                                                 \
+    "function main(valueOld)\n"                                                                                 \
+    "    -- pass numeric value main(arg) from returned prevision call\n"                                        \
     "    local state = LuaObject:stateGet()\n"                                                                  \
-    "    -- good state value == (stateOld + 1)\n"                                                               \
-    "    if state ~= stateOld then\n"                                                                           \
-    "        print(\"state = \", state, \":\", stateOld)\n"                                                     \
-    "    end\n"                                                                                                 \
+    "    print(\"state = \", state, \", old return value = \", valueOld)\n"                                     \
     "    \n"                                                                                                    \
     "    -- code begin\n"                                                                                       \
     "    \n"                                                                                                    \
@@ -312,14 +327,19 @@ static inline const char g_scedit_EDIT_PASTE_CODE_1[] =
     "        local cmp = LuaObject:checkPixelsByCord(tbl_pixels_by_cord)\n"                                     \
     "        if cmp == true then\n"                                                                             \
     "            LuaObject:adbClick(tbl_click[1][1], tbl_click[1][2])\n"                                        \
+    "            valueOld = 1\n"                                                                                \
     "        else\n"                                                                                            \
     "            print(\"screen NOT equals\")\n"                                                                \
+    "            valueOld = 0\n"                                                                                \
     "        end\n"                                                                                             \
     "    \n"                                                                                                    \
     "    -- code end\n\n"                                                                                       \
-    "    stateOld = stateOld + 1\n"                                                                             \
-    "    LuaObject:stateSet(stateOld)\n"                                                                        \
     "    LuaObject:stateSleep(5)\n"                                                                             \
+    "    \n"                                                                                                    \
+    "    state = state + 1\n"                                                                                   \
+    "    LuaObject:stateSet(state)\n"                                                                           \
+    "    -- save numeric value, returned as argument main(arg) from next call\n"                                \
+    "    return valueOld\n"                                                                                     \
     "end\n\n"                                                                                                   \
     "return 0\n";
 
@@ -350,7 +370,8 @@ static inline const char g_scedit_EDIT_PASTE_CODE_4[] =
     "    if img_screen ~= nil then\n"                                                                           \
     "        print(\"screen: width = \", img_screen.width, \", height = \", img_screen.height)\n"               \
     "        print(\"screen  type  = \", img_screen.itype)\n"                                                   \
-    "        -- show new image, development only!\n"                                                            \
+    "        -- show new image, LuaImage format\n"                                                              \
+    "        -- warning, working only this editor, development only!\n"                                         \
     "        LuaObject:imageTableShow(img_screen)\n"                                                            \
     "    end\n"                                                                                                 \
     "\n";
@@ -362,7 +383,8 @@ static inline const char g_scedit_EDIT_PASTE_CODE_5[] =
     "    if img_screen ~= nil then\n"                                                                           \
     "        print(\"screen: width = \", img_screen.width, \", height = \", img_screen.height)\n"               \
     "        print(\"screen  type  = \", img_screen.itype)\n"                                                   \
-    "        -- show new image, development only!\n"                                                            \
+    "        -- show new image, LuaImage format\n"                                                              \
+    "        -- warning, working only this editor, development only!\n"                                         \
     "        LuaObject:imageTableShow(img_screen)\n"                                                            \
     "    end\n"                                                                                                 \
     "\n";
@@ -441,12 +463,31 @@ static inline const char g_scedit_EDIT_PASTE_CODE_11[] =
 
 static inline const char g_scedit_EDIT_PASTE_CODE_12[] =
     "    -- set default image, emulate Android frame buffer\n"                                                  \
-    "    -- editor option, development only!\n"                                                                 \
+    "    -- warning, working only this editor, development only!\n"                                             \
     "    local s = LuaObject:imageDefault(\"scedit-default.png\")\n"                                            \
     "    print(\"default frame buffer emulate image = \", s)\n"                                                 \
     "\n";
 
 static inline const char g_scedit_EDIT_PASTE_CODE_13[] =
+    "    \n"                                                                                                    \
+    "    -- using DebugView or other software for show trace message\n"                                         \
+    "    -- warning, working only Lua ADB Viewer plugin\n"                                                      \
+    "    -- in editor, checking menu ' Debug ' -> ' Using DebugView ' or press ' ALT-V '\n"                     \
+    "    -- DebugView's links:\n"                                                                               \
+    "    -- 1.  https://debugviewpp.wordpress.com\n"                                                            \
+    "    -- 1.  https://github.com/CobaltFusion/DebugViewPP/files/1408599/DebugView.v1.5.zip\n"                 \
+    "    -- 2.  https://docs.microsoft.com/ru-ru/sysinternals/downloads/debugview\n"                            \
+    "    -- 2.  https://download.sysinternals.com/files/DebugView.zip\n"                                        \
+    "    LuaObject:traceOn()\n"                                                                                 \
+    "    -- trace code begin\n"                                                                                 \
+    "    \n"                                                                                                    \
+    "        print(\"I'm trace!\")\n"                                                                           \
+    "    \n"                                                                                                    \
+    "    -- trace code end\n"                                                                                   \
+    "    LuaObject:traceOff()\n"                                                                                \
+    "\n";
+
+static inline const char g_scedit_EDIT_PASTE_CODE_14[] =
     "    -- example LuaImage format\n"                                                                          \
     "    local LuaImage_object = {\n"                                                                           \
     "       width  = 32,\n"                                                                                     \

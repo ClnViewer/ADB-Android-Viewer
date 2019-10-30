@@ -30,8 +30,10 @@
 #define __LUA_FUNC_CODE_HEADER(funname)                                                                         \
     int32_t LuaEngine::funname ()
 
+#include "LuaMacro.Args.h"
+
 #if defined(_BUILD_LUA_EDITOR)
-#  include "LuaMacroEditor.h"
+#  include "LuaMacro.Editor.h"
 #else
-#  include "LuaMacroPlugin.h"
+#  include "LuaMacro.Plugin.h"
 #endif

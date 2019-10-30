@@ -25,3 +25,6 @@
 #   include "lua_adbSwipe.cxx"
 #   include "lua_adbKey.cxx"
 #   include "lua_adbText.cxx"
+
+#   include "lua_traceOn.cxx"
+#   include "lua_traceOff.cxx"
