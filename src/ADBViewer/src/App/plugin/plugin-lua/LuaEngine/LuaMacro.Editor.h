@@ -5,7 +5,7 @@
 #define __LUA_LINT_UNUSED(A) (void) A;
 #define __LUA_ALL_UNUSED(A) __LUA_LINT_UNUSED(A)
 #define __LUA_IF_LINT(A) A
-#define __LUA_IF_NOT_LINT(...)
+#define __LUA_IF_PLUGIN(...)
 #define __LUA_BIND_CLASS() Editor
 
 #define LINT_TRY__                                                                                              \

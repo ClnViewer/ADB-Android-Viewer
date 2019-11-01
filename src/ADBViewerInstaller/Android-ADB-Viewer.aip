@@ -83,6 +83,10 @@
     <ROW File="ADBSCEdit.exe" Component_="ADBSCEdit.exe" FileName="ADBSCE~1.EXE|ADBSCEdit.exe" Attributes="0" SourcePath="..\bin\Release\ADBSCEdit.exe" SelfReg="false" DigSign="true"/>
     <ROW File="ADBSCEdit.style" Component_="ADBViewer.ini" FileName="ADBSCE~1.STY|ADBSCEdit.style" Attributes="0" SourcePath="..\bin\Release\ADBSCEdit.style" SelfReg="false"/>
     <ROW File="sceditdefault.png" Component_="ADBViewer.ini" FileName="SCEDIT~1.PNG|scedit-default.png" Attributes="0" SourcePath="..\bin\Release\scedit-default.png" SelfReg="false"/>
+    <ROW File="scepluginByteCode.lua" Component_="pluginlua.lua.example" FileName="SCE-PL~1.LUA|sce-plugin-ByteCode.lua" Attributes="0" SourcePath="..\ADBSCEditDLL\plugins\sce-plugin-ByteCode.lua" SelfReg="false"/>
+    <ROW File="scepluginFunctionList.lua" Component_="pluginlua.lua.example" FileName="SCE-PL~2.LUA|sce-plugin-FunctionList.lua" Attributes="0" SourcePath="..\ADBSCEditDLL\plugins\sce-plugin-FunctionList.lua" SelfReg="false"/>
+    <ROW File="scepluginFunctionListAll.lua" Component_="pluginlua.lua.example" FileName="SCE-PL~3.LUA|sce-plugin-FunctionListAll.lua" Attributes="0" SourcePath="..\ADBSCEditDLL\plugins\sce-plugin-FunctionListAll.lua" SelfReg="false"/>
+    <ROW File="scepluginSaveAsByteCode.lua" Component_="pluginlua.lua.example" FileName="SCE-PL~4.LUA|sce-plugin-SaveAsByteCode.lua" Attributes="0" SourcePath="..\ADBSCEditDLL\plugins\sce-plugin-SaveAsByteCode.lua" SelfReg="false"/>
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.BootstrOptComponent">
     <ROW BootstrOptKey="GlobalOptions" DownloadFolder="[AppDataFolder][|Manufacturer]\[|ProductName]\prerequisites" Options="2"/>
@@ -208,6 +212,7 @@
   </COMPONENT>
   <COMPONENT cid="caphyon.advinst.msicomp.MsiShortsComponent">
     <ROW Shortcut="ADBSCEdit" Directory_="SHORTCUTDIR" Name="ADBSCE~1|ADBSCEdit" Component_="ADBSCEdit.exe" Target="[#ADBSCEdit.exe]" Description="ADB Viewer Lua script editor" Hotkey="0" Icon_="ADBSCEdit.exe" IconIndex="0" ShowCmd="1" WkDir="ADBViewer_Dir"/>
+    <ROW Shortcut="ADBSCEdit_1" Directory_="DesktopFolder" Name="ADBVIE~1|ADB Viewer script Editor" Component_="ADBSCEdit.exe" Target="[#ADBSCEdit.exe]" Description="Lua script editor" Hotkey="0" Icon_="ADBSCEdit.exe" IconIndex="0" ShowCmd="1" WkDir="ADBViewer_Dir"/>
     <ROW Shortcut="AndoidADBViewer" Directory_="SHORTCUTDIR" Name="ANDOID~1|Andoid ADB Viewer" Component_="ADBViewer.exe" Target="[#ADBViewer.exe]" Description="ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features.." Hotkey="0" Icon_="ADBViewer.exe" IconIndex="0" ShowCmd="1" WkDir="ADBViewer_Dir"/>
     <ROW Shortcut="AndoidADBViewer_1" Directory_="DesktopFolder" Name="ANDOID~1|Andoid ADB Viewer" Component_="ADBViewer.exe" Target="[#ADBViewer.exe]" Description="ADB exchange Android Viewer, support scale view, input tap from mouse, input swipe from keyboard, more features.." Hotkey="0" Icon_="ADBViewer.exe" IconIndex="0" ShowCmd="1" WkDir="ADBViewer_Dir"/>
   </COMPONENT>

@@ -1,7 +1,37 @@
+/*
+    MIT License
+
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer/ADBSCEditDLL/ADBSCEdit
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #include <SCEditInternal.h>
 #include <lua.hpp>
-#include <iomanip>
 #include <ctime>
 
 #include "LuaLint.h"
@@ -10,16 +40,26 @@
 
 namespace Editor
 {
+    enum LuaDebugDataOut
+    {
+        DDT_ANOTATION,
+        DDT_DBGVIEW,
+        DDT_LISTBOX,
+        DDT_TRACELINE,
+        DDT_TRACEPRN
+    };
+
+#   include "LuaEngine.Editor.DebugData.cxx"
+
     //
     // Public
     //
-
     LuaEngine::LuaEngine()
     {
         initbase_();
         m_imgdraw.init(
-            Config::instance().gethinstance(),
-            Config::instance().gethandle()
+            MDIWin::Config::instance().gethinstance(),
+            CONF_MAIN_HANDLE()
         );
         m_imgdefault_name = "scedit-default.png";
         LuaLint::settrace(true);
@@ -196,6 +236,28 @@ namespace Editor
         return 1;
     }
 
+    void LuaEngine::pcall_error_(int32_t err, int32_t cnt)
+    {
+        LuaLint::print_pcall_error(err);
+        LuaLint::print(lua_tostring(m_lua, -1), LuaLint::ColorPrint::DebugError);
+        //
+        std::string stb = LuaObject::trace_(m_lua);
+        if (!stb.empty())
+        {
+            if (cnt)
+                countprint_(cnt, stb);
+            else
+                LuaLint::print(stb, LuaLint::ColorPrint::DebugTraceStack);
+        }
+    }
+
+    void LuaEngine::countprint_(int32_t cnt, std::string const & s)
+    {
+        std::stringstream ss;
+        ss << "[ " << cnt << " ] - " << s.c_str();
+        LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceC);
+    }
+
     bool LuaEngine::init_()
     {
         close_();
@@ -234,10 +296,7 @@ namespace Editor
             int32_t err;
             if ((err = lua_pcall(m_lua, 0, 0, 0)) != LUA_OK)
             {
-                LuaLint::print_pcall_error(err);
-                std::string stb = LuaObject::trace_(m_lua);
-                if (!stb.empty())
-                    LuaLint::print(stb, LuaLint::ColorPrint::DebugTraceStack);
+                pcall_error_(err);
                 break;
             }
             LuaLint::print(g_debug_str_3, LuaLint::ColorPrint::DebugOk);
@@ -256,19 +315,12 @@ namespace Editor
         return false;
     }
 
-    void LuaEngine::countprint_(int32_t cnt, std::string const & s)
-    {
-        std::stringstream ss;
-        ss << "[ " << cnt << " ] - " << s.c_str();
-        LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceC);
-    }
-
     void LuaEngine::runscriptend_()
     {
         SendMessageA(
-            Config::instance().gethandle(),
+            CONF_MAIN_HANDLE(),
             WM_COMMAND,
-            (WPARAM)IDM_BTN_SCRUN_STOP,
+            (WPARAM)IDM_EVENT_SCRUN_STOP,
             0
         );
 
@@ -277,15 +329,15 @@ namespace Editor
 
         EditBox::AnnotateData ad{};
         SendMessageA(
-            Config::instance().gethandle(),
+            CONF_MAIN_HANDLE(),
             WM_COMMAND,
-            (WPARAM)IDM_EDIT_SHOW_ANNOTATION,
+            (WPARAM)IDM_EVENT_EDIT_ANNOTATION,
             reinterpret_cast<LPARAM>(&ad)
         );
         SendMessageA(
-            Config::instance().gethandle(),
+            CONF_MAIN_HANDLE(),
             WM_COMMAND,
-            (WPARAM)IDM_EDIT_SHOW_DBGLINE,
+            (WPARAM)IDM_EVENT_EDIT_DBGLINE,
             (LPARAM)-1
         );
     }
@@ -371,9 +423,9 @@ namespace Editor
         setrunbreak(false);
         LuaLint::print(g_debug_help, LuaLint::ColorPrint::DebugHelp);
         SendMessageA(
-            Config::instance().gethandle(),
+            CONF_MAIN_HANDLE(),
             WM_COMMAND,
-            (WPARAM)IDM_BTN_SCRUN_START,
+            (WPARAM)IDM_EVENT_SCRUN_START,
             0
         );
 
@@ -412,12 +464,7 @@ namespace Editor
                     {
                         if ((!getrunbreak())  ||
                             (err != LUA_ERRRUN))
-                        {
-                            LuaLint::print_pcall_error(err);
-                            std::string stb = LuaObject::trace_(m_lua);
-                            if (!stb.empty())
-                                countprint_(cnt, stb);
-                        }
+                            pcall_error_(err, cnt);
                         break;
                     }
                     //
@@ -503,87 +550,6 @@ namespace Editor
         return false;
     }
 
-    //
-    // static callback
-    //
-
-    static void f_dump_(lua_State *lua_, EditBox::AnnotateData *ad_, bool isdbgview)
-    {
-        lua_Debug ldb{};
-        int32_t i, n, l = 0;
-        std::stringstream ss;
-
-        while (lua_getstack(lua_, l++, &ldb) == 1)
-        {
-            if (!lua_getinfo(lua_, "nlSf", &ldb))
-                continue;
-
-            n = lua_gettop(lua_);
-            lua_pop(lua_, 1);
-            if (isdbgview)
-                ss << "line: " << ad_->line << ", " << "stack: " << n << ", ";
-            else
-                ss << "* stack available: " << n << "\n";
-
-            for (i = 0; i < n; i++)
-            {
-                int32_t cnt = 0;
-
-                do
-                {
-                    const char *str, *val;
-
-                    if (!(str = lua_getlocal(lua_, &ldb, i)))
-                        break;
-
-                    cnt++;
-
-                    if (::memcmp(str, static_cast<const void*>(&"(*temporary)"), 12) == 0)
-                        break;
-
-                    if (!isdbgview)
-                        ss << "   " << i << "] - ";
-                    ss << "(" << lua_typename(lua_, lua_type(lua_, i)) << ") ";
-                    ss << str << " = [";
-
-                    if (!(val = luaL_tolstring(lua_, -1, nullptr)))
-                        ss << "?";
-                    else
-                    {
-                        ss << val;
-                        cnt++;
-                    }
-                    if (isdbgview)
-                        ss << "], ";
-                    else
-                        ss << "]\n";
-                }
-                while (0);
-
-                if (cnt)
-                    lua_pop(lua_, cnt);
-            }
-        }
-
-        ad_->text = ss.str();
-
-        if ((isdbgview) && (!ad_->text.empty()))
-        {
-            std::size_t pos = ad_->text.find_last_of(",");
-            if (pos != std::string::npos)
-                ad_->text.erase(pos, (ad_->text.length() - 1));
-
-            ::OutputDebugStringA(ad_->text.c_str());
-        }
-        else
-            SendMessageA(
-                Config::instance().gethandle(),
-                WM_COMMAND,
-                (WPARAM)IDM_EDIT_SHOW_ANNOTATION,
-                reinterpret_cast<LPARAM>(ad_)
-            );
-    }
-
     void LuaEngine::hook_cb(lua_State *lua_, lua_Debug *ldb_)
     {
         LuaEngine *le = LuaEngine::instance(lua_);
@@ -608,24 +574,15 @@ namespace Editor
                     if (ldb_->currentline < 0)
                         break;
 
-                    EditBox::AnnotateData ad{};
-                    ad.line = (ldb_->currentline - 1);
-
-                    SendMessageA(
-                        Config::instance().gethandle(),
-                        WM_COMMAND,
-                        (WPARAM)IDM_EDIT_SHOW_DBGLINE,
-                        (LPARAM)ad.line
-                    );
-                    SendMessageA(
-                        Config::instance().gethandle(),
-                        WM_COMMAND,
-                        (WPARAM)IDM_EDIT_SHOW_ANNOTATION,
-                        reinterpret_cast<LPARAM>(&ad)
-                    );
-
+                    DebugData dd{};
+                    dd.nline = (ldb_->currentline - 1);
+                    //
+                    f_DebugData_set_(lua_, dd);
+                    f_DebugData_send_(dd, LuaDebugDataOut::DDT_TRACELINE);
+                    f_DebugData_send_(dd, LuaDebugDataOut::DDT_LISTBOX);
+                    //
                     if (le->getdbgview())
-                        f_dump_(lua_, &ad, true);
+                        f_DebugData_send_(dd, LuaDebugDataOut::DDT_DBGVIEW);
 
                     while (!le->getdbgcontinue())
                     {
@@ -633,7 +590,7 @@ namespace Editor
                             break;
                         if (le->getdbgdump())
                         {
-                            f_dump_(lua_, &ad, false);
+                            f_DebugData_send_(dd, LuaDebugDataOut::DDT_ANOTATION);
                             le->setdbgdump(false);
                         }
                         std::this_thread::yield();
@@ -649,23 +606,15 @@ namespace Editor
                     if (!ldb_->name)
                         break;
 
+                    DebugData dd{};
+                    dd.nline = (ldb_->linedefined + 1);
+                    //
                     if ((le->getdbgview()) && (ldb_->linedefined > 0))
                     {
-                        EditBox::AnnotateData ad{};
-                        ad.line = (ldb_->linedefined + 1);
-                        f_dump_(lua_, &ad, true);
+                        f_DebugData_set_(lua_, dd);
+                        f_DebugData_send_(dd, LuaDebugDataOut::DDT_DBGVIEW);
                     }
-
-                    std::stringstream ss;
-                    ss << "\tcall ";
-                    if (ldb_->what)
-                        ss << ldb_->what << ":";
-                    if (ldb_->namewhat)
-                        ss << ldb_->namewhat << ":";
-                    ss << " -> " << ldb_->name;
-                    if (ldb_->linedefined > 0)
-                        ss << ":" << (ldb_->linedefined + 1);
-                    LuaLint::print(ss.str(), LuaLint::ColorPrint::DebugTraceStack);
+                    f_DebugData_send_(dd, LuaDebugDataOut::DDT_TRACEPRN, ldb_);
                     break;
                 }
                 default:

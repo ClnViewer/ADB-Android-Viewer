@@ -1,8 +1,39 @@
+/*
+    MIT License
+
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer/ADBSCEditDLL/ADBSCEdit
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #if defined(_BUILD_LUA_EDITOR)
 #  include <SCEditInternal.h>
 #  define __LINT_PRINT(...)                                                                                     \
-    if (l_istrace) Editor::PrintBox::instance().colorBox(__VA_ARGS__)
+    if (l_istrace) MDIWin::Config::instance().colorBox(__VA_ARGS__)
 #else
 #include "../../plugin-base.h"
 #  define __LINT_PRINT(A,...)                                                                                  \
@@ -55,39 +86,40 @@ namespace LuaLint
     // weak functions:
     void print(std::string const & s)
     {
-        __LINT_PRINT(s, l_color[LuaLint::ColorPrint::DebugTraceLua], "", -1);
+        __LINT_PRINT(s, l_color[LuaLint::ColorPrint::DebugTraceLua]);
     }
     void print(std::stringstream & ss)
     {
-        __LINT_PRINT(ss.str(), l_color[LuaLint::ColorPrint::DebugTraceLua], "", -1);
+        __LINT_PRINT(ss.str(), l_color[LuaLint::ColorPrint::DebugTraceLua]);
     }
     void print(std::string const & s, COLORREF const & color)
     {
-        __LINT_PRINT(s, color, "", -1);
+        __LINT_PRINT(s, color);
     }
     void print(std::stringstream & ss, COLORREF const & color)
     {
-        __LINT_PRINT(ss.str(), color, "", -1);
+        __LINT_PRINT(ss.str(), color);
     }
     void print(std::string const & s, LuaLint::ColorPrint idx)
     {
-        __LINT_PRINT(s, l_color[idx], "", -1);
+        __LINT_PRINT(s, l_color[idx]);
     }
     void print(std::stringstream & ss, LuaLint::ColorPrint idx)
     {
-        __LINT_PRINT(ss.str(), l_color[idx], "", -1);
+        __LINT_PRINT(ss.str(), l_color[idx]);
     }
     //
     void print_lua(lua_State *lua_, COLORREF const & color)
     {
         std::stringstream ss;
         int32_t i, n = ::lua_gettop(lua_);
-        for (i = 1; i < n; i++)
+        for (i = 1; i <= n; i++)
         {
             ss << ::luaL_tolstring(lua_, i, nullptr);
             ::lua_pop(lua_, 1);
         }
-        print(ss.str(), color);
+        if (!ss.str().empty())
+            print(ss.str(), color);
     }
     //
     void stream_print_error(std::stringstream & ss, std::string const & s, int32_t n)

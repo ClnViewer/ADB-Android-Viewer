@@ -67,10 +67,19 @@ namespace ImageLite
             struct IPOINT
             {
                 Tval x, y;
+                Tval *byindex[2] = { &x, &y };
 
-                bool empty()
+                IPOINT()
+                 : x(0), y(0) {}
+                IPOINT(Tval x_, Tval y_)
+                 : x(x_), y(y_) {}
+                //
+                bool empty() const
                 {
-                    return ((!x) && (!y));
+                    if constexpr (std::is_unsigned<Tval>::value)
+                        return ((!x) && (!y));
+                    else
+                        return ((x <= 0) && (y <= 0));
                 }
                 //
                 template<typename Tobj, typename Tin>
@@ -80,6 +89,13 @@ namespace ImageLite
                         static_cast<Tin>(x),
                         static_cast<Tin>(y)
                     };
+                }
+                //
+                template<uint32_t Tn>
+                Tval get()
+                {
+                    static_assert((Tn < 2), "index wrong, >= 2");
+                    return *byindex[Tn];
                 }
                 //
                 template<typename Tin>
@@ -92,8 +108,7 @@ namespace ImageLite
                 template<typename Tobj>
                 void set(Tobj const & obj)
                 {
-                    x = static_cast<Tval>(obj.x);
-                    y = static_cast<Tval>(obj.y);
+                    set<decltype(reinterpret_cast<Tobj*>(0)->x)>(obj.x , obj.y);
                 }
             };
             //
@@ -101,11 +116,38 @@ namespace ImageLite
             struct IRECT
             {
                 Tval x, y, w, h;
+                Tval *byindex[4] = { &x, &y, &w, &h };
 
-                bool empty()
+                IRECT()
+                 : x(0), y(0), w(0), h(0) {}
+                IRECT(Tval x_, Tval y_, Tval w_, Tval h_)
+                 : x(x_), y(y_), w(w_), h(h_) {}
+                //
+                bool empty() const
                 {
-                    return ((!w) && (!h));
+                    if constexpr (std::is_unsigned<Tval>::value)
+                        return ((!w) || (!h));
+                    else
+                        return ((w <= 0) || (h <= 0));
                 }
+                bool contains(IPOINT<Tval> const & ip, Tval pad = 0) const
+                {
+                    return (
+                        (ip.x >= x)       && // w
+                        (ip.x <= (x + w)) &&
+                        (ip.y >= y)       && // h
+                        (ip.y <= (y + ((pad) ? pad : h)))
+                            );
+                }
+#               if defined(__WIN32)
+                void convert(RECT const & r)
+                {
+                    x = static_cast<Tval>(r.left);
+                    y = static_cast<Tval>(r.top);
+                    w = static_cast<Tval>(r.right  - r.left);
+                    h = static_cast<Tval>(r.bottom - r.top);
+                }
+#               endif
                 //
                 template<typename Tobj, typename Tin>
                 Tobj get()
@@ -116,6 +158,32 @@ namespace ImageLite
                         static_cast<Tin>(w),
                         static_cast<Tin>(h)
                     };
+                }
+                //
+                template<uint32_t Tn>
+                Tval get()
+                {
+                    static_assert((Tn < 4), "index wrong, >= 4");
+                    return *byindex[Tn];
+                }
+                //
+                template<typename Ttype>
+                IPOINT<Ttype> get()
+                {
+                    return {
+                        static_cast<Ttype>(w),
+                        static_cast<Ttype>(h)
+                    };
+                }
+                //
+                void set(IRECT<int32_t> const & ir)
+                {
+                    set<int32_t>(ir.x, ir.y, ir.w, ir.h);
+                }
+                //
+                void set(IPOINT<int32_t> const & ip)
+                {
+                    set<int32_t>(ip.x, ip.y);
                 }
                 //
                 template<typename Tin>
@@ -130,43 +198,44 @@ namespace ImageLite
                 template<typename Tin>
                 void set(Tin const _w, Tin const _h)
                 {
-                    x = 0;
-                    y = 0;
-                    w = static_cast<Tval>(_w);
-                    h = static_cast<Tval>(_h);
+                    set<Tin>(0, 0, _w, _h);
                 }
                 //
-                template<typename T>
-                void set(T const & obj)
+                template<typename Ttype, typename Tin>
+                void set(Tin const & obj)
                 {
-#                   if defined(__WIN32)
-                    if constexpr (
-                        (std::is_same<T, RECT>::value) ||
-                        (std::is_same<T, RECTL>::value))
-                    {
-                        x = static_cast<Tval>(obj.left);
-                        y = static_cast<Tval>(obj.top);
-                        w = static_cast<Tval>(obj.right);
-                        h = static_cast<Tval>(obj.bottom);
-                    }
-#                   if defined(_BUILD_GDIPLUS_ENABLE)
-                    else if constexpr (std::is_same<T, Gdiplus::Rect>::value)
-                    {
-                        x = static_cast<Tval>(obj.x);
-                        y = static_cast<Tval>(obj.y);
-                        w = static_cast<Tval>(obj.width);
-                        h = static_cast<Tval>(obj.height);
-                    }
-                    else
-#                   endif
-#                   endif
-                    {
-                        x = static_cast<Tval>(obj.x);
-                        y = static_cast<Tval>(obj.y);
-                        w = static_cast<Tval>(obj.w);
-                        h = static_cast<Tval>(obj.h);
-                    }
+                    static_assert((sizeof(Tin) == (sizeof(Ttype) * 4)), "type different size");
+                    uint8_t *xobj = reinterpret_cast<uint8_t*>(
+                                    const_cast<Tin*>(&obj)
+                                );
+                    for (uint32_t i = 0U; i < 4; i++)
+                        *byindex[i] =  static_cast<Tval>(
+                                        *reinterpret_cast<Ttype*>(
+                                            xobj + (sizeof(Ttype) * i)
+                                        )
+                                    );
                 }
+                //
+                template<typename Tin>
+                bool compare(Tin const _w, Tin const _h) const
+                {
+                    return ((w == static_cast<Tval>(_w)) &&
+                            (h == static_cast<Tval>(_h)));
+                }
+                template<typename Ttype>
+                bool compare(IRECT<Ttype> const & ir) const
+                {
+                    return ((x == static_cast<Tval>(ir.x)) &&
+                            (y == static_cast<Tval>(ir.y)) &&
+                            (w == static_cast<Tval>(ir.w)) &&
+                            (h == static_cast<Tval>(ir.h)));
+                }
+                template<typename Ttype>
+                bool compare(IPOINT<Ttype> const & ip) const
+                {
+                    return compare<Ttype>(ip.x, ip.y);
+                }
+                //
             };
             //
             typedef struct __attribute__((__packed__))

@@ -155,7 +155,7 @@ namespace ImageLite
 
         IRECT<uint32_t>  drect;
         IPOINT<uint32_t> spoint;
-        drect.set<IRECT<int32_t>>(r);
+        drect.set(r);
         spoint.set<IPOINT<int32_t>>(src.point);
 
         uint32_t y,
@@ -236,7 +236,7 @@ namespace ImageLite
 
         IPOINT<uint32_t> spoint;
         IRECT<uint32_t>  drect;
-        drect.set<IRECT<int32_t>>(r);
+        drect.set(r);
         spoint.set<IPOINT<int32_t>>(src.point);
 
         uint32_t y,

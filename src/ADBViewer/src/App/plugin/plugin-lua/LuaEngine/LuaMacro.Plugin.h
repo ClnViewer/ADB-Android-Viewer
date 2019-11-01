@@ -5,7 +5,7 @@
 #define __LUA_LINT_UNUSED(...)
 #define __LUA_ALL_UNUSED(A) (void) A;
 #define __LUA_IF_LINT(A) if (LuaLint::istrace()) { A }
-#define __LUA_IF_NOT_LINT(A) A
+#define __LUA_IF_PLUGIN(A) A
 #define __LUA_BIND_CLASS() Plugins
 
 #define LINT_TRY__                                                                                              \

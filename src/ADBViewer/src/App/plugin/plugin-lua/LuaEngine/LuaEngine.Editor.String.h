@@ -28,7 +28,7 @@ namespace __LUA_BIND_CLASS()
     static inline const char g_debug_str_22[] = " -- Debug process running, not change run mode..";
     static inline const char g_debug_str_23[] = "!Lua panic!";
     static inline const char g_debug_str_24[] = " -- Recovery Lua engine prevision crush..";
-
+    //
     static inline const char g_debug_help[] =
         " - Debugger key help:\n"                                                                         \
         "\t- ALT-S, F4  : Debug mode ' step by step ', set this, script rerun required\n"                 \

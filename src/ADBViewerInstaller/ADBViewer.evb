@@ -105,6 +105,54 @@
                 <PassCommandLine>False</PassCommandLine>
                 <HideFromDialogs>0</HideFromDialogs>
               </File>
+              <File>
+                <Type>2</Type>
+                <Name>sce-plugin-ByteCode.lua</Name>
+                <File>C:\__BuildSource\__SVN__\ADBViewer\src\ADBSCEditDLL\plugins\sce-plugin-ByteCode.lua</File>
+                <ActiveX>False</ActiveX>
+                <ActiveXInstall>False</ActiveXInstall>
+                <Action>3</Action>
+                <OverwriteDateTime>False</OverwriteDateTime>
+                <OverwriteAttributes>False</OverwriteAttributes>
+                <PassCommandLine>False</PassCommandLine>
+                <HideFromDialogs>0</HideFromDialogs>
+              </File>
+              <File>
+                <Type>2</Type>
+                <Name>sce-plugin-FunctionList.lua</Name>
+                <File>C:\__BuildSource\__SVN__\ADBViewer\src\ADBSCEditDLL\plugins\sce-plugin-FunctionList.lua</File>
+                <ActiveX>False</ActiveX>
+                <ActiveXInstall>False</ActiveXInstall>
+                <Action>3</Action>
+                <OverwriteDateTime>False</OverwriteDateTime>
+                <OverwriteAttributes>False</OverwriteAttributes>
+                <PassCommandLine>False</PassCommandLine>
+                <HideFromDialogs>0</HideFromDialogs>
+              </File>
+              <File>
+                <Type>2</Type>
+                <Name>sce-plugin-FunctionListAll.lua</Name>
+                <File>C:\__BuildSource\__SVN__\ADBViewer\src\ADBSCEditDLL\plugins\sce-plugin-FunctionListAll.lua</File>
+                <ActiveX>False</ActiveX>
+                <ActiveXInstall>False</ActiveXInstall>
+                <Action>3</Action>
+                <OverwriteDateTime>False</OverwriteDateTime>
+                <OverwriteAttributes>False</OverwriteAttributes>
+                <PassCommandLine>False</PassCommandLine>
+                <HideFromDialogs>0</HideFromDialogs>
+              </File>
+              <File>
+                <Type>2</Type>
+                <Name>sce-plugin-SaveAsByteCode.lua</Name>
+                <File>C:\__BuildSource\__SVN__\ADBViewer\src\ADBSCEditDLL\plugins\sce-plugin-SaveAsByteCode.lua</File>
+                <ActiveX>False</ActiveX>
+                <ActiveXInstall>False</ActiveXInstall>
+                <Action>3</Action>
+                <OverwriteDateTime>False</OverwriteDateTime>
+                <OverwriteAttributes>False</OverwriteAttributes>
+                <PassCommandLine>False</PassCommandLine>
+                <HideFromDialogs>0</HideFromDialogs>
+              </File>
             </Files>
           </File>
           <File>

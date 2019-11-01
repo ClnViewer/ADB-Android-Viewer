@@ -44,7 +44,7 @@
                 LuaLint::stream_print_irectT<int32_t>(ss, r);
                 LuaLint::print_traceT(LuaLint::g_lint_str_31, ss.str());
             )
-            __LUA_IF_NOT_LINT(
+            __LUA_IF_PLUGIN(
 
                 if (!le->m_adbcmd.load())
                     break;

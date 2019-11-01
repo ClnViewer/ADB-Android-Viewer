@@ -14,6 +14,7 @@ namespace LuaObject
         std::string trace_(lua_State*);
         void        clean_(lua_State*);
         void        close_(lua_State**);
+        void        close_(std::optional<lua_State*>&);
         bool        init_(
                         lua_State **,
                         std::string const& = "",
@@ -21,6 +22,15 @@ namespace LuaObject
                         struct luaL_Reg* = nullptr,
                         int32_t sz = 0,
                         void* = nullptr);
+        bool        init_(
+                        std::optional<lua_State*>&,
+                        std::string const& = "",
+                        struct luaL_Reg* = nullptr,
+                        struct luaL_Reg* = nullptr,
+                        int32_t sz = 0,
+                        void* = nullptr);
+        void        pcall_error_print_(lua_State*, int32_t);
+        void        pcall_error_print_(std::optional<lua_State*> const&, int32_t);
         //
 
         /// Internal generic LUA get/set/callback

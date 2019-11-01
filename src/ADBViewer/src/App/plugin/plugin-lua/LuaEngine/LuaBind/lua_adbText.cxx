@@ -31,7 +31,7 @@
             __LUA_IF_LINT(
                 LuaLint::print_traceT(LuaLint::g_lint_str_31, s);
             )
-            __LUA_IF_NOT_LINT(
+            __LUA_IF_PLUGIN(
 
                 if (!le->m_adbcmd.load())
                     break;

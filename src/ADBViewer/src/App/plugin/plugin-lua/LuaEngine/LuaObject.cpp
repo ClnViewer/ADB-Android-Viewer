@@ -1,11 +1,45 @@
+/*
+    MIT License
+
+    Android remote Viewer, GUI ADB tools
+
+    Android Viewer developed to view and control your android device from a PC.
+    ADB exchange Android Viewer, support scale view, input tap from mouse,
+    input swipe from keyboard, save/copy screenshot, etc..
+
+    Copyright (c) 2016-2019 PS
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer
+    GitHub: https://github.com/ClnViewer/ADB-Android-Viewer/ADBSCEditDLL/ADBSCEdit
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sub license, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+ */
 
 #include <string>
+#include <sstream>
 #include <array>
 #include <vector>
 #include <functional>
+#include <optional>
 #include <lua.hpp>
 #include <ImageLite.h>
 #include "LuaObject.h"
+#include "LuaLint.h"
 
 namespace LuaObject
 {
@@ -19,7 +53,10 @@ namespace LuaObject
                 if (vname.at(i) == '.')
                 {
                     if (idx == 0)
-                        lua_getglobal(L, var.c_str());
+                    {
+                        if (lua_getglobal(L, var.c_str()) == LUA_TNIL)
+                            return false;
+                    }
                     else
                         lua_getfield(L, -1, var.c_str());
 
@@ -34,7 +71,10 @@ namespace LuaObject
                     var += vname.at(i);
             }
             if (idx == 0)
-                lua_getglobal(L, var.c_str());
+            {
+                if (lua_getglobal(L, var.c_str()) == LUA_TNIL)
+                   return false;
+            }
             else
                 lua_getfield(L, -1, var.c_str());
             if (lua_isnil(L, -1))
@@ -78,7 +118,8 @@ namespace LuaObject
             if (s.empty())
                 return false;
 
-            lua_getglobal(L, s.c_str());
+            if (lua_getglobal(L, s.c_str()) == LUA_TNIL)
+                return false;
             return lua_isfunction(L, -1);
         }
 
@@ -97,12 +138,36 @@ namespace LuaObject
                 lua_pop(L, lua_gettop(L));
         }
 
+        void close_(std::optional<lua_State*> & mlua)
+        {
+            if (!mlua.has_value())
+                return;
+
+            lua_close(mlua.value());
+            mlua.reset();
+        }
+
         void close_(lua_State **lua)
         {
             lua_State *L = *lua;
             if (L)
                 lua_close(L);
             *lua = nullptr;
+        }
+
+        bool init_(
+            std::optional<lua_State*> & mlua,
+            std::string const & s,
+            struct luaL_Reg *fun_redefine,
+            struct luaL_Reg *fun_object,
+            int32_t sz,
+            void *instance)
+        {
+            lua_State *L = nullptr;
+            if (!init_(&L, s, fun_redefine, fun_object, sz, instance))
+                return false;
+            mlua.emplace(L);
+            return true;
         }
 
         bool init_(
@@ -125,7 +190,8 @@ namespace LuaObject
             //
             if (fun_redefine)
             {
-                lua_getglobal(L, "_G");
+                if (lua_getglobal(L, "_G") == LUA_TNIL)
+                    return false;
                 luaL_setfuncs(L, fun_redefine, 0);
                 lua_pop(L, 1);
             }
@@ -150,4 +216,29 @@ namespace LuaObject
             *lua = L;
             return true;
         }
+
+        void pcall_error_print_(std::optional<lua_State*> const & mlua, int32_t err)
+        {
+            if (!mlua.has_value())
+                pcall_error_print_(nullptr, err);
+            else
+                pcall_error_print_(mlua.value(), err);
+        }
+
+        void pcall_error_print_(lua_State *L, int32_t err)
+        {
+            LuaLint::print_pcall_error(err);
+            if (!L)
+                return;
+
+            //
+            std::string s = lua_tostring(L, -1);
+            if (!s.empty())
+                LuaLint::print(s, LuaLint::ColorPrint::DebugError);
+            //
+            s = trace_(L);
+            if (!s.empty())
+                LuaLint::print(s, LuaLint::ColorPrint::DebugTraceStack);
+        }
+
 };

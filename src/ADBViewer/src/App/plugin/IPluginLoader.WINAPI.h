@@ -49,7 +49,7 @@ namespace Plugins
             fpath_a = fpath_d;
             fpath_a.append(l_pluginPath);
 
-		    if (::_access(fpath_a.c_str(), F_OK) < 0)
+	    if (::_access(fpath_a.c_str(), F_OK) < 0)
                 return false;
 
             if ((handle = ::FindFirstFile(fpath_s.c_str(), &data)) == INVALID_HANDLE_VALUE)

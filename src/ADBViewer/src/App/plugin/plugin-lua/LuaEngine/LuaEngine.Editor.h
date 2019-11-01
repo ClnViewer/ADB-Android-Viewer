@@ -10,6 +10,21 @@ namespace Editor
     {
         public:
             //
+            struct DumpData
+            {
+                int32_t     ncount;
+                std::string sname;
+                std::string svalue;
+                std::string stype;
+            };
+            //
+            struct DebugData
+            {
+                int32_t               nline;
+                int32_t               nstack;
+                std::vector<DumpData> data;
+            };
+            //
             LuaEngine();
             ~LuaEngine();
             //
@@ -67,7 +82,7 @@ namespace Editor
             bool                    open_(std::string const&);
             //
             static void             hook_cb(lua_State*, lua_Debug*);
-            static void             trace_(lua_State*);
+            void                    pcall_error_(int32_t, int32_t = 0);
             //
             void                    countprint_(int32_t, std::string const&);
             void                    runscriptend_();
@@ -79,6 +94,7 @@ namespace Editor
     };
 };
 
+/// this macro defined in MDIAppConfig.h
 #define LocalPrintError(A)    TRACEBoxEx(A, RGB(186,0,0))
 #define DebugPrintError(A)    TRACEBox(A, RGB(192,0,0))
 #define DebugPrintOk(A)       TRACEBox(A, RGB(0,134,0))

@@ -48,7 +48,7 @@ INT_PTR AdbListDialog::_OnWM_INITDIALOG(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
         DWORD st =
             LVS_EX_FULLROWSELECT |
             LVS_EX_GRIDLINES |
-            LVS_EX_BORDERSELECT |
+            // LVS_EX_BORDERSELECT |
             LVS_EX_DOUBLEBUFFER;
         ListView_SetExtendedListViewStyleEx(_hwnd, st, st);
 

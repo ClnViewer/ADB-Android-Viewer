@@ -25,6 +25,7 @@
 # include <sstream>
 # include <vector>
 # include <functional>
+# include <optional>
 # include <cassert>
 # include <ctime>
 

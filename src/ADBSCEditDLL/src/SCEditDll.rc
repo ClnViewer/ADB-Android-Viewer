@@ -1,57 +1,62 @@
 
 #include "SCEditInternal.h"
+
 #define _TOSTR(a) #a
 #define __TOSTR(a) _TOSTR(a)
 
 1 RT_MANIFEST "..\\ADBSCEditDll.manifest"
-ID_MAIN_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
+ID_MAIN_ICON   ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
 ID_VIEWER_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
 
-ID_REBAR_BITMAP BITMAP "Resources\\ADBSCEditRebar.bmp"
-ID_TOOLBAR_BITMAP BITMAP "Resources\\ADBSCEditToolBar.bmp"
+ID_IMGL_REBAR_BITMAP   BITMAP "Resources\\ADBSCEditRebar.bmp"
+ID_IMGL_TOOLBAR_BITMAP BITMAP "Resources\\ADBSCEditToolBar.bmp"
+ID_IMGL_TITLE_BITMAP   BITMAP "Resources\\ADBSCEditTitleBar.bmp"
+ID_IMGL_TOOLAPI_BITMAP BITMAP "Resources\\ADBSCEditToolBoxApi.bmp"
 
 ID_ACCEL ACCELERATORS DISCARDABLE
 BEGIN
     "A",            IDM_EDIT_SELECTALL,      VIRTKEY, CONTROL
     "C",            IDM_EDIT_COPY,           VIRTKEY, CONTROL
-    "N",            IDM_FILE_NEW,            VIRTKEY, CONTROL
-    "O",            IDM_FILE_OPEN,           VIRTKEY, CONTROL
-    "S",            IDM_FILE_SAVE,           VIRTKEY, CONTROL
+    "N",            IDM_EDIT_NEW,            VIRTKEY, CONTROL
+    "O",            IDM_EDIT_OPEN,           VIRTKEY, CONTROL
+    "S",            IDM_EDIT_SAVE,           VIRTKEY, CONTROL
     "V",            IDM_EDIT_PASTE,          VIRTKEY, CONTROL
     VK_DELETE,      IDM_EDIT_DELETE,         VIRTKEY
     "X",            IDM_EDIT_CUT,            VIRTKEY, CONTROL
     "Y",            IDM_EDIT_REDO,           VIRTKEY, CONTROL
     "Z",            IDM_EDIT_UNDO,           VIRTKEY, CONTROL
-    "Q",            IDM_MAIN_EXIT,           VIRTKEY, CONTROL
-    "S",            IDM_MAIN_DBGSTEP,        VIRTKEY, ALT
-    "C",            IDM_MAIN_DBGCYCLE,       VIRTKEY, ALT
-    "N",            IDM_MAIN_DBGNEXT,        VIRTKEY, ALT
-    "B",            IDM_MAIN_DBGBREAK,       VIRTKEY, ALT
-    "D",            IDM_MAIN_DBGDUMP,        VIRTKEY, ALT
-    "V",            IDM_MAIN_EXTDBGV,        VIRTKEY, ALT
-    "T",            IDM_MAIN_WINTOP,         VIRTKEY, ALT
-    VK_F1,          IDM_EDIT_SHOW_HELP,      VIRTKEY
-    VK_F2,          IDM_FILE_SAVE,           VIRTKEY
-    VK_F2,          IDM_FILE_SAVEAS,         VIRTKEY, CONTROL
-    VK_F3,          IDM_MAIN_EXTDBGV,        VIRTKEY
-    VK_F4,          IDM_MAIN_DBGCYCLE,       VIRTKEY
-    VK_F5,          IDM_MAIN_DBGSTEP,        VIRTKEY
-    VK_F6,          IDM_MAIN_DBGDUMP,        VIRTKEY
-    VK_F7,          IDM_MAIN_DBGNEXT,        VIRTKEY
-    VK_F8,          IDM_MAIN_DBGBREAK,       VIRTKEY
+    "Q",            IDM_BTN_EXIT,            VIRTKEY, CONTROL
+    "S",            IDM_BTN_DBGSTEP,         VIRTKEY, ALT
+    "C",            IDM_BTN_DBGCYCLE,        VIRTKEY, ALT
+    "N",            IDM_BTN_DBGNEXT,         VIRTKEY, ALT
+    "B",            IDM_BTN_DBGBREAK,        VIRTKEY, ALT
+    "D",            IDM_BTN_DBGDUMP,         VIRTKEY, ALT
+    "V",            IDM_BTN_EXTDBGV,         VIRTKEY, ALT
+    "T",            IDM_BTN_WINTOP,          VIRTKEY, ALT
+    VK_F1,          IDM_TOOLBOX_SHOW_HELP,   VIRTKEY
+    VK_F2,          IDM_EDIT_SAVE,           VIRTKEY
+    VK_F2,          IDM_EDIT_SAVEAS,         VIRTKEY, CONTROL
+    VK_F3,          IDM_BTN_EXTDBGV,         VIRTKEY
+    VK_F4,          IDM_BTN_DBGCYCLE,        VIRTKEY
+    VK_F5,          IDM_BTN_DBGSTEP,         VIRTKEY
+    VK_F6,          IDM_BTN_DBGDUMP,         VIRTKEY
+    VK_F7,          IDM_BTN_DBGNEXT,         VIRTKEY
+    VK_F8,          IDM_BTN_DBGBREAK,        VIRTKEY
+    VK_F9,          IDM_TOOLBOX_SHOW_MONITOR,VIRTKEY
+    VK_F10,         IDM_TOOLBOX_SHOW_API,    VIRTKEY
 END
 
 ID_REBAR_MENU MENU DISCARDABLE
 BEGIN
     POPUP "Main"
     BEGIN
-        MENUITEM "Open script",         IDM_FILE_OPEN
-        MENUITEM "Save script",         IDM_FILE_SAVE
-        MENUITEM "Save script as ..",   IDM_FILE_SAVEAS
+        MENUITEM "Open script",         IDM_EDIT_OPEN
+        MENUITEM "Save script",         IDM_EDIT_SAVE
+        MENUITEM "Save script as ..",   IDM_EDIT_SAVEAS
         MENUITEM SEPARATOR
-        MENUITEM "Load default script", IDM_FILE_NEW
+        MENUITEM "Load default script", IDM_EDIT_NEW
         MENUITEM SEPARATOR
-        MENUITEM "Exit",                IDM_MAIN_EXIT
+        MENUITEM "Exit",                IDM_BTN_EXIT
     END
     POPUP "Edit"
     BEGIN
@@ -91,28 +96,38 @@ BEGIN
         MENUITEM "Show indent",         IDM_EDIT_SHOW_INDENTG, CHECKED
         MENUITEM "Show end line",       IDM_EDIT_SHOW_ENDLINE
         MENUITEM SEPARATOR
-        MENUITEM "Always top window",   IDM_MAIN_WINTOP
+        MENUITEM "Clear Debug output",  IDM_BTN_INFOCLEAR
+        MENUITEM SEPARATOR
+        MENUITEM "Always top window",   IDM_BTN_WINTOP
     END
     POPUP "Debug"
     BEGIN
-        MENUITEM "Start check",         IDM_SCRUN_TEST
-        MENUITEM "Start debug",         IDM_SCRUN_START
-        MENUITEM "Stop",                IDM_SCRUN_STOP,    GRAYED
+        MENUITEM "Start check",         IDM_BTN_SCRUN_TEST
+        MENUITEM "Start debug",         IDM_BTN_SCRUN_START
+        MENUITEM "Stop",                IDM_BTN_SCRUN_STOP,GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "Cycle mode (ALT-C)",  IDM_MAIN_DBGCYCLE, CHECKED
-        MENUITEM "Step by step mode (ALT-S)", IDM_MAIN_DBGSTEP
+        MENUITEM "Cycle mode (ALT-C)",  IDM_BTN_DBGCYCLE, CHECKED
+        MENUITEM "Step by step mode (ALT-S)", IDM_BTN_DBGSTEP
         MENUITEM SEPARATOR
-        MENUITEM "Using DebugView (ALT-V)",   IDM_MAIN_EXTDBGV
+        MENUITEM "Using DebugView (ALT-V)",   IDM_BTN_EXTDBGV
         MENUITEM SEPARATOR
-        MENUITEM "Stack dump (ALT-D)",  IDM_MAIN_DBGDUMP,  GRAYED
-        MENUITEM "Next line  (ALT-N)",  IDM_MAIN_DBGNEXT,  GRAYED
+        MENUITEM "Stack dump (ALT-D)",  IDM_BTN_DBGDUMP,  GRAYED
+        MENUITEM "Next line  (ALT-N)",  IDM_BTN_DBGNEXT,  GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "Mute verbose output", IDM_MAIN_DBGMUTE
+        MENUITEM "Mute verbose output", IDM_BTN_DBGMUTE
     END
-    POPUP "Info"
+    POPUP "Plugins"
     BEGIN
-        MENUITEM "Help",                IDM_EDIT_SHOW_HELP
-        MENUITEM "Version",             IDM_MAIN_SHOW_VERSION
+        MENUITEM "Rescan plugins directory",IDM_BTN_PLUGIN_RESCAN
+        MENUITEM SEPARATOR
+    END
+    POPUP "Window"
+    BEGIN
+        MENUITEM "Help",                IDM_TOOLBOX_SHOW_HELP
+        MENUITEM "Plugin API list",     IDM_TOOLBOX_SHOW_API
+        MENUITEM "Debug value monitor", IDM_TOOLBOX_SHOW_MONITOR
+        MENUITEM SEPARATOR
+        MENUITEM "Version",             IDM_BTN_SHOW_VERSION
     END
 END
 
