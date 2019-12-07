@@ -35,12 +35,31 @@
 
 namespace Editor
 {
+    //
     static inline const wchar_t *l_items[] =
     {
         L"Help",
         L"API",
         L"Monitor"
     };
+    //
+    /* OLE DRAG & DROP event from ListBox (MONITOR), DROP ID is registered MDIWin::MDIApp::m_dragid */
+    LRESULT CALLBACK ToolBox::TabWndProc(HWND hwnd_, UINT umsg_, WPARAM wp_, LPARAM lp_, UINT_PTR, DWORD_PTR ptr)
+    {
+        if ((umsg_ == MDIWin::MDIApp::m_dragid) &&
+            (wp_ == (ID_TAB_IDX + static_cast<uint32_t>(TabIndex::ITAB_MONITOR))))
+        {
+            std::string s;
+            Editor::ToolBox *tb = reinterpret_cast<Editor::ToolBox*>(ptr);
+            if (tb)
+                tb->event(
+                    tb->getchild(ToolBox::TabIndex::ITAB_MONITOR),
+                    lp_,
+                    s
+                );
+        }
+        return ::DefSubclassProc(hwnd_, umsg_, wp_, lp_);
+    }
     //
 
     ToolBox::ToolBox()
@@ -57,8 +76,11 @@ namespace Editor
             m_tab[i] = nullptr;
         }
         if (m_hwnd)
+        {
+            ::RemoveWindowSubclass(m_hwnd, &ToolBox::TabWndProc, 0);
             ::DestroyWindow(m_hwnd);
-        m_hwnd = nullptr;
+            m_hwnd = nullptr;
+        }
     }
 
     MDIWin::WinData ToolBox::data()
@@ -74,6 +96,11 @@ namespace Editor
                 );
         d.irdefault.set<int32_t>(72, 0, 28, 70);                      // % from main widow
         return d;
+    }
+
+    HWND ToolBox::getchild(TabIndex t)
+    {
+        return m_tab[t];
     }
 
     bool ToolBox::tabforeach_(uint32_t id, std::function<bool(HWND*, uint32_t, uint32_t)> fun)
@@ -215,6 +242,12 @@ namespace Editor
             }
             //
             ::SendMessage(m_hwnd, WM_SETFONT, (WPARAM)MDIWin::Config::instance().getfont(), (LPARAM)1);
+            ::SetWindowSubclass(
+                    m_hwnd,
+                    &ToolBox::TabWndProc,
+                    0,
+                    reinterpret_cast<DWORD_PTR>(this)
+                );
             //
             bool b = setup_();
             return { true, b };
@@ -223,6 +256,7 @@ namespace Editor
         return { true, false };
     }
 
+    /* OLE DRAG & DROP from TreeView (API) & ListBox (MONITOR) */
     bool ToolBox::event(HWND hwnd_, LPARAM lp, std::string & s)
     {
         (void) tabforeach_(0,

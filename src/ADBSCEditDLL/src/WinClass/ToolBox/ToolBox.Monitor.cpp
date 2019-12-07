@@ -45,7 +45,6 @@ namespace Editor
                         WS_CLIPCHILDREN   |
                         WS_VSCROLL        |
                         LBS_NOSEL         |
-                        LBS_USETABSTOPS   |
                         LBS_NOTIFY        |
                         LBS_USETABSTOPS,
                         0, 30, 1, 1,
@@ -88,29 +87,49 @@ namespace Editor
         );
     }
 
-    bool ToolBox::event_monitor(HWND hwnd, LPARAM, std::string & s)
+    bool ToolBox::event_monitor(HWND hwnd, LPARAM lp_, std::string&)
     {
-        s = "";
-        //
         do
         {
             if (!hwnd)
                 break;
 
-            int32_t idx = ::SendMessage(m_tab[TabIndex::ITAB_MONITOR], LB_GETCURSEL, (WPARAM)0, (LPARAM)0);
-            if (idx == LB_ERR)
+            DRAGLISTINFO *dli = reinterpret_cast<DRAGLISTINFO*>(lp_);
+            if (!dli)
+                break;
+            if (dli->hWnd != hwnd)
+                break;
+            if (dli->uNotification != DL_BEGINDRAG)
                 break;
 
-            int32_t len = ::SendMessage(m_tab[TabIndex::ITAB_MONITOR], LB_GETTEXTLEN, (WPARAM)idx, (LPARAM)0);
+            int32_t idx = ::LBItemFromPt(hwnd, dli->ptCursor, 1);
+            if (idx < 0)
+                break;
+
+            int32_t len = ::SendMessage(hwnd, LB_GETTEXTLEN, (WPARAM)idx, (LPARAM)0);
             if (len == LB_ERR)
                 break;
 
-            std::vector<char> v(len + 1);
-            ::SendMessage(m_tab[TabIndex::ITAB_MONITOR], LB_GETTEXT, (WPARAM)idx, reinterpret_cast<LPARAM>(&v[0]));
-            s = &v[0];
+            std::string s;
+            {
+                std::vector<char> v(len + 1);
+                ::SendMessage(hwnd, LB_GETTEXT, (WPARAM)idx, reinterpret_cast<LPARAM>(&v[0]));
+                s = &v[0];
+            }
+            if (s.empty())
+                break;
+            //
+            {
+                std::stringstream ss;
+                ss << " -- " << s.c_str();
+                GameDev::OLEDropSource::BeginDrag(ss.str());
+                /// ALERTBox(ss.str());
+            }
+            //
+            return true;
         }
         while (0);
-        return !(s.empty());
+        return false;
     }
 
 };

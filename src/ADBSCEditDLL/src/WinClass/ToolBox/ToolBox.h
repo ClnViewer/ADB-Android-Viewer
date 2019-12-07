@@ -27,6 +27,10 @@ namespace Editor
             void                   show(std::vector<std::string> const &) override;
             //
             bool                   event(HWND, LPARAM, std::string&) override;
+            //
+            HWND                   getchild(TabIndex);
+            //
+            static LRESULT CALLBACK TabWndProc(HWND, UINT, WPARAM, LPARAM, UINT_PTR, DWORD_PTR);
 
         private:
             //

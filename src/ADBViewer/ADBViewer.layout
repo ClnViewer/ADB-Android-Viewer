@@ -2,9 +2,19 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Release" />
-	<File name="src\App\AppBrowser\AppBrowserList_LineSelect\AppBrowserList_MENUKEY_FILE.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="9944" topLine="164" />
+			<Cursor1 position="1813" topLine="42" />
+		</Cursor>
+	</File>
+	<File name="src\App\App.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="0" topLine="13" />
+		</Cursor>
+	</File>
+	<File name="src\App\AppEditor.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1501" topLine="33" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppBrowser\AppBrowserListEvent.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -12,14 +22,24 @@
 			<Cursor1 position="962" topLine="20" />
 		</Cursor>
 	</File>
+	<File name="src\App\AppEditor.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="16570" topLine="490" />
+		</Cursor>
+	</File>
 	<File name="src\ADBViewer.cpp" open="0" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1458" topLine="23" />
 		</Cursor>
 	</File>
-	<File name="src\App\AppEditor.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="src\App\AppBrowser\AppBrowserList_LineSelect\AppBrowserList_MENUKEY_FILE.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="16570" topLine="490" />
+			<Cursor1 position="9944" topLine="164" />
+		</Cursor>
+	</File>
+	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="1657" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="src\App\AppBrowser\AppBrowserList.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -32,29 +52,9 @@
 			<Cursor1 position="207" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="src\App\plugin\AppPluginManager.cpp" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1657" topLine="0" />
-		</Cursor>
-	</File>
 	<File name="src\App\AppScreen.WINAPI.cpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="1485" topLine="23" />
-		</Cursor>
-	</File>
-	<File name="src\App\App.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="0" topLine="13" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppMenuPopUp.WINAPI.cpp" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1813" topLine="42" />
-		</Cursor>
-	</File>
-	<File name="src\App\AppEditor.h" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="1501" topLine="33" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
