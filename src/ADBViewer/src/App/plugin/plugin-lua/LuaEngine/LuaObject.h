@@ -4,24 +4,17 @@
 namespace LuaObject
 {
         bool        getstack_(lua_State*, std::string const&);
-        bool        getfunction_(lua_State*, std::string const&);
+        bool        getfunction_(std::optional<lua_State*>&, std::string const&);
         bool        getLuaImage(lua_State*, ImageLite::ImageData&);
         void        setLuaImage(lua_State*, ImageLite::ImageData const &);  // using setformatLuaImage instead
         bool        setformatLuaImage(lua_State*, ImageLite::ImageRGBbuffer&);
         bool        setformatLuaImage(lua_State*, ImageLite::ImageData&, ImageLite::BufferType, int32_t);
-        void        stackdump_(lua_State*, std::function<void(std::string const&, int32_t)>);
         int32_t     tablecount_(lua_State*);
+        void        stackdump_(std::optional<lua_State*>&, std::function<void(std::string const&, int32_t)>);
         std::string trace_(lua_State*);
-        void        clean_(lua_State*);
-        void        close_(lua_State**);
+        std::string trace_(std::optional<lua_State*>&);
+        void        clean_(std::optional<lua_State*>&);
         void        close_(std::optional<lua_State*>&);
-        bool        init_(
-                        lua_State **,
-                        std::string const& = "",
-                        struct luaL_Reg* = nullptr,
-                        struct luaL_Reg* = nullptr,
-                        int32_t sz = 0,
-                        void* = nullptr);
         bool        init_(
                         std::optional<lua_State*>&,
                         std::string const& = "",
@@ -29,7 +22,6 @@ namespace LuaObject
                         struct luaL_Reg* = nullptr,
                         int32_t sz = 0,
                         void* = nullptr);
-        void        pcall_error_print_(lua_State*, int32_t);
         void        pcall_error_print_(std::optional<lua_State*> const&, int32_t);
         //
 

@@ -98,7 +98,13 @@ namespace MDIWin
             return;
         ::ShowWindow(m_data.window, SW_SHOWNORMAL);
     }
+    void Base::show(HWND)
+    {
+    }
     void Base::show(uint32_t)
+    {
+    }
+    void Base::show(std::string const&)
     {
     }
     void Base::show(std::vector<std::string> const&)

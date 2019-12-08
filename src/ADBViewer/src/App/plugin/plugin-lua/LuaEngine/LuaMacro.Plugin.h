@@ -19,8 +19,8 @@
 #define __LUA_FUNC_CLASS_TEMPLATE(funname, args_in, args_out, helpstr, ext_fun)                                 \
     int32_t LuaEngine::funname ()                                                                               \
     {                                                                                                           \
-        ::lua_pop(m_lua, 1);                                                                                    \
-        int32_t args  = (::lua_gettop(m_lua) - 1),                                                              \
+        ::lua_pop(m_lua.value(), 1);                                                                                    \
+        int32_t args  = (::lua_gettop(m_lua.value()) - 1),                                                              \
                 nargs = __LUA_FUNC_ARGS_ ## args_in (),                                                         \
                 ret   = 0;                                                                                      \
         __LUA_FUNC_CALL_DECLARE(funname)                                                                        \
@@ -30,7 +30,7 @@
 /// C function
 
 #define __LUA_FUNC_CALL_DECLARE(funname)                                                                        \
-    f_ext_ ## funname (this, m_lua, args, nargs, ret);
+    f_ext_ ## funname (this, m_lua.value(), args, nargs, ret);
 
 #define __LUA_FUNC_STATIC_TEMPLATE(funname, body)                                                               \
     static void f_ext_ ## funname (                                                                             \

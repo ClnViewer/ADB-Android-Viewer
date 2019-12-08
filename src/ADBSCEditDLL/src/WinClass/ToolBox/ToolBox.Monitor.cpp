@@ -87,6 +87,30 @@ namespace Editor
         );
     }
 
+    bool ToolBox::get_monitor_selected(HWND hwnd, int32_t idx, std::string & s)
+    {
+        do
+        {
+            if (idx == LB_ERR)
+                if ((idx = ::SendMessage(hwnd, LB_GETCURSEL, (WPARAM)0, (LPARAM)0)) == LB_ERR)
+                    break;
+
+            int32_t len = ::SendMessage(hwnd, LB_GETTEXTLEN, (WPARAM)idx, (LPARAM)0);
+            if (len == LB_ERR)
+                break;
+
+            std::vector<char> v(len + 1);
+            ::SendMessage(hwnd, LB_GETTEXT, (WPARAM)idx, reinterpret_cast<LPARAM>(&v[0]));
+            s = &v[0];
+
+            if (s.empty())
+                break;
+            return true;
+        }
+        while (0);
+        return false;
+    }
+
     bool ToolBox::event_monitor(HWND hwnd, LPARAM lp_, std::string&)
     {
         do
@@ -106,26 +130,14 @@ namespace Editor
             if (idx < 0)
                 break;
 
-            int32_t len = ::SendMessage(hwnd, LB_GETTEXTLEN, (WPARAM)idx, (LPARAM)0);
-            if (len == LB_ERR)
+            std::string s;
+            if (!get_monitor_selected(hwnd, idx, s))
                 break;
 
-            std::string s;
-            {
-                std::vector<char> v(len + 1);
-                ::SendMessage(hwnd, LB_GETTEXT, (WPARAM)idx, reinterpret_cast<LPARAM>(&v[0]));
-                s = &v[0];
-            }
-            if (s.empty())
-                break;
-            //
-            {
-                std::stringstream ss;
-                ss << " -- " << s.c_str();
-                GameDev::OLEDropSource::BeginDrag(ss.str());
-                /// ALERTBox(ss.str());
-            }
-            //
+            std::stringstream ss;
+            ss << " -- " << s.c_str();
+            GameDev::OLEDropSource::BeginDrag(ss.str());
+            /// ALERTBox(ss.str());
             return true;
         }
         while (0);

@@ -70,12 +70,14 @@ namespace Editor
         m_isdbgbreak = true;
         if (m_task.joinable())
             m_task.join();
-        close_();
+        LuaObject::close_(m_lua);
     }
 
     lua_State * LuaEngine::instance() const
     {
-        return m_lua;
+        if (m_lua.has_value())
+            return m_lua.value();
+        return nullptr;
     }
 
     LuaEngine * LuaEngine::instance(lua_State *L)
@@ -157,7 +159,7 @@ namespace Editor
 
     bool LuaEngine::ready()
     {
-        return (m_lua);
+        return m_lua.has_value();
     }
 
     bool LuaEngine::check(std::string const & s)
@@ -239,7 +241,7 @@ namespace Editor
     void LuaEngine::pcall_error_(int32_t err, int32_t cnt)
     {
         LuaLint::print_pcall_error(err);
-        LuaLint::print(lua_tostring(m_lua, -1), LuaLint::ColorPrint::DebugError);
+        LuaLint::print(lua_tostring(m_lua.value(), -1), LuaLint::ColorPrint::DebugError);
         //
         std::string stb = LuaObject::trace_(m_lua);
         if (!stb.empty())
@@ -260,10 +262,10 @@ namespace Editor
 
     bool LuaEngine::init_()
     {
-        close_();
+        LuaObject::close_(m_lua);
 
         if (!LuaObject::init_(
-                &m_lua,
+                m_lua,
                 "LuaObject",
                 m_fun_redefine,
                 m_fun_object,
@@ -274,27 +276,24 @@ namespace Editor
         return true;
     }
 
-    void LuaEngine::close_()
-    {
-        LuaObject::close_(&m_lua);
-    }
-
     bool LuaEngine::open_(std::string const & s)
     {
         do
         {
             if (!init_())
                 break;
-
-            lua_atpanic(m_lua, &f_atpanic_);
-
-            if (luaL_loadstring(m_lua, s.c_str()))
+            if (!m_lua.has_value())
                 break;
 
-            lua_sethook(m_lua, &LuaEngine::hook_cb, LUA_MASKCALL, 0);
+            lua_atpanic(m_lua.value(), &f_atpanic_);
+
+            if (luaL_loadstring(m_lua.value(), s.c_str()))
+                break;
+
+            lua_sethook(m_lua.value(), &LuaEngine::hook_cb, LUA_MASKCALL, 0);
 
             int32_t err;
-            if ((err = lua_pcall(m_lua, 0, 0, 0)) != LUA_OK)
+            if ((err = lua_pcall(m_lua.value(), 0, 0, 0)) != LUA_OK)
             {
                 pcall_error_(err);
                 break;
@@ -304,10 +303,10 @@ namespace Editor
         }
         while (0);
 
-        if (m_lua)
+        if (m_lua.has_value())
         {
-            LuaLint::print(lua_tostring(m_lua, -1), LuaLint::ColorPrint::DebugError);
-            close_();
+            LuaLint::print(lua_tostring(m_lua.value(), -1), LuaLint::ColorPrint::DebugError);
+            LuaObject::close_(m_lua);
         }
         else
             LuaLint::print(g_debug_str_4, LuaLint::ColorPrint::DebugError);
@@ -382,10 +381,10 @@ namespace Editor
                 m_task.join();
                 LuaLint::print(g_debug_str_6, LuaLint::ColorPrint::DebugOk);
             }
-            if (m_lua)
+            if (m_lua.has_value())
             {
                 LuaLint::print(g_debug_str_7, LuaLint::ColorPrint::DebugOk);
-                close_();
+                LuaObject::close_(m_lua);
             }
             l_ispanic = false;
             return true;
@@ -416,7 +415,7 @@ namespace Editor
         if (!runchek_(true))
             return false;
 
-        if (!m_lua)
+        if (!m_lua.has_value())
             if (!check_(s))
                 return false;
 
@@ -438,8 +437,8 @@ namespace Editor
                 m_laststate = 0;
 
                 LuaLint::print(g_debug_str_10, LuaLint::ColorPrint::DebugOk);
-                lua_sethook(m_lua, &LuaEngine::hook_cb, LUA_MASKCALL | LUA_MASKLINE, 0);
-                lua_pushcfunction(m_lua, &LuaObject::trace<&LuaLint::print>);
+                lua_sethook(m_lua.value(), &LuaEngine::hook_cb, LUA_MASKCALL | LUA_MASKLINE, 0);
+                lua_pushcfunction(m_lua.value(), &LuaObject::trace<&LuaLint::print>);
 
                 do
                 {
@@ -457,10 +456,10 @@ namespace Editor
                         break;
 
                     // push main() arguments
-                    ::lua_pushinteger(m_lua, ret);
+                    ::lua_pushinteger(m_lua.value(), ret);
 
                     int32_t err;
-                    if ((err = lua_pcall(m_lua, 1, 1, 0)) != LUA_OK)
+                    if ((err = lua_pcall(m_lua.value(), 1, 1, 0)) != LUA_OK)
                     {
                         if ((!getrunbreak())  ||
                             (err != LUA_ERRRUN))
@@ -471,11 +470,11 @@ namespace Editor
                     if (getrunbreak())
                         break;
                     // pull state from main()
-                    if (!lua_isnil(m_lua, -1))
+                    if (!lua_isnil(m_lua.value(), -1))
                     {
-                        if (lua_isnumber(m_lua, -1))
-                            ret = ::lua_tointeger(m_lua, -1);
-                        ::lua_pop(m_lua, 1);
+                        if (lua_isnumber(m_lua.value(), -1))
+                            ret = ::lua_tointeger(m_lua.value(), -1);
+                        ::lua_pop(m_lua.value(), 1);
 
                         std::stringstream ss;
                         ss << g_debug_str_16 << m_laststate.load();
@@ -546,7 +545,7 @@ namespace Editor
         }
         while (0);
 
-        close_();
+        LuaObject::close_(m_lua);
         return false;
     }
 

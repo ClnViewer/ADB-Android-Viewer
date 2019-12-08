@@ -82,8 +82,12 @@ namespace LuaObject
             return true;
         }
 
-        void stackdump_(lua_State *L, std::function<void(std::string const&, int32_t)> fun)
+        void stackdump_(std::optional<lua_State*> & mlua, std::function<void(std::string const&, int32_t)> fun)
         {
+            if (!mlua.has_value())
+                return;
+
+            lua_State *L = mlua.value();
             int32_t i = ::lua_gettop(L);
             fun("[Start] ", i);
 
@@ -113,29 +117,38 @@ namespace LuaObject
             return idx;
         }
 
-        bool getfunction_(lua_State *L, std::string const & s)
+        bool getfunction_(std::optional<lua_State*> & mlua, std::string const & s)
         {
-            if (s.empty())
+            if ((s.empty()) || (!mlua.has_value()))
                 return false;
 
-            if (lua_getglobal(L, s.c_str()) == LUA_TNIL)
+            if (lua_getglobal(mlua.value(), s.c_str()) == LUA_TNIL)
                 return false;
-            return lua_isfunction(L, -1);
+            return lua_isfunction(mlua.value(), -1);
+        }
+
+        std::string trace_(std::optional<lua_State*> & mlua)
+        {
+            if (mlua.has_value())
+                return std::string();
+            return trace_(mlua.value());
         }
 
         std::string trace_(lua_State *L)
         {
-            lua_State *L1 = L;
-            luaL_traceback(L, L1, nullptr, 1);
+            if (!L)
+                return std::string();
+
+            luaL_traceback(L, L, nullptr, 1);
             std::string s = lua_tostring(L, -1);
             lua_pop(L, 1);
             return s;
         }
 
-        void clean_(lua_State *L)
+        void clean_(std::optional<lua_State*> & mlua)
         {
-            if (L)
-                lua_pop(L, lua_gettop(L));
+            if (mlua.has_value())
+                lua_pop(mlua.value(), lua_gettop(mlua.value()));
         }
 
         void close_(std::optional<lua_State*> & mlua)
@@ -147,14 +160,6 @@ namespace LuaObject
             mlua.reset();
         }
 
-        void close_(lua_State **lua)
-        {
-            lua_State *L = *lua;
-            if (L)
-                lua_close(L);
-            *lua = nullptr;
-        }
-
         bool init_(
             std::optional<lua_State*> & mlua,
             std::string const & s,
@@ -163,27 +168,10 @@ namespace LuaObject
             int32_t sz,
             void *instance)
         {
-            lua_State *L = nullptr;
-            if (!init_(&L, s, fun_redefine, fun_object, sz, instance))
-                return false;
-            mlua.emplace(L);
-            return true;
-        }
-
-        bool init_(
-            lua_State **lua,
-            std::string const & s,
-            struct luaL_Reg *fun_redefine,
-            struct luaL_Reg *fun_object,
-            int32_t sz,
-            void *instance)
-        {
             lua_State *L;
+            mlua.reset();
             if (!(L = luaL_newstate()))
-            {
-                *lua = nullptr;
                 return false;
-            }
             //
             luaL_checkversion(L);
             luaL_openlibs(L);
@@ -213,7 +201,7 @@ namespace LuaObject
                     luaL_setfuncs(L, fun_object, 0);
                 lua_setglobal(L, s.c_str());
             }
-            *lua = L;
+            mlua.emplace(L);
             return true;
         }
 

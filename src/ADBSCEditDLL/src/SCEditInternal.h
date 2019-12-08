@@ -15,11 +15,12 @@
 #define ID_ACCEL                         1002
 #define ID_EDITBOX                       1003
 #define ID_REBAR                         1004
+//#define ID_???                         1005
 // ReBar bands
-#define ID_REBAR_SEARCH                  1005
-#define ID_REBAR_TOOLBAR                 1006
-#define ID_REBAR_MENU                    1007
-#define ID_TAB_CTRL                      1008
+#define ID_REBAR_SEARCH                  1006
+#define ID_REBAR_TOOLBAR                 1007
+#define ID_REBAR_MENU                    1008
+#define ID_TAB_CTRL                      1009
 // Info window rich edit control
 #define ID_INFO_RTBOX                    1010
 // Menu/Event/Button command:
@@ -118,6 +119,7 @@
 #  include <functional>
 #  include <iterator>
 #  include <optional>
+#  include <regex>
 
 #  include "Utils/LoadDll.h"
 #  include "Utils/ExceptionPrint.h"
@@ -129,6 +131,7 @@
 #  include <LuaEngine.Editor.h>
 #  include <LuaPlugin.Editor.h>
 
+# include "AppHelp/AppHelp.h"
 # include "WinClass/WinBase.h"
 # include "WinClass/MainWin/MainWin.h"
 # include "WinClass/ClientWin/ClientWin.h"
@@ -139,7 +142,6 @@
 # include "WinClass/ToolBar/SearchBar.h"
 # include "WinClass/ToolBar/ToolBar.h"
 # include "WinClass/ToolBox/ToolBox.h"
-# include "WinClass/HelpWin.h"
 
 # include "AppSCEdit.h"
 # include "AppSCEdit.String.h"

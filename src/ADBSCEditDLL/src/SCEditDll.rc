@@ -5,6 +5,7 @@
 #define __TOSTR(a) _TOSTR(a)
 
 1 RT_MANIFEST "..\\ADBSCEditDll.manifest"
+
 ID_MAIN_ICON   ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
 ID_VIEWER_ICON ICON  "..\\ADBSCEdit\\src\\ADBSCEdit.ico"
 

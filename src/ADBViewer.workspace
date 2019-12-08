@@ -11,5 +11,6 @@
 		<Project filename="ADBViewer/ADBViewer.cbp" />
 		<Project filename="ADBDriverDLL/test/TestADBDriverDLL.cbp" />
 		<Project filename="ADBSCEditDLL/test/TestADBSCEditDLL.cbp" />
+		<Project filename="ADBSCEditDLL/test/misc-converter/XMLtoHelp.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

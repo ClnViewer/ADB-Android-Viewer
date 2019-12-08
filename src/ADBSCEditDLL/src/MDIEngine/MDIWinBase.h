@@ -199,7 +199,9 @@ namespace MDIWin
             void                       setsize(ImageLite::IRECT<int32_t> const&, ImageLite::IRECT<int32_t> const&); // set child mode
             //
             virtual void               show();
+            virtual void               show(HWND);
             virtual void               show(uint32_t);
+            virtual void               show(std::string const&);
             virtual void               show(std::vector<std::string> const&);
             //
             virtual void               event(void*);

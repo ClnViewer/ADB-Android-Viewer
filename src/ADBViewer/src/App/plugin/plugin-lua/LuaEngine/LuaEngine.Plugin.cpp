@@ -49,7 +49,9 @@ namespace Plugins
 
     lua_State * LuaEngine::instance() const
     {
-        return m_lua;
+        if (m_lua.has_value())
+            return m_lua.value();
+        return nullptr;
     }
 
     LuaEngine * LuaEngine::instance(lua_State *L)
@@ -87,7 +89,7 @@ namespace Plugins
 
     bool LuaEngine::ready()
     {
-        return (m_lua);
+        return m_lua.has_value();
     }
 
     bool LuaEngine::iserror()
@@ -144,11 +146,11 @@ namespace Plugins
                     break;
 
                 int32_t err;
-                lua_atpanic(m_lua, &f_atpanic_);
+                lua_atpanic(m_lua.value(), &f_atpanic_);
 
                 __TRACE_PRINT(m_path);
 
-                if ((err = luaL_loadfile(m_lua, m_path.c_str())) != LUA_OK)
+                if ((err = luaL_loadfile(m_lua.value(), m_path.c_str())) != LUA_OK)
                 {
                     if (!LuaLint::istrace())
                         break;
@@ -156,9 +158,9 @@ namespace Plugins
                     break;
                 }
 
-                ::lua_sethook(m_lua, &LuaEngine::hook_cb, LUA_MASKCALL, 0);
+                ::lua_sethook(m_lua.value(), &LuaEngine::hook_cb, LUA_MASKCALL, 0);
 
-                if ((err = ::lua_pcall(m_lua, 0, 0, 0)) != LUA_OK)
+                if ((err = ::lua_pcall(m_lua.value(), 0, 0, 0)) != LUA_OK)
                 {
                     if (!LuaLint::istrace())
                         break;
@@ -170,9 +172,9 @@ namespace Plugins
             }
             while (0);
 
-            if (m_lua)
+            if (m_lua.has_value())
             {
-                __TRACE_PRINT(::lua_tostring(m_lua, -1));
+                __TRACE_PRINT(::lua_tostring(m_lua.value(), -1));
                 close_();
             }
             m_path.assign("");
@@ -186,10 +188,9 @@ namespace Plugins
     bool LuaEngine::init_()
     {
         close_();
-        m_lua = nullptr;
 
         if (!LuaObject::init_(
-                &m_lua,
+                m_lua,
                 "LuaObject",
                 m_fun_redefine,
                 m_fun_object,
@@ -209,7 +210,7 @@ namespace Plugins
             m_isrun   = false;
             l_ispanic = false;
 
-            LuaObject::close_(&m_lua);
+            LuaObject::close_(m_lua);
             if (!m_imgdefault.empty())
                 m_imgdefault = ImageLite::ImageRGBbuffer();
         }

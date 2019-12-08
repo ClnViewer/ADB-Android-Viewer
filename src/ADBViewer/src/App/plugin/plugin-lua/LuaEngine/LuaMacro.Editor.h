@@ -25,7 +25,7 @@
 #define __LUA_FUNC_CLASS_TEMPLATE(funname, args_in, args_out, helpstr, ext_fun)                                 \
     int32_t LuaEngine::funname ()                                                                               \
     {                                                                                                           \
-        ::lua_pop(m_lua, 1);                                                                                    \
+        ::lua_pop(m_lua.value(), 1);                                                                            \
         LuaObject::stackdump_(m_lua,                                                                            \
                 [=](std::string const & s, int32_t i)                                                           \
                     {                                                                                           \
@@ -38,7 +38,7 @@
         bool isnotvalid = false;                                                                                \
         int32_t args = 0,                                                                                       \
                 ret  = 0,                                                                                       \
-                n    = (lua_gettop(m_lua) - 1);                                                                 \
+                n    = (lua_gettop(m_lua.value()) - 1);                                                         \
         LuaLint::stream_print_caller(ss, __PRETTY_FUNCTION__, __FILE__, __LINE__);                              \
         LuaLint::stream_print_called(ss, #funname, n);                                                          \
         {                                                                                                       \
@@ -88,31 +88,31 @@
 
 #define __LUA_FUNC_LINT_INPUT_STRING(funname)                                                                   \
     ++args;                                                                                                     \
-    if (!lua_isstring(m_lua, -n))                                                                               \
+    if (!lua_isstring(m_lua.value(), -n))                                                                       \
         LuaLint::stream_print_error(ss, "string", args);                                                        \
     else                                                                                                        \
-        LuaLint::stream_print_argT<const char*>(ss, lua_tostring(m_lua, -n), args);                             \
+        LuaLint::stream_print_argT<const char*>(ss, lua_tostring(m_lua.value(), -n), args);                     \
     n--;
 
 #define __LUA_FUNC_LINT_INPUT_NUMBER(funname)                                                                   \
     ++args;                                                                                                     \
-    if (!lua_isnumber(m_lua, -n))                                                                               \
+    if (!lua_isnumber(m_lua.value(), -n))                                                                       \
         LuaLint::stream_print_error(ss, "number", args);                                                        \
     else                                                                                                        \
-        LuaLint::stream_print_argT<int32_t>(ss, lua_tonumber(m_lua, -n), args);                                 \
+        LuaLint::stream_print_argT<int32_t>(ss, lua_tonumber(m_lua.value(), -n), args);                         \
     n--;
 
 #define __LUA_FUNC_LINT_INPUT_BOOL(funname)                                                                     \
     ++args;                                                                                                     \
-    if (!lua_isboolean(m_lua, -n))                                                                              \
+    if (!lua_isboolean(m_lua.value(), -n))                                                                      \
         LuaLint::stream_print_error(ss, "boolean", args);                                                       \
     else                                                                                                        \
-        LuaLint::stream_print_argT<bool>(ss, lua_toboolean(m_lua, -n), args);                                   \
+        LuaLint::stream_print_argT<bool>(ss, lua_toboolean(m_lua.value(), -n), args);                           \
     n--;
 
 #define __LUA_FUNC_LINT_INPUT_TABLE(funname)                                                                    \
     ++args;                                                                                                     \
-    if (!lua_istable(m_lua, -n))                                                                                \
+    if (!lua_istable(m_lua.value(), -n))                                                                        \
         LuaLint::stream_print_error(ss, "{table}", args);                                                       \
     else                                                                                                        \
         LuaLint::stream_print_argT<const char*>(ss, "{table}", args);                                           \
@@ -121,29 +121,29 @@
 /// RETURN_
 
 #define __LUA_FUNC_LINT_RETURN_NONE()                                                                           \
-    lua_pushnil(m_lua);
+    lua_pushnil(m_lua.value());
 
 #define __LUA_FUNC_LINT_RETURN_NUMBER()                                                                         \
-    lua_pushinteger(m_lua, 100); ret++;
+    lua_pushinteger(m_lua.value(), 100); ret++;
 
 #define __LUA_FUNC_LINT_RETURN_BOOL()                                                                           \
-    lua_pushboolean(m_lua, 1); ret++;
+    lua_pushboolean(m_lua.value(), 1); ret++;
 
 #define __LUA_FUNC_LINT_RETURN_DOUBLE()                                                                         \
-    lua_pusnumber(m_lua, 100.0); ret++;
+    lua_pusnumber(m_lua.value(), 100.0); ret++;
 
 #define __LUA_FUNC_LINT_RETURN_STRING()                                                                         \
-    lua_pushstring(m_lua, "test string return");
+    lua_pushstring(m_lua.value(), "test string return");
 
 #define __LUA_FUNC_LINT_RETURN_NULL()                                                                           \
-    lua_pushnil(m_lua);
+    lua_pushnil(m_lua.value());
 
 /// FROM BASE EXTENSION
 /// RETURN_
 /// -- if/else extended function call
 
 #define __LUA_FUNC_LINT_LFEXT_BYNAME(funname, args_out)                                                         \
-    f_ext_ ## funname (this, m_lua, args, ret, isnotvalid);
+    f_ext_ ## funname (this, m_lua.value(), args, ret, isnotvalid);
 
 #define __LUA_FUNC_LINT_LFEXT_NONE(funname, args_out)                                                           \
     __LUA_FUNC_LINT_ ## args_out ()
@@ -223,34 +223,34 @@
                     __LUA_FUNC_LINT_INPUT_NUMBER(funname)
 
 #define __LUA_FUNC_LINT_INPUT_NUMBER_4_OR_NUMBER_1_TABLE(funname)                                               \
-    if (lua_istable(m_lua, -1))                                                                                 \
+    if (lua_istable(m_lua.value(), -1))                                                                         \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_NUMBER(funname)                                                                   \
         __LUA_FUNC_LINT_INPUT_TABLE(funname)                                                                    \
     }                                                                                                           \
-    else if (lua_isnumber(m_lua, -1))                                                                           \
+    else if (lua_isnumber(m_lua.value(), -1))                                                                   \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_NUMBER_4(funname)                                                                 \
     }
 
 #define __LUA_FUNC_LINT_INPUT_NUMBER_4_OR_TABLE(funname)                                                        \
-    if (lua_istable(m_lua, -1))                                                                                 \
+    if (lua_istable(m_lua.value(), -1))                                                                         \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_TABLE(funname)                                                                    \
     }                                                                                                           \
-    else if (lua_isnumber(m_lua, -1))                                                                           \
+    else if (lua_isnumber(m_lua.value(), -1))                                                                   \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_NUMBER_4(funname)                                                                 \
     }
 
 
 #define __LUA_FUNC_LINT_INPUT_NUMBER_5_OR_NUMBER_2_TABLE(funname)                                               \
-    if (lua_istable(m_lua, -1))                                                                                 \
+    if (lua_istable(m_lua.value(), -1))                                                                         \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_NUMBER_2(funname)                                                                 \
         __LUA_FUNC_LINT_INPUT_TABLE(funname)                                                                    \
     }                                                                                                           \
-    else if (lua_isnumber(m_lua, -1))                                                                           \
+    else if (lua_isnumber(m_lua.value(), -1))                                                                   \
     {                                                                                                           \
         __LUA_FUNC_LINT_INPUT_NUMBER_5(funname)                                                                 \
     }

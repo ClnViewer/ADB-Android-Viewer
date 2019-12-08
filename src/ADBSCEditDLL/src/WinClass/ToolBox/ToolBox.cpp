@@ -36,6 +36,9 @@
 namespace Editor
 {
     //
+    static inline const char     l_str_find[] = " -- Find help for label: '";
+    static inline const char     l_str_find_found[] = "' - found";
+    static inline const char     l_str_find_notfound[] = "' - not found";
     static inline const wchar_t *l_items[] =
     {
         L"Help",
@@ -46,17 +49,28 @@ namespace Editor
     /* OLE DRAG & DROP event from ListBox (MONITOR), DROP ID is registered MDIWin::MDIApp::m_dragid */
     LRESULT CALLBACK ToolBox::TabWndProc(HWND hwnd_, UINT umsg_, WPARAM wp_, LPARAM lp_, UINT_PTR, DWORD_PTR ptr)
     {
-        if ((umsg_ == MDIWin::MDIApp::m_dragid) &&
-            (wp_ == (ID_TAB_IDX + static_cast<uint32_t>(TabIndex::ITAB_MONITOR))))
+        if (LOWORD(wp_) == (ID_TAB_IDX + static_cast<uint32_t>(TabIndex::ITAB_MONITOR)))
         {
-            std::string s;
             Editor::ToolBox *tb = reinterpret_cast<Editor::ToolBox*>(ptr);
-            if (tb)
+            if (!tb)
+                return 0;
+
+            if (umsg_ == MDIWin::MDIApp::m_dragid)
+            {
+                std::string s;
                 tb->event(
                     tb->getchild(ToolBox::TabIndex::ITAB_MONITOR),
                     lp_,
                     s
                 );
+            }
+            else if ((umsg_ == WM_COMMAND) && (HIWORD(wp_) == LBN_DBLCLK))
+            {
+                tb->show(
+                    tb->getchild(ToolBox::TabIndex::ITAB_MONITOR)
+                );
+                return 1;
+            }
         }
         return ::DefSubclassProc(hwnd_, umsg_, wp_, lp_);
     }
@@ -256,7 +270,9 @@ namespace Editor
         return { true, false };
     }
 
-    /* OLE DRAG & DROP from TreeView (API) & ListBox (MONITOR) */
+    /* OLE DRAG & DROP from TreeView (API)     */
+    /* OLE DRAG & DROP from ListBox  (MONITOR) */
+    /* LINK handle from RichTextBox  (HELP)    */
     bool ToolBox::event(HWND hwnd_, LPARAM lp, std::string & s)
     {
         (void) tabforeach_(0,
@@ -267,6 +283,11 @@ namespace Editor
 
                     switch (n)
                     {
+                        case TabIndex::ITAB_HELP:
+                            {
+                                (void) event_help(*hwnd, lp, s);
+                                break;
+                            }
                         case TabIndex::ITAB_API:
                             {
                                 (void) event_api(*hwnd, lp, s);
@@ -351,6 +372,49 @@ namespace Editor
         //
         (void)::SendMessage(m_hwnd, TCM_SETCURSEL, (WPARAM)idx, 0);
         show_(idx);
+    }
+
+    void ToolBox::show(HWND hwnd_)
+    {
+        (void) tabforeach_(0,
+                [&](HWND *hwnd, uint32_t, uint32_t n)
+                {
+                    if (*hwnd != hwnd_)
+                        return true;
+
+                    switch (n)
+                    {
+                        case TabIndex::ITAB_HELP:
+                            {
+                                break;
+                            }
+                        case TabIndex::ITAB_API:
+                            {
+                                break;
+                            }
+                        case TabIndex::ITAB_MONITOR:
+                            {
+                                std::string s;
+                                if (!get_monitor_selected(*hwnd, LB_ERR, s))
+                                    break;
+
+                                std::stringstream ss;
+                                if (find_help_(s))
+                                {
+                                    ss << l_str_find << s.c_str() << l_str_find_found;
+                                    show(static_cast<uint32_t>(TabIndex::ITAB_HELP));
+                                }
+                                else
+                                    ss << l_str_find << s.c_str() << l_str_find_notfound;
+                                INFOBox(ss.str());
+                                return true;
+                            }
+                        default:
+                            return false;
+                    }
+                    return true;
+                }
+            );
     }
 
     void ToolBox::show(std::vector<std::string> const & v)

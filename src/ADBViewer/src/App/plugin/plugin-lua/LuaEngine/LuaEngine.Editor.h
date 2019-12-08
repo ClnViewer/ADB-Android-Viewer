@@ -64,7 +64,7 @@ namespace Editor
 
         private:
             //
-            lua_State                 *m_lua             = nullptr;
+            std::optional<lua_State*>  m_lua;
             struct luaL_Reg           *m_fun_object      = nullptr;
             struct luaL_Reg           *m_fun_redefine    = nullptr;
             int32_t                    m_fun_object_sz   = 0;
@@ -78,7 +78,6 @@ namespace Editor
             //
             void                    initbase_();
             bool                    init_();
-            void                    close_();
             bool                    open_(std::string const&);
             //
             static void             hook_cb(lua_State*, lua_Debug*);

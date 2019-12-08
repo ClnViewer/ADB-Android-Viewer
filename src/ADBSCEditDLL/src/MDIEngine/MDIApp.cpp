@@ -32,6 +32,7 @@
 
 #include "../SCEditInternal.h"
 #include <windowsx.h>
+#include <richedit.h>
 #include <ole2.h>
 
 namespace MDIWin
@@ -380,6 +381,22 @@ namespace MDIWin
                                 return 1;
                             }
                             while (0);
+                            return 0;
+                        }
+                        /* Link click - ToolBox Help RichEdit */
+                        else if ((lph->idFrom == (ID_TAB_IDX + static_cast<int32_t>(Editor::ToolBox::TabIndex::ITAB_HELP))) &&
+                                 (lph->code == EN_LINK))
+                        {
+                            ENLINK *el = reinterpret_cast<ENLINK*>(lp_);
+                            if (el->msg != WM_LBUTTONUP)
+                                break;
+
+                            auto a = m_mgr.find(hwnd_);
+                            if (!a)
+                                break;
+                                //
+                            std::string s;
+                            a->event(lph->hwndFrom, lp_, s);
                             return 0;
                         }
                     }

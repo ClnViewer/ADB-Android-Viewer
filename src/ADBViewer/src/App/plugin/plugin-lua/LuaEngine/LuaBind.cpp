@@ -95,20 +95,20 @@ namespace __LUA_BIND_CLASS()
 
     __LUA_FUNC_CODE_HEADER(print)
     {
-        lua_pop(m_lua, 1);
+        lua_pop(m_lua.value(), 1);
         __LUA_IF_LINT(
-            LuaLint::print_lua(m_lua, LuaLint::ColorPrint::LuaFunctionPrint);
+            LuaLint::print_lua(m_lua.value(), LuaLint::ColorPrint::LuaFunctionPrint);
         )
-        ::lua_pushnil(m_lua);
+        ::lua_pushnil(m_lua.value());
         return 0;
     }
     __LUA_FUNC_CODE_HEADER(dprint)
     {
-        lua_pop(m_lua, 1);
+        lua_pop(m_lua.value(), 1);
         __LUA_IF_LINT(
-            LuaLint::print_lua(m_lua, LuaLint::ColorPrint::LuaFunctionDprint);
+            LuaLint::print_lua(m_lua.value(), LuaLint::ColorPrint::LuaFunctionDprint);
         )
-        ::lua_pushnil(m_lua);
+        ::lua_pushnil(m_lua.value());
         return 0;
     }
 

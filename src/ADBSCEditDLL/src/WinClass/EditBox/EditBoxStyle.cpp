@@ -33,8 +33,11 @@
 #include "../../SCEditInternal.h"
 #include "../../Utils/extern/tixml2ex.h"
 #include "../../Utils/HelperMap.h"
+#include <filesystem>
 #include <Scintilla.h>
 #include <SciLexer.h>
+
+namespace fs = std::filesystem;
 
 #define  EDITBOX_STYLE_ACTIVE 1
 #include "EditBoxStyle.h"
@@ -66,7 +69,7 @@ namespace Editor
         }
     }
 
-    static void f_parse_section(
+    static void f_parse_xml_section(
         const tinyxml2::XMLDocument & root,
         std::function<void(std::string&, std::string&)> f)
     {
@@ -86,15 +89,17 @@ namespace Editor
         {
             do
             {
-                if (::_access(l_style_file, F_OK) < 0)
-                    break;
-
+                {
+                    fs::path l_root{ l_style_file };
+                    if (!fs::exists(l_root))
+                        break;
+                }
                 std::map<std::string, Editor::e_color> mapenum = HelperMap::InitMap<std::string, Editor::e_color>
 #               define EBSTYLE__(A,...) (STR_(A), Editor::e_color::SC_COLOR_ ## A)
 #               include "EditBoxStyleBase.h"
                 ;
                 auto doc = tinyxml2::load_xmlfile(l_style_file);
-                f_parse_section(
+                f_parse_xml_section(
                     static_cast<const tinyxml2::XMLDocument&>(*doc),
                     [=](std::string & name_, std::string & val_)
                     {
@@ -121,14 +126,7 @@ namespace Editor
         {
             ALERTBox(_ex.what()); return;
         }
-        catch (std::exception & _ex)
-        {
-            ALERTBox(_ex.what()); return;
-        }
-        catch (...)
-        {
-            ALERTBox(g_scedit_error); return;
-        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
     }
 
     void EditBox::style(int32_t style_, COLORREF fore_, COLORREF back_, int32_t size_, std::string const & face_)

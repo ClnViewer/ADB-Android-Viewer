@@ -31,24 +31,12 @@
  */
 
 #include "../../SCEditInternal.h"
+#include <codecvt>
 #include <richedit.h>
 
 namespace Editor
 {
-    struct HelpeItems
-    {
-        char const *title;
-        char const *key;
-        char const *desc;
-        char const *info;
-    };
-    //
-    static HelpeItems l_items[] =
-    {
-#       define HLP_LABEL(A)    { A, nullptr, nullptr, nullptr },
-#       define HLP_ITEM(A,B,C) { nullptr, A, B, C },
-#       include "../../SCEditHelpItems.h"
-    };
+    static inline const char     l_str_ourl[] = " -- open URL: ";
     //
     static void f_styleText(HWND hwnd, uint32_t flags)
     {
@@ -79,6 +67,13 @@ namespace Editor
                     cf.dwEffects ^= CFE_SUBSCRIPT;
                     break;
                 }
+            case CFM_LINK:
+                {
+                    cf.dwMask = CFM_LINK | CFM_LINKPROTECTED | CFM_COLOR;
+                    cf.dwEffects ^= CFE_LINK | CFE_LINKPROTECTED | CFE_AUTOCOLOR;
+                    cf.crTextColor = RGB(200,30,30);
+                    break;
+                }
             default:
                 {
                     cf.dwMask = CFM_FACE;
@@ -87,11 +82,79 @@ namespace Editor
                 }
         }
         //
-        ::SendMessage(hwnd, EM_SETSEL, -2, -1);
+        ::SendMessage(hwnd, EM_SETSEL, (WPARAM)-2, (LPARAM)-1);
         ::SendMessage(hwnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
     }
-    static void f_print(HWND hwnd, std::string const & s, uint32_t flags)
+
+    void ToolBox::print_help_(AppHelp::helparray_t & var, HWND hwnd)
     {
+        auto & [ items, isz ] = var;
+        if ((!isz) || (!items))
+            return;
+
+        if (!hwnd)
+        {
+            hwnd = getchild(TabIndex::ITAB_HELP);
+            if (!hwnd)
+                return;
+        }
+
+        ::LockWindowUpdate(hwnd);
+
+        for (uint32_t i = 0; i < isz; i++)
+        {
+            std::string s;
+            AppHelp::HelpItems & itm = items[i];
+            if (itm.flag == CFM_LINK)
+            {
+                s  = itm.title;
+                s += "\n";
+                print_help_(hwnd, s, CFM_LINK);
+                continue;
+            }
+            else if ((itm.flag != CFM_ALL) && (itm.flag != CFM_ALL2))
+                continue;
+
+            if (itm.title)
+            {
+                s  = "\n";
+                s += itm.title;
+                s += "\n";
+                print_help_(hwnd, s, CFM_UNDERLINE);
+                if (itm.flag != CFM_ALL2)
+                    continue;
+            }
+            if (itm.key)
+            {
+                s = itm.key;
+                print_help_(hwnd, s, CFM_BOLD);
+            }
+            if (itm.desc)
+            {
+                s  = "   ";
+                s += itm.desc;
+                print_help_(hwnd, s, CFM_SUBSCRIPT);
+            }
+            if (itm.info)
+            {
+                s  = "   ";
+                s += itm.info;
+                print_help_(hwnd, s, CFM_SUBSCRIPT);
+            }
+        }
+        ::LockWindowUpdate(nullptr);
+        ::SendMessage(hwnd, WM_VSCROLL, SB_TOP, 0);
+    }
+
+    void ToolBox::print_help_(HWND hwnd, std::string const & s, uint32_t flags)
+    {
+        if (!hwnd)
+        {
+            hwnd = getchild(TabIndex::ITAB_HELP);
+            if (!hwnd)
+                return;
+        }
+
         std::vector<char> vs(s.length() + 2);
         vs.assign(s.begin(), s.end());
         vs[s.length()] = '\n';
@@ -102,7 +165,36 @@ namespace Editor
         SETTEXTEX se{};
         se.codepage = CP_ACP;
         se.flags    = ST_SELECTION;
-        ::SendMessage(hwnd, EM_SETTEXTEX, (WPARAM)&se, (LPARAM)&vs[0]);
+        ::SendMessage(
+            hwnd,
+            ((flags == CFM_LINK) ? EM_SETTEXTEX : EM_REPLACESEL),
+            (WPARAM)&se,
+            (LPARAM)&vs[0]
+        );
+    }
+
+    void ToolBox::clear_help_(HWND hwnd)
+    {
+        if (!hwnd)
+        {
+            hwnd = getchild(TabIndex::ITAB_HELP);
+            if (!hwnd)
+                return;
+        }
+        ::SendMessage(hwnd, EM_SETSEL,     (WPARAM)0, (LPARAM)-1);
+        ::SendMessage(hwnd, EM_REPLACESEL, (WPARAM)0, (LPARAM)"");
+    }
+
+    void ToolBox::menu_help_(HWND hwnd)
+    {
+        if (!hwnd)
+        {
+            hwnd = getchild(TabIndex::ITAB_HELP);
+            if (!hwnd)
+                return;
+        }
+        auto obj = m_help.get(AppHelp::HelpType::THELP_LINK);
+        print_help_(obj, hwnd);
     }
 
     HWND ToolBox::setup_help_()
@@ -114,7 +206,6 @@ namespace Editor
                         WS_CLIPCHILDREN |
                         WS_VSCROLL      |
                         ES_MULTILINE    |
-                        ES_AUTOVSCROLL  |
                         ES_SAVESEL      |
                         ES_READONLY,
                         0, 30, 1, 1,
@@ -130,37 +221,96 @@ namespace Editor
         ::SendMessage(hwnd, EM_FMTLINES,      (WPARAM)1,   (LPARAM)0);
         ::SendMessage(hwnd, EM_AUTOURLDETECT, (WPARAM)1,   (LPARAM)0);
         ::SendMessage(hwnd, EM_SETMARGINS,    (WPARAM)EC_LEFTMARGIN, (LPARAM)12);
-
-        for (uint32_t i = 0; i < __NELE(l_items); i++)
-        {
-            std::string s;
-            HelpeItems & itm = l_items[i];
-            if (itm.title)
-            {
-                s  = "\n";
-                s += itm.title;
-                s += "\n";
-                f_print(hwnd, s, CFM_UNDERLINE);
-                continue;
-            }
-            if (itm.key)
-            {
-                s = itm.key;
-                f_print(hwnd, s, CFM_BOLD);
-            }
-            if (itm.desc)
-            {
-                s  = "   ";
-                s += itm.desc;
-                f_print(hwnd, s, CFM_SUBSCRIPT);
-            }
-            if (itm.info)
-            {
-                s  = "   ";
-                s += itm.info;
-                f_print(hwnd, s, CFM_SUBSCRIPT);
-            }
-        }
+        ::SendMessage(hwnd, EM_SETEVENTMASK, 0, ::SendMessage(hwnd, EM_GETEVENTMASK, 0, 0) | ENM_LINK);
+        //
+        menu_help_(hwnd);
+        auto obj = m_help.get(AppHelp::HelpType::THELP_APP);
+        print_help_(obj, hwnd);
+        //
         return hwnd;
     }
+
+    bool ToolBox::find_help_(std::string const & s, HWND hwnd)
+    {
+        if (s.empty())
+            return false;
+
+        if (!hwnd)
+        {
+            hwnd = getchild(TabIndex::ITAB_HELP);
+            if (!hwnd)
+                return false;
+        }
+
+        auto obj = m_help.get(s);
+        if (std::get<1>(obj) == 0)
+            return false;
+
+        clear_help_(hwnd);
+        menu_help_(hwnd);
+        print_help_(obj, hwnd);
+        return true;
+    }
+
+    bool ToolBox::event_help(HWND hwnd, LPARAM lp_, std::string&)
+    {
+        do
+        {
+            if (!hwnd)
+                break;
+
+            ENLINK *el = reinterpret_cast<ENLINK*>(lp_);
+            if (!el)
+                break;
+
+            std::wstring ws;
+            std::vector<wchar_t> vs(1024);
+            ::SendMessage(hwnd, EM_EXSETSEL,    0, reinterpret_cast<LPARAM>(&el->chrg));
+            ::SendMessageW(hwnd, EM_GETSELTEXT, 0, reinterpret_cast<LPARAM>(&vs[0]));
+
+            ws = &vs[0];
+            if (ws.empty())
+                break;
+
+            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> cnv;
+            std::string s = cnv.to_bytes(ws.c_str());
+            if (s.empty())
+                break;
+            /*
+                // Debug:
+                ALERTBox(s);
+             */
+            AppHelp::HelpType t = m_help.getid(s);
+            if (t == AppHelp::HelpType::THELP_NONE)
+                break;
+            else if (t == AppHelp::HelpType::THELP_URL)
+            {
+                std::stringstream ss;
+                ss << l_str_ourl << s.c_str();
+                INFOBox(ss.str());
+                ::ShellExecuteA(
+                        MDIWin::Config::instance().gethandle<MDIWin::Config::HandleType::HWND_MAIN>(),
+                        0,
+                        s.c_str(),
+                        0, 0,
+                        SW_SHOW
+                    );
+                break;
+            }
+            //
+            {
+                auto obj = m_help.get(t);
+                if (std::get<1>(obj) == 0)
+                    break;
+
+                clear_help_(hwnd);
+                menu_help_(hwnd);
+                print_help_(obj, hwnd);
+            }
+            return true;
+        }
+        while (0);
+        return false;
+    }
+
 };

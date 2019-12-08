@@ -43,7 +43,7 @@ namespace Plugins
 
         private:
             //
-            lua_State                  *m_lua             = nullptr;
+            std::optional<lua_State*>                     m_lua;
             struct luaL_Reg            *m_fun_object      = nullptr;
             struct luaL_Reg            *m_fun_redefine    = nullptr;
             int32_t                     m_fun_object_sz   = 0;

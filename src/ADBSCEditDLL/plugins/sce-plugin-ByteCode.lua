@@ -227,13 +227,15 @@ local plugin = {}
 			closure = nil
 		elseif info.code == "GETTABUP" then
 			o[#o + 1] = string.format("%s GET %s", getIndent(info), getGETTABUP(info))
-		elseif info.code == "LOADK" then
+		elseif info.code == "LOADK" or info.code == "LOADKX" or info.code == "LOADBOOL" or info.code == "LOADNIL" then
 			o[#o + 1] = string.format("%s LOAD \"%s\"", getIndent(info), info.comment)
 		elseif info.code == "CALL" then
 			o[#o + 1] = string.format("%s CALL", getIndent(info))
+		elseif info.code == "TAILCALL" then
+			o[#o + 1] = string.format("%s CALL TAIL", getIndent(info))
 		elseif info.code == "RETURN" then
 			o[#o + 1] = string.format("%s RETURN", getIndent(info))
-		elseif info.code == "LT" then
+		elseif info.code == "LT" or info.code == "LE" then
 			o[#o + 1] = string.format("%s %s", getIndent(info), getLT(info))
 		elseif info.code == "EQ" then
 			o[#o + 1] = string.format("%s %s", getIndent(info), getEQ(info))
