@@ -31,6 +31,8 @@ namespace Editor
             {
                 int32_t lastpos;
                 int32_t wordlen;
+                int32_t flag;     //SCFIND_NONE, SCFIND_MATCHCASE, SCFIND_WHOLEWORD
+                int32_t direct;    // SCI_SETSELECTIONSTART, SCI_SETSELECTIONEND, SCI_SETSELALPHA;
             };
             //
             struct TextServiceData
@@ -40,6 +42,8 @@ namespace Editor
                 EditBox::AutoHighlight lightText;
                 EditBox::FindTextData  findText;
             };
+            //
+            EditBox::FindTextData  search_data{};
             //
              EditBox();
             ~EditBox();
@@ -60,9 +64,12 @@ namespace Editor
             bool                    vieweol();
             LRESULT                 navigate();
             void                    findtext(std::string const&);
+            void                    textnew(std::string const&, bool = false);
             void                    textinsert(std::string const&);
-            void                    setdebugline(int32_t);
+            bool                    textreplace(std::string const&, std::string const&);
+            void                    gotoline(int32_t);
             void                    showhelp();
+            void                    setdebugline(int32_t);
             void                    setannotation(std::string const&, int32_t);
             void                    setannotation(EditBox::AnnotateData*);
             LRESULT                 command(UINT, WPARAM = 0, LPARAM = 0);

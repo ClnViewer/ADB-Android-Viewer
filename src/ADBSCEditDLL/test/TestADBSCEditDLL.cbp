@@ -58,6 +58,9 @@
 		</Linker>
 		<Unit filename="../src/SCEditDll.h" />
 		<Unit filename="TestADBSCEditDLL.cpp" />
+                <Unit filename="TestADBSCEditDLL.rc">
+                   <Option compilerVar="WINDRES" />
+                </Unit>
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -3,11 +3,32 @@
 #if !defined(ADBSCEDIT_INTERNAL_H)
 #define ADBSCEDIT_INTERNAL_H 1
 
+#  if defined(ISOLATION_AWARE_ENABLED)
+#    undef ISOLATION_AWARE_ENABLED
+#  endif
+#  define ISOLATION_AWARE_ENABLED 1
+
 #include "../../ADBViewer/src/loader.h"
 #include "SCEditDll.h"
 #include <Commctrl.h>
 #include <stdint.h>
 
+
+// ID DIALOG:
+#define IDD_DIALOG_1NUM                  901
+#define IDD_DIALOG_2SR                   902
+#define IDC_EDIT1                        910
+#define IDC_EDIT2                        911
+#define IDC_EDIT3                        912
+// { IDD_DIALOG_2SR Control id
+#  define IDC_REPLACEONCE                914
+#  define IDC_REPLACEALL                 915
+#  define IDC_FINDFIRST                  916
+#  define IDC_RADIO_MWORD                917
+#  define IDC_RADIO_MCASE                918
+#  define IDC_RADIO_DDOWN                919
+#  define IDC_RADIO_DUP                  920
+// }
 
 // ID:
 #define ID_MAIN_ICON                     1000
@@ -54,13 +75,21 @@
 #define IDM_EDIT_SHOW_NAVIGATE           40013     // button only
 #define IDM_EDIT_SHOW_INDENTG            40014     // button only
 #define IDM_EDIT_SHOW_ENDLINE            40015     // button only
-#define IDM_EVENT_EDIT_DBGLINE           40016     // event only
-#define IDM_EVENT_EDIT_ANNOTATION        40017     // event only
-#define IDM_EVENT_EDIT_FINDTEXT          40018     // event only
+
+#define IDM_EDIT_GOTO_LINE               40016     // button / menu only
+#define IDM_EDIT_COLOR_INSERT            40017     // button / menu only
+#define IDM_EDIT_TEXT_REPLACE            40018     // button / menu only
+
 #define IDM_TOOLBOX_SHOW_HELP            40019     // F1 / Menu (window)
 #define IDM_TOOLBOX_SHOW_API             40020     // ? / Menu (window)
 #define IDM_TOOLBOX_SHOW_MONITOR         40021     // ? / Menu (window)
 #define IDM_EVENT_PLUGIN_INIT            40022     // event only
+#define IDM_EVENT_TXT_INSERT             40023     // event only
+#define IDM_EVENT_TXT_NEW                40024     // event only
+//
+#define IDM_EVENT_EDIT_DBGLINE           40025     // event only
+#define IDM_EVENT_EDIT_ANNOTATION        40026     // event only
+#define IDM_EVENT_EDIT_FINDTEXT          40027     // event only
 
 #define IDM_EDIT_PASTE_CODE_0            41010     // menu only
 #define IDM_EDIT_PASTE_CODE_1            41011     // menu only
@@ -124,6 +153,7 @@
 #  include "Utils/LoadDll.h"
 #  include "Utils/ExceptionPrint.h"
 #  include "Utils/OLE/OLEInternal.h"
+#  include "Utils/GUI/DialogInternal.h"
 
 #  define _BUILD_IMAGELITE_DRAW 1
 #  include <ImageLite.h>

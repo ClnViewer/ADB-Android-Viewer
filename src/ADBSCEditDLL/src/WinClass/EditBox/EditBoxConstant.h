@@ -6,7 +6,7 @@
 #   define _INDEX_MARGIN_FOLD 1
 #   define _INDEX_MARGIN_MARK 2
 
-    static inline const char  l_ebFileDesc[]   = "Lua script files (*.lua)\0*.lua\0";
+    static inline const char  l_ebFileDesc[]   = "Lua script files";
     static inline const char  l_ebFileExt[]    = "lua";
     static inline const char  l_ebFilePath[]   = ".\\";
     //
@@ -20,6 +20,8 @@
     static inline const char  l_dropOpen[]     = " - Opening drop file: ";
     static inline const char  l_dropErrorExt[] = "file extension not support, accept only .lua script files.";
     static inline const char  l_dropErrorHandle[] = "not opening drop file, class handle broken..";
+    //
+    static inline const char  l_searchErrorData[] = "unknown find structure set..";
     //
     static inline const char  l_autoAppend[]   = "(";
     static inline const char  l_autoStop[]     = ");";

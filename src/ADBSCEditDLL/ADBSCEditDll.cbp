@@ -18,6 +18,7 @@
 				<Compiler>
 					<Add option="-g3" />
 					<Add option="-D_BUILD_TRACE=0" />
+					<Add option="-D_BUILD_DEBUG_LUAPLUGIN=1" />
 					<Add option="-D_DEBUG" />
 				</Compiler>
 				<Linker>
@@ -206,6 +207,12 @@
 		<Unit filename="../ADBViewer/src/App/plugin/plugin-lua/LuaEngine/LuaPluginFunction.h" />
 		<Unit filename="../ADBViewer/src/extern/lodepng.cpp" />
 		<Unit filename="../ADBViewer/src/extern/lodepng.h" />
+		<Unit filename="src/AppHelp/AppHelp.Static.cxx">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
+		<Unit filename="src/AppHelp/AppHelp.cpp" />
+		<Unit filename="src/AppHelp/AppHelp.h" />
 		<Unit filename="src/AppSCEdit.EventChild.cpp" />
 		<Unit filename="src/AppSCEdit.EventFrame.cpp" />
 		<Unit filename="src/AppSCEdit.String.h" />
@@ -251,14 +258,15 @@
 			<Option compilerVar="WINDRES" />
 		</Unit>
 		<Unit filename="src/SCEditInternal.h" />
-		<Unit filename="src/AppHelp/AppHelp.cpp" />
-		<Unit filename="src/AppHelp/AppHelp.h" />
-		<Unit filename="src/AppHelp/AppHelp.Static.cxx">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
 		<Unit filename="src/Utils/ExceptionPrint.cpp" />
 		<Unit filename="src/Utils/ExceptionPrint.h" />
+		<Unit filename="src/Utils/GUI/ColorDialog.cpp" />
+		<Unit filename="src/Utils/GUI/ColorDialog.h" />
+		<Unit filename="src/Utils/GUI/CustomDialog.cpp" />
+		<Unit filename="src/Utils/GUI/CustomDialog.h" />
+		<Unit filename="src/Utils/GUI/DialogInternal.h" />
+		<Unit filename="src/Utils/GUI/FileDialog.cpp" />
+		<Unit filename="src/Utils/GUI/FileDialog.h" />
 		<Unit filename="src/Utils/HelperMap.h" />
 		<Unit filename="src/Utils/LoadDll.h" />
 		<Unit filename="src/Utils/OLE/OLEDataObject.cpp" />

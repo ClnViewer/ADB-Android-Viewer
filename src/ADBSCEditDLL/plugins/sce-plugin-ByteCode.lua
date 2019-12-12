@@ -97,7 +97,7 @@ local plugin = {}
         elseif l < 100 then
             s = s .. o.line .. INDENT100
         else
-            s = s .. o.line .. INDENT100
+            s = s .. o.line .. INDENT1000
         end
         return s
     end

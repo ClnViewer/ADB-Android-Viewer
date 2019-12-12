@@ -10,6 +10,10 @@ static inline const char g_scedit_error[] = "unknown error";
 static inline const char g_scedit_saved[] = "script NOT saved, press twice to exit without saving..";
 static inline const char g_scedit_load[]  = "error load script from editor panel";
 static inline const char g_scedit_empty[] = "NOT run empty script";
+static inline const char g_scedit_savedearch1[] = "-- Searching text not found between current position and end of document.";
+static inline const char g_scedit_savedearch2[] = "-- Searching text not found between current position and beginning of document.";
+static inline const char g_scedit_savedearch3[] = "-- Searching text not found of document.";
+
 static inline const char g_scedit_default_skeleton[] =
 #if defined(_DEBUG)
     "\n\n"                                                                                                      \

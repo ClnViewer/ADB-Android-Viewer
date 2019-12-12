@@ -9,15 +9,115 @@
 
     void EditBox::showhelp()
     {
-        setannotation(g_scedit_help, 0);
+        try
+        {
+            setannotation(g_scedit_help, 0);
+        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
+
+    }
+
+    void EditBox::gotoline(int32_t ln)
+    {
+        try
+        {
+            int32_t pend = cmd(SCI_GETLINECOUNT);
+            ln = ((ln >= pend) ? pend : ((ln > 0) ? (ln - 1) : 0));
+            cmd(SCI_GOTOLINE, ln);
+            cmd(SCI_SETFOCUS, 1);
+        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
     }
 
     void EditBox::textinsert(std::string const &s)
     {
-        if (s.empty())
-            return;
+        try
+        {
+            if (s.empty())
+                return;
 
-        cmd(SCI_INSERTTEXT,  cmd(SCI_GETCURRENTPOS), reinterpret_cast<LPARAM>(s.c_str()));
+            cmd(SCI_INSERTTEXT,  cmd(SCI_GETCURRENTPOS), reinterpret_cast<LPARAM>(s.c_str()));
+            cmd(SCI_SETFOCUS, 1);
+        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
+    }
+
+    bool EditBox::textreplace(std::string const &s, std::string const &sr)
+    {
+        try
+        {
+            do
+            {
+                if ((s.empty()) || (sr.empty()))
+                    break;
+
+                Sci_TextToFind ttf{};
+                int32_t endpos = cmd(SCI_GETLENGTH);
+                ttf.lpstrText = s.c_str();
+
+                switch (search_data.direct)
+                {
+                    case SCI_SETSELECTIONSTART:
+                        {
+                            ttf.chrg.cpMin = search_data.lastpos;
+                            ttf.chrg.cpMax = cmd(SCI_GETCURRENTPOS);
+                            break;
+                        }
+                    case SCI_SETSELECTIONEND:
+                        {
+                            ttf.chrg.cpMin = ((!search_data.lastpos) ? cmd(SCI_GETCURRENTPOS) : search_data.lastpos);
+                            ttf.chrg.cpMax = endpos;
+                            break;
+                        }
+                    case SCI_SETSELALPHA:
+                        {
+                            ttf.chrg.cpMin = search_data.lastpos;
+                            ttf.chrg.cpMax = endpos;
+                            break;
+                        }
+                    default:
+                        {
+                            ALERTBox(l_searchErrorData);
+                            return false;
+                        }
+                }
+
+                if (cmd(SCI_FINDTEXT, search_data.flag, reinterpret_cast<LPARAM>(&ttf)) == -1)
+                    break;
+
+                cmd(SCI_SETSEL, ttf.chrgText.cpMin, ttf.chrgText.cpMax);
+                cmd(SCI_REPLACESEL, 0, reinterpret_cast<LPARAM>(sr.c_str()));
+                search_data.lastpos = ((endpos > ttf.chrgText.cpMax) ? (ttf.chrgText.cpMax + 1) : ttf.chrgText.cpMax);
+                search_data.wordlen = (ttf.chrgText.cpMax - ttf.chrgText.cpMin);
+                //
+                return true;
+            }
+            while (0);
+            search_data = {};
+        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
+        return false;
+    }
+
+    void EditBox::textnew(std::string const & s, bool isclear)
+    {
+        try
+        {
+            if (s.empty())
+                return;
+
+            cmd(SCI_CLEARALL);
+            if (isclear)
+            {
+                cmd(SCI_SETUNDOCOLLECTION, 1);
+                cmd(EM_EMPTYUNDOBUFFER);
+            }
+            cmd(SCI_SETTEXT, 0, reinterpret_cast<LPARAM>(s.c_str()));
+            cmd(SCI_SETSAVEPOINT);
+            cmd(SCI_GOTOPOS, 0);
+            cmd(SCI_SETFOCUS, 1);
+        }
+        catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
     }
 
     void EditBox::setannotation(EditBox::AnnotateData *ad_)

@@ -39,23 +39,6 @@ namespace Editor
 
 #   include "EditBoxConstant.h"
 
-    static void f_SetupFileDialog(
-                OPENFILENAMEA *sfn_,
-                std::vector<char> & v_,
-                DWORD flags_
-            )
-    {
-        sfn_->lStructSize = sizeof(OPENFILENAMEA);
-        sfn_->Flags = OFN_EXPLORER | OFN_HIDEREADONLY | OFN_NOCHANGEDIR | flags_;
-        sfn_->lpstrFilter = static_cast<LPCSTR>(l_ebFileDesc);
-        sfn_->lpstrDefExt = static_cast<LPCSTR>(l_ebFileExt);
-        sfn_->lpstrInitialDir = static_cast<LPCSTR>(l_ebFilePath);
-        sfn_->nFilterIndex = 1;
-        sfn_->hwndOwner = MDIWin::Config::instance().gethandle<MDIWin::Config::HandleType::HWND_MAIN>();
-        sfn_->lpstrFile = static_cast<LPSTR>(&v_[0]);
-        sfn_->nMaxFile = MAX_PATH;
-    }
-
     static void f_FileNameNotify()
     {
         ::SendMessageA(
@@ -86,7 +69,6 @@ namespace Editor
             cmd(EM_EMPTYUNDOBUFFER);
             cmd(SCI_SETSAVEPOINT);
             cmd(SCI_GOTOPOS, 0);
-            return;
         }
         catch (...) { GameDev::ExceptionPrn::parse(std::current_exception(), g_scedit_error); }
     }
@@ -101,25 +83,28 @@ namespace Editor
                 //
                 if (s.empty())
                 {
-                    std::vector<char> v(MAX_PATH);
-                    std::string tname(l_ebFileName);
-                    v.assign(tname.begin(), tname.end());
-                    v[tname.length()] = '\0';
-
-                    OPENFILENAMEA sfn{};
-                    //
-                    f_SetupFileDialog(
-                        &sfn,
-                        v,
-                        OFN_LONGNAMES | OFN_OVERWRITEPROMPT
+                    GUI::FileDialog fdlg;
+                    fdlg.SetCtrlValue(
+                        MDIWin::Config::instance().gethandle<MDIWin::Config::HandleType::HWND_MAIN>(),
+                        {
+                            l_ebFilePath,
+                            l_ebFileName,
+                            {
+                                {
+                                    l_ebFileDesc,
+                                    l_ebFileExt
+                                }
+                            }
+                        }
                     );
-                    if (!::GetSaveFileNameA(&sfn))
+                    if (fdlg.Save())
+                        fname = fdlg.GetCtrlString();
+                    else
                     {
                         if (::GetLastError())
                             ERRORBox();
                         break;
                     }
-                    fname = &v[0];
                     if (fname.empty())
                         break;
                 }
@@ -213,22 +198,34 @@ namespace Editor
         {
             do
             {
-                std::vector<char> v(MAX_PATH);
-                v[0] = '\0';
+                std::string fname;
                 //
-                OPENFILENAMEA sfn{};
-                f_SetupFileDialog(
-                    &sfn,
-                    v,
-                    OFN_LONGNAMES | OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST
+                GUI::FileDialog fdlg;
+                fdlg.SetCtrlValue(
+                    MDIWin::Config::instance().gethandle<MDIWin::Config::HandleType::HWND_MAIN>(),
+                    {
+                        l_ebFilePath,
+                        std::string(),
+                        {
+                            {
+                                l_ebFileDesc,
+                                l_ebFileExt
+                            }
+                        }
+                    }
                 );
-                if (!::GetSaveFileNameA(&sfn))
+                if (fdlg.Open())
+                    fname = fdlg.GetCtrlString();
+                else
                 {
                     if (::GetLastError())
                         ERRORBox();
                     break;
                 }
-                return fileopen(&v[0]);
+                if (fname.empty())
+                    break;
+
+                return fileopen(fname);
             }
             while (0);
         }

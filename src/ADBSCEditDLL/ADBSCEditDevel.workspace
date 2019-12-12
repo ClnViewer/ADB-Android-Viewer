@@ -4,5 +4,7 @@
 		<Project filename="ADBSCEditDll.cbp" />
 		<Project filename="ADBSCEdit/ADBSCEdit.cbp" />
 		<Project filename="test/TestADBSCEditDLL.cbp" />
+		<Project filename="test/misc-converter/XMLtoHelp.cbp" />
+		<Project filename="test/misc-regex/CppRegex.cbp" />
 	</Workspace>
 </CodeBlocks_workspace_file>

@@ -37,6 +37,7 @@
 namespace Editor
 {
     ///
+    static inline const wchar_t l_search_banner[] = L"Search text";
 
     LRESULT CALLBACK SearchBar::SearchWndProc(HWND hwnd_, UINT umsg_, WPARAM wp_, LPARAM lp_, UINT_PTR, DWORD_PTR ptr)
     {
@@ -84,7 +85,7 @@ namespace Editor
 
             ::SendMessage(WinBase::m_hwnd, EM_SETMARGINS, EC_LEFTMARGIN,  (LPARAM)5);
             ::SendMessage(WinBase::m_hwnd, EM_SETMARGINS, EC_RIGHTMARGIN, (LPARAM)10);
-            ::SendMessage(WinBase::m_hwnd, EM_SETCUEBANNER, 0, (LPARAM)"Search text");
+            ::SendMessage(WinBase::m_hwnd, EM_SETCUEBANNER, 0, reinterpret_cast<LPARAM>(l_search_banner));
             //
             ::SetWindowSubclass(
                     WinBase::m_hwnd,

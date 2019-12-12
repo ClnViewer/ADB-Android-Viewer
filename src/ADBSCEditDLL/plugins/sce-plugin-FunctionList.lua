@@ -138,7 +138,7 @@ local plugin = {}
         plugin.savename = s
     end
     --
-    function plugin.callplugin()
+    function plugin.callplugin(str)
         tblseen = {}
         plugin.outtbl = {}
 	plugin.functionList(ENV._G, "")
@@ -146,7 +146,7 @@ local plugin = {}
 	return plugin.outtbl
     end
     --
-    function plugin.debugplugin()
+    function plugin.debugplugin(str)
         local o = plugin.callplugin()
         for k in pairs(o) do
             print(k, " : ", o[k])

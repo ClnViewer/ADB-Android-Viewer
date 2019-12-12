@@ -10,10 +10,16 @@
 #    define _WIN32_WINNT 0x0502
 #  endif
 
-#  ifdef _BUILD_DLL
-#    define DLL_EXPORT __declspec(dllexport)
-#  else
-#    define DLL_EXPORT __declspec(dllimport)
+#  if !defined(DLL_EXPORT)
+#    ifdef _BUILD_DLL
+#      define DLL_EXPORT __declspec(dllexport)
+#    else
+#      define DLL_EXPORT __declspec(dllimport)
+#    endif
+#  endif
+
+#  if !defined(ISOLATION_AWARE_ENABLED)
+#    define ISOLATION_AWARE_ENABLED 1
 #  endif
 
 #  include <winsock2.h>

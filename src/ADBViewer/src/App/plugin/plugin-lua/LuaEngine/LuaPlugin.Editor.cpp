@@ -71,6 +71,21 @@
     --
     return plugin
 
+    ///
+
+    Editor callback in plugin:
+
+    --
+    local function editor(str)
+        if str == nil then
+           return
+        end
+        ... other code ...
+        LuaObject:TextInsert("-- This should work TextInsert\n")
+        LuaObject:TextReplace("-- This should work TextReplace\n")
+    end
+    --
+
  */
 
 #include <SCEditInternal.h>
@@ -85,7 +100,7 @@
 
 #define break_error(A) { ret = A; break; }
 // Debug plugins interface:
-// #define _BUILD_DEBUG_LUAPLUGIN 1
+//#define _BUILD_DEBUG_LUAPLUGIN 1
 
 namespace fs = std::filesystem;
 
@@ -135,18 +150,45 @@ namespace Editor
         ::lua_pushnil(L);
         return 0;
     }
+
+    ///
+
+    template <uint32_t ID>
+    int32_t f_bind_EditorService(lua_State *L)
+    {
+        do
+        {
+            if (!lua_isstring(L, -1))
+                break;
+
+            std::string s = lua_tostring(L, -1);
+            if (s.empty())
+                break;
+
+            ::SendMessageA(
+                    MDIWin::Config::instance().gethandle<MDIWin::Config::HandleType::HWND_MAIN>(),
+                    WM_COMMAND,
+                    (WPARAM)ID,
+                    reinterpret_cast<LPARAM>(s.data())
+                );
+            ::lua_pop(L, 1);
+        }
+        while (0);
+        ::lua_pushnil(L);
+        return 0;
+    }
     //
     static struct luaL_Reg l_func_empty_GlobRedefine[] =
     {
-        { "print",  f_bind_emptyd },
-        { "dprint", f_bind_emptyd },
+        { "print",  &f_bind_emptyd },
+        { "dprint", &f_bind_emptyd },
         { nullptr, nullptr }
     };
     //
     static struct luaL_Reg l_func_print_GlobRedefine[] =
     {
-        { "print",  f_bind_printd },
-        { "dprint", f_bind_printd },
+        { "print",  &f_bind_printd },
+        { "dprint", &f_bind_printd },
         { nullptr, nullptr }
     };
     //
@@ -154,6 +196,8 @@ namespace Editor
     {
 #       define LFUN__(S,A,...) { #A, f_bind_emptyd },
 #       include "LuaPluginFunction.h"
+        { "TextInsert",  &f_bind_EditorService<IDM_EVENT_TXT_INSERT> },
+        { "TextReplace", &f_bind_EditorService<IDM_EVENT_TXT_NEW> },
         { nullptr, nullptr }
     };
     //
